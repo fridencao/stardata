@@ -33,7 +33,7 @@ upload(){
 }
 
 if [[ ${TRAVIS_OS_NAME} == "osx" ]]; then
-  cp rilldata/rill-macos-x64 rill
+  cp fridencao/stardata-macos-x64 rill
   shasum -a 256 rill > rill.sha256
   upload rill macos-x64/rill
   upload rill.sha256 macos-x64/rill.sha256
@@ -41,7 +41,7 @@ if [[ ${TRAVIS_OS_NAME} == "osx" ]]; then
 fi
 
 if [[ ${TRAVIS_OS_NAME} == "linux" ]]; then
-  cp rilldata/rill-linux-x64 rill
+  cp fridencao/stardata-linux-x64 rill
   shasum -a 256 rill > rill.sha256
   upload rill linux-x64/rill
   upload rill.sha256 linux-x64/rill.sha256
@@ -56,8 +56,8 @@ if [[ ${TRAVIS_OS_NAME} == "windows" ]]; then
     /c/Program\ Files\ \(x86\)/Google/Cloud\ SDK/google-cloud-sdk/platform/gsutil_py2/gsutil $1 $2 $3
   }
 
-  CertUtil -hashfile rilldata/rill-win-x64.exe SHA256 > rill.sha256
+  CertUtil -hashfile fridencao/stardata-win-x64.exe SHA256 > rill.sha256
 
-  upload rilldata/rill-win-x64.exe win-x64/rill.exe
+  upload fridencao/stardata-win-x64.exe win-x64/rill.exe
   upload rill.sha256 win-x64/rill.sha256
 fi

@@ -15,7 +15,7 @@ Example provisioner spec for the Kubernetes provisioner:
           "data_dir": "/mnt/data",                            // Directory to use for data storage like DB files etc.
           "host": "http://node-*.localhost",                  // The wildcard '*' will be replaced with the deployment's 'provision_id'
           "namespace": "cloud-runtime",                       // Namespace to use in the K8s cluster
-          "image": "rilldata/rill",                           // Rill Docker image
+          "image": "fridencao/stardata",                     // Stardata Docker image
           "kubeconfig_path": "kubeconfig.yaml",               // K8s config file to authenticate against the cluster
           "template_paths":
             {
