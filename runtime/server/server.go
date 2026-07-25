@@ -226,6 +226,9 @@ func (s *Server) HTTPHandler(ctx context.Context, registerAdditionalHandlers fun
 	observability.MuxHandle(httpMux, "/v1/instances/{instance_id}/resources/-/watch", observability.Middleware("runtime", s.logger, auth.HTTPMiddleware(s.aud, http.HandlerFunc(s.SSEHandler)))) // Deprecated: Use /sse?streams=resources
 	observability.MuxHandle(httpMux, "/v1/instances/{instance_id}/ai/complete/stream", observability.Middleware("runtime", s.logger, auth.HTTPMiddleware(s.aud, middleware.ActivityHTTPMiddleware(s.activity, runtime.RequestSourceChat)(http.HandlerFunc(s.CompleteStreamingHandler)))))
 
+	// Test a data source connection without saving (raw HTTP, bypasses gRPC/proto).
+	observability.MuxHandle(httpMux, "/v1/instances/{instance_id}/connectors:testconnection", observability.Middleware("runtime", s.logger, auth.HTTPMiddleware(s.aud, http.HandlerFunc(s.TestConnectionHandler))))
+
 	// Add Prometheus
 	if s.opts.ServePrometheus {
 		httpMux.Handle("/metrics", promhttp.Handler())

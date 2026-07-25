@@ -2,13 +2,19 @@ package server
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
+	"net/http"
+	"os"
 	"strings"
+	"time"
 
 	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/parser"
 	"github.com/fridencao/stardata/runtime/server/auth"
+	"github.com/fridencao/stardata/runtime/storage"
 	"golang.org/x/exp/maps"
 	"google.golang.org/protobuf/types/known/structpb"
 )
@@ -250,4 +256,87 @@ func driverIsNotifier(driver string) bool {
 	}
 
 	return connector.Spec().ImplementsNotifier
+}
+
+// TestConnectionHandler tests a data source connection without saving it.
+// POST /v1/instances/{instance_id}/connectors:testconnection
+// Body: {"driver":"clickhouse","config":{"host":"...","port":"9000",...}}
+// This is a raw HTTP handler (bypasses gRPC/proto) wrapped with auth middleware.
+func (s *Server) TestConnectionHandler(w http.ResponseWriter, r *http.Request) {
+	instanceID := r.PathValue("instance_id")
+
+	// Auth check: require ReadInstance permission.
+	claims := auth.GetClaims(r.Context(), instanceID)
+	if !claims.Can(runtime.ReadInstance) {
+		writeJSONError(w, http.StatusForbidden, "access denied")
+		return
+	}
+
+	var req struct {
+		Driver string         `json:"driver"`
+		Config map[string]any `json:"config"`
+	}
+	if err := json.NewDecoder(r.Body).Decode(&req); err != nil {
+		writeJSONError(w, http.StatusBadRequest, fmt.Sprintf("invalid request body: %s", err))
+		return
+	}
+
+	if req.Driver == "" {
+		writeJSONError(w, http.StatusBadRequest, "driver is required")
+		return
+	}
+
+	// Look up the driver.
+	driver, ok := drivers.Connectors[req.Driver]
+	if !ok {
+		writeJSONResult(w, false, fmt.Sprintf("driver %q not found", req.Driver))
+		return
+	}
+
+	// Create a minimal storage client (some drivers like DuckDB need it for Open).
+	st, stErr := storage.New(os.TempDir(), nil)
+	if stErr != nil {
+		writeJSONResult(w, false, fmt.Sprintf("failed to create storage client: %s", stErr))
+		return
+	}
+
+	// Open a connection with the provided config (not saved anywhere).
+	// Wrapped in recover because some drivers may panic on nil dependencies.
+	var handle drivers.Handle
+	var openErr error
+	func() {
+		defer func() {
+			if r := recover(); r != nil {
+				openErr = fmt.Errorf("driver panicked: %v", r)
+			}
+		}()
+		handle, openErr = driver.Open("test-connection", instanceID, req.Config, st, nil, s.logger)
+	}()
+	if openErr != nil {
+		writeJSONResult(w, false, fmt.Sprintf("failed to open connection: %s", openErr))
+		return
+	}
+	defer handle.Close()
+
+	// Ping with a timeout.
+	ctx, cancel := context.WithTimeout(r.Context(), 15*time.Second)
+	defer cancel()
+
+	if err := handle.Ping(ctx); err != nil {
+		writeJSONResult(w, false, fmt.Sprintf("connection test failed: %s", err))
+		return
+	}
+
+	writeJSONResult(w, true, "connection successful")
+}
+
+func writeJSONError(w http.ResponseWriter, status int, message string) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	_ = json.NewEncoder(w).Encode(map[string]any{"ok": false, "error": message})
+}
+
+func writeJSONResult(w http.ResponseWriter, ok bool, message string) {
+	w.Header().Set("Content-Type", "application/json")
+	_ = json.NewEncoder(w).Encode(map[string]any{"ok": ok, "message": message})
 }
