@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill org show
+title: stardata org show
 ---
-## rill org show
+## stardata org show
 
 Show org details
 
 ```
-rill org show [<org-name>] [flags]
+stardata org show [<org-name>] [flags]
 ```
 
 ### Flags
@@ -27,5 +27,5 @@ rill org show [<org-name>] [flags]
 
 ### SEE ALSO
 
-* [rill org](org.md)	 - Manage organizations
+* [stardata org](org.md)	 - Manage organizations
 

@@ -1,14 +1,14 @@
 ---
 title: "Exports & Scheduled Reports"
-description: Downloading and exporting data from Rill
+description: Downloading and exporting data from StarData
 sidebar_label: "Exports & Scheduled Reports"
 sidebar_position: 38
 ---
 
 
-Rill provides the ability to export data from multiple locations - leaderboards, Time Dimension detail, and Pivot Tables (_coming soon_). In addition to direct downloads, you can also set up recurring reports to your inbox. Scheduled Reports allow you to effortlessly generate and manage email reports for any exportable content within your Rill Cloud dashboard. 
+StarData provides the ability to export data from multiple locations - leaderboards, Time Dimension detail, and Pivot Tables (_coming soon_). In addition to direct downloads, you can also set up recurring reports to your inbox. Scheduled Reports allow you to effortlessly generate and manage email reports for any exportable content within your StarData Cloud dashboard. 
 
-- [Exporting from Rill](#exporting-from-rill)
+- [Exporting from StarData](#exporting-from-stardata)
 - [How to Schedule an Email Report](#how-to-schedule-an-email-report)
 - [Managing Scheduled Reports](#managing-scheduled-reports)
 
@@ -38,9 +38,9 @@ Rill provides the ability to export data from multiple locations - leaderboards,
 
 Prefer video? Check out our [YouTube playlist](https://www.youtube.com/watch?v=wTP46eOzoCk&list=PL_ZoDsg2yFKgi7ud_fOOD33AH8ONWQS7I&index=1) for a quick start!
 
-## Exporting from Rill
+## Exporting from StarData
 
-There are several places to export your data from Rill. In each case, you will see options for exporting to CSV, XLSX, or Parquet formats.
+There are several places to export your data from StarData. In each case, you will see options for exporting to CSV, XLSX, or Parquet formats.
 
 Exports are available from:
 

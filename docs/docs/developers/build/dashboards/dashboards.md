@@ -4,7 +4,7 @@ description: Create and customize interactive dashboards for data exploration an
 sidebar_position: 00
 ---
 
-Rill provides powerful dashboard capabilities to visualize and explore your data.
+StarData provides powerful dashboard capabilities to visualize and explore your data.
 
 - [**Dashboard Overview**](/developers/build/dashboards/dashboards-101) - Compare Explore vs Canvas dashboards and choose the right one for your needs
 - [**Create an Explore Dashboard**](/developers/build/dashboards/explore) - Interactive, slice-and-dice interfaces for dynamic data exploration and analysis. Built on top of a single metrics view, they provide real-time filtering, drilling, and comparison capabilities.

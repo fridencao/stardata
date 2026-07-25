@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill billing list-issues
+title: stardata billing list-issues
 ---
-## rill billing list-issues
+## stardata billing list-issues
 
 List billing issues for an organization
 
 ```
-rill billing list-issues [flags]
+stardata billing list-issues [flags]
 ```
 
 ### Flags
@@ -27,5 +27,5 @@ rill billing list-issues [flags]
 
 ### SEE ALSO
 
-* [rill billing](billing.md)	 - Billing related commands for org
+* [stardata billing](billing.md)	 - Billing related commands for org
 

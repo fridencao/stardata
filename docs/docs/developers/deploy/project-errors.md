@@ -1,23 +1,23 @@
 ---
 title: Managing Project Errors
-description: Configure alerts and manage errors for deployed projects in Rill Cloud
+description: Configure alerts and manage errors for deployed projects in StarData Cloud
 sidebar_label: Managing Project Errors
 sidebar_position: 25
 ---
 
-When you deploy to Rill Cloud, projects can encounter errors—from missing credentials to data type mismatches. This guide focuses on managing errors in deployed projects and setting up automated alerts.
+When you deploy to StarData Cloud, projects can encounter errors—from missing credentials to data type mismatches. This guide focuses on managing errors in deployed projects and setting up automated alerts.
 
 :::info General Troubleshooting
-For general troubleshooting guidance, error message explanations, and debugging techniques, see the [Debugging Rill Projects](/developers/build/debugging) documentation.
+For general troubleshooting guidance, error message explanations, and debugging techniques, see the [Debugging StarData Projects](/developers/build/debugging) documentation.
 :::
 
-## How Rill Handles Errors
+## How StarData Handles Errors
 
-Rill's error management approach ensures visibility and isolation:
+StarData's error management approach ensures visibility and isolation:
 
-- **Visibility:** View project status at the resource level via the `Status` tab or [`rill project status`](/reference/cli/project/status) CLI command
+- **Visibility:** View project status at the resource level via the `Status` tab or [`stardata project status`](/reference/cli/project/status) CLI command
 - **Isolation:** Errors are contained to individual resource trees—if one dashboard fails, others remain available
-- **Fallback:** Rill attempts to serve from the most recent valid state when possible
+- **Fallback:** StarData attempts to serve from the most recent valid state when possible
 
 :::tip Check upstream dependencies
 The surfaced error might not be the root cause. A dashboard error could stem from an underlying model timeout. Always check the [project status page](/guide/administration/project-settings#checking-deployment-status) to trace errors to their source.
@@ -25,7 +25,7 @@ The surfaced error might not be the root cause. A dashboard error could stem fro
 
 ## Deployment-Specific Error Scenarios
 
-Most errors will surface during local development in Rill Developer. However, after deploying to Rill Cloud, you may encounter additional issues:
+Most errors will surface during local development in StarData Developer. However, after deploying to StarData Cloud, you may encounter additional issues:
 
 1. **Production configuration missing** - Your YAML files reference `prod:` parameters that have been defined incorrectly. Verify your [dev/prod setup](/developers/build/connectors/templating).
 2. **Timeouts, OOM** - Production data volumes may be larger than local development data, leading to timeouts and out-of-memory issues. [Contact us](/contact) if you see any related error messages.
@@ -33,7 +33,7 @@ Most errors will surface during local development in Rill Developer. However, af
 To troubleshoot deployment errors:
 
 1. **Check the resource status** in the [project status page](/guide/administration/project-settings#checking-deployment-status)
-2. **Review project logs** using `rill project logs` or the Rill Cloud UI
+2. **Review project logs** using `stardata project logs` or the StarData Cloud UI
 3. **Compare with local behavior** - If it worked locally, check production-specific configuration differences
 
 ## Setting Up Error Alerts
@@ -44,7 +44,7 @@ Besides alerting on project errors, it is possible to configure generic alerts i
 
 ### Configure an email alert
 
-To configure an email alert for project errors, add a file named `project_errors.yaml` to your Rill project with the contents below. Remember to update the `recipients` field to your desired alert recipients.
+To configure an email alert for project errors, add a file named `project_errors.yaml` to your StarData project with the contents below. Remember to update the `recipients` field to your desired alert recipients.
 
 ```yaml
 type: alert
@@ -71,7 +71,7 @@ After making these changes, you should commit and [push these changes](/develope
 
 ### Configure a Slack alert
 
-To configure a Slack alert for project errors, first follow the Slack configuration steps described on [Configuring Slack integration](/developers/build/connectors/services/slack#setting-up-the-slack-integration). Next, add a file named `project_errors.yaml` to your Rill project with the contents below. Remember to update the `channels` field to your desired destination channel.
+To configure a Slack alert for project errors, first follow the Slack configuration steps described on [Configuring Slack integration](/developers/build/connectors/services/slack#setting-up-the-slack-integration). Next, add a file named `project_errors.yaml` to your StarData project with the contents below. Remember to update the `channels` field to your desired destination channel.
 
 ```yaml
 type: alert
@@ -90,7 +90,7 @@ data:
 # Follow these steps to configure a Slack token: https://docs.rilldata.com/guide/alerts/alerts/slack.
 notify:
   slack:
-    channels: [rill-alerts]
+    channels: [stardata-alerts]
 ```
 
-After making these changes, you should commit and [push these changes](/developers/deploy/deploy-dashboard/github-101#pushing-changes) to your git repository or update your Rill project via the Deploy button.
+After making these changes, you should commit and [push these changes](/developers/deploy/deploy-dashboard/github-101#pushing-changes) to your git repository or update your StarData project via the Deploy button.

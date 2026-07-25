@@ -7,7 +7,7 @@ sidebar_position: 45
 
 ## Overview
 
-Alerts in Rill allow you to monitor your data and receive notifications when specific conditions are met. While alerts can be created through the UI, defining them as code in YAML files provides version control, reproducibility, and the ability to manage complex alerting logic programmatically.
+Alerts in StarData allow you to monitor your data and receive notifications when specific conditions are met. While alerts can be created through the UI, defining them as code in YAML files provides version control, reproducibility, and the ability to manage complex alerting logic programmatically.
 
 When you create an alert via a YAML file, it appears in the UI marked as `Created through code`.
 
@@ -114,7 +114,7 @@ data:
 
 ### Resource Status
 
-Monitor the health of your Rill resources to catch pipeline failures and reconciliation errors. This is useful for monitoring pipeline health and catching reconciliation failures before they impact downstream processes.
+Monitor the health of your StarData resources to catch pipeline failures and reconciliation errors. This is useful for monitoring pipeline health and catching reconciliation failures before they impact downstream processes.
 
 ```yaml
 data:
@@ -229,7 +229,7 @@ renotify_after: "6h"
 
 ### Project Health Monitor
 
-This example monitors the overall health of your Rill project by checking for any resource reconciliation errors. It runs every 10 minutes for rapid detection of pipeline failures, uses the `resource_status` data source to automatically detect errors across all resources, and sends notifications to both Slack and email channels. Recovery notifications ensure you're alerted when issues are resolved.
+This example monitors the overall health of your StarData project by checking for any resource reconciliation errors. It runs every 10 minutes for rapid detection of pipeline failures, uses the `resource_status` data source to automatically detect errors across all resources, and sends notifications to both Slack and email channels. Recovery notifications ensure you're alerted when issues are resolved.
 
 ```yaml
 # alerts/project_health.yaml
@@ -247,7 +247,7 @@ data:
 notify:
   slack:
     channels:
-      - "#rill-alerts"
+      - "#stardata-alerts"
   email:
     recipients:
       - platform-team@example.com

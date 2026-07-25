@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill login
+title: stardata login
 ---
-## rill login
+## stardata login
 
-Authenticate with the Rill API
+Authenticate with the StarData API
 
 ```
-rill login [flags]
+stardata login [flags]
 ```
 
 ### Global flags
@@ -21,5 +21,5 @@ rill login [flags]
 
 ### SEE ALSO
 
-* [rill](cli.md)	 - A CLI for Rill
+* [stardata](cli.md)	 - A CLI for StarData
 

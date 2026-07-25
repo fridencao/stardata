@@ -1,17 +1,17 @@
 ---
 title: Schedule Your Data Refresh
-description: Manage refresh schedules for models deployed to Rill Cloud
+description: Manage refresh schedules for models deployed to StarData Cloud
 sidebar_label: Scheduled Refreshes
 sidebar_position: 15
 ---
 
 <!-- WARNING: There are links to this page in source code. If you move it, find and replace the links and consider adding a redirect in docusaurus.config.js. -->
 
-When creating or updating a model in Rill Cloud, you also have the option to configure how often the underlying model is refreshed (and thus ingested into the underlying OLAP layer powering Rill models and dashboards). By default, models are refreshed manually, but this can also be automated to a predefined schedule. This is handled through the underlying [model settings](/reference/project-files/models) and/or [project YAML](/reference/project-files/rill-yaml#project-wide-defaults) using standard cron or Go duration syntax.
+When creating or updating a model in StarData Cloud, you also have the option to configure how often the underlying model is refreshed (and thus ingested into the underlying OLAP layer powering StarData models and dashboards). By default, models are refreshed manually, but this can also be automated to a predefined schedule. This is handled through the underlying [model settings](/reference/project-files/models) and/or [project YAML](/reference/project-files/rill-yaml#project-wide-defaults) using standard cron or Go duration syntax.
 
 :::tip Configuring model refreshes for Cloud deployments
 
-It is generally strongly recommended to configure model refreshes when [deploying a project](/developers/deploy/deploy-dashboard) to Rill Cloud to ensure that your production data (and dashboards) _remains up-to-date_. The interval that you should set really depends on how often your own data is being refreshed. Furthermore, while it is technically possible to configure model refreshes for Rill Developer as well, Rill Developer is primarily used for local development and thus typically does not require working with the most up-to-date data (local model refreshes that occur too often could also lead to resource constraints on your local machine). For more details, please see our pages on [environments](/developers/build/connectors/credentials#variables), [templating](/developers/build/connectors/templating), and [performance optimization](/developers/build/models/performance).
+It is generally strongly recommended to configure model refreshes when [deploying a project](/developers/deploy/deploy-dashboard) to StarData Cloud to ensure that your production data (and dashboards) _remains up-to-date_. The interval that you should set really depends on how often your own data is being refreshed. Furthermore, while it is technically possible to configure model refreshes for StarData Developer as well, StarData Developer is primarily used for local development and thus typically does not require working with the most up-to-date data (local model refreshes that occur too often could also lead to resource constraints on your local machine). For more details, please see our pages on [environments](/developers/build/connectors/credentials#variables), [templating](/developers/build/connectors/templating), and [performance optimization](/developers/build/models/performance).
 
 :::
 
@@ -64,7 +64,7 @@ models:
 
 :::info Did you know?
 
-If you have both a project-wide default and model-specific refresh schedule _configured in the same project_, the model-specific refresh will **override** the project default based on how inheritance works in Rill. Otherwise, if not specified, the project-wide default will be used instead!
+If you have both a project-wide default and model-specific refresh schedule _configured in the same project_, the model-specific refresh will **override** the project default based on how inheritance works in StarData. Otherwise, if not specified, the project-wide default will be used instead!
 
 :::
 

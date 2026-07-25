@@ -36,7 +36,7 @@ Prefer video? Check out our [YouTube playlist](https://www.youtube.com/watch?v=w
 
 
 **Explore** 
-The main screen of any Rill dashboard is called the _Explore_ page. As seen above, this is divided into three sections.
+The main screen of any StarData dashboard is called the _Explore_ page. As seen above, this is divided into three sections.
 
 - Navigation Bar
 - Measures panel (Left)
@@ -50,7 +50,7 @@ The main screen of any Rill dashboard is called the _Explore_ page. As seen abov
 
 - _**Explore or Pivot:**_ You can switch the view from _explore_ to [_pivot_](/guide/dashboards/explore/pivot) by selecting either option from the UI (see `pink` box).
 
-- _**Alerts, Bookmarks and Sharing:**_ You can create an [alert](/guide/alerts) by selecting the bell, customize the default view of the dashboard (see `purple` box) to a predefined set of metrics, dimensions, and filters by selecting the [bookmark](/guide/dashboards/bookmarks), or share the dashboard ([internally by clicking the `Share` button](/guide/administration/users-and-access/user-management#admin-invites-user-from-rill-cloud) or [externally via Public URLs](/guide/dashboards/public-urls)).
+- _**Alerts, Bookmarks and Sharing:**_ You can create an [alert](/guide/alerts) by selecting the bell, customize the default view of the dashboard (see `purple` box) to a predefined set of metrics, dimensions, and filters by selecting the [bookmark](/guide/dashboards/bookmarks), or share the dashboard ([internally by clicking the `Share` button](/guide/administration/users-and-access/user-management#admin-invites-user-from-stardata-cloud) or [externally via Public URLs](/guide/dashboards/public-urls)).
 
 
 ### KPI Widget (Measures) Panel
@@ -132,16 +132,16 @@ After drilling into a leaderboard (or what we sometimes refer to as a _toplist_ 
 
 
 
-:::tip Don't have a Rill project or dashboard deployed yet?
-If you want to get hands on and see what interacting with a Rill dashboard feels like, we have a set of [demo projects](https://ui.rilldata.com/demo) already deployed on Rill Cloud and publicly available for everyone to try out. These [same projects](/developers/tutorials/) are also available on GitHub and can be deployed locally using Rill Developer.
+:::tip Don't have a StarData project or dashboard deployed yet?
+If you want to get hands on and see what interacting with a StarData dashboard feels like, we have a set of [demo projects](https://ui.rilldata.com/demo) already deployed on StarData Cloud and publicly available for everyone to try out. These [same projects](/developers/tutorials/) are also available on GitHub and can be deployed locally using StarData Developer.
 :::
 
 
-For more details about additional capabilities and/or how to utilize more advanced functionality within Rill dashboards, please see the [reference](#reference) section.
+For more details about additional capabilities and/or how to utilize more advanced functionality within StarData dashboards, please see the [reference](#reference) section.
 
 
 ### Keyboard shortcuts
-Whether you need to see the full value of a long JSON, or copy a value, there are some available keyboard shortcuts in the Rill Cloud Dashboards. More coming soon!
+Whether you need to see the full value of a long JSON, or copy a value, there are some available keyboard shortcuts in the StarData Cloud Dashboards. More coming soon!
 
 List of commands:
 - __*Copy values*__ ( ``shift + click`` ) - Copy the value of the row value. 
@@ -159,7 +159,7 @@ Toggle between light and dark themes by clicking your profile icon in the top ri
 ![Dark Mode Toggle](/img/guide/theme/dark-mode.png)
 
 ## Banners!
-Another additional feature that you can add to an Explore dashboard are banners. Whether it is to inform your end-users about specific guidelines on how to use Rill, or an informational post about the datasets being used, you can design the banner to whatever text you'd like.
+Another additional feature that you can add to an Explore dashboard are banners. Whether it is to inform your end-users about specific guidelines on how to use StarData, or an informational post about the datasets being used, you can design the banner to whatever text you'd like.
 
 Simply add the following to your explore-dashboard.yaml
 

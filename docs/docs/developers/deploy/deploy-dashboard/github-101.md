@@ -11,14 +11,14 @@ sidebar_position: 20
 This page makes the deploy process easier for those who are less familiar with GitHub by walking you through the steps to use the UI rather than the GitHub command line interface. Much simpler for those who prefer a graphic interface!
 :::
 
-To share dashboards with other users, Rill utilizes GitHub as a means of version control - effectively creating BI-as-code. There are several advantages to Git as the backend for dashboards: develop locally, integrate into existing development workflows, and manage versions + change control. While many users are familiar with Git and basic commands, there are other Rill users who are relatively new to Git. 
+To share dashboards with other users, StarData utilizes GitHub as a means of version control - effectively creating BI-as-code. There are several advantages to Git as the backend for dashboards: develop locally, integrate into existing development workflows, and manage versions + change control. While many users are familiar with Git and basic commands, there are other StarData users who are relatively new to Git. 
 
 In this section, we will outline: 
 
 - Installing the GitHub Desktop app (recommended for those less familiar with Git versus using the command line)
 - Setting up your repository (repo) and cloning to your local
 - Pushing changes to Git
-- Deploying Rill to your new org to share dashboards, set up alerts and receive scheduled reports
+- Deploying StarData to your new org to share dashboards, set up alerts and receive scheduled reports
   
 ![Process](/img/deploy/github-101/process.png)
 
@@ -36,7 +36,7 @@ If you do not already have a GitHub account, you'll need to create one as part o
 
 ## Cloning Locally
 
-Once you have downloaded GitHub and connected your account, you'll be able to create a new repository. Think of the repository as a shared cloud drive for the configuration files (sources, models, dashboards) that power Rill.
+Once you have downloaded GitHub and connected your account, you'll be able to create a new repository. Think of the repository as a shared cloud drive for the configuration files (sources, models, dashboards) that power StarData.
 
 - First, go to GitHub.com and create a new repository - clicking the ```New``` button on the homepage\
   
@@ -48,20 +48,20 @@ Once you have downloaded GitHub and connected your account, you'll be able to cr
 ![Repo](/img/deploy/github-101/repo.png)
 
 
-- Select the folder on your computer where you'd like to build with Rill. Confirm the location you cloned for the next step.
+- Select the folder on your computer where you'd like to build with StarData. Confirm the location you cloned for the next step.
 
 ![Clone](/img/deploy/github-101/clone.png)
 
 
 - Open the Terminal and go to your local copy of the repo (e.g. the above would be ```cd Documents/GitHub/rill-poc/testrepo```)
 
-- Run the Rill install command ```curl https://rill.sh | sh``` (or run ```rill start``` if you've already installed)
+- Run the StarData install command ```curl https://rill.sh | sh``` (or run ```stardata start``` if you've already installed)
 
 Now - any changes you make locally can be synced directly with your GitHub repo in one click! You can revisit our [build section](/developers/build/connectors) for refreshers on connecting to new sources, modeling data, or building dashboards.
 
 ## Pushing Changes
 
-After installing Rill and adding sources, your local project will now contain a variety of new files - source definitions, SQL models for transformation, and dashboards for analysis. GitHub automatically recognizes those files as new and you can now push those changes to your cloud repository.
+After installing StarData and adding sources, your local project will now contain a variety of new files - source definitions, SQL models for transformation, and dashboards for analysis. GitHub automatically recognizes those files as new and you can now push those changes to your cloud repository.
 
 First, open the GitHub app and select your repo. You should now see a variety of new changes (that can then be committed):
 
@@ -82,9 +82,9 @@ During the commit process, make sure to **uncheck** files you do not wish to syn
 For any larger changes, we would strongly suggest developing locally to see the effects of that change. However, for smaller changes (add a simple metric, changing the name of a dimension, etc.), some users _may_ prefer to edit directly inline on [GitHub](https://github.com) directly.
 :::
 
-## Deploying Rill
+## Deploying StarData
 
-Now that your dashboards should be fully synced to GitHub, version controlled, and available to be edited by others. To make the dashboard fully cloud-enabled, you can return to your terminal and run ```rill project connect-github```. With everything synced, you should now be able to create a [new organization](/guide/administration/organization-settings#organization) within Rill Cloud and push your dashboard to the cloud for shared collaboration. Any future changes should automatically be present in your deployed dashboards on [Rill Cloud](https://ui.rilldata.com) once committed and new dashboards will appear automatically as well (no deploy command needed). More details on [deployment here](/developers/deploy/deploy-dashboard).
+Now that your dashboards should be fully synced to GitHub, version controlled, and available to be edited by others. To make the dashboard fully cloud-enabled, you can return to your terminal and run ```stardata project connect-github```. With everything synced, you should now be able to create a [new organization](/guide/administration/organization-settings#organization) within StarData Cloud and push your dashboard to the cloud for shared collaboration. Any future changes should automatically be present in your deployed dashboards on [StarData Cloud](https://ui.rilldata.com) once committed and new dashboards will appear automatically as well (no deploy command needed). More details on [deployment here](/developers/deploy/deploy-dashboard).
 
 :::info Have further questions? We'd love to hear from you!
 

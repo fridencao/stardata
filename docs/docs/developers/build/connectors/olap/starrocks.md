@@ -1,6 +1,6 @@
 ---
 title: StarRocks
-description: Power Rill dashboards using StarRocks
+description: Power StarData dashboards using StarRocks
 sidebar_label: StarRocks
 sidebar_position: 25
 ---
@@ -9,13 +9,13 @@ sidebar_position: 25
 
 :::note Supported Versions
 
-Rill supports connecting to StarRocks 4.0 or newer versions.
+StarData supports connecting to StarRocks 4.0 or newer versions.
 
 :::
 
 :::info
 
-Rill supports connecting to an existing StarRocks cluster via a read-only OLAP connector and using it to power Rill dashboards with [external tables](/developers/build/connectors/olap#external-olap-tables).
+StarData supports connecting to an existing StarRocks cluster via a read-only OLAP connector and using it to power StarData dashboards with [external tables](/developers/build/connectors/olap#external-olap-tables).
 
 :::
 
@@ -42,7 +42,7 @@ ssl: false
 
 ### Connection String (DSN)
 
-Rill can also connect to StarRocks using a DSN connection string. StarRocks uses MySQL protocol, so the connection string must follow the MySQL DSN format:
+StarData can also connect to StarRocks using a DSN connection string. StarRocks uses MySQL protocol, so the connection string must follow the MySQL DSN format:
 
 ```yaml
 type: connector
@@ -113,9 +113,9 @@ database: my_database
 
 ## Naming Mapping
 
-StarRocks uses a three-level hierarchy: Catalog > Database > Table. In Rill's API:
+StarRocks uses a three-level hierarchy: Catalog > Database > Table. In StarData's API:
 
-| Rill Parameter   | StarRocks Concept | Example                              |
+| StarData Parameter   | StarRocks Concept | Example                              |
 | ---------------- | ----------------- | ------------------------------------ |
 | `database`       | Catalog           | `default_catalog`, `iceberg_catalog` |
 | `databaseSchema` | Database          | `my_database`                        |
@@ -162,6 +162,6 @@ All timestamp values are returned in UTC. The driver parses DATETIME values from
 
 :::info Need help connecting to StarRocks?
 
-If you would like to connect Rill to an existing StarRocks instance, please don't hesitate to [contact us](/contact). We'd love to help!
+If you would like to connect StarData to an existing StarRocks instance, please don't hesitate to [contact us](/contact). We'd love to help!
 
 :::

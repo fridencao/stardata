@@ -1,6 +1,6 @@
 ---
 title: "Dashboards"
-description: "Explore and interact with your data through Rill dashboards"
+description: "Explore and interact with your data through StarData dashboards"
 sidebar_label: "Dashboards"
 sidebar_position: 0
 ---
@@ -9,11 +9,11 @@ import ThemedImage from '@theme/ThemedImage';
 
 # Dashboards
 
-Rill Cloud provides powerful interactive dashboards for exploring, analyzing, and sharing your data. Dashboards make it easy to slice, dice, and drill down into your metrics to discover insights.
+StarData Cloud provides powerful interactive dashboards for exploring, analyzing, and sharing your data. Dashboards make it easy to slice, dice, and drill down into your metrics to discover insights.
 
 ## Explore Dashboards
 
-**[Explore Dashboard Quickstart](/guide/dashboards/explore)** provides an introduction to navigating and using Rill dashboards. Learn how to:
+**[Explore Dashboard Quickstart](/guide/dashboards/explore)** provides an introduction to navigating and using StarData dashboards. Learn how to:
 - Navigate the dashboard interface with measures, dimensions, and time series
 - Understand the different components and their interactions
 - Get started with your first dashboard exploration
@@ -71,5 +71,5 @@ Rill Cloud provides powerful interactive dashboards for exploring, analyzing, an
 
 **[Public URLs](/guide/dashboards/public-urls)** enable external sharing of your dashboards. Share:
 - Dashboards externally with customers and partners
-- Views without requiring Rill accounts
+- Views without requiring StarData accounts
 - Secure, shareable links to specific dashboard configurations

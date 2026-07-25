@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill service edit
+title: stardata service edit
 ---
-## rill service edit
+## stardata service edit
 
 edit service properties
 
 ```
-rill service edit <service-name> [flags]
+stardata service edit <service-name> [flags]
 ```
 
 ### Flags
@@ -29,5 +29,5 @@ rill service edit <service-name> [flags]
 
 ### SEE ALSO
 
-* [rill service](service.md)	 - Manage service accounts
+* [stardata service](service.md)	 - Manage service accounts
 

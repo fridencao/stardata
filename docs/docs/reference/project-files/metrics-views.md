@@ -4,7 +4,7 @@ title: Metrics View YAML
 sidebar_position: 34
 ---
 
-In your Rill project directory, create a metrics view, `<metrics_view>.yaml`, file in the `metrics` directory. Rill will ingest the metric view definition next time you run `rill start`.
+In your StarData project directory, create a metrics view, `<metrics_view>.yaml`, file in the `metrics` directory. StarData will ingest the metric view definition next time you run `stardata start`.
 
 ## Properties
 
@@ -62,7 +62,7 @@ _[string]_ - A SQL expression that tells us the max timestamp that the measures 
 
 ### `data_time_range`
 
-_[string]_ - Optional [rilltime](https://docs.rilldata.com/reference/time-syntax) expression describing the base table's time coverage (e.g. `-5Y to now`). When set, Rill skips the `min`/`max` OLAP probe for the base table and uses the declared bounds for coverage checks. The start must be bounded; `inf` and `earliest` are rejected. To declare full history, use a concrete early bound such as `-100Y to now` or omit this field to probe the table.
+_[string]_ - Optional [stardatatime](https://docs.rilldata.com/reference/time-syntax) expression describing the base table's time coverage (e.g. `-5Y to now`). When set, StarData skips the `min`/`max` OLAP probe for the base table and uses the declared bounds for coverage checks. The start must be bounded; `inf` and `earliest` are rejected. To declare full history, use a concrete early bound such as `-100Y to now` or omit this field to probe the table.
 
 ### `smallest_time_grain`
 
@@ -316,7 +316,7 @@ _[array of object]_ - Pre-aggregated rollup tables that can be used to accelerat
 
       - **`exclude`** - _[object]_ - Select all fields except those listed here
 
-  - **`data_time_range`** - _[string]_ - Optional [rilltime](https://docs.rilldata.com/reference/time-syntax) expression describing the rollup's time coverage (e.g. `-1Y to now`, `-5Y to -1Y`). When set, Rill skips the `min`/`max` OLAP probe for this rollup and uses the declared bounds for coverage checks. The start must be bounded; `inf` and `earliest` are rejected. To declare full history, use a concrete early bound such as `-100Y to now` or omit this field to probe the table.
+  - **`data_time_range`** - _[string]_ - Optional [stardatatime](https://docs.rilldata.com/reference/time-syntax) expression describing the rollup's time coverage (e.g. `-1Y to now`, `-5Y to -1Y`). When set, StarData skips the `min`/`max` OLAP probe for this rollup and uses the declared bounds for coverage checks. The start must be bounded; `inf` and `earliest` are rejected. To declare full history, use a concrete early bound such as `-100Y to now` or omit this field to probe the table.
 
 ### `security`
 
@@ -366,12 +366,12 @@ _[object]_ - Defines [security rules and access control policies](/developers/bu
 
 ### `cache`
 
-_[object]_ - Enable caching of query results for metrics views backed by externally-managed tables (e.g. in Snowflake, BigQuery). These settings have no effect for metrics views backed by Rill models (where queries are automatically cached and invalidated when the model is refreshed).
+_[object]_ - Enable caching of query results for metrics views backed by externally-managed tables (e.g. in Snowflake, BigQuery). These settings have no effect for metrics views backed by StarData models (where queries are automatically cached and invalidated when the model is refreshed).
 Each cache entry is keyed by a hash of the query combined with the latest result of `key_sql`. Cached results stay valid as long as `key_sql` returns the same value; when its result changes, prior results become unreachable. `key_sql` itself runs at most once per `key_ttl`, decoupling freshness checks from query traffic.
 Example: a `key_sql` of `SELECT MAX(updated_at) FROM orders` with `key_ttl: 5m` checks for new data every 5 minutes but only invalidates cached results when new data has actually landed.
 
 
-  - **`enabled`** - _[boolean]_ - Whether to cache query results for this metrics view. Defaults to false for metrics views backed by externally-managed tables and to true for metrics views backed by a Rill model.
+  - **`enabled`** - _[boolean]_ - Whether to cache query results for this metrics view. Defaults to false for metrics views backed by externally-managed tables and to true for metrics views backed by a StarData model.
 
   - **`key_sql`** - _[string]_ - SQL returning a single value used in the cache key, typically a max timestamp, version, or row count. Cached results are invalidated when this value changes. Optional; defaults to the metrics view's watermark expression (which itself defaults to `MAX(<time dimension>)`).
 
@@ -431,13 +431,13 @@ _[object]_ - Defines an optional inline explore view for the metrics view. If no
 
   - **`time_ranges`** - _[array of oneOf]_ - Overrides the list of default time range selections available in the dropdown. It can be a string or an object with a 'range' and optional 'comparison_offsets'.
 
-    - **option 1** - _[string]_ - An [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Durations) duration or one of the [Rill ISO 8601 extensions](/reference/time-syntax/rill-iso-extensions#extensions) extensions for the selection.
+    - **option 1** - _[string]_ - An [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Durations) duration or one of the [StarData ISO 8601 extensions](/reference/time-syntax/rill-iso-extensions#extensions) extensions for the selection.
 
     - **option 2** - _[object]_ - Object containing time range and comparison configuration
 
-      - **`range`** - _[string]_ - An [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Durations) duration or one of the [Rill ISO 8601 extensions](/reference/time-syntax/rill-iso-extensions#extensions) extensions for the selection. _(required)_
+      - **`range`** - _[string]_ - An [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601#Durations) duration or one of the [StarData ISO 8601 extensions](/reference/time-syntax/rill-iso-extensions#extensions) extensions for the selection. _(required)_
 
-      - **`comparison_offsets`** - _[array of oneOf]_ - List of time comparison options for this time range selection (optional). Must be one of the [Rill ISO 8601 extensions](https://docs.rilldata.com/reference/rill-iso-extensions#extensions).
+      - **`comparison_offsets`** - _[array of oneOf]_ - List of time comparison options for this time range selection (optional). Must be one of the [StarData ISO 8601 extensions](https://docs.rilldata.com/reference/rill-iso-extensions#extensions).
 
         - **option 1** - _[string]_ - Offset string only (range is inferred)
 

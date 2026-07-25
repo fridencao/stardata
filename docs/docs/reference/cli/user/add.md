@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill user add
+title: stardata user add
 ---
-## rill user add
+## stardata user add
 
 Add user to a project, organization or group
 
 ```
-rill user add [flags]
+stardata user add [flags]
 ```
 
 ### Flags
@@ -34,5 +34,5 @@ rill user add [flags]
 
 ### SEE ALSO
 
-* [rill user](user.md)	 - Manage users
+* [stardata user](user.md)	 - Manage users
 

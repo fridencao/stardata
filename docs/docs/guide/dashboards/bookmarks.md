@@ -1,6 +1,6 @@
 ---
 title: "Bookmarks & Sharing"
-description: Creating & Sharing Saved Views in Rill
+description: Creating & Sharing Saved Views in StarData
 sidebar_label: "Bookmarks & Sharing"
 sidebar_position: 35
 ---

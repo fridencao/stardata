@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project deployment start
+title: stardata project deployment start
 ---
-## rill project deployment start
+## stardata project deployment start
 
 Start a deployment by branch
 
 ```
-rill project deployment start [<project>] <branch> [flags]
+stardata project deployment start [<project>] <branch> [flags]
 ```
 
 ### Flags
@@ -29,5 +29,5 @@ rill project deployment start [<project>] <branch> [flags]
 
 ### SEE ALSO
 
-* [rill project deployment](deployment.md)	 - Manage project deployments
+* [stardata project deployment](deployment.md)	 - Manage project deployments
 

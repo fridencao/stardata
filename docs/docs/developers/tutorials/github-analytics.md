@@ -11,10 +11,10 @@ tags:
 
 # Analyze Your GitHub Repository
 
-This guide shows you how to build a powerful analytics dashboard for your own GitHub repository using Rill. In just a few commands, you'll have a fully interactive dashboard to discover hot zones in your codebase, track contributor activity, analyze code churn, and measure development velocity.
+This guide shows you how to build a powerful analytics dashboard for your own GitHub repository using StarData. In just a few commands, you'll have a fully interactive dashboard to discover hot zones in your codebase, track contributor activity, analyze code churn, and measure development velocity.
 
 :::tip See it live
-**[Explore the live demo →](https://ui.rilldata.com/demo/rill-github-analytics)** to see interactive dashboards analyzing real repositories (DuckDB, Rill). This is exactly what you'll create for your own repository.
+**[Explore the live demo →](https://ui.rilldata.com/demo/rill-github-analytics)** to see interactive dashboards analyzing real repositories (DuckDB, StarData). This is exactly what you'll create for your own repository.
 :::
 
 ## Step 1: Clone the Project
@@ -29,7 +29,7 @@ cd rill-examples/rill-github-analytics
 
 ### Install Dependencies
 
-The project includes Python scripts for downloading GitHub data and generating Rill project files. The project uses [Poetry](https://python-poetry.org/) for dependency management ([installation guide](https://python-poetry.org/docs/#installation)).
+The project includes Python scripts for downloading GitHub data and generating StarData project files. The project uses [Poetry](https://python-poetry.org/) for dependency management ([installation guide](https://python-poetry.org/docs/#installation)).
 
 ```bash
 # Using Poetry (recommended)
@@ -71,7 +71,7 @@ For private repos, use a fine-grained access token:
 
 **Note:** For large repositories with 10,000+ commits, the download may take 10-30 minutes. Use `--limit` to test with a smaller dataset first.
 
-## Step 3: Generate Rill Project Files
+## Step 3: Generate StarData Project Files
 
 The project includes a `generate_project.py` script that will generate:
 - Source definitions pointing to your GCS bucket
@@ -82,7 +82,7 @@ The project includes a `generate_project.py` script that will generate:
 Run the script with your repository and bucket:
 
 ```bash
-# Generate Rill files configured for your GCS bucket
+# Generate StarData files configured for your GCS bucket
 python generate_project.py owner/repo --gcs --bucket gs://your-bucket/github-analytics
 
 # Examples:
@@ -90,26 +90,26 @@ python generate_project.py duckdb/duckdb --gcs --bucket gs://your-bucket/github-
 python generate_project.py your-org/your-repo --gcs --bucket gs://your-bucket/github-analytics
 ```
 
-**Note:** Rill supports both Google Cloud Storage (GCS) and Amazon S3. The download script currently supports GCS. For S3, you'll need to modify the script.
+**Note:** StarData supports both Google Cloud Storage (GCS) and Amazon S3. The download script currently supports GCS. For S3, you'll need to modify the script.
 
 :::note Just want to explore locally?
 Use the `--local` flag instead: `python generate_project.py owner/repo --local`
 
-This is great for testing, but you won't be able to deploy to Rill Cloud without migrating to cloud storage later.
+This is great for testing, but you won't be able to deploy to StarData Cloud without migrating to cloud storage later.
 :::
 
-## Step 4: Deploy to Rill Cloud
+## Step 4: Deploy to StarData Cloud
 
 Deploy your dashboard to share with your team:
 
 ```bash
-rill deploy
+stardata deploy
 ```
 
-This creates a live, shareable link where your team can explore the data together. Since your data is in cloud storage, Rill Cloud can access it directly.
+This creates a live, shareable link where your team can explore the data together. Since your data is in cloud storage, StarData Cloud can access it directly.
 
 :::tip Preview locally first
-Want to verify everything looks good before deploying? Run `rill start` to preview the dashboard locally, then deploy when ready.
+Want to verify everything looks good before deploying? Run `stardata start` to preview the dashboard locally, then deploy when ready.
 :::
 
 ## Next Steps
@@ -118,4 +118,4 @@ Now that you have GitHub Analytics deployed:
 
 1. **Keep data fresh** – Schedule the download script to run regularly (cron, GitHub Actions, etc.) and keep your dashboards up to date
 2. **Customize metrics** – Edit the metrics YAML files to add team-specific calculations
-3. **Add alerts** – Use Rill's alerting features to monitor key metrics
+3. **Add alerts** – Use StarData's alerting features to monitor key metrics

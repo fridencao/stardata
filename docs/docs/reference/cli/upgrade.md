@@ -1,20 +1,20 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill upgrade
+title: stardata upgrade
 ---
-## rill upgrade
+## stardata upgrade
 
-Upgrade Rill to the latest version
+Upgrade StarData to the latest version
 
 ```
-rill upgrade [flags]
+stardata upgrade [flags]
 ```
 
 ### Flags
 
 ```
       --nightly          Install the latest nightly build
-      --version string   Install a specific version of Rill
+      --version string   Install a specific version of StarData
 ```
 
 ### Global flags
@@ -28,5 +28,5 @@ rill upgrade [flags]
 
 ### SEE ALSO
 
-* [rill](cli.md)	 - A CLI for Rill
+* [stardata](cli.md)	 - A CLI for StarData
 

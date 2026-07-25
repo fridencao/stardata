@@ -7,7 +7,7 @@ sidebar_position: 20
 
 ### Google Sheets
 
-Rill can read from any HTTP(S) URL endpoint that produces a valid data file in a supported format. For example, to bring in data from [Google Sheets](https://www.google.com/sheets/about/) as a CSV file directly into Rill as a source ([leveraging the direct download link syntax](https://www.highviewapps.com/blog/how-to-create-a-csv-or-excel-direct-download-link-in-google-sheets/)), you can create a `source_name.yaml` file in the `sources` directory of your Rill project with the following content. 
+StarData can read from any HTTP(S) URL endpoint that produces a valid data file in a supported format. For example, to bring in data from [Google Sheets](https://www.google.com/sheets/about/) as a CSV file directly into StarData as a source ([leveraging the direct download link syntax](https://www.highviewapps.com/blog/how-to-create-a-csv-or-excel-direct-download-link-in-google-sheets/)), you can create a `source_name.yaml` file in the `sources` directory of your StarData project with the following content. 
 
 :::note Prerequisite 
 

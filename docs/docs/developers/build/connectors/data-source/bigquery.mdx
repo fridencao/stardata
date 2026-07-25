@@ -11,11 +11,11 @@ import { TwoStepFlowIntro, EnvPullTip, DevProdSeparation, DeployToCloud } from '
 
 ## Overview
 
-[Google BigQuery](https://cloud.google.com/bigquery/docs) is a fully managed, serverless data warehouse that enables scalable and cost-effective analysis of large datasets using SQL-like queries. It supports a highly scalable and flexible architecture, allowing users to analyze large amounts of data in real time, making it suitable for BI/ML applications. Rill supports natively connecting to and reading from BigQuery as a source by leveraging the [BigQuery SDK](https://cloud.google.com/bigquery/docs/reference/libraries).
+[Google BigQuery](https://cloud.google.com/bigquery/docs) is a fully managed, serverless data warehouse that enables scalable and cost-effective analysis of large datasets using SQL-like queries. It supports a highly scalable and flexible architecture, allowing users to analyze large amounts of data in real time, making it suitable for BI/ML applications. StarData supports natively connecting to and reading from BigQuery as a source by leveraging the [BigQuery SDK](https://cloud.google.com/bigquery/docs/reference/libraries).
 
 ## Authentication Methods
 
-To connect to Google BigQuery, you need to provide authentication credentials. Rill supports two methods:
+To connect to Google BigQuery, you need to provide authentication credentials. StarData supports two methods:
 
 1. **Use Service Account JSON** (recommended for production)
 2. **Use Local Google Cloud CLI credentials** (local development only - not recommended for production)
@@ -28,11 +28,11 @@ To connect to Google BigQuery, you need to provide authentication credentials. R
 
 ## Method 1: Service Account JSON (Recommended)
 
-Service Account JSON credentials provide the most secure and reliable authentication for BigQuery. This method works for both local development and Rill Cloud deployments.
+Service Account JSON credentials provide the most secure and reliable authentication for BigQuery. This method works for both local development and StarData Cloud deployments.
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Google BigQuery** as the data source type
 3. In the authentication step:
    - Upload your JSON key file or paste its contents
@@ -70,10 +70,10 @@ Then, [create your first model](#create-your-first-model).
 
 ## Method 2: Local Google Cloud CLI Credentials
 
-For local development, you can use credentials from the Google Cloud CLI. This method is **not suitable for production** or Rill Cloud deployments.
+For local development, you can use credentials from the Google Cloud CLI. This method is **not suitable for production** or StarData Cloud deployments.
 
 :::warning Not recommended for production
-Local Google Cloud CLI credentials only work for local development. If you deploy to Rill Cloud using this method, your dashboards will fail. Always use Service Account JSON for production deployments.
+Local Google Cloud CLI credentials only work for local development. If you deploy to StarData Cloud using this method, your dashboards will fail. Always use Service Account JSON for production deployments.
 :::
 
 ### Setup
@@ -106,7 +106,7 @@ driver: bigquery
 project_id: "my-gcp-project"
 ```
 
-When no explicit credentials are provided in the connector, Rill will automatically use your local Google Cloud CLI credentials. Then, [create your first model](#create-your-first-model).
+When no explicit credentials are provided in the connector, StarData will automatically use your local Google Cloud CLI credentials. Then, [create your first model](#create-your-first-model).
 
 ## Create Your First Model
 
@@ -131,7 +131,7 @@ After creating the model, you can add additional [model settings](/developers/bu
 
 <DevProdSeparation />
 
-## Deploy to Rill Cloud
+## Deploy to StarData Cloud
 
 <DeployToCloud
   connector="BigQuery"

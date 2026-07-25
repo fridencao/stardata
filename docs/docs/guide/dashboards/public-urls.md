@@ -33,18 +33,18 @@ In fact, users who click on a public shareable URL cannot see the parent filters
 ## How to manage public URLs
 
 ### Via the UI
-You can now manage public URLs via the UI. You will find a new "settings" tab in the Rill Cloud UI as an administrator.
+You can now manage public URLs via the UI. You will find a new "settings" tab in the StarData Cloud UI as an administrator.
 
 ![Public URL Settings](/img/explore/publicurl/public-url-settings.png)
 
 
 ### Via the CLI
 ```
-rill public-url
+stardata public-url
 Manage public URLs
 
 Usage:
-  rill public-url [command]
+  stardata public-url [command]
 
 Available Commands:
   list        List all public URLs
@@ -52,7 +52,7 @@ Available Commands:
   delete      Delete a public URL
 
 Flags:
-      --org string   Organization Name (default "Rill_Learning")
+      --org string   Organization Name (default "StarData_Learning")
 
 Global Flags:
       --api-token string   Token for authenticating with the cloud API
@@ -60,23 +60,23 @@ Global Flags:
   -h, --help               Print usage
       --interactive        Prompt for missing required parameters (default true)
 
-Use "rill public-url [command] --help" for more information about a command.
+Use "stardata public-url [command] --help" for more information about a command.
 
 ```
-Using the Rill CLI, you can list, create, or delete public URLs.
+Using the StarData CLI, you can list, create, or delete public URLs.
 
 #### Deleting a public URL
 
 To delete a public URL, you will need an `id` parameter. In order to retrieve the appropriate `id`, you will need to first list out the public URLs. You can do so using the command below with any flags that help you.
 
 ```
-rill public-url list 
+stardata public-url list 
 ```
 
 Once you have obtained the `id` you can run the following:
 
 ```
-rill public-url delete <id>
+stardata public-url delete <id>
 ```
 
 If you are interested in creating a public URL directly from the CLI, you can do so by passing the required parameters. (You can use the --help flag to see what additional flags are required.)

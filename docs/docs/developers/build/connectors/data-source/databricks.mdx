@@ -11,11 +11,11 @@ import { TwoStepFlowIntro, EnvPullTip, DevProdSeparation, DeployToCloud } from '
 
 ## Overview
 
-[Databricks](https://docs.databricks.com) is a unified data and AI platform built on top of Apache Spark and the lakehouse architecture. Rill connects to Databricks SQL warehouses using the [Databricks SQL Go driver](https://github.com/databricks/databricks-sql-go) to ingest data into Rill's embedded engine.
+[Databricks](https://docs.databricks.com) is a unified data and AI platform built on top of Apache Spark and the lakehouse architecture. StarData connects to Databricks SQL warehouses using the [Databricks SQL Go driver](https://github.com/databricks/databricks-sql-go) to ingest data into StarData's embedded engine.
 
 ## Authentication
 
-Rill authenticates to Databricks using a [personal access token](https://docs.databricks.com/aws/en/dev-tools/auth/pat). The token must have access to the SQL warehouse and to the catalogs and schemas you intend to query.
+StarData authenticates to Databricks using a [personal access token](https://docs.databricks.com/aws/en/dev-tools/auth/pat). The token must have access to the SQL warehouse and to the catalogs and schemas you intend to query.
 
 <TwoStepFlowIntro
   connector="Databricks"
@@ -25,7 +25,7 @@ Rill authenticates to Databricks using a [personal access token](https://docs.da
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Databricks** as the data source type
 3. In the authentication step:
    - Enter the **Server hostname** of your SQL warehouse (e.g. `dbc-xxxxxxxx-xxxx.cloud.databricks.com`)
@@ -105,7 +105,7 @@ After creating the model, you can add additional [model settings](/developers/bu
 
 <DevProdSeparation />
 
-## Deploy to Rill Cloud
+## Deploy to StarData Cloud
 
 <DeployToCloud
   connector="Databricks"

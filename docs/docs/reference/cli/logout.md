@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill logout
+title: stardata logout
 ---
-## rill logout
+## stardata logout
 
-Logout of the Rill API
+Logout of the StarData API
 
 ```
-rill logout [flags]
+stardata logout [flags]
 ```
 
 ### Global flags
@@ -21,5 +21,5 @@ rill logout [flags]
 
 ### SEE ALSO
 
-* [rill](cli.md)	 - A CLI for Rill
+* [stardata](cli.md)	 - A CLI for StarData
 

@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill billing subscription cancel
+title: stardata billing subscription cancel
 ---
-## rill billing subscription cancel
+## stardata billing subscription cancel
 
 Cancel subscription for an organization
 
 ```
-rill billing subscription cancel [flags]
+stardata billing subscription cancel [flags]
 ```
 
 ### Global flags
@@ -22,5 +22,5 @@ rill billing subscription cancel [flags]
 
 ### SEE ALSO
 
-* [rill billing subscription](subscription.md)	 - Manage organization subscriptions
+* [stardata billing subscription](subscription.md)	 - Manage organization subscriptions
 

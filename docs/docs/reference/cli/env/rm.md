@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill env rm
+title: stardata env rm
 ---
-## rill env rm
+## stardata env rm
 
 Remove an env variable
 
 ```
-rill env rm [<project>] <key> [flags]
+stardata env rm [<project>] <key> [flags]
 ```
 
 ### Flags
@@ -30,5 +30,5 @@ rill env rm [<project>] <key> [flags]
 
 ### SEE ALSO
 
-* [rill env](env.md)	 - Manage variables for a project
+* [stardata env](env.md)	 - Manage variables for a project
 

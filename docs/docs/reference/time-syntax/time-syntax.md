@@ -1,11 +1,11 @@
 ---
 title: Time Range Syntax
-description: Complete reference for Rill's time range syntax
+description: Complete reference for StarData's time range syntax
 sidebar_label: Time Range Syntax
 sidebar_position: 0
 ---
 
-Rill provides a flexible, expressive syntax for specifying time ranges. This reference covers every aspect of the syntax with detailed examples.
+StarData provides a flexible, expressive syntax for specifying time ranges. This reference covers every aspect of the syntax with detailed examples.
 
 ## Grammar Overview
 
@@ -512,7 +512,7 @@ Given `now = 2025-09-03T14:30:00Z`:
 
 ## Week Correction (ISO 8601)
 
-Rill follows ISO 8601 week rules where:
+StarData follows ISO 8601 week rules where:
 - Weeks start on Monday
 - Week 1 contains the first Thursday of the year
 - Weeks can span year boundaries

@@ -1,23 +1,23 @@
 ---
-title: Building Your Data Analytics Pipeline in Rill
+title: Building Your Data Analytics Pipeline in StarData
 sidebar_label: Build
 sidebar_position: 0
 ---
 
-Rill provides a comprehensive platform for building end-to-end data analytics solutions. Once you've connected to your source data or connected to your own OLAP database, you can start building with Rill. Don't forget to check out the [reference documentation!](/reference/project-files)
+StarData provides a comprehensive platform for building end-to-end data analytics solutions. Once you've connected to your source data or connected to your own OLAP database, you can start building with StarData. Don't forget to check out the [reference documentation!](/reference/project-files)
 
-### What is a Rill project?
-- [**Getting Started with your Rill Project**](/developers/build/getting-started) - Understand Rill project structure and configuration
+### What is a StarData project?
+- [**Getting Started with your StarData Project**](/developers/build/getting-started) - Understand StarData project structure and configuration
 
 ### Connect to your Data
-- [**Connectors Overview**](/developers/build/connectors) - Learn about connecting Rill to data sources and OLAP engines
+- [**Connectors Overview**](/developers/build/connectors) - Learn about connecting StarData to data sources and OLAP engines
 - [**OLAP Engines**](/developers/build/connectors/olap) - Configure DuckDB, ClickHouse, Druid, or Pinot for analytics
 - [**Data Sources**](/developers/build/connectors/data-source) - Connect to S3, GCS, BigQuery, Snowflake, and more
 - [**Configure Local Credentials**](/developers/build/connectors/credentials) - Set up credentials for local development
 - [**Dev/Prod Connectors**](/developers/build/connectors/templating) - Separate your production and development data sources 
   
 ### Modeling and Last Mile ETL
-- [**Models Overview**](/developers/build/models) - Overview of models available in Rill
+- [**Models Overview**](/developers/build/models) - Overview of models available in StarData
 - [**Getting Started with Models**](/developers/build/models/models-101) - What are models and important topics to remember as you create your own.
 - [**Differences between SQL and YAML Models**](/developers/build/models/model-differences) - Compare SQL and YAML models and learn when to use 
 - [**SQL Models**](/developers/build/models/sql-models) - Transform and prepare your data
@@ -29,27 +29,27 @@ Rill provides a comprehensive platform for building end-to-end data analytics so
 ### Define Measures and Dimensions
 - [**What are Metrics Views?**](/developers/build/metrics-view/what-are-metrics-views) - Learn about Metrics Views!
 - [**Underlying Model/Table**](/developers/build/metrics-view/underlying-model) - Powering your metrics view with a `model` or `table`
-- [**Time Series**](/developers/build/metrics-view/time-series) - The backbone of Rill Explore Dashboards, time
+- [**Time Series**](/developers/build/metrics-view/time-series) - The backbone of StarData Explore Dashboards, time
 - [**Dimensions**](/developers/build/metrics-view/dimensions) - Expand your dimensions capabilities further in your metrics view
 - [**Measures**](/developers/build/metrics-view/measures) - Aggregate your measures further in your metrics view
 - [**Define Data Access**](/developers/build/metrics-view/security) - Define access and row access policies
 
 ### Build Visualizations
-- [**Dashboards Types**](/developers/build/dashboards/dashboards-101) - What are the visualization options in Rill, and how are they different?
+- [**Dashboards Types**](/developers/build/dashboards/dashboards-101) - What are the visualization options in StarData, and how are they different?
 - [**Slice-and-Dice Dashboards**](/developers/build/dashboards/explore) - Explore and find insights in your data
 - [**Traditional Visualizations**](/developers/build/dashboards/canvas) - Visualize your data with various chart types
 - [**Canvas Components**](/developers/build/dashboards/canvas-widgets) - See all of our supported components!
 - [**Define Dashboard Access**](/developers/build/dashboards/customization#define-dashboard-access) - Set a SQL boolean query that defines access to the dashboard
 
 ### Build Integrations with Custom APIs
-- [**Custom APIs Overview**](/developers/build/custom-apis) - Create HTTP API endpoints to expose your Rill data
+- [**Custom APIs Overview**](/developers/build/custom-apis) - Create HTTP API endpoints to expose your StarData data
 - [**SQL APIs**](/developers/build/custom-apis/sql) - Query models, tables, and external databases
 - [**Metrics SQL APIs**](/developers/build/custom-apis/metrics-sql) - Query metrics views with automatic security inheritance
 - [**Dynamic Queries & Templating**](/developers/build/custom-apis/templating) - Add parameters, user attributes, and conditional logic
 - [**Security & Access Control**](/developers/build/custom-apis/security) - Multi-tenant APIs with custom attributes on tokens
 
 ### Project Settings
-- [**Project Configuration**](/developers/build/project-configuration) - Configure your Rill Project and set default behavior
-- [**Structure your Project**](/developers/build/structure) - Structure folder architecture in Rill
-- [**Use your favorite IDE**](/developers/build/ide) - Utilize your favorite IDE to build Rill projects
-- [**Debugging Rill Developer**](/developers/build/debugging/trace-viewer) - Troubleshoot dashboard access, trace your reconciled resources, and understand project logs
+- [**Project Configuration**](/developers/build/project-configuration) - Configure your StarData Project and set default behavior
+- [**Structure your Project**](/developers/build/structure) - Structure folder architecture in StarData
+- [**Use your favorite IDE**](/developers/build/ide) - Utilize your favorite IDE to build StarData projects
+- [**Debugging StarData Developer**](/developers/build/debugging/trace-viewer) - Troubleshoot dashboard access, trace your reconciled resources, and understand project logs

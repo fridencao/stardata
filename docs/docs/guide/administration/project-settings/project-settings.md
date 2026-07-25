@@ -1,5 +1,5 @@
 ---
-title: "Managing Projects in Rill Cloud"
+title: "Managing Projects in StarData Cloud"
 description: Basic management for projects
 sidebar_position: 20
 ---
@@ -15,11 +15,11 @@ Projects can be connected to a GitHub repository for continuous deployment. See 
 ![Project Home](<https://cdn.rilldata.com/docs/screenshots/guide/administration/project-home.png>)
 
 
-A project is a single deployed instance from Rill Developer (or what we refer to as a Rill project). Once you have deployed a project to Rill Cloud, you can make changes to it via the CLI or via Rill Cloud.
+A project is a single deployed instance from StarData Developer (or what we refer to as a StarData project). Once you have deployed a project to StarData Cloud, you can make changes to it via the CLI or via StarData Cloud.
 
 
 ## Checking deployment status
-After deploying to Rill Cloud, you can navigate to the status page to monitor your project's health. The status page provides an overview of your deployment details, resource statuses, tables, and errors, with dedicated tabs for deeper inspection.
+After deploying to StarData Cloud, you can navigate to the status page to monitor your project's health. The status page provides an overview of your deployment details, resource statuses, tables, and errors, with dedicated tabs for deeper inspection.
 
 ![Status](<https://cdn.rilldata.com/docs/screenshots/guide/administration/project-status-overview.png>)
 
@@ -37,7 +37,7 @@ Coming soon! -->
 
 ### Tables
 
-The Tables tab provides visibility into the tables in your OLAP database. Tables are split into two sections: **Models** (tables managed by Rill) and **External Tables** (tables that exist in the OLAP engine but are not managed by Rill). You can search and filter by type (table or view), view partition details for incremental models, and trigger model refreshes.
+The Tables tab provides visibility into the tables in your OLAP database. Tables are split into two sections: **Models** (tables managed by StarData) and **External Tables** (tables that exist in the OLAP engine but are not managed by StarData). You can search and filter by type (table or view), view partition details for incremental models, and trigger model refreshes.
 
 ![Tables](<https://cdn.rilldata.com/docs/screenshots/guide/administration/project-status-tables.png>)
 
@@ -55,15 +55,15 @@ You can also manage project objects on the settings page, including public URLs 
 
 ![Project Settings](<https://cdn.rilldata.com/docs/screenshots/guide/administration/project-settings-general.png>)
 
-## Managing a Rill project from the CLI
-Managing a project includes the project itself and all components or resources that belong to the project. Via the CLI, you can make changes to the project's properties such as description, public access, etc. Run `rill project -h` for an overview of available commands.
+## Managing a StarData project from the CLI
+Managing a project includes the project itself and all components or resources that belong to the project. Via the CLI, you can make changes to the project's properties such as description, public access, etc. Run `stardata project -h` for an overview of available commands.
 
 ### Refreshing the deployment
 
 If your project is connected to a GitHub repository, it will automatically redeploy every time you push changes. To manually refresh data sources without pushing code changes (or redeploying your project), run the following command:
 
 ```
-rill project refresh [--source/model] (source_name or model_name) [--local]
+stardata project refresh [--source/model] (source_name or model_name) [--local]
 ```
 
 
@@ -71,7 +71,7 @@ rill project refresh [--source/model] (source_name or model_name) [--local]
 
 In case you need to check the project status via the CLI, you can run the following:
 ```
-rill project status
+stardata project status
 ```
 
 
@@ -79,9 +79,9 @@ rill project status
 
 ## Make a project public
 
-Projects on Rill Cloud are private by default. To make a project's dashboards publicly accessible without authentication, run:
+Projects on StarData Cloud are private by default. To make a project's dashboards publicly accessible without authentication, run:
 ```
-rill project edit --public=true
+stardata project edit --public=true
 ```
 
 :::caution Avoid Sharing Private Data

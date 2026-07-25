@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill org switch
+title: stardata org switch
 ---
-## rill org switch
+## stardata org switch
 
 Switch to other organization
 
 ```
-rill org switch [<org-name>] [flags]
+stardata org switch [<org-name>] [flags]
 ```
 
 ### Global flags
@@ -21,5 +21,5 @@ rill org switch [<org-name>] [flags]
 
 ### SEE ALSO
 
-* [rill org](org.md)	 - Manage organizations
+* [stardata org](org.md)	 - Manage organizations
 

@@ -5,7 +5,7 @@ sidebar_position: 20
 ---
 
 
-After logging into [Rill Cloud](https://ui.rilldata.com), you should see all projects within your [organization](/guide/administration/organization-settings#organization) that are available and/or have been granted permissions to your user profile. Within each project, you'll then be able to access the corresponding individual dashboards that belong to a particular Rill project.
+After logging into [StarData Cloud](https://ui.rilldata.com), you should see all projects within your [organization](/guide/administration/organization-settings#organization) that are available and/or have been granted permissions to your user profile. Within each project, you'll then be able to access the corresponding individual dashboards that belong to a particular StarData project.
 
 
 <div style={{ 
@@ -54,7 +54,7 @@ Similar to our [Explore dashboards](/guide/dashboards/explore), Canvas Dashboard
  If your dimensions or measures have the same name in your metrics view, filters will apply to all components, regardless if it's in a different metrics view.
  :::
 
-<!-- - _**Alerts, Bookmarks and Sharing:**_ You can create an [alert](/guide/alerts) by selecting the bell, customizing the default view of the dashboard (see `purple` box) to a predefined set of metrics, dimensions, and filters by selecting the [bookmark](/guide/dashboards/bookmarks.md), or share the dashboard ([internally by clicking the `Share` button](/guide/administration/users-and-access/user-management#admin-invites-user-from-rill-cloud) or [externally via Public URLs](/guide/dashboards/public-urls.md)) . -->
+<!-- - _**Alerts, Bookmarks and Sharing:**_ You can create an [alert](/guide/alerts) by selecting the bell, customizing the default view of the dashboard (see `purple` box) to a predefined set of metrics, dimensions, and filters by selecting the [bookmark](/guide/dashboards/bookmarks.md), or share the dashboard ([internally by clicking the `Share` button](/guide/administration/users-and-access/user-management#admin-invites-user-from-stardata-cloud) or [externally via Public URLs](/guide/dashboards/public-urls.md)) . -->
 
 ## Component Navigation
 ![Canvas Navigation](/img/explore/canvas/canvas-navigaton.png)

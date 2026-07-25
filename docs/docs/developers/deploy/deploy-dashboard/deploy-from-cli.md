@@ -1,44 +1,44 @@
 ---
-title: Deploy to Rill Cloud from GitLab
-description: How to set up continuous deploys to Rill Cloud from GitLab
+title: Deploy to StarData Cloud from GitLab
+description: How to set up continuous deploys to StarData Cloud from GitLab
 sidebar_label: Deploy from GitLab
 sidebar_position: 10
 ---
 
-While Rill Cloud natively integrates with [GitHub](https://github.com), you can also deploy your Rill project from [GitLab](https://about.gitlab.com/) using direct uploads from a [GitLab CI/CD pipeline](https://docs.gitlab.com/ee/ci/quick_start/).
+While StarData Cloud natively integrates with [GitHub](https://github.com), you can also deploy your StarData project from [GitLab](https://about.gitlab.com/) using direct uploads from a [GitLab CI/CD pipeline](https://docs.gitlab.com/ee/ci/quick_start/).
 
-Follow these steps to set up continuous deployment from GitLab to Rill Cloud:
+Follow these steps to set up continuous deployment from GitLab to StarData Cloud:
 
-1. Create a new GitLab repository and push your Rill project to it.
+1. Create a new GitLab repository and push your StarData project to it.
 
-2. On your local, [authenticate with Rill Cloud](/guide/administration/users-and-access/user-management#logging-into-rill-cloud) and create an organization (replace `my-org-name` with your desired name):
+2. On your local, [authenticate with StarData Cloud](/guide/administration/users-and-access/user-management#logging-into-stardata-cloud) and create an organization (replace `my-org-name` with your desired name):
 ```bash
-rill login
-rill org create my-org-name
+stardata login
+stardata org create my-org-name
 ```
 
-3. Create the project in Rill Cloud
+3. Create the project in StarData Cloud
 ```bash
-rill project deploy
+stardata project deploy
 ```
 
 :::note Multiple branches
 If your repo contains multiple branches ensure the branch you want to deploy from via
 ```bash
-rill project edit --project my-project-name --prod-branch my-branch-name
+stardata project edit --project my-project-name --prod-branch my-branch-name
 ```
 :::
 
-4. Provision a Rill Cloud [service account](/reference/cli/service/create) called `gitlab-ci` and copy its access token:
+4. Provision a StarData Cloud [service account](/reference/cli/service/create) called `gitlab-ci` and copy its access token:
 ```
-rill service create gitlab-ci
+stardata service create gitlab-ci
 ```
 
 5. Set the service token as a CI/CD variable called `RILL_SERVICE_TOKEN` in GitLab (from the repository page, it's under _Settings > CI/CD > Variables_).
 
-6. Create a file named `.gitlab-ci.yml` at the root of the repository containing your Rill project. Paste the following contents into it (replace `my-org-name` and `my-project-name` with your desired names):
+6. Create a file named `.gitlab-ci.yml` at the root of the repository containing your StarData project. Paste the following contents into it (replace `my-org-name` and `my-project-name` with your desired names):
 ```yaml
-deploy-rill-cloud:
+deploy-stardata-cloud:
   stage: deploy
   script: 
     - curl -L -o $HOME/rill.zip https://cdn.rilldata.com/rill/latest/rill_linux_amd64.zip 
@@ -47,8 +47,8 @@ deploy-rill-cloud:
     - $HOME/rill project deploy --org my-org-name --project my-project-name --interactive=false --api-token $RILL_SERVICE_TOKEN
 ```
 
-Your Rill project should now automatically deploy to `ui.rilldata.com/my-org-name/my-project-name` each time changes are pushed to GitLab!
+Your StarData project should now automatically deploy to `ui.rilldata.com/my-org-name/my-project-name` each time changes are pushed to GitLab!
 
 :::note File size limits
-We enforce a file size limit of 100mb so ensure you do not unpack the rill binary in the repo root or add it to your .gitignore
+We enforce a file size limit of 100mb so ensure you do not unpack the stardata binary in the repo root or add it to your .gitignore
 :::

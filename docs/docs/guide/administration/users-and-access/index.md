@@ -1,13 +1,13 @@
 ---
 title: "Users and Access"
-description: "Manage users, groups, and access controls in Rill Cloud"
+description: "Manage users, groups, and access controls in StarData Cloud"
 sidebar_label: "Users"
 sidebar_position: 0
 ---
 
 # Users and Access
 
-Manage users, user groups, and access controls for your Rill Cloud projects.
+Manage users, user groups, and access controls for your StarData Cloud projects.
 
 ## User Management
 

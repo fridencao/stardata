@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill service show
+title: stardata service show
 ---
-## rill service show
+## stardata service show
 
 Show service
 
 ```
-rill service show <service-name> [flags]
+stardata service show <service-name> [flags]
 ```
 
 ### Global flags
@@ -22,5 +22,5 @@ rill service show <service-name> [flags]
 
 ### SEE ALSO
 
-* [rill service](service.md)	 - Manage service accounts
+* [stardata service](service.md)	 - Manage service accounts
 

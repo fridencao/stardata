@@ -1,8 +1,8 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill org delete
+title: stardata org delete
 ---
-## rill org delete
+## stardata org delete
 
 Delete organization
 
@@ -12,14 +12,14 @@ Delete an organization and all its associated projects.
 This operation cannot be undone. Use --force to skip confirmation.
 
 ```
-rill org delete [<org-name>] [flags]
+stardata org delete [<org-name>] [flags]
 ```
 
 ### Examples
 
 ```
-  rill org delete myorg
-  rill org delete myorg --force
+  stardata org delete myorg
+  stardata org delete myorg --force
 ```
 
 ### Global flags
@@ -33,5 +33,5 @@ rill org delete [<org-name>] [flags]
 
 ### SEE ALSO
 
-* [rill org](org.md)	 - Manage organizations
+* [stardata org](org.md)	 - Manage organizations
 

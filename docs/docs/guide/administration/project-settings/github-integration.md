@@ -1,13 +1,13 @@
 ---
 title: "GitHub Integration"
-description: "Connect and manage GitHub repository integration for your Rill Cloud projects"
+description: "Connect and manage GitHub repository integration for your StarData Cloud projects"
 sidebar_label: "GitHub Integration"
 sidebar_position: 21
 ---
 
 # GitHub Integration
 
-Each Rill Cloud project can be connected to a single GitHub repository. This enables continuous deployment—your project automatically redeploys whenever you push changes to the connected repository.
+Each StarData Cloud project can be connected to a single GitHub repository. This enables continuous deployment—your project automatically redeploys whenever you push changes to the connected repository.
 
 ## Connecting to a GitHub Repository
 
@@ -33,9 +33,9 @@ This action has no effect on your current deployment and will not require a sour
 
 ## Deploying from a Branch Other Than `main`
 
-By default, Rill Cloud deploys from the `main` branch of your connected repository. You can change this to deploy from a different branch.
+By default, StarData Cloud deploys from the `main` branch of your connected repository. You can change this to deploy from a different branch.
 
-### Via Rill Cloud UI
+### Via StarData Cloud UI
 
 If you have already [set up your connection to GitHub](/developers/deploy/deploy-dashboard/#syncing-your-github-repository), you can edit the branch from the project settings:
 
@@ -46,18 +46,18 @@ If you have already [set up your connection to GitHub](/developers/deploy/deploy
 To change the branch via the CLI, run:
 
 ```bash
-rill project edit
+stardata project edit
 ```
 
 This will open an interactive prompt where you can update the branch name and other project properties.
 
 ## Automatic Deployment
 
-Your project on Rill Cloud will automatically redeploy every time you push changes to the connected GitHub repository. This ensures your dashboards always reflect the latest version of your project code.
+Your project on StarData Cloud will automatically redeploy every time you push changes to the connected GitHub repository. This ensures your dashboards always reflect the latest version of your project code.
 
 :::tip Manual Refresh
 To manually refresh data sources without pushing code changes (or redeploying your project), use:
 ```bash
-rill project refresh [--source/model] (source_name or model_name)
+stardata project refresh [--source/model] (source_name or model_name)
 ```
 :::

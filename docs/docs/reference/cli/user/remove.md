@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill user remove
+title: stardata user remove
 ---
-## rill user remove
+## stardata user remove
 
 Remove a user
 
 ```
-rill user remove [flags]
+stardata user remove [flags]
 ```
 
 ### Flags
@@ -30,5 +30,5 @@ rill user remove [flags]
 
 ### SEE ALSO
 
-* [rill user](user.md)	 - Manage users
+* [stardata user](user.md)	 - Manage users
 

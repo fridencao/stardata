@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill usergroup add
+title: stardata usergroup add
 ---
-## rill usergroup add
+## stardata usergroup add
 
 Add a group to a project or organization
 
 ```
-rill usergroup add [flags]
+stardata usergroup add [flags]
 ```
 
 ### Flags
@@ -33,5 +33,5 @@ rill usergroup add [flags]
 
 ### SEE ALSO
 
-* [rill usergroup](usergroup.md)	 - Manage user groups
+* [stardata usergroup](usergroup.md)	 - Manage user groups
 

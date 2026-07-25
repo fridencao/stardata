@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project logs
+title: stardata project logs
 ---
-## rill project logs
+## stardata project logs
 
 Show project logs
 
 ```
-rill project logs [<project-name>] [flags]
+stardata project logs [<project-name>] [flags]
 ```
 
 ### Flags
@@ -33,5 +33,5 @@ rill project logs [<project-name>] [flags]
 
 ### SEE ALSO
 
-* [rill project](project.md)	 - Manage projects
+* [stardata project](project.md)	 - Manage projects
 

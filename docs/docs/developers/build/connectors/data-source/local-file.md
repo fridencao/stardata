@@ -5,7 +5,7 @@ sidebar_label: Local File
 sidebar_position: 35
 ---
 
-Import data from files stored on your local machine into your Rill project.
+Import data from files stored on your local machine into your StarData project.
 
 ## Overview
 
@@ -13,11 +13,11 @@ The Local File connector allows you to import data from CSV, JSON, Parquet, and 
 
 ## Adding a Local File Source
 
-### Option 1: Using the Rill UI
+### Option 1: Using the StarData UI
 
 1. In the left navigation pane, click the **"+"** button next to **Sources**
 2. Select **"Local File"** from the connector options
-3. Navigate to and select your file, or drag and drop it directly onto the Rill interface
+3. Navigate to and select your file, or drag and drop it directly onto the StarData interface
 
 ### Option 2: Using Code
 
@@ -34,7 +34,7 @@ connector: duckdb
 sql: "select * from read_csv('data/your_file_name.csv', auto_detect=true, ignore_errors=1, header=true)
 ```
 
-**Important:** When using relative paths, they should be relative to your Rill project root (where `rill.yaml` is located), not the `sources` directory.
+**Important:** When using relative paths, they should be relative to your StarData project root (where `rill.yaml` is located), not the `sources` directory.
 
 ## Importing Multiple Files
 
@@ -62,5 +62,5 @@ The Local File connector supports various file formats including:
 
 
 :::warning File Size Limits
-When ingesting the Data into Rill, you'll notice a new `/data` folder path with a copy of the CSV file. This is designed so that when you publish to Rill Cloud, the file will also be included. Note that there is a 100MB limit to each unique file. Files over 100MB will not be deployed with your project.
+When ingesting the Data into StarData, you'll notice a new `/data` folder path with a copy of the CSV file. This is designed so that when you publish to StarData Cloud, the file will also be included. Note that there is a 100MB limit to each unique file. Files over 100MB will not be deployed with your project.
 :::

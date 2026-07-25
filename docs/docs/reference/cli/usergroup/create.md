@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill usergroup create
+title: stardata usergroup create
 ---
-## rill usergroup create
+## stardata usergroup create
 
 Create a group
 
 ```
-rill usergroup create [<name>] [flags]
+stardata usergroup create [<name>] [flags]
 ```
 
 ### Flags
@@ -27,5 +27,5 @@ rill usergroup create [<name>] [flags]
 
 ### SEE ALSO
 
-* [rill usergroup](usergroup.md)	 - Manage user groups
+* [stardata usergroup](usergroup.md)	 - Manage user groups
 

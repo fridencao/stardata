@@ -9,7 +9,7 @@ import { TwoStepFlowIntro, EnvPullTip, DevProdSeparation, DeployToCloud } from '
 
 ## Overview
 
-[Supabase](https://supabase.com) is an open-source Firebase alternative built on top of PostgreSQL. It provides a fully managed Postgres database with additional features like authentication, real-time subscriptions, and storage. Since Supabase uses PostgreSQL under the hood, you can connect to it using standard PostgreSQL connection methods. Rill supports connecting to Supabase databases using either individual connection parameters or a [connection string/URI](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING-URIS).
+[Supabase](https://supabase.com) is an open-source Firebase alternative built on top of PostgreSQL. It provides a fully managed Postgres database with additional features like authentication, real-time subscriptions, and storage. Since Supabase uses PostgreSQL under the hood, you can connect to it using standard PostgreSQL connection methods. StarData supports connecting to Supabase databases using either individual connection parameters or a [connection string/URI](https://www.postgresql.org/docs/current/libpq-connect.html#LIBPQ-CONNSTRING-URIS).
 
 ## Authentication Methods
 
@@ -30,7 +30,7 @@ Using individual parameters provides clear, readable configuration for your Supa
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Supabase** as the data source type
 3. In the authentication step:
    - Enter your host (e.g., `aws-0-us-east-1.pooler.supabase.com`)
@@ -125,7 +125,7 @@ After creating the model, you can add additional [model settings](/developers/bu
 
 <DevProdSeparation />
 
-## Deploy to Rill Cloud
+## Deploy to StarData Cloud
 
 <DeployToCloud
   connector="Supabase"

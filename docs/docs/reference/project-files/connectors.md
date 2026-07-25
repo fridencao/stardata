@@ -4,7 +4,7 @@ title: Connector YAML
 sidebar_position: 31
 ---
 
-Connector YAML files define how Rill connects to external data sources and OLAP engines. Each connector specifies a driver type and its required connection parameters.
+Connector YAML files define how StarData connects to external data sources and OLAP engines. Each connector specifies a driver type and its required connection parameters.
 
 ## Available Connector Types
 
@@ -205,7 +205,7 @@ _[boolean]_ - Controls whether to log raw SQL queries
 
 ### `max_bytes_billed`
 
-_[integer]_ - Maximum number of bytes billed for a query. Queries that exceed this limit will fail with an error. This can help prevent unexpectedly high costs from large queries. It is highly recommended to set this when running on `on-demand pricing` model. The default value is 0 i.e. no limits are enforced in Rill.
+_[integer]_ - Maximum number of bytes billed for a query. Queries that exceed this limit will fail with an error. This can help prevent unexpectedly high costs from large queries. It is highly recommended to set this when running on `on-demand pricing` model. The default value is 0 i.e. no limits are enforced in StarData.
 
 ### `allow_standard_api`
 
@@ -228,7 +228,7 @@ _[string]_ - Refers to the driver type and must be driver `clickhouse` _(require
 
 ### `managed`
 
-_[boolean]_ - `true` means Rill will provision the connector using the default provisioner. `false` disables automatic provisioning.
+_[boolean]_ - `true` means StarData will provision the connector using the default provisioner. `false` disables automatic provisioning.
 
 ### `mode`
 

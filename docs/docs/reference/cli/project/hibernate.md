@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project hibernate
+title: stardata project hibernate
 ---
-## rill project hibernate
+## stardata project hibernate
 
 Hibernate project
 
 ```
-rill project hibernate [<project-name>] [flags]
+stardata project hibernate [<project-name>] [flags]
 ```
 
 ### Flags
@@ -31,5 +31,5 @@ rill project hibernate [<project-name>] [flags]
 
 ### SEE ALSO
 
-* [rill project](project.md)	 - Manage projects
+* [stardata project](project.md)	 - Manage projects
 

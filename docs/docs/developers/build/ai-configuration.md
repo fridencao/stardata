@@ -1,15 +1,15 @@
 ---
 title: "AI Configuration"
-description: "Configure AI instructions for your Rill project"
+description: "Configure AI instructions for your StarData project"
 sidebar_label: "AI Configuration"
 sidebar_position: 55
 ---
 
 # AI Configuration
 
-Rill's AI capabilities, including [AI Chat](/guide/ai/ai-chat) and the [MCP Server](/guide/ai/mcp), rely on context to provide accurate and relevant answers. You can provide additional context using the `ai_instructions` field in your project configuration files.
+StarData's AI capabilities, including [AI Chat](/guide/ai/ai-chat) and the [MCP Server](/guide/ai/mcp), rely on context to provide accurate and relevant answers. You can provide additional context using the `ai_instructions` field in your project configuration files.
 
-LLMs give their best results when they have good context. For a conversation with Rill Data, this means things like clarifying project-specific terms, routing questions to the correct metrics view, or defining business rules. Rather than expecting the user to provide this context every time, you can add `ai_instructions` to your project. This adds the context automatically for every conversation.
+LLMs give their best results when they have good context. For a conversation with StarData, this means things like clarifying project-specific terms, routing questions to the correct metrics view, or defining business rules. Rather than expecting the user to provide this context every time, you can add `ai_instructions` to your project. This adds the context automatically for every conversation.
 
 There are two places to add `ai_instructions`:
 
@@ -18,7 +18,7 @@ There are two places to add `ai_instructions`:
 
 ## Automatic Context Inclusion
 
-In addition to `ai_instructions`, Rill automatically includes the following in the AI context:
+In addition to `ai_instructions`, StarData automatically includes the following in the AI context:
 
 - **Measure and dimension descriptions**: Any `description` fields you add to measures and dimensions in your metrics view YAML files are automatically included in the AI context. This helps the AI understand what each metric or dimension represents without requiring you to duplicate that information in `ai_instructions`.
 - **Metrics view metadata**: The metrics view name, display name, and description are included to help route questions to the correct dashboard.
@@ -97,18 +97,18 @@ ai_instructions: |
 
 ## Visualization Tips 
 
-When using the [Rill MCP Server](/guide/ai/mcp) with external AI clients like Claude, you can provide specific instructions on how to visualize data. Since the MCP server returns structured data, the AI client is responsible for rendering it.
+When using the [StarData MCP Server](/guide/ai/mcp) with external AI clients like Claude, you can provide specific instructions on how to visualize data. Since the MCP server returns structured data, the AI client is responsible for rendering it.
 
 :::note Visualization tips affect all AI interactions
-Visualization instructions added to `rill.yaml` will affect both [Rill Chat](/guide/ai/ai-chat) responses and external AI clients via the MCP Server. If you only want visualization tips to apply to external AI clients (like Claude Desktop), consider adding them to your client-specific configuration files instead:
+Visualization instructions added to `rill.yaml` will affect both [StarData Chat](/guide/ai/ai-chat) responses and external AI clients via the MCP Server. If you only want visualization tips to apply to external AI clients (like Claude Desktop), consider adding them to your client-specific configuration files instead:
 - **Claude Desktop**: Add to `claude_desktop_config.json` or `Claude.md` in your project
 - **Cursor**: Add to `.cursorrules` or `AGENT.md` in your project
 - **Other AI clients**: Check your client's documentation for where to add custom instructions
 
-This way, visualization formatting will only apply when using external clients, while Rill Chat maintains its default formatting.
+This way, visualization formatting will only apply when using external clients, while StarData Chat maintains its default formatting.
 :::
 
-You can add instructions to your `rill.yaml` to guide the AI in presenting data more effectively (note that this will affect both Rill Chat and MCP clients):
+You can add instructions to your `rill.yaml` to guide the AI in presenting data more effectively (note that this will affect both StarData Chat and MCP clients):
 
 ```yaml
 ai_instructions: |

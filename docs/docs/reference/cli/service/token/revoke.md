@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill service token revoke
+title: stardata service token revoke
 ---
-## rill service token revoke
+## stardata service token revoke
 
 Revoke token
 
 ```
-rill service token revoke <token-id> [flags]
+stardata service token revoke <token-id> [flags]
 ```
 
 ### Global flags
@@ -22,5 +22,5 @@ rill service token revoke <token-id> [flags]
 
 ### SEE ALSO
 
-* [rill service token](token.md)	 - Manage service tokens
+* [stardata service token](token.md)	 - Manage service tokens
 

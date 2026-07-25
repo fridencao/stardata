@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill org upload-logo
+title: stardata org upload-logo
 ---
-## rill org upload-logo
+## stardata org upload-logo
 
 Upload a custom logo
 
 ```
-rill org upload-logo [<org-name> [<path-to-image>]] [flags]
+stardata org upload-logo [<org-name> [<path-to-image>]] [flags]
 ```
 
 ### Flags
@@ -30,5 +30,5 @@ rill org upload-logo [<org-name> [<path-to-image>]] [flags]
 
 ### SEE ALSO
 
-* [rill org](org.md)	 - Manage organizations
+* [stardata org](org.md)	 - Manage organizations
 

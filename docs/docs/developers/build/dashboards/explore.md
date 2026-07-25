@@ -7,7 +7,7 @@ sidebar_position: 00
 
 Explore dashboards are interactive, slice-and-dice interfaces that transform your metrics view data into powerful visualizations for data exploration and analysis. Built on top of a single metrics view, they provide an intuitive way for users to interact with your data through real-time filtering, drilling, and comparison capabilities.
 
-## Creating an Explore Dashboard in Rill Developer
+## Creating an Explore Dashboard in StarData Developer
 
 ### Using the Code Editor
 
@@ -17,7 +17,7 @@ In the Explore dashboard YAML, you can define dashboard level parameters to cust
 * _**measures**_ - `*` Which measures to include or exclude from the metrics view; using a wildcard will include all.
 * _**dimensions**_ - `*` Which dimensions to include or exclude from the metrics view; using a wildcard will include all.
 
-In some cases, a specific dashboard will not need to include all of the underlying metrics view's measures and/or dimensions. In this case, you can use the `measures` and `dimensions` parameters to filter these out. Rill supports providing a single value, list, or regex to filter out unnecessary measures and dimensions.
+In some cases, a specific dashboard will not need to include all of the underlying metrics view's measures and/or dimensions. In this case, you can use the `measures` and `dimensions` parameters to filter these out. StarData supports providing a single value, list, or regex to filter out unnecessary measures and dimensions.
 
 ```yaml
 type: explore
@@ -61,9 +61,9 @@ In various locations throughout the platform, you have the opportunity to fast-t
 
 ![Create With AI](/img/build/metrics-view/create-with-ai.png)
 
-## Preview a Dashboard in Rill Developer
+## Preview a Dashboard in StarData Developer
 
-Once a dashboard is ready to preview, before [deploying to Rill Cloud](/developers/deploy/deploy-dashboard), you can preview the dashboard in Rill Developer.
+Once a dashboard is ready to preview, before [deploying to StarData Cloud](/developers/deploy/deploy-dashboard), you can preview the dashboard in StarData Developer.
 
 ![Preview](/img/build/dashboard/preview.png)
 

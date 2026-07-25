@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill env set
+title: stardata env set
 ---
-## rill env set
+## stardata env set
 
 Set variable
 
 ```
-rill env set [<project>] <key> <value> [flags]
+stardata env set [<project>] <key> <value> [flags]
 ```
 
 ### Flags
@@ -30,5 +30,5 @@ rill env set [<project>] <key> <value> [flags]
 
 ### SEE ALSO
 
-* [rill env](env.md)	 - Manage variables for a project
+* [stardata env](env.md)	 - Manage variables for a project
 

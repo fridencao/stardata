@@ -1,6 +1,6 @@
 ---
 title: "Bring Your Own OLAP Engine (Live Connector)"
-description: Configure the OLAP engine used by Rill
+description: Configure the OLAP engine used by StarData
 sidebar_label: "OLAP Engines"
 sidebar_position: 0
 toc_max_heading_level: 3
@@ -9,11 +9,11 @@ className: connect-connect
 
 import ConnectorIcon from '@site/src/components/ConnectorIcon';
 
-Rill supports connecting directly to your own OLAP engine via a "live connector". In this mode, no data is ingested into Rill, and all compute is pushed down to the OLAP engine. Use this mode if you've already handled all of your modeling upstream and want to use Rill as your visual application layer.
+StarData supports connecting directly to your own OLAP engine via a "live connector". In this mode, no data is ingested into StarData, and all compute is pushed down to the OLAP engine. Use this mode if you've already handled all of your modeling upstream and want to use StarData as your visual application layer.
 
 :::tip Models on Live Connectors
 
-Rill also offers the ability to ingest and create tables directly from a [data source](/developers/build/connectors/data-source) to your OLAP engine via the live connector, however you'll need to consider a few topics.
+StarData also offers the ability to ingest and create tables directly from a [data source](/developers/build/connectors/data-source) to your OLAP engine via the live connector, however you'll need to consider a few topics.
 
 - **Use a test database** to avoid accidentally overwriting production data
 - **Incremental processing and related queries are not supported**
@@ -23,7 +23,7 @@ Rill also offers the ability to ingest and create tables directly from a [data s
 
 
 
-In order to connect Rill to your OLAP engine:
+In order to connect StarData to your OLAP engine:
 1. Create the connector via the UI.
 2. [Create the YAML](/reference/project-files/connectors#olap-engines) and set the [default OLAP engine](/reference/project-files/rill-yaml#configuring-the-default-olap-engine) via the rill.yaml file.
 
@@ -34,7 +34,7 @@ When setting the OLAP Engine via the UI, the `olap_connector` key will automatic
 
 ## OLAP Engines
 
-Rill supports the use of several different OLAP engines to power your dashboards, including:
+StarData supports the use of several different OLAP engines to power your dashboards, including:
 
 ### ClickHouse
 ### Databricks
@@ -74,7 +74,7 @@ Rill supports the use of several different OLAP engines to power your dashboards
 
   <ConnectorIcon
     icon={<img src="/img/build/connectors/icons/Logo-DuckDB.svg" alt="DuckDB" />}
-    content="Add extra parameters to Rill's embedded DuckDB or connect your own."
+    content="Add extra parameters to StarData's embedded DuckDB or connect your own."
     link="/developers/build/connectors/olap/duckdb"
     linkLabel="Learn more"
     referenceLink="duckdb"
@@ -131,18 +131,18 @@ Rill supports the use of several different OLAP engines to power your dashboards
 
 
 :::note Additional OLAP Engines
-Rill is continually evaluating additional OLAP engines that can be added. For a full list of OLAP engines that we support, refer to our [OLAP Engines](/developers/build/connectors/olap) page. If you don't see an OLAP engine that you'd like to use, please don't hesitate to [reach out](/contact)!
+StarData is continually evaluating additional OLAP engines that can be added. For a full list of OLAP engines that we support, refer to our [OLAP Engines](/developers/build/connectors/olap) page. If you don't see an OLAP engine that you'd like to use, please don't hesitate to [reach out](/contact)!
 :::
 
 ## Multiple OLAP Engines in a Single Project
 
-Rill supports the use of multiple OLAP engines in a single project with some limitations. For more detailed information, see our reference on [multiple OLAP engines](/developers/build/connectors/olap/multiple-olap). The basic use cases for multiple engines in a single project are:
+StarData supports the use of multiple OLAP engines in a single project with some limitations. For more detailed information, see our reference on [multiple OLAP engines](/developers/build/connectors/olap/multiple-olap). The basic use cases for multiple engines in a single project are:
 
-1. Using Rill on top of already created and optimized tables from different OLAP sources.
+1. Using StarData on top of already created and optimized tables from different OLAP sources.
 2. Separating data based on size, as performance on different engines differs based on the size of the data.
 
 ## Externally Hosted Services
-If you have a firewall in front of your externally hosted service, you will need to whitelist the IP addresses below. This will allow you to connect to/from your service once your project is deployed to Rill Cloud. 
+If you have a firewall in front of your externally hosted service, you will need to whitelist the IP addresses below. This will allow you to connect to/from your service once your project is deployed to StarData Cloud. 
 ```
 35.196.245.100
 34.74.117.37
@@ -157,7 +157,7 @@ If you have a firewall in front of your externally hosted service, you will need
 
 OLAP (or Online Analytical Processing) is a computational approach designed to enable rapid, multidimensional analysis of large volumes of data. With OLAP, data is typically organized into cubes instead of traditional two-dimensional tables, which can facilitate complex queries and data analysis in a way that is significantly more efficient and user-friendly for analytical tasks. In particular, OLAP databases can be especially well suited for BI use cases that require deep, multidimensional analysis or real-time / user-facing analytics and applications. Additionally, many modern OLAP databases are optimized to ingest large volumes of data, execute low-latency queries with high throughput, and process billions of rows quickly with an emphasis on speed and efficiency in data retrieval. 
 
-Unlike traditional relational databases or data warehouses that are optimized for transaction processing (with a focus on CRUD operations), OLAP databases are designed for query speed and complex analysis. Rather than storing data in a row-oriented manner, optimizing for transactional efficiency and operational queries, most OLAP databases are columnar and use pre-aggregated multidimensional cubes to speed up analytical queries. This allows a broad range of ad hoc queries and analysis to be performed without needing predefined schemas that are tailored to specific queries, and it's this flexibility that enables the highly interactive slice-and-dice exploration of data that powers Rill dashboards. This paradigm allows OLAP to be particularly well-suited for organizations and teams that want to dive deep into and understand their data to support decision-making processes, where speed and flexibility in the actual data analysis are important. 
+Unlike traditional relational databases or data warehouses that are optimized for transaction processing (with a focus on CRUD operations), OLAP databases are designed for query speed and complex analysis. Rather than storing data in a row-oriented manner, optimizing for transactional efficiency and operational queries, most OLAP databases are columnar and use pre-aggregated multidimensional cubes to speed up analytical queries. This allows a broad range of ad hoc queries and analysis to be performed without needing predefined schemas that are tailored to specific queries, and it's this flexibility that enables the highly interactive slice-and-dice exploration of data that powers StarData dashboards. This paradigm allows OLAP to be particularly well-suited for organizations and teams that want to dive deep into and understand their data to support decision-making processes, where speed and flexibility in the actual data analysis are important. 
 
 :::info Want to see OLAP in action?
 
@@ -167,7 +167,7 @@ Check [here](https://www.rilldata.com/case-studies) to see examples of use cases
 
 ### External OLAP tables
 
-Rill supports creating and powering dashboards using existing tables from alternative [OLAP engines](/developers/build/connectors/olap) that have been configured in a particular project. These tables are not managed by Rill—hence, external—but allow users to bring in separate tables or datasets that might already exist in another preferred OLAP database of choice. This prevents the need to unnecessarily ingest this data into Rill, especially if the table is already optimized for use by this other OLAP engine, and allows Rill to connect to the data directly (and submit analytical queries).
+StarData supports creating and powering dashboards using existing tables from alternative [OLAP engines](/developers/build/connectors/olap) that have been configured in a particular project. These tables are not managed by StarData—hence, external—but allow users to bring in separate tables or datasets that might already exist in another preferred OLAP database of choice. This prevents the need to unnecessarily ingest this data into StarData, especially if the table is already optimized for use by this other OLAP engine, and allows StarData to connect to the data directly (and submit analytical queries).
 
 ![External Olap Db](/img/build/connectors/external-tables/external-olap-db.png)
 
@@ -175,7 +175,7 @@ Rill supports creating and powering dashboards using existing tables from altern
 
 ### Data Lifecycle Management 
 
-One common way to decrease overall data size and improve query performance (by scanning less data) is to roll up your data to higher time grains historically. Typically, this means taking hourly data and rolling up to daily data when the additional level of granularity is no longer necessary for business needs. Databases like Apache Druid have these lifecycle tools built in, or reach out to Rill with questions.
+One common way to decrease overall data size and improve query performance (by scanning less data) is to roll up your data to higher time grains historically. Typically, this means taking hourly data and rolling up to daily data when the additional level of granularity is no longer necessary for business needs. Databases like Apache Druid have these lifecycle tools built in, or reach out to StarData with questions.
 
 A couple of considerations when rolling data from lower to higher time grains:
 
@@ -193,7 +193,7 @@ Dimension stripping is another tool to reduce data size by removing high cardina
 
 ### Sampling & Datasketches
 
-There are times when you may look at sampling data feeds to trade data accuracy for lower costs and faster query speeds. Sampling involves sending only a percentage of your data, then extrapolating the values to get an estimate. Rill does not recommend sampling your primary KPIs, any records that require a join, or are tied to revenue. This filtered data should be decided in random fashion to not skew or bias the results. Please note, tracking uniques is not recommended if you choose to sample.
+There are times when you may look at sampling data feeds to trade data accuracy for lower costs and faster query speeds. Sampling involves sending only a percentage of your data, then extrapolating the values to get an estimate. StarData does not recommend sampling your primary KPIs, any records that require a join, or are tied to revenue. This filtered data should be decided in random fashion to not skew or bias the results. Please note, tracking uniques is not recommended if you choose to sample.
 
 If looking to track uniques, but with smaller datasets and significantly improved performance, you can load unique values (IP addresses, user IDs, URLs, etc.) with [datasketches](https://datasketches.apache.org). There are multiple types of datasketches supported depending on your engine. At a high level, datasketches use algorithms to approximate unique values. Common use cases for datasketches include count distincts (campaign reach, unique visitors) and quantiles (time spent, frequency). Check out the [Apache Datasketches](https://datasketches.apache.org/docs/Architecture/MajorSketchFamilies.html) site for more details on methodology and use cases.
 

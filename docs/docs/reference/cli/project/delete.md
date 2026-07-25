@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project delete
+title: stardata project delete
 ---
-## rill project delete
+## stardata project delete
 
 Delete the project
 
 ```
-rill project delete [<project-name>] [flags]
+stardata project delete [<project-name>] [flags]
 ```
 
 ### Flags
@@ -30,5 +30,5 @@ rill project delete [<project-name>] [flags]
 
 ### SEE ALSO
 
-* [rill project](project.md)	 - Manage projects
+* [stardata project](project.md)	 - Manage projects
 

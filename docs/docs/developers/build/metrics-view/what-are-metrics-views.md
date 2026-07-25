@@ -8,13 +8,13 @@ sidebar_position: 00
 
 A metrics view is a 'centralized framework' used to define and organize **key measures and dimensions** for your organization. Having a centralized layer allows an organization to easily manage and reuse calculations across various reports, dashboards, and data tools. Each metrics view is powered by a single [model or table](/developers/build/metrics-view/underlying-model).
 
-Rill metrics views are analogous to the **semantic layer** and **metrics layer** concepts found in other business intelligence and analytics tools. It provides a consistent, reusable abstraction over your underlying data, enabling standardized definitions of business metrics that can be shared across different dashboards and reports.
+StarData metrics views are analogous to the **semantic layer** and **metrics layer** concepts found in other business intelligence and analytics tools. It provides a consistent, reusable abstraction over your underlying data, enabling standardized definitions of business metrics that can be shared across different dashboards and reports.
 
 ![Metrics View Components](/img/concepts/metrics-view/metrics-view-components.png)
 
-In Rill, your metrics view is defined by _metric definitions_. Metric definitions are composed of:
+In StarData, your metrics view is defined by _metric definitions_. Metric definitions are composed of:
 * [_**model/table**_](/developers/build/metrics-view/underlying-model) - A data model or underlying table created with the concept of [One Big Table](/developers/build/models/models-101#one-big-table-and-dashboarding) that will power the metrics view.
-* [_**timeseries**_](/developers/build/metrics-view/time-series) - A column from your model that will underlie x-axis data in Rill's Explore dashboards and Canvas dashboards. Time can be truncated into different time periods.
+* [_**timeseries**_](/developers/build/metrics-view/time-series) - A column from your model that will underlie x-axis data in StarData's Explore dashboards and Canvas dashboards. Time can be truncated into different time periods.
 * [_**dimensions**_](/developers/build/metrics-view/dimensions) - Categorical columns from your data model whose values are shown in _leaderboards_ in explore dashboard and allow you to look at segments or attributes of your data (and filter/slice accordingly) as well as selectable axis in Canvas dashboard components.
 * _[**measures**](/developers/build/metrics-view/measures)_ - Numerical aggregates of columns from your data model shown on the y-axis of the explore charts and canvas components and the "big number" summaries.
 
@@ -55,7 +55,7 @@ Configure default time modifiers like first day of week and smallest time grain 
 :::
 ### Using the Visual Metrics Editor
 
-When you add a metrics definition using the UI, a code definition will automatically be created as a YAML file in your Rill project within the metrics directory by default.
+When you add a metrics definition using the UI, a code definition will automatically be created as a YAML file in your StarData project within the metrics directory by default.
 
 ![Visual Metrics Editor](/img/build/metrics-view/visual-metrics-editor.png)
 
@@ -64,7 +64,7 @@ When you add a metrics definition using the UI, a code definition will automatic
 ### Creating a Metrics View with AI
 
 
-In order to streamline the process and get to a dashboard as quickly as possible, we've added the "Create Metrics with AI" and "Create Dashboard with AI" options! This will pass your schema to OpenAI to suggest measures and dimensions to get started with Rill.
+In order to streamline the process and get to a dashboard as quickly as possible, we've added the "Create Metrics with AI" and "Create Dashboard with AI" options! This will pass your schema to OpenAI to suggest measures and dimensions to get started with StarData.
 
 ![Create With AI](/img/build/metrics-view/create-with-ai.png)
 

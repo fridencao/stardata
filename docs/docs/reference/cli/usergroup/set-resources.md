@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill usergroup set-resources
+title: stardata usergroup set-resources
 ---
-## rill usergroup set-resources
+## stardata usergroup set-resources
 
 Set a user group's project resources and restriction flag (overwrites existing list)
 
 ```
-rill usergroup set-resources [flags]
+stardata usergroup set-resources [flags]
 ```
 
 ### Flags
@@ -32,5 +32,5 @@ rill usergroup set-resources [flags]
 
 ### SEE ALSO
 
-* [rill usergroup](usergroup.md)	 - Manage user groups
+* [stardata usergroup](usergroup.md)	 - Manage user groups
 

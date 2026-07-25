@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill user show
+title: stardata user show
 ---
-## rill user show
+## stardata user show
 
 Show detailed information about a user
 
 ```
-rill user show [flags]
+stardata user show [flags]
 ```
 
 ### Flags
@@ -29,5 +29,5 @@ rill user show [flags]
 
 ### SEE ALSO
 
-* [rill user](user.md)	 - Manage users
+* [stardata user](user.md)	 - Manage users
 

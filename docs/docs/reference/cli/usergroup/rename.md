@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill usergroup rename
+title: stardata usergroup rename
 ---
-## rill usergroup rename
+## stardata usergroup rename
 
 Rename a group
 
 ```
-rill usergroup rename [<name>] [flags]
+stardata usergroup rename [<name>] [flags]
 ```
 
 ### Flags
@@ -28,5 +28,5 @@ rill usergroup rename [<name>] [flags]
 
 ### SEE ALSO
 
-* [rill usergroup](usergroup.md)	 - Manage user groups
+* [stardata usergroup](usergroup.md)	 - Manage user groups
 

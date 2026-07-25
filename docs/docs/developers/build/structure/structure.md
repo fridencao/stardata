@@ -4,16 +4,16 @@ sidebar_label: Organize your Code Files
 sidebar_position: 00
 ---
 
-After creating your initial set of sources, models, and dashboards, you may have noticed the following _native_ folders that exist in your Rill project directory:
+After creating your initial set of sources, models, and dashboards, you may have noticed the following _native_ folders that exist in your StarData project directory:
 - [Models](/reference/project-files/models)
 - [Metrics Views](/reference/project-files/metrics-views)
 - [Dashboards](/reference/project-files/explore-dashboards)
 
-By default, any new sources, models, metrics views, and dashboards will be created in their respective native folders. However, this does not necessarily have to be the case, and Rill Developer allows for a flexible project directory structure, including nested folders or even storing objects in non-native folders. This is a powerful feature that allows you, as a developer, to organize your project to meet your team's specific needs.
+By default, any new sources, models, metrics views, and dashboards will be created in their respective native folders. However, this does not necessarily have to be the case, and StarData Developer allows for a flexible project directory structure, including nested folders or even storing objects in non-native folders. This is a powerful feature that allows you, as a developer, to organize your project to meet your team's specific needs.
 
 ## Adding new resources or parent folders
 
-Within Rill Developer, from the left-hand side (file explorer), you should be able to click on the `Add` button to add a new resource, such as a new source, model, or dashboard. Furthermore, you will also have the ability to add a new parent folder to store groups of resources (which can be mixed). If you choose to add a new folder, you should see the folder structure reflected when you check the project directory via the CLI. 
+Within StarData Developer, from the left-hand side (file explorer), you should be able to click on the `Add` button to add a new resource, such as a new source, model, or dashboard. Furthermore, you will also have the ability to add a new parent folder to store groups of resources (which can be mixed). If you choose to add a new folder, you should see the folder structure reflected when you check the project directory via the CLI. 
 
 ![Adding Objects](/img/build/structure/adding-objects.png)
 
@@ -21,7 +21,7 @@ Within Rill Developer, from the left-hand side (file explorer), you should be ab
 
 For backward compatibility purposes, any resource that belongs in the `sources`, `models`, and `dashboards` native folders is assumed to be a source, model, or dashboard respectively (including nested folders that belong within a native folder). 
 
-However, if you'd like to create a resource outside one of these native folders, make sure to include the `type` property in the resource definition, or Rill will not be able to properly resolve the resource type! For more details, see our [reference documentation](/reference/project-files/rill-yaml).
+However, if you'd like to create a resource outside one of these native folders, make sure to include the `type` property in the resource definition, or StarData will not be able to properly resolve the resource type! For more details, see our [reference documentation](/reference/project-files/rill-yaml).
 
 :::
 

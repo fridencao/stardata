@@ -9,11 +9,11 @@ import { TwoStepFlowIntro, EnvPullTip, DevProdSeparation, DeployToCloud } from '
 
 ## Overview
 
-The HTTPS connector allows you to import data from remote sources accessible via HTTP or HTTPS URLs into your Rill project. This includes publicly accessible files hosted on web servers, CDNs, or cloud storage services—perfect for working with datasets that are regularly updated or shared publicly.
+The HTTPS connector allows you to import data from remote sources accessible via HTTP or HTTPS URLs into your StarData project. This includes publicly accessible files hosted on web servers, CDNs, or cloud storage services—perfect for working with datasets that are regularly updated or shared publicly.
 
 ## Authentication Methods
 
-To connect to data via HTTPS, you need to choose an authentication approach. Rill supports two methods:
+To connect to data via HTTPS, you need to choose an authentication approach. StarData supports two methods:
 
 1. **Use Authenticated Endpoints** (for private APIs or protected resources)
 2. **Use Public URLs** (for publicly accessible files without authentication)
@@ -26,11 +26,11 @@ To connect to data via HTTPS, you need to choose an authentication approach. Ril
 
 ## Method 1: Authenticated Endpoints (Recommended for Protected Resources)
 
-If your endpoint requires authentication, create an HTTPS connector with your credentials. This method works for both local development and Rill Cloud deployments.
+If your endpoint requires authentication, create an HTTPS connector with your credentials. This method works for both local development and StarData Cloud deployments.
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **HTTPS** as the data source type
 3. In the authentication step:
    - Configure authentication headers (e.g., Bearer token)
@@ -71,7 +71,7 @@ For publicly accessible files that don't require authentication, you can use the
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **HTTPS** as the data source type
 3. In the authentication step, skip or leave authentication blank
 4. In the data model configuration step, enter the full public URL
@@ -117,7 +117,7 @@ The HTTPS connector supports various remote data sources:
 
 <DevProdSeparation />
 
-## Deploy to Rill Cloud
+## Deploy to StarData Cloud
 
 <DeployToCloud
   connector="HTTPS"

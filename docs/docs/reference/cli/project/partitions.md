@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project partitions
+title: stardata project partitions
 ---
-## rill project partitions
+## stardata project partitions
 
 List partitions for a model
 
 ```
-rill project partitions [<project>] <model> [flags]
+stardata project partitions [<project>] <model> [flags]
 ```
 
 ### Flags
@@ -20,7 +20,7 @@ rill project partitions [<project>] <model> [flags]
       --pending             Only fetch pending partitions
       --errored             Only fetch errored partitions
       --skipped             Only fetch skipped partitions
-      --local               Target locally running Rill
+      --local               Target locally running StarData
       --page-size uint32    Number of partitions to return per page (default 50)
       --page-token string   Pagination token
 ```
@@ -37,5 +37,5 @@ rill project partitions [<project>] <model> [flags]
 
 ### SEE ALSO
 
-* [rill project](project.md)	 - Manage projects
+* [stardata project](project.md)	 - Manage projects
 

@@ -1,6 +1,6 @@
 ---
-title: "3. Create Metrics View Dashboard in Rill"
-sidebar_label: "3. Create Metrics View Dashboard in Rill"
+title: "3. Create Metrics View Dashboard in StarData"
+sidebar_label: "3. Create Metrics View Dashboard in StarData"
 sidebar_position: 3
 hide_table_of_contents: false
 tags:
@@ -46,7 +46,7 @@ measures:
     ...
 ```
 
-While we go into more details in our [Rill Basics course](/developers/tutorials/rill-basics/dashboard) and [our documentation](https://docs.rilldata.com/developers/build/dashboards), let's go over it quickly.
+While we go into more details in our [StarData Basics course](/developers/tutorials/rill-basics/dashboard) and [our documentation](https://docs.rilldata.com/developers/build/dashboards), let's go over it quickly.
 
 ---
 

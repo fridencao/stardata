@@ -1,20 +1,20 @@
 ---
-title: "Getting Started with Rill Cloud"
-description: "Introduction to Rill Cloud, AI features, and management"
-sidebar_label: "Rill Cloud"
+title: "Getting Started with StarData Cloud"
+description: "Introduction to StarData Cloud, AI features, and management"
+sidebar_label: "StarData Cloud"
 sidebar_position: 0
 slug: "/guide"
 ---
 import TileIcon from '@site/src/components/TileIcon';
 import ThemedImage from '@theme/ThemedImage';
 
-# Getting Started with Rill Cloud
+# Getting Started with StarData Cloud
 
-Rill Cloud is a fully-managed platform that brings powerful, interactive analytics directly to your fingertips. Explore your data through instant dashboards, ask questions in plain English with AI Chat, and share insights with your team—all without writing SQL or waiting for custom reports. Your data team has already set up the metrics and dashboards you need; you simply explore, analyze, and collaborate.
+StarData Cloud is a fully-managed platform that brings powerful, interactive analytics directly to your fingertips. Explore your data through instant dashboards, ask questions in plain English with AI Chat, and share insights with your team—all without writing SQL or waiting for custom reports. Your data team has already set up the metrics and dashboards you need; you simply explore, analyze, and collaborate.
 
-This guide is for **anyone who consumes dashboards and insights in Rill Cloud** — business analysts, marketing and finance teams, operations leads, executives, and anyone else on your team who needs to explore data, set up alerts, schedule reports, or share findings. No coding or SQL experience required.
+This guide is for **anyone who consumes dashboards and insights in StarData Cloud** — business analysts, marketing and finance teams, operations leads, executives, and anyone else on your team who needs to explore data, set up alerts, schedule reports, or share findings. No coding or SQL experience required.
 
-Need to **build or maintain Rill projects** — connect data sources, write models, define metrics, or deploy dashboards? See the [Developer Docs](/).
+Need to **build or maintain StarData projects** — connect data sources, write models, define metrics, or deploy dashboards? See the [Developer Docs](/).
 
 <ThemedImage
   alt="Dark Mode"
@@ -57,7 +57,7 @@ Need to **build or maintain Rill projects** — connect data sources, write mode
 />
 <TileIcon
   header="Public URL"
-  content="Save dashboard views as bookmarks and share them with your team. Share dashboards externally via public URLs without requiring Rill accounts."
+  content="Save dashboard views as bookmarks and share them with your team. Share dashboards externally via public URLs without requiring StarData accounts."
   link="/guide/dashboards/public-urls"
   icon={<img src="/img/get-started/share.svg" alt="Sharing" style={{ width: 24, height: 24 }} />}
 />
@@ -69,7 +69,7 @@ Need to **build or maintain Rill projects** — connect data sources, write mode
 />
 <TileIcon
   header="Alerts"
-  content="Set up alerts in Rill Cloud to receive notifications when certain conditions are met."
+  content="Set up alerts in StarData Cloud to receive notifications when certain conditions are met."
   link="/guide/alerts"
   icon={<img src="/img/get-started/alert.svg" alt="Alerts" style={{ width: 24, height: 24 }} />}
 />

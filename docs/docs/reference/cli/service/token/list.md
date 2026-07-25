@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill service token list
+title: stardata service token list
 ---
-## rill service token list
+## stardata service token list
 
 List tokens
 
 ```
-rill service token list [<service>] [flags]
+stardata service token list [<service>] [flags]
 ```
 
 ### Flags
@@ -28,5 +28,5 @@ rill service token list [<service>] [flags]
 
 ### SEE ALSO
 
-* [rill service token](token.md)	 - Manage service tokens
+* [stardata service token](token.md)	 - Manage service tokens
 

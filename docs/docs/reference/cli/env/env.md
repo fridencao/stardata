@@ -1,8 +1,8 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill env
+title: stardata env
 ---
-## rill env
+## stardata env
 
 Manage variables for a project
 
@@ -23,10 +23,10 @@ Manage variables for a project
 
 ### SEE ALSO
 
-* [rill](../cli.md)	 - A CLI for Rill
-* [rill env pull](pull.md)	 - Pull cloud credentials into local .env file
-* [rill env push](push.md)	 - Push local .env contents to cloud
-* [rill env rm](rm.md)	 - Remove an env variable
-* [rill env set](set.md)	 - Set variable
-* [rill env show](show.md)	 - Show credentials and other variables
+* [stardata](../cli.md)	 - A CLI for StarData
+* [stardata env pull](pull.md)	 - Pull cloud credentials into local .env file
+* [stardata env push](push.md)	 - Push local .env contents to cloud
+* [stardata env rm](rm.md)	 - Remove an env variable
+* [stardata env set](set.md)	 - Set variable
+* [stardata env show](show.md)	 - Show credentials and other variables
 

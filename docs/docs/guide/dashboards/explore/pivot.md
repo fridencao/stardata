@@ -6,7 +6,7 @@ sidebar_position: 30
 ---
 
 
-Rill's multi-dimensional pivot provides lightning-fast, Excel-style pivot tables across multiple dimensions, time granularities, and metrics. The interface allows users to drag and drop any combination of fields for quick comparison and report generation. While the Explore view is great for data discovery, the Pivot view serves other use cases like:
+StarData's multi-dimensional pivot provides lightning-fast, Excel-style pivot tables across multiple dimensions, time granularities, and metrics. The interface allows users to drag and drop any combination of fields for quick comparison and report generation. While the Explore view is great for data discovery, the Pivot view serves other use cases like:
 
 - Regular reporting: Monthly financial reports, campaign reporting, client reports
 - Time analysis: Dimensions by time columns for daily or weekly comparisons 
@@ -40,7 +40,7 @@ Rill's multi-dimensional pivot provides lightning-fast, Excel-style pivot tables
 Prefer video? Check out our [YouTube playlist](https://www.youtube.com/watch?v=wTP46eOzoCk&list=PL_ZoDsg2yFKgi7ud_fOOD33AH8ONWQS7I&index=1) for a quick start!
 
 
-## Using Rill's Pivot View
+## Using StarData's Pivot View
 
 Pivots can be split by time, measures, and dimensions. You can drag and drop any of these options to rows and columns to create your pivot table (and can drag between columns/rows as well). Dimensions are also searchable in the top left, or select the ```+``` to see the dimension list. As each dimension is added, you can track the kernels on the top left to see which rows have been added to the table. Each column dimension will also be visualized in the pivot. Like Time Dimension Detail, the same filter bar can be used to filter the pivot table overall. 
 

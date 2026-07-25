@@ -1,8 +1,8 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project rename
+title: stardata project rename
 ---
-## rill project rename
+## stardata project rename
 
 Rename project
 
@@ -13,7 +13,7 @@ Rename project
 Warning: Renaming a project will invalidate all dashboard URLs.
 
 ```
-rill project rename [flags]
+stardata project rename [flags]
 ```
 
 ### Flags
@@ -35,5 +35,5 @@ rill project rename [flags]
 
 ### SEE ALSO
 
-* [rill project](project.md)	 - Manage projects
+* [stardata project](project.md)	 - Manage projects
 

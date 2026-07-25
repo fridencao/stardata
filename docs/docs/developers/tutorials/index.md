@@ -6,21 +6,21 @@ tags:
   - Getting Started
 ---
 
-# Welcome to Rill Guides and Tutorials!
+# Welcome to StarData Guides and Tutorials!
 
-### We're thrilled you've joined us on this th-Rill-ing journey!
+### We're thrilled you've joined us on this th-StarData-ing journey!
 
-These tutorials were built to help you get started with Rill and empower you to build your own projects. The journey covers data import, SQL transformations, dashboard creation, and finally deployment to Cloud. From there, you'll explore Rill Cloud-specific features, push local changes to Rill Cloud, and develop custom features.
+These tutorials were built to help you get started with StarData and empower you to build your own projects. The journey covers data import, SQL transformations, dashboard creation, and finally deployment to Cloud. From there, you'll explore StarData Cloud-specific features, push local changes to StarData Cloud, and develop custom features.
 
-### Why Rill?
-Here at Rill, we believe in business-speed visual analytics. Gone are the days of waiting for your dashboard to load! By utilizing OLAP engines, we strive for quick, reactive dashboards that you can drill down into further to make real-time decisions. Not only that, you'll also be able to make traditional dashboards that we call Canvas Dashboards.
+### Why StarData?
+Here at StarData, we believe in business-speed visual analytics. Gone are the days of waiting for your dashboard to load! By utilizing OLAP engines, we strive for quick, reactive dashboards that you can drill down into further to make real-time decisions. Not only that, you'll also be able to make traditional dashboards that we call Canvas Dashboards.
 
 ---
 Follow along, refer to the in-line linked documentation, and explore our product to make the most out of these guides! Please reach out to ask any questions or provide feedback on our Community Slack or Discord!
 
-- [**Source to Published Dashboard:**](/developers/tutorials/rill-basics/launch) Learn the basics, understand the core concepts of Rill, and deploy to Cloud!
-- [**Visualize ClickHouse tables in Rill:**](/developers/tutorials/rill-clickhouse) For our friends from **ClickHouse**, we have created a dedicated course using ClickHouse!
-- [**Clone a Project:**](/developers/tutorials/clone-a-project) Step-by-step guide to clone an already deployed instance from Rill Cloud to your local machine
+- [**Source to Published Dashboard:**](/developers/tutorials/rill-basics/launch) Learn the basics, understand the core concepts of StarData, and deploy to Cloud!
+- [**Visualize ClickHouse tables in StarData:**](/developers/tutorials/rill-clickhouse) For our friends from **ClickHouse**, we have created a dedicated course using ClickHouse!
+- [**Clone a Project:**](/developers/tutorials/clone-a-project) Step-by-step guide to clone an already deployed instance from StarData Cloud to your local machine
 - [**GitHub Analytics:**](/developers/tutorials/github-analytics) Analyze your own GitHub repository by modifying the Python file, download_commits.py
 - [**Cost Monitoring Analytics:**](/developers/tutorials/cost-monitoring-analytics) Analyze your cost and usage data
 - [**OpenRTB Analytics:**](/developers/tutorials/openrtb-analytics) Analyze real-time bidding data to track impressions, bids, wins and more

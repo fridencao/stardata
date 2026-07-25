@@ -1,18 +1,18 @@
 ---
 title: Databricks
-description: Power Rill dashboards using Databricks
+description: Power StarData dashboards using Databricks
 sidebar_label: Databricks
 sidebar_position: 02
 ---
 
-[Databricks](https://docs.databricks.com) is a unified data and AI platform built on top of Apache Spark and the lakehouse architecture, with Unity Catalog for governance and Databricks SQL for analytics. Rill supports connecting to Databricks as a live connector, allowing you to build metrics views and dashboards directly on top of existing Databricks tables — no data movement required.
+[Databricks](https://docs.databricks.com) is a unified data and AI platform built on top of Apache Spark and the lakehouse architecture, with Unity Catalog for governance and Databricks SQL for analytics. StarData supports connecting to Databricks as a live connector, allowing you to build metrics views and dashboards directly on top of existing Databricks tables — no data movement required.
 
 :::tip Databricks as a Live Connector vs. Data Source Connector
-Rill supports Databricks in two distinct modes:
+StarData supports Databricks in two distinct modes:
 
-- **OLAP (Live Connector)** — Rill queries Databricks directly at dashboard load time. No data is ingested into Rill. Use this when your data is already modeled and optimized in Databricks and you want Rill as a visual layer on top. Set `olap_connector: databricks` in `rill.yaml`.
+- **OLAP (Live Connector)** — StarData queries Databricks directly at dashboard load time. No data is ingested into StarData. Use this when your data is already modeled and optimized in Databricks and you want StarData as a visual layer on top. Set `olap_connector: databricks` in `rill.yaml`.
 
-- **Data Source Connector** — Rill extracts data from Databricks and ingests it into its embedded engine (DuckDB). Use this when you want Rill to manage the data pipeline, apply transformations via SQL models, or combine Databricks data with other sources. See the [Databricks data source docs](/developers/build/connectors/data-source/databricks).
+- **Data Source Connector** — StarData extracts data from Databricks and ingests it into its embedded engine (DuckDB). Use this when you want StarData to manage the data pipeline, apply transformations via SQL models, or combine Databricks data with other sources. See the [Databricks data source docs](/developers/build/connectors/data-source/databricks).
 
 In general, use the live connector if your Databricks tables are already production-ready and large. Use data source ingestion if you need to transform, join, or enrich the data before building dashboards.
 :::
@@ -86,7 +86,7 @@ measures:
 In Databricks terminology, `database` maps to the **catalog**, `database_schema` maps to the **schema**, and `model` maps to the **table**. Measure expressions must use [Databricks SQL](https://docs.databricks.com/aws/en/sql/language-manual/) syntax.
 
 :::note
-Rill supports metrics views directly on Databricks as a live connector. Incremental models and partitioned ingestion are not supported in live connector mode.
+StarData supports metrics views directly on Databricks as a live connector. Incremental models and partitioned ingestion are not supported in live connector mode.
 :::
 
 To reduce SQL warehouse spend on dashboards with repeat traffic, see [Caching query results](/developers/build/metrics-view/underlying-model#caching-query-results) on live connectors.

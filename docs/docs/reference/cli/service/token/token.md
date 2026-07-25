@@ -1,8 +1,8 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill service token
+title: stardata service token
 ---
-## rill service token
+## stardata service token
 
 Manage service tokens
 
@@ -18,8 +18,8 @@ Manage service tokens
 
 ### SEE ALSO
 
-* [rill service](../service.md)	 - Manage service accounts
-* [rill service token issue](issue.md)	 - Issue service token
-* [rill service token list](list.md)	 - List tokens
-* [rill service token revoke](revoke.md)	 - Revoke token
+* [stardata service](../service.md)	 - Manage service accounts
+* [stardata service token issue](issue.md)	 - Issue service token
+* [stardata service token list](list.md)	 - List tokens
+* [stardata service token revoke](revoke.md)	 - Revoke token
 

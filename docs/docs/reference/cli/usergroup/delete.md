@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill usergroup delete
+title: stardata usergroup delete
 ---
-## rill usergroup delete
+## stardata usergroup delete
 
 Delete a group
 
 ```
-rill usergroup delete <name> [flags]
+stardata usergroup delete <name> [flags]
 ```
 
 ### Flags
@@ -27,5 +27,5 @@ rill usergroup delete <name> [flags]
 
 ### SEE ALSO
 
-* [rill usergroup](usergroup.md)	 - Manage user groups
+* [stardata usergroup](usergroup.md)	 - Manage user groups
 

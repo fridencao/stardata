@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill service delete
+title: stardata service delete
 ---
-## rill service delete
+## stardata service delete
 
 Delete service
 
 ```
-rill service delete <service-name> [flags]
+stardata service delete <service-name> [flags]
 ```
 
 ### Global flags
@@ -22,5 +22,5 @@ rill service delete <service-name> [flags]
 
 ### SEE ALSO
 
-* [rill service](service.md)	 - Manage service accounts
+* [stardata service](service.md)	 - Manage service accounts
 

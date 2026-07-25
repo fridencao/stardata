@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill service remove
+title: stardata service remove
 ---
-## rill service remove
+## stardata service remove
 
 remove service from org or project
 
 ```
-rill service remove <service-name> [flags]
+stardata service remove <service-name> [flags]
 ```
 
 ### Flags
@@ -28,5 +28,5 @@ rill service remove <service-name> [flags]
 
 ### SEE ALSO
 
-* [rill service](service.md)	 - Manage service accounts
+* [stardata service](service.md)	 - Manage service accounts
 

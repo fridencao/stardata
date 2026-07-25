@@ -11,11 +11,11 @@ import { TwoStepFlowIntro, EnvPullTip, DevProdSeparation, DeployToCloud } from '
 
 ## Overview
 
-[Amazon Athena](https://docs.aws.amazon.com/athena/) is an interactive query service that makes it easy to analyze data directly in Amazon S3 using standard SQL. It is serverless, so there is no infrastructure to manage, and you pay only for the queries you run, making it cost-effective for a wide range of data analysis tasks. Athena is designed for quick, ad-hoc querying of large datasets, enabling businesses to easily integrate it into their analytics and business intelligence tools for immediate insights from their data stored in S3. Rill supports natively connecting to and reading from Athena as a source by leveraging the [AWS SDK for Go](https://aws.github.io/aws-sdk-go-v2/docs/).
+[Amazon Athena](https://docs.aws.amazon.com/athena/) is an interactive query service that makes it easy to analyze data directly in Amazon S3 using standard SQL. It is serverless, so there is no infrastructure to manage, and you pay only for the queries you run, making it cost-effective for a wide range of data analysis tasks. Athena is designed for quick, ad-hoc querying of large datasets, enabling businesses to easily integrate it into their analytics and business intelligence tools for immediate insights from their data stored in S3. StarData supports natively connecting to and reading from Athena as a source by leveraging the [AWS SDK for Go](https://aws.github.io/aws-sdk-go-v2/docs/).
 
 ## Authentication Methods
 
-To connect to Amazon Athena, you need to provide authentication credentials. Rill supports two methods:
+To connect to Amazon Athena, you need to provide authentication credentials. StarData supports two methods:
 
 1. **Use Access Key/Secret Key** (recommended for production)
 2. **Use Local AWS credentials** (local development only - not recommended for production)
@@ -28,11 +28,11 @@ To connect to Amazon Athena, you need to provide authentication credentials. Ril
 
 ## Method 1: Access Key and Secret Key (Recommended)
 
-Access Key and Secret Key credentials provide the most reliable authentication for Athena. This method works for both local development and Rill Cloud deployments.
+Access Key and Secret Key credentials provide the most reliable authentication for Athena. This method works for both local development and StarData Cloud deployments.
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Amazon Athena** as the data source type
 3. In the authentication step:
    - Enter your AWS Access Key ID
@@ -75,10 +75,10 @@ Then, [create your first model](#create-your-first-model).
 
 ## Method 2: Local AWS Credentials
 
-For local development, you can use credentials from the AWS CLI. This method is **not suitable for production** or Rill Cloud deployments.
+For local development, you can use credentials from the AWS CLI. This method is **not suitable for production** or StarData Cloud deployments.
 
 :::warning Not recommended for production
-Local AWS credentials only work for local development. If you deploy to Rill Cloud using this method, your dashboards will fail. Always use Access Key/Secret Key for production deployments.
+Local AWS credentials only work for local development. If you deploy to StarData Cloud using this method, your dashboards will fail. Always use Access Key/Secret Key for production deployments.
 :::
 
 ### Setup
@@ -104,7 +104,7 @@ output_location: "s3://my-bucket/athena-results/"
 region: "us-east-1"
 ```
 
-When no explicit credentials are provided in the connector, Rill will automatically use your local AWS CLI credentials. Then, [create your first model](#create-your-first-model).
+When no explicit credentials are provided in the connector, StarData will automatically use your local AWS CLI credentials. Then, [create your first model](#create-your-first-model).
 
 ## Create Your First Model
 
@@ -127,7 +127,7 @@ After creating the model, you can add additional [model settings](/developers/bu
 
 <DevProdSeparation />
 
-## Deploy to Rill Cloud
+## Deploy to StarData Cloud
 
 <DeployToCloud
   connector="Athena"

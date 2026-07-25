@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill billing plan list
+title: stardata billing plan list
 ---
-## rill billing plan list
+## stardata billing plan list
 
 List plans
 
 ```
-rill billing plan list [flags]
+stardata billing plan list [flags]
 ```
 
 ### Global flags
@@ -21,5 +21,5 @@ rill billing plan list [flags]
 
 ### SEE ALSO
 
-* [rill billing plan](plan.md)	 - Get billing plans
+* [stardata billing plan](plan.md)	 - Get billing plans
 

@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill version
+title: stardata version
 ---
-## rill version
+## stardata version
 
-Show Rill version
+Show StarData version
 
 ```
-rill version [flags]
+stardata version [flags]
 ```
 
 ### Global flags
@@ -21,5 +21,5 @@ rill version [flags]
 
 ### SEE ALSO
 
-* [rill](cli.md)	 - A CLI for Rill
+* [stardata](cli.md)	 - A CLI for StarData
 

@@ -5,7 +5,7 @@ sidebar_label: Data Access Control
 sidebar_position: 50
 ---
 
-Rill supports **granular access policies** that let you control:
+StarData supports **granular access policies** that let you control:
 
 - **Who can access your data**
 - **What rows they can see**
@@ -66,21 +66,21 @@ Typical use cases include:
 - [**Hiding specific dimensions and measures**](#conditionally-hide-a-dashboard-dimension-or-measure) from specific groups of users, creating a tailored dashboard experience
 - [**Restricting Access to Internal users**](#hide-dimensions-or-measures-for-members-of-a-certain-group) of your organization, allowing specific dashboards to be viewed by internal users only
 - [**Partner-filtered Dashboards**](#show-only-data-from-the-users-own-domain) where external users can only access the subset of their data
-- [**Embedded**](#advanced-example-custom-attributes-embed-dashboards) use cases, passing custom attributes to Rill
+- [**Embedded**](#advanced-example-custom-attributes-embed-dashboards) use cases, passing custom attributes to StarData
 
 :::tip Project Access Required
 
-Access Policies assume that the user already has access to the project in Rill Cloud. For more information on user management, see our [User Management](/guide/administration/users-and-access/user-management) and [Project Management](/guide/administration/project-settings) documentation.
+Access Policies assume that the user already has access to the project in StarData Cloud. For more information on user management, see our [User Management](/guide/administration/users-and-access/user-management) and [Project Management](/guide/administration/project-settings) documentation.
 
 :::
 
 ## Creating Access Policies
 
-There are two locations that control data access in Rill.
+There are two locations that control data access in StarData.
 
 ### Project Level Defaults
 
-By default, when a user is granted access to your project, they have access to all metrics views and, if there is [no dashboard policy](/developers/build/dashboards/customization#define-dashboard-access), all dashboards. While this is the default behavior, it can be easily changed in the project's `rill.yaml`. This will lock down all metrics views and block all users who are not Rill Administrators or do not have 'example.com' as their domain.
+By default, when a user is granted access to your project, they have access to all metrics views and, if there is [no dashboard policy](/developers/build/dashboards/customization#define-dashboard-access), all dashboards. While this is the default behavior, it can be easily changed in the project's `rill.yaml`. This will lock down all metrics views and block all users who are not StarData Administrators or do not have 'example.com' as their domain.
 
 :::tip Set project-wide security defaults
 Configure default security policies for all metrics views and dashboards in your project.
@@ -151,15 +151,15 @@ A few recommendations:
 - `.user.groups` - a list of user groups the user belongs to in the project's org (list of strings), e.g. ["marketing","sales","finance"]
 - `.user.attribute` - where `attribute` is a custom variable that you can pass via an embedded dashboard from your application
 
-Note: Rill requires users to confirm their email address before letting them interact with the platform, so a user cannot fake an email address or email domain.
+Note: StarData requires users to confirm their email address before letting them interact with the platform, so a user cannot fake an email address or email domain.
 
 
 
-## Testing Policies in Rill Developer
+## Testing Policies in StarData Developer
 
 In development (on `localhost`), you can test your policies by adding "mock users" to your project and viewing the dashboard as one of them.
 
-:::tip Test policies in Rill Developer
+:::tip Test policies in StarData Developer
 Use `mock_users` in rill.yaml to test your security policies before deploying.
 [Learn more about testing security →](/developers/build/project-configuration#testing-security)
 :::
@@ -179,14 +179,14 @@ mock_users:
 
 On the dashboard page (provided you've added a policy), you'll see a "View as" button in the top right corner. Click this button and select one of your mock users. You'll see the dashboard as that user would see it.
 
-### Rill Cloud
-If you want to test what your users are seeing in Rill Cloud after deploying, you can find this in the dropdown of your account. You will see the actual users in the dropdown of this list, not the mock users defined in the rill.yaml file.
+### StarData Cloud
+If you want to test what your users are seeing in StarData Cloud after deploying, you can find this in the dropdown of your account. You will see the actual users in the dropdown of this list, not the mock users defined in the rill.yaml file.
 
-![Rill Cloud View As](/img/manage/access-policies/rill-cloud-view-as.png)
+![StarData Cloud View As](/img/manage/access-policies/rill-cloud-view-as.png)
 
 ### Embedded Dashboards
 
-When [requesting an embedded dashboard from Rill](/developers/embed/iframe) from your frontend, you can pass the `attributes` parameter with custom names to ensure that the resulting dashboard displays the correct information.
+When [requesting an embedded dashboard from StarData](/developers/embed/iframe) from your frontend, you can pass the `attributes` parameter with custom names to ensure that the resulting dashboard displays the correct information.
 
 For more information, see [our embedding docs](/developers/embed/iframe#2-build-the-iframe-url-backend).
 
@@ -288,14 +288,14 @@ For some use cases, the built-in user attributes do not provide sufficient conte
 
 To support this, ingest a separate data [source](/developers/build/connectors) containing mappings of user email addresses to tenant IDs and reference it in the row-level filter. This can be a locally created CSV file or any hosted data source.
 
-For example, a locally created `mappings.csv` file in the `data` directory of your Rill project with the following contents:
+For example, a locally created `mappings.csv` file in the `data` directory of your StarData project with the following contents:
 ```csv
 email,tenant_id
 john.doe@example.com,1
 jane.doe@example.com,2
 ```
 
-This needs to be ingested as a source in Rill like any other data source:
+This needs to be ingested as a source in StarData like any other data source:
 ```yaml
 # sources/mappings.yaml
 type: local_file
@@ -312,7 +312,7 @@ security:
 
 ### Advanced Example: Custom attributes (Embed Dashboards)
 
-Another use case for row access policies is to ensure that your embedded dashboard provides a specific view for your end users. During the [embed dashboard request](/developers/embed/iframe), you can pass custom attributes (other than the ones provided out-of-the-box) that map directly to a value within your Rill explore dashboard.
+Another use case for row access policies is to ensure that your embedded dashboard provides a specific view for your end users. During the [embed dashboard request](/developers/embed/iframe), you can pass custom attributes (other than the ones provided out-of-the-box) that map directly to a value within your StarData explore dashboard.
 
 ```yaml
 security:
@@ -322,7 +322,7 @@ security:
         dimension_2 = '{{ .user.custom_variable_2 }}' 
 ```
 
-In order to test the view of your embedded dashboard, you can add the same custom variables to [your mock users](#testing-policies-in-rill-developer) as seen below:
+In order to test the view of your embedded dashboard, you can add the same custom variables to [your mock users](#testing-policies-in-stardata-developer) as seen below:
 ```yaml
 - email: embed@rilldata.com
   name: embed
@@ -331,9 +331,9 @@ In order to test the view of your embedded dashboard, you can add the same custo
 ```
 
 
-### Advanced Example: Access to Dashboard in Rill and Embedded
+### Advanced Example: Access to Dashboard in StarData and Embedded
 
-While not common, there are use cases where a dashboard is used both in the Rill Cloud UI and as an embedded dashboard. In this case, passing a similar user attribute could suffice, but if you need to pass a custom attribute, you'll need to add an extra layer of logic to your dashboard.
+While not common, there are use cases where a dashboard is used both in the StarData Cloud UI and as an embedded dashboard. In this case, passing a similar user attribute could suffice, but if you need to pass a custom attribute, you'll need to add an extra layer of logic to your dashboard.
 
 ```yaml
 security:

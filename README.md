@@ -18,7 +18,7 @@
 
 ---
 
-**StarData** 是一个面向中文用户的智能 BI 平台，基于 Rill 开源项目定制开发。
+**StarData** 是一个面向中文用户的智能 BI 平台，基于 StarData 开源项目定制开发。
 
 核心能力:
 - **智能问数** — 用中文自然语言提问，AI 自动完成数据查询与分析
@@ -84,7 +84,7 @@ Success! Run the following command to start the project:
 
 ## How It Works
 
-Define everything in code — models, metrics, dashboards — and Rill handles the rest.
+Define everything in code — models, metrics, dashboards — and StarData handles the rest.
 
 **1. Connect data** — `models/events.yaml`
 
@@ -141,7 +141,7 @@ Your metrics view is immediately queryable — add YAML files to configure dashb
 
 ## Learn More
 
-- [Rill Documentation](https://docs.rilldata.com/) — upstream project docs
+- [StarData Documentation](https://docs.rilldata.com/) — upstream project docs
 
 ## Contributing
 

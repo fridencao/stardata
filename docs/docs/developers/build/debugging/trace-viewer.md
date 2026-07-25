@@ -1,21 +1,21 @@
 ---
-title: "Trace Viewer in Rill Developer"
+title: "Trace Viewer in StarData Developer"
 description: Visualize resource reconciliation and trace execution
-sidebar_label: "Trace Viewer in Rill Developer"
+sidebar_label: "Trace Viewer in StarData Developer"
 sidebar_position: 00
 ---
 
-Rill Developer provides a built-in trace viewer, enabling users to visually inspect operations performed when reconciling resources or fetching data for dashboards. This helps in diagnosing performance and operational issues.
+StarData Developer provides a built-in trace viewer, enabling users to visually inspect operations performed when reconciling resources or fetching data for dashboards. This helps in diagnosing performance and operational issues.
 
 ![Trace Viewer Overview](/img/build/debugging/trace-viewer-overview.png)
 ## How to Use the Trace Viewer
 
-### Step 1: Start Rill Developer with Debug Mode
+### Step 1: Start StarData Developer with Debug Mode
 
-Launch Rill Developer with the debug flag enabled:
+Launch StarData Developer with the debug flag enabled:
 
 ```bash
-rill start --debug
+stardata start --debug
 ```
 
 ### Step 2: Access the Trace Viewer
@@ -37,7 +37,7 @@ For example, to view the operations performed during the reconciliation of the `
 
 ## Understanding the Trace Graph
 
-- **Horizontal Bars:** Each horizontal bar represents a distinct operation performed by Rill.
+- **Horizontal Bars:** Each horizontal bar represents a distinct operation performed by StarData.
 - **Bar Length:** The length of each bar indicates the duration of the operation.
 - **Operation Details:** Click on any bar to view detailed tags and metadata in the pane on the right.
 - **Nested Operations:** Operations may trigger other sub-operations, displayed as nested bars beneath the parent operation.

@@ -1,6 +1,6 @@
 ---
-title: "4. Create Explore Dashboard in Rill"
-sidebar_label: "4. Create Explore Dashboard in Rill"
+title: "4. Create Explore Dashboard in StarData"
+sidebar_label: "4. Create Explore Dashboard in StarData"
 sidebar_position: 4
 hide_table_of_contents: false
 tags:
@@ -15,7 +15,7 @@ When you're ready, you can create the visualization on top of the metrics layer.
 
 ---
 
-### What can we do in Rill?
+### What can we do in StarData?
 In our case, since we generated this with AI, we can look through the description of the populated measures for more information. Based on this, we can find some specific information on the UK properties dataset at a glance, such as:
 
 1. In 2023, what was the minimum/maximum detached property sold in London? [46.5K, 65.0M]

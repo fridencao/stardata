@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill billing subscription list
+title: stardata billing subscription list
 ---
-## rill billing subscription list
+## stardata billing subscription list
 
 List subscriptions for an organization
 
 ```
-rill billing subscription list [flags]
+stardata billing subscription list [flags]
 ```
 
 ### Global flags
@@ -22,5 +22,5 @@ rill billing subscription list [flags]
 
 ### SEE ALSO
 
-* [rill billing subscription](subscription.md)	 - Manage organization subscriptions
+* [stardata billing subscription](subscription.md)	 - Manage organization subscriptions
 

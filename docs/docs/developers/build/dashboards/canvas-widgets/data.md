@@ -6,7 +6,7 @@ sidebar_position: 00
 
 import ImageCodeToggle from '@site/src/components/ImageCodeToggle';
 
-Data widgets in Rill Canvas allow you to display raw data in various formats. These widgets are perfect for showing detailed information, metrics, and tabular data. For more information, refer to our [Components reference doc](/reference/project-files/component).
+Data widgets in StarData Canvas allow you to display raw data in various formats. These widgets are perfect for showing detailed information, metrics, and tabular data. For more information, refer to our [Components reference doc](/reference/project-files/component).
 
 ## KPI Grid
 

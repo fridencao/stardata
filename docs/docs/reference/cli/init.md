@@ -1,36 +1,36 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill init
+title: stardata init
 ---
-## rill init
+## stardata init
 
-Initialize a new Rill project
+Initialize a new StarData project
 
 ### Synopsis
 
-Initialize a new Rill project. Use flags to customize the project or run interactively to be prompted for each option.
+Initialize a new StarData project. Use flags to customize the project or run interactively to be prompted for each option.
 
 Available example projects:
-  - rill-cost-monitoring (duckdb)
-  - rill-github-analytics (duckdb)
-  - rill-openrtb-prog-ads (duckdb)
+  - stardata-cost-monitoring (duckdb)
+  - stardata-github-analytics (duckdb)
+  - stardata-openrtb-prog-ads (duckdb)
 
 
 ```
-rill init [<path>] [flags]
+stardata init [<path>] [flags]
 ```
 
 ### Examples
 
 ```
   # Interactive initialization (prompts for all options)
-  rill init
+  stardata init
 
   # Create an empty DuckDB project with Claude agent instructions
-  rill init my-project --olap duckdb --agent claude
+  stardata init my-project --olap duckdb --agent claude
 
-  # Add Claude agent instructions to an existing Rill project
-  rill init ./existing-project --agent claude
+  # Add Claude agent instructions to an existing StarData project
+  stardata init ./existing-project --agent claude
 ```
 
 ### Flags
@@ -52,5 +52,5 @@ rill init [<path>] [flags]
 
 ### SEE ALSO
 
-* [rill](cli.md)	 - A CLI for Rill
+* [stardata](cli.md)	 - A CLI for StarData
 

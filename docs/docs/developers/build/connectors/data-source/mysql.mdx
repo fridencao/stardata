@@ -15,7 +15,7 @@ import { TwoStepFlowIntro, EnvPullTip, DevProdSeparation, DeployToCloud } from '
 
 ## Authentication Methods
 
-To connect to MySQL, you need to provide database connection credentials. Rill supports connecting via individual parameters (host, port, user, password, database).
+To connect to MySQL, you need to provide database connection credentials. StarData supports connecting via individual parameters (host, port, user, password, database).
 
 <TwoStepFlowIntro
   connector="MySQL"
@@ -32,7 +32,7 @@ When connecting to MySQL, you can also specify an appropriate Data Source Name (
 ```
 
 - **scheme**: The transport protocol to use. Use `mysql` for classic MySQL protocol connections and `mysqlx` for X Protocol connections.
-- **user** and **password**: Should correspond to the user credentials that Rill will use to connect to MySQL.
+- **user** and **password**: Should correspond to the user credentials that StarData will use to connect to MySQL.
 - **host** and **port**: Should correspond to the IP address/hostname and port (default 3306) of your MySQL database.
 - **database**: Should correspond to the database in MySQL that you are using.
 
@@ -42,7 +42,7 @@ For more details, see the [MySQL documentation on DSN formats](https://dev.mysql
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **MySQL** as the data source type
 3. In the authentication step:
    - Enter your MySQL host and port
@@ -105,7 +105,7 @@ After creating the model, you can add additional [model settings](/developers/bu
 
 <DevProdSeparation />
 
-## Deploy to Rill Cloud
+## Deploy to StarData Cloud
 
 <DeployToCloud
   connector="MySQL"

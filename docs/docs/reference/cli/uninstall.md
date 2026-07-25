@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill uninstall
+title: stardata uninstall
 ---
-## rill uninstall
+## stardata uninstall
 
-Uninstall the Rill binary
+Uninstall the StarData binary
 
 ```
-rill uninstall [flags]
+stardata uninstall [flags]
 ```
 
 ### Global flags
@@ -21,5 +21,5 @@ rill uninstall [flags]
 
 ### SEE ALSO
 
-* [rill](cli.md)	 - A CLI for Rill
+* [stardata](cli.md)	 - A CLI for StarData
 

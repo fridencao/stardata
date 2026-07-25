@@ -11,15 +11,15 @@ Templating serves several important purposes in your data workflow:
 - **Environment Separation**: Keep development and production data sources completely separate
 - **Testing Safety**: Test your models and transformations without affecting production data
 
-:::note Rill Developer defaults to 'dev'
+:::note StarData Developer defaults to 'dev'
 
-Unless explicitly defined, Rill Developer will use a `dev` environment. If you want to emulate production locally, you can do so via `rill start --environment prod`.
+Unless explicitly defined, StarData Developer will use a `dev` environment. If you want to emulate production locally, you can do so via `stardata start --environment prod`.
 
 :::
 
 ## Setting Up Environment Variables
 
-You can set up environment variables in several locations in Rill. Please review our [configure local credentials documentation](/developers/build/connectors/credentials#setting-credentials-for-rill-developer) for more information.
+You can set up environment variables in several locations in StarData. Please review our [configure local credentials documentation](/developers/build/connectors/credentials#setting-credentials-for-stardata-developer) for more information.
 
 ## Referencing Environment Variables
 
@@ -64,7 +64,7 @@ prod:
 ```
 
 In this example:
-- **Development**: Uses a managed ClickHouse instance that Rill starts locally
+- **Development**: Uses a managed ClickHouse instance that StarData starts locally
 - **Production**: Connects to your existing ClickHouse cluster using environment variables for secure configuration
 
 :::warning Managing development and production credentials
@@ -88,7 +88,7 @@ Or, by creating a separate connector altogether.
 
 ## Environment-Specific Data Source Location
 
-Rill allows you to configure different data source locations for different environments (development, staging, production) using templating. This enables you to work with development datasets locally while pointing to production data sources in cloud deployments.
+StarData allows you to configure different data source locations for different environments (development, staging, production) using templating. This enables you to work with development datasets locally while pointing to production data sources in cloud deployments.
 
 ```yaml
 type: connector

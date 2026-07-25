@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill token issue
+title: stardata token issue
 ---
-## rill token issue
+## stardata token issue
 
 Issue personal access token
 
 ```
-rill token issue [flags]
+stardata token issue [flags]
 ```
 
 ### Flags
@@ -28,5 +28,5 @@ rill token issue [flags]
 
 ### SEE ALSO
 
-* [rill token](token.md)	 - Manage personal access tokens
+* [stardata token](token.md)	 - Manage personal access tokens
 

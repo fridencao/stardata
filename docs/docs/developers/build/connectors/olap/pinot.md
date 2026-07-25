@@ -1,18 +1,18 @@
 ---
 title: Pinot
-description: Power Rill dashboards using Pinot
+description: Power StarData dashboards using Pinot
 sidebar_label: Pinot
 sidebar_position: 20
 ---
 
 [Apache Pinot](https://docs.pinot.apache.org/) is a real-time distributed OLAP datastore purpose-built for low-latency, high-throughput analytics, and is perfect for user-facing analytical workloads.
 
-Rill supports connecting to an existing Pinot cluster via a "live connector" and using it as an OLAP engine built against [external tables](/developers/build/connectors/olap#external-olap-tables) to power Rill dashboards. This is particularly useful when working with extremely large datasets (hundreds of GBs or even TB+ in size).
+StarData supports connecting to an existing Pinot cluster via a "live connector" and using it as an OLAP engine built against [external tables](/developers/build/connectors/olap#external-olap-tables) to power StarData dashboards. This is particularly useful when working with extremely large datasets (hundreds of GBs or even TB+ in size).
 
 
-## Configuring Rill Developer with Pinot
+## Configuring StarData Developer with Pinot
 
-When using Rill for local development, there are a few options to configure Rill to enable Pinot as an OLAP engine:
+When using StarData for local development, there are a few options to configure StarData to enable Pinot as an OLAP engine:
 
 1. Connect to an OLAP engine via Add Data. This will automatically create the `pinot.yaml` file in your `connectors` directory and populate the `.env` file with `PINOT_PASSWORD` or `PINOT_DSN` depending on which you select in the UI.
 
@@ -24,17 +24,17 @@ When using Rill for local development, there are a few options to configure Rill
     dsn: "{{ .env.PINOT_DSN }}"
     ```
 
-1. You can set `PINOT_DSN` in your project's `.env` file or try pulling existing credentials locally using `rill env pull` if the project has already been deployed to Rill Cloud.
+1. You can set `PINOT_DSN` in your project's `.env` file or try pulling existing credentials locally using `stardata env pull` if the project has already been deployed to StarData Cloud.
 
 :::tip Getting DSN errors in dashboards after setting `.env`?
 
-If you are facing issues related to DSN connection errors in your dashboards even after setting the connection string via the project's `.env` file, try restarting Rill using the `rill start --reset` command.
+If you are facing issues related to DSN connection errors in your dashboards even after setting the connection string via the project's `.env` file, try restarting StarData using the `stardata start --reset` command.
 
 :::
 
 ## Connection String (DSN)
 
-Rill connects to Pinot using the [Pinot Golang Client](https://docs.pinot.apache.org/users/clients/golang) and requires a connection string of the following format: `http://<user>:<password>@<broker_host>:<port>?controller=<controller_host>:<port>`. If `user` or `password` contain special characters, they should be URL encoded (i.e., `p@ssword` -> `p%40ssword`). This should be set in the `PINOT_DSN` property in Rill.
+StarData connects to Pinot using the [Pinot Golang Client](https://docs.pinot.apache.org/users/clients/golang) and requires a connection string of the following format: `http://<user>:<password>@<broker_host>:<port>?controller=<controller_host>:<port>`. If `user` or `password` contain special characters, they should be URL encoded (i.e., `p@ssword` -> `p%40ssword`). This should be set in the `PINOT_DSN` property in StarData.
 
 As an example, this typically looks like:
 
@@ -44,7 +44,7 @@ PINOT_DSN="http(s)://username:password@localhost:8000?controller=localhost:9000"
 
 :::info Need help connecting to Pinot?
 
-If you would like to connect Rill to an existing Pinot instance, please don't hesitate to [contact us](/contact). We'd love to help!
+If you would like to connect StarData to an existing Pinot instance, please don't hesitate to [contact us](/contact). We'd love to help!
 
 :::
 
@@ -62,11 +62,11 @@ Please see our [Using Multiple OLAP Engines](/developers/build/connectors/olap/m
 
 :::
 
-## Configuring Rill Cloud
+## Configuring StarData Cloud
 
-When deploying a Pinot-backed project to Rill Cloud, you have the following options to pass the appropriate connection string to Rill Cloud:
+When deploying a Pinot-backed project to StarData Cloud, you have the following options to pass the appropriate connection string to StarData Cloud:
 1. If you have followed the UI to create your Pinot connector, the password or DSN should already exist in the .env file. During the deployment process, this `.env` file is automatically pushed with the deployment.
-2. If `PINOT_DSN` has already been set in your project `.env`, you can push and update these variables directly in your cloud deployment by using the `rill env push` command.
+2. If `PINOT_DSN` has already been set in your project `.env`, you can push and update these variables directly in your cloud deployment by using the `stardata env push` command.
 
 ## Support for Multi-Valued Dimensions
 

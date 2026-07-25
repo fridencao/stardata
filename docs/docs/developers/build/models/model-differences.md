@@ -5,7 +5,7 @@ sidebar_label: When to use SQL vs YAML
 sidebar_position: 03
 ---
 
-In Rill, there are two types of data models:
+In StarData, there are two types of data models:
 
 - [SQL models](/developers/build/models/model-differences#sql-models)
 - [YAML models](/developers/build/models/model-differences#yaml-models)
@@ -16,7 +16,7 @@ For more complex modeling and [data ingestion](/developers/build/models/source-m
 
 :::tip Avoid Pre-aggregated Metrics
 
-Rill works best for slicing and dicing data, meaning keeping data closer to raw to retain that granularity for flexible analysis. When loading data, be careful with adding pre-aggregated metrics like averages, as that could lead to unintended results like a sum of an average. Instead, load the two raw metrics and calculate the derived metric in your model or dashboard.
+StarData works best for slicing and dicing data, meaning keeping data closer to raw to retain that granularity for flexible analysis. When loading data, be careful with adding pre-aggregated metrics like averages, as that could lead to unintended results like a sum of an average. Instead, load the two raw metrics and calculate the derived metric in your model or dashboard.
 
 :::
 
@@ -24,7 +24,7 @@ Rill works best for slicing and dicing data, meaning keeping data closer to raw 
 
 ### When to use SQL Models?
 
-For most users working with DuckDB-backed Rill projects, SQL models provide everything needed to transform and prepare data for visualizations. These models are the default option when using the UI and offer full functionality for data transformation.
+For most users working with DuckDB-backed StarData projects, SQL models provide everything needed to transform and prepare data for visualizations. These models are the default option when using the UI and offer full functionality for data transformation.
 
 ### Creating a SQL Model
 
@@ -34,13 +34,13 @@ When using the UI to create a new model, you'll see something similar to the scr
 
 ## YAML Models
 
-Unlike SQL models, YAML file models allow you to fine-tune a model to perform additional capabilities such as pre-exec, post-exec SQL, partitioning, and incremental modeling. This is an important addition to modeling, as it allows users to customize the model's build process. In the case of partitions and incremental modeling, this will reduce the amount of data ingested into Rill at each interval and provide insight into specific issues per partition. Another use case is when using [multiple OLAP engines](/developers/build/connectors/olap/multiple-olap), which allows you to define where a SQL query is run.
+Unlike SQL models, YAML file models allow you to fine-tune a model to perform additional capabilities such as pre-exec, post-exec SQL, partitioning, and incremental modeling. This is an important addition to modeling, as it allows users to customize the model's build process. In the case of partitions and incremental modeling, this will reduce the amount of data ingested into StarData at each interval and provide insight into specific issues per partition. Another use case is when using [multiple OLAP engines](/developers/build/connectors/olap/multiple-olap), which allows you to define where a SQL query is run.
 
 ### When to use YAML Models
 
-For the majority of users on a DuckDB-backed Rill project, YAML models are not required. When a project grows larger and refreshing entire datasets becomes a time-consuming and costly task, we introduce incremental ingestion to help alleviate the problem. Along with incremental modeling, we use partitions to divide a dataset into smaller, more manageable partitions. After enabling partitions, you will be able to refresh individual partitions of data when required.
+For the majority of users on a DuckDB-backed StarData project, YAML models are not required. When a project grows larger and refreshing entire datasets becomes a time-consuming and costly task, we introduce incremental ingestion to help alleviate the problem. Along with incremental modeling, we use partitions to divide a dataset into smaller, more manageable partitions. After enabling partitions, you will be able to refresh individual partitions of data when required.
 
-Another use case is when using multiple OLAP engines. This allows you to specify where your SQL query is running. When both DuckDB and ClickHouse are enabled in a single environment, you will need to define `connector: duckdb/clickhouse` in the YAML to tell Rill where to run the SQL query, as well as define the `output` location. For more information, refer to the [YAML reference](/reference/project-files/models).
+Another use case is when using multiple OLAP engines. This allows you to specify where your SQL query is running. When both DuckDB and ClickHouse are enabled in a single environment, you will need to define `connector: duckdb/clickhouse` in the YAML to tell StarData where to run the SQL query, as well as define the `output` location. For more information, refer to the [YAML reference](/reference/project-files/models).
 
 ### Types of YAML Models
 

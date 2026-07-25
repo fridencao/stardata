@@ -30,7 +30,7 @@ _[string]_ - Refers to the resource type and must be `model` _(required)_
 
 ### `refresh`
 
-_[object]_ - Specifies the refresh schedule that Rill should follow to re-ingest and update the underlying model data
+_[object]_ - Specifies the refresh schedule that StarData should follow to re-ingest and update the underlying model data
 
   - **`cron`** - _[string]_ - A cron expression that defines the execution schedule
 
@@ -192,7 +192,7 @@ _[oneOf]_ - Refers to the explicitly defined state of your model, cannot be used
 
         - **`end`** - _[string]_ - End timestamp in ISO 8601 format
 
-        - **`expression`** - _[string]_ - Rill time expression (e.g., 'last 7 days', 'this month')
+        - **`expression`** - _[string]_ - StarData time expression (e.g., 'last 7 days', 'this month')
 
       - **`comparison_time_range`** - _[object]_ - Optional comparison time range for period-over-period analysis
 
@@ -204,7 +204,7 @@ _[oneOf]_ - Refers to the explicitly defined state of your model, cannot be used
 
         - **`end`** - _[string]_ - End timestamp in ISO 8601 format
 
-        - **`expression`** - _[string]_ - Rill time expression for comparison period
+        - **`expression`** - _[string]_ - StarData time expression for comparison period
 
       - **`context`** - _[object]_ - Context to constrain the AI analysis
 
@@ -290,7 +290,7 @@ _[oneOf]_ - Refers to how your data is partitioned; cannot be used with state. (
 
         - **`end`** - _[string]_ - End timestamp in ISO 8601 format
 
-        - **`expression`** - _[string]_ - Rill time expression (e.g., 'last 7 days', 'this month')
+        - **`expression`** - _[string]_ - StarData time expression (e.g., 'last 7 days', 'this month')
 
       - **`comparison_time_range`** - _[object]_ - Optional comparison time range for period-over-period analysis
 
@@ -302,7 +302,7 @@ _[oneOf]_ - Refers to how your data is partitioned; cannot be used with state. (
 
         - **`end`** - _[string]_ - End timestamp in ISO 8601 format
 
-        - **`expression`** - _[string]_ - Rill time expression for comparison period
+        - **`expression`** - _[string]_ - StarData time expression for comparison period
 
       - **`context`** - _[object]_ - Context to constrain the AI analysis
 

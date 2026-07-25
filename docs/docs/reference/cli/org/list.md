@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill org list
+title: stardata org list
 ---
-## rill org list
+## stardata org list
 
 List all organizations
 
 ```
-rill org list [flags]
+stardata org list [flags]
 ```
 
 ### Flags
@@ -28,5 +28,5 @@ rill org list [flags]
 
 ### SEE ALSO
 
-* [rill org](org.md)	 - Manage organizations
+* [stardata org](org.md)	 - Manage organizations
 

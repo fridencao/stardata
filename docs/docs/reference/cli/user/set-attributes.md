@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill user set-attributes
+title: stardata user set-attributes
 ---
-## rill user set-attributes
+## stardata user set-attributes
 
 Set custom attributes for a user
 
 ```
-rill user set-attributes [flags]
+stardata user set-attributes [flags]
 ```
 
 ### Flags
@@ -31,5 +31,5 @@ rill user set-attributes [flags]
 
 ### SEE ALSO
 
-* [rill user](user.md)	 - Manage users
+* [stardata user](user.md)	 - Manage users
 

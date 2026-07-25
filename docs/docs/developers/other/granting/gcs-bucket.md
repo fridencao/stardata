@@ -6,13 +6,13 @@ sidebar_position: 20
 ---
 
 :::warning
-Please note that these instructions were made specifically for Rill Managed Pipelines and used by our data engineering team to set up orchestration from object stores/data warehouses into Rill Managed Database Services. While some of the concepts may apply, please refer to your provider's documentation on the correct permissions required to connect to your service.
+Please note that these instructions were made specifically for StarData Managed Pipelines and used by our data engineering team to set up orchestration from object stores/data warehouses into StarData Managed Database Services. While some of the concepts may apply, please refer to your provider's documentation on the correct permissions required to connect to your service.
 :::
 
 ## Setup instructions
-Follow the instructions below to grant Rill access to your Google Cloud Storage Bucket.
+Follow the instructions below to grant StarData access to your Google Cloud Storage Bucket.
 
-1. Find your Google Cloud Service Account by logging into Rill and clicking on Integrations. Your Google Cloud Service Account will be displayed. It will be of the form `organization`-`workspace`@rilldata.iam.gserviceaccount.com.
+1. Find your Google Cloud Service Account by logging into StarData and clicking on Integrations. Your Google Cloud Service Account will be displayed. It will be of the form `organization`-`workspace`@rilldata.iam.gserviceaccount.com.
 
 2. Go to Storage Console: https://console.cloud.google.com/storage/browser.
 

@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill user set-role
+title: stardata user set-role
 ---
-## rill user set-role
+## stardata user set-role
 
 Change a user's role
 
 ```
-rill user set-role [flags]
+stardata user set-role [flags]
 ```
 
 ### Flags
@@ -30,5 +30,5 @@ rill user set-role [flags]
 
 ### SEE ALSO
 
-* [rill user](user.md)	 - Manage users
+* [stardata user](user.md)	 - Manage users
 

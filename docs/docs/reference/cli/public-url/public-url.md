@@ -1,8 +1,8 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill public-url
+title: stardata public-url
 ---
-## rill public-url
+## stardata public-url
 
 Manage public URLs
 
@@ -23,8 +23,8 @@ Manage public URLs
 
 ### SEE ALSO
 
-* [rill](../cli.md)	 - A CLI for Rill
-* [rill public-url create](create.md)	 - Create a public URL
-* [rill public-url delete](delete.md)	 - Delete a public URL
-* [rill public-url list](list.md)	 - List all public URLs
+* [stardata](../cli.md)	 - A CLI for StarData
+* [stardata public-url create](create.md)	 - Create a public URL
+* [stardata public-url delete](delete.md)	 - Delete a public URL
+* [stardata public-url list](list.md)	 - List all public URLs
 

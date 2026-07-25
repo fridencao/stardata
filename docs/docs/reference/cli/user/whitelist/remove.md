@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill user whitelist remove
+title: stardata user whitelist remove
 ---
-## rill user whitelist remove
+## stardata user whitelist remove
 
 Remove whitelisted email domain for the org or project
 
 ```
-rill user whitelist remove <email-domain> [flags]
+stardata user whitelist remove <email-domain> [flags]
 ```
 
 ### Flags
@@ -28,5 +28,5 @@ rill user whitelist remove <email-domain> [flags]
 
 ### SEE ALSO
 
-* [rill user whitelist](whitelist.md)	 - Whitelist access by email domain
+* [stardata user whitelist](whitelist.md)	 - Whitelist access by email domain
 

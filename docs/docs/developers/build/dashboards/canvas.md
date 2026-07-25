@@ -5,7 +5,7 @@ sidebar_label: Canvas Dashboards
 sidebar_position: 05
 ---
 
-While Rill's signature **[Explore dashboards](/developers/build/dashboards/explore)** let you slice, dice, and interact with your data in our suggested layout, **Canvas dashboards** let you define your own visualizations and arrange them into your preferred layout.
+While StarData's signature **[Explore dashboards](/developers/build/dashboards/explore)** let you slice, dice, and interact with your data in our suggested layout, **Canvas dashboards** let you define your own visualizations and arrange them into your preferred layout.
 
 
 Canvas dashboards are built using various components that can display data, create visualizations, and add rich content from independent metrics views. You can create components dynamically through the visual Canvas Dashboard interface or define them in individual YAML files.

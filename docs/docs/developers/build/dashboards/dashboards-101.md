@@ -1,11 +1,11 @@
 ---
-title: Dashboards in Rill
+title: Dashboards in StarData
 description: Understanding Explore vs Canvas dashboards and when to use each
 sidebar_label: Overview
 sidebar_position: 00
 ---
 
-Rill offers two distinct dashboard experiences, each optimized for different use cases and user needs. While both are used to visualize your data, the key difference lies in how they handle [**metrics views**](/developers/build/metrics-view) - the data sources that power your dashboards.
+StarData offers two distinct dashboard experiences, each optimized for different use cases and user needs. While both are used to visualize your data, the key difference lies in how they handle [**metrics views**](/developers/build/metrics-view) - the data sources that power your dashboards.
 
 - **Explore Dashboards** - Standardized _opinionated_ dashboards with consistent data components, visualizations, and layout structure that promote slice-and-dice discovery and interactive data exploration. These are built over a **single metrics view** using the [One Big Table approach](/developers/build/models/models-101#one-big-table-and-dashboarding).
 - **Canvas Dashboards** - Traditional dashboards that allow users to customize visualizations and layout according to their specific requirements utilizing **multiple metrics views**.

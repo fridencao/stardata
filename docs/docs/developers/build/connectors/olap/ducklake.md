@@ -1,19 +1,19 @@
 ---
 title: DuckLake
-description: Power Rill dashboards using DuckLake
+description: Power StarData dashboards using DuckLake
 sidebar_label: DuckLake
 sidebar_position: 12
 ---
 
-[DuckLake](https://ducklake.select/) is an open lakehouse format built on DuckDB. A DuckLake keeps table data as Parquet files in object storage (local, S3, GCS, or Azure) while the catalog (schemas, snapshots, statistics) lives in a separate database — DuckDB, SQLite, PostgreSQL, or MySQL. Rill connects to DuckLake through the DuckDB driver and uses it as a live OLAP engine, so no data is ingested into Rill and all queries are pushed down to DuckDB against your lake.
+[DuckLake](https://ducklake.select/) is an open lakehouse format built on DuckDB. A DuckLake keeps table data as Parquet files in object storage (local, S3, GCS, or Azure) while the catalog (schemas, snapshots, statistics) lives in a separate database — DuckDB, SQLite, PostgreSQL, or MySQL. StarData connects to DuckLake through the DuckDB driver and uses it as a live OLAP engine, so no data is ingested into StarData and all queries are pushed down to DuckDB against your lake.
 
 :::note DuckLake uses the DuckDB Driver
 DuckLake connectors use `driver: duckdb` under the hood. The difference from a standard DuckDB connector is the `attach` clause, which points DuckDB at your DuckLake catalog and data path.
 :::
 
-## Configuring Rill Developer with DuckLake
+## Configuring StarData Developer with DuckLake
 
-Create the connector via **Add Data → DuckLake** in the UI. Rill will generate a `connectors/ducklake.yaml` file and set DuckLake as the default OLAP engine in `rill.yaml`.
+Create the connector via **Add Data → DuckLake** in the UI. StarData will generate a `connectors/ducklake.yaml` file and set DuckLake as the default OLAP engine in `rill.yaml`.
 
 ```yaml
 type: connector
@@ -69,7 +69,7 @@ attach: "'ducklake:metadata.ducklake' (DATA_PATH 's3://my-bucket/ducklake/', OVE
 
 ## Trying DuckLake Without Your Own Data
 
-If you want to see DuckLake in action before pointing Rill at your own catalog, DuckDB hosts a public `lineitem` table from TPC-H (scale factor 3) as a read-only DuckLake. Load it in the [DuckDB browser visualizer](https://duckdb.org/visualizer/#resource_path=https%3A%2F%2Fblobs.duckdb.org%2Fdatalake%2Ftpch-sf3.ducklake&resource_type=ducklake&table_name=lineitem) to confirm the catalog is reachable, then point Rill at the same resource:
+If you want to see DuckLake in action before pointing StarData at your own catalog, DuckDB hosts a public `lineitem` table from TPC-H (scale factor 3) as a read-only DuckLake. Load it in the [DuckDB browser visualizer](https://duckdb.org/visualizer/#resource_path=https%3A%2F%2Fblobs.duckdb.org%2Fdatalake%2Ftpch-sf3.ducklake&resource_type=ducklake&table_name=lineitem) to confirm the catalog is reachable, then point StarData at the same resource:
 
 ```yaml
 type: connector
@@ -78,22 +78,22 @@ driver: duckdb
 attach: "'ducklake:https://blobs.duckdb.org/datalake/tpch-sf3.ducklake'"
 ```
 
-## Configuring Rill Cloud
+## Configuring StarData Cloud
 
-When deploying a DuckLake-backed project to Rill Cloud:
+When deploying a DuckLake-backed project to StarData Cloud:
 
 1. Any secrets referenced in the `attach` clause (e.g. S3 credentials, Postgres passwords) should be set via `{{ .env.KEY_NAME }}` in your YAML and managed with the project `.env` file.
-2. Use `rill env push` to sync local environment variables to your cloud deployment.
-3. The `DATA_PATH` must be reachable from Rill Cloud — local filesystem paths will not deploy.
+2. Use `stardata env push` to sync local environment variables to your cloud deployment.
+3. The `DATA_PATH` must be reachable from StarData Cloud — local filesystem paths will not deploy.
 
 ## Additional Notes
 
 - DuckLake uses the same SQL dialect as DuckDB, so all standard DuckDB functions are available. [Measure definitions](/developers/build/metrics-view/#measures) should follow standard [DuckDB SQL](https://duckdb.org/docs/sql/introduction) syntax.
-- Rill opens DuckLake in read-only mode by default. To allow Rill to create or modify tables in the lake, enable write mode in the connector advanced options.
+- StarData opens DuckLake in read-only mode by default. To allow StarData to create or modify tables in the lake, enable write mode in the connector advanced options.
 - Combine DuckLake with [multiple OLAP engines](/developers/build/connectors/olap/multiple-olap) to power different dashboards from different catalogs in the same project.
 
 :::info Need help connecting to DuckLake?
 
-If you would like to connect Rill to DuckLake or need assistance with setup, please don't hesitate to [contact us](/contact). We'd love to help!
+If you would like to connect StarData to DuckLake or need assistance with setup, please don't hesitate to [contact us](/contact). We'd love to help!
 
 :::

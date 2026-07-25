@@ -13,7 +13,7 @@ If you are unsure about the required parameters, please review the [reference pa
 
 :::
 
-Rill supports incremental models on either cloud storage or data warehouses, but the parameters to set these up will be different. Cloud storage requires the `glob` parameter while data warehouses will need to use `sql`.
+StarData supports incremental models on either cloud storage or data warehouses, but the parameters to set these up will be different. Cloud storage requires the `glob` parameter while data warehouses will need to use `sql`.
 
 See [our reference documentation](/reference/project-files/models) for more information.
 
@@ -77,7 +77,7 @@ You can verify the current value of your state in the left-hand panel under Incr
 
 ### Refreshing an Incremental Model
 
-When you are testing with incremental models in Rill Developer, you will notice a change in the refresh functionality. Instead of a full refresh, you are given the option for `incremental refresh`.
+When you are testing with incremental models in StarData Developer, you will notice a change in the refresh functionality. Instead of a full refresh, you are given the option for `incremental refresh`.
 
 ![Now Incremental](/img/tutorials/advanced-models/now-incremental.png)
 
@@ -92,13 +92,13 @@ There are times when a full refresh may be required. In these cases, running the
 When selecting to refresh incrementally, what is being run in the CLI is:
 
 ```bash
-rill project refresh --local --model <model_name>
+stardata project refresh --local --model <model_name>
 ```
 
 Keep in mind that if you select `Full refresh`, this will start the ingestion of **all of your data** from scratch. Only use this when absolutely required. When running a full refresh, the CLI command is:
 
 ```bash
-rill project refresh --local --model <model_name> --full
+stardata project refresh --local --model <model_name> --full
 ```
 
 ## Model Change Modes

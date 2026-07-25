@@ -7,11 +7,11 @@ className: connect-connect
 ---
 
 
-By default, Rill will use a managed embedded analytics engine (**DuckDB** or **ClickHouse**) to support data ingestion.  Whether you're working with cloud data warehouses, databases, file storage, or streaming data sources, Rill provides seamless connectivity and data ingestion capabilities. Once you have connected to your data source you can create [downstream models](/developers/build/models), [metrics views](/developers/build/metrics-view) and [visualize your data](/developers/build/dashboards).
+By default, StarData will use a managed embedded analytics engine (**DuckDB** or **ClickHouse**) to support data ingestion.  Whether you're working with cloud data warehouses, databases, file storage, or streaming data sources, StarData provides seamless connectivity and data ingestion capabilities. Once you have connected to your data source you can create [downstream models](/developers/build/models), [metrics views](/developers/build/metrics-view) and [visualize your data](/developers/build/dashboards).
 
 :::tip using clickhouse?
 
-Don't forget to [create a managed ClickHouse server](/developers/build/connectors/olap/clickhouse#rill-managed-clickhouse) before getting started!
+Don't forget to [create a managed ClickHouse server](/developers/build/connectors/olap/clickhouse#stardata-managed-clickhouse) before getting started!
 
 
 ```yaml
@@ -32,7 +32,7 @@ import ConnectorIcon from '@site/src/components/ConnectorIcon';
 In order to connect and browse through your data, you'll need to create a connector file. Browse through the options below for our supported connectors. Each connector is designed to handle the specific authentication and configuration requirements of your data source.
 
 :::warning OLAP Engine Limitations
-Rill supports connecting your data to both [DuckDB](/developers/build/connectors/olap/duckdb) and [ClickHouse](/developers/build/connectors/olap/clickhouse). However, there are still some features in development for managed ClickHouse. For more information see our [managed ClickHouse docs](/developers/build/connectors/olap/clickhouse#rill-managed-clickhouse). If you've still got questions, [contact our team](/contact) for more information and scheduled feature releases!
+StarData supports connecting your data to both [DuckDB](/developers/build/connectors/olap/duckdb) and [ClickHouse](/developers/build/connectors/olap/clickhouse). However, there are still some features in development for managed ClickHouse. For more information see our [managed ClickHouse docs](/developers/build/connectors/olap/clickhouse#stardata-managed-clickhouse). If you've still got questions, [contact our team](/contact) for more information and scheduled feature releases!
 :::
 
 
@@ -200,7 +200,7 @@ Rill supports connecting your data to both [DuckDB](/developers/build/connectors
   <ConnectorIcon
     icon={<img src="/img/build/connectors/icons/Logo-DuckDB.svg" alt="DuckDB" className="duckdb-icon"/>}
     header="DuckDB"
-    content="Attach your local DuckDB database to Rill's embedded database."
+    content="Attach your local DuckDB database to StarData's embedded database."
     link="/developers/build/connectors/data-source/duckdb"
     linkLabel="Learn more"
     referenceLink="external-duckdb"
@@ -240,7 +240,7 @@ Rill supports connecting your data to both [DuckDB](/developers/build/connectors
 
 
 ## Externally Hosted Services
-If you have a firewall in front of your externally hosted service, you will need to whitelist the IP addresses below. This will allow you to connect to/from your service once your project is deployed to Rill Cloud. 
+If you have a firewall in front of your externally hosted service, you will need to whitelist the IP addresses below. This will allow you to connect to/from your service once your project is deployed to StarData Cloud. 
 ```
 35.196.245.100
 34.74.117.37
@@ -256,7 +256,7 @@ Add content here about how to explore the connector UI -->
 
 ## Managed OLAP Engine Caveats
 
-When deciding on which managed OLAP engine to use with Rill, you'll need to decide based on the following factors:
+When deciding on which managed OLAP engine to use with StarData, you'll need to decide based on the following factors:
 
 - **Size of data**: Consider the volume and growth rate of your datasets
 - **Familiarity with respective OLAP engine features**: Assess your team's expertise with each engine's capabilities

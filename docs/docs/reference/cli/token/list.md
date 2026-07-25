@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill token list
+title: stardata token list
 ---
-## rill token list
+## stardata token list
 
 List personal access tokens
 
 ```
-rill token list [flags]
+stardata token list [flags]
 ```
 
 ### Flags
@@ -29,5 +29,5 @@ rill token list [flags]
 
 ### SEE ALSO
 
-* [rill token](token.md)	 - Manage personal access tokens
+* [stardata token](token.md)	 - Manage personal access tokens
 

@@ -4,7 +4,7 @@ title: Theme YAML
 sidebar_position: 40
 ---
 
-In your Rill project directory, create a `<theme_name>.yaml` file in any directory containing `type: theme`. Rill will automatically ingest the theme next time you run `rill start` or deploy to Rill Cloud.
+In your StarData project directory, create a `<theme_name>.yaml` file in any directory containing `type: theme`. StarData will automatically ingest the theme next time you run `stardata start` or deploy to StarData Cloud.
 
 To apply that theme to a dashboard, add `default_theme: <name of theme>` to the yaml file for that dashboard. Alternatively, you can add this to the end of the URL in your browser: `?theme=<name of theme>`
 

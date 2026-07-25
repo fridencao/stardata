@@ -5,7 +5,7 @@ sidebar_label: OpenAPI Documentation
 sidebar_position: 60
 ---
 
-Rill automatically generates an OpenAPI specification for your project that combines built-in APIs with your custom API definitions. You can add request and response schemas to your APIs for better documentation and typed client generation.
+StarData automatically generates an OpenAPI specification for your project that combines built-in APIs with your custom API definitions. You can add request and response schemas to your APIs for better documentation and typed client generation.
 
 ## Adding an OpenAPI spec to your API
 
@@ -75,7 +75,7 @@ Schemas follow the [JSON Schema](https://json-schema.org/) format. You can use `
 curl http://localhost:9009/v1/instances/default/api/openapi -o openapi.json
 ```
 
-### From Rill Cloud
+### From StarData Cloud
 
 ```bash
 curl "https://api.rilldata.com/v1/organizations/<org>/projects/<project>/runtime/api/openapi" \
@@ -91,7 +91,7 @@ curl "https://api.rilldata.com/v1/orgs/<org>/projects/<project>/branch/<branch-n
   -o openapi.json
 ```
 
-The generated spec includes all your custom APIs with their schemas, plus Rill's built-in API endpoints.
+The generated spec includes all your custom APIs with their schemas, plus StarData's built-in API endpoints.
 
 ## Generating typed clients
 

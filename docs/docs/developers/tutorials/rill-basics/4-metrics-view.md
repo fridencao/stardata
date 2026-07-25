@@ -85,7 +85,7 @@ Let's go over each component and what they are in order to better understand the
 version: 1
 type: metrics_view
 ```
-The type is a Rill-required key pair as it indicates to Rill what type of file this is. Whether a `source`, `metrics_view`, `connector`, etc. We can keep this as is.
+The type is a StarData-required key pair as it indicates to StarData what type of file this is. Whether a `source`, `metrics_view`, `connector`, etc. We can keep this as is.
 
 ---
 

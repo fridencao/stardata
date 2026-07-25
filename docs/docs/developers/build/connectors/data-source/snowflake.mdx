@@ -11,7 +11,7 @@ import { TwoStepFlowIntro, EnvPullTip, DevProdSeparation, DeployToCloud } from '
 
 :::info Deprecation of password authentication
 
-Snowflake has issued a [deprecation notice](https://www.snowflake.com/en/blog/blocking-single-factor-password-authentification/) for single-factor password authentication. Rill supports and recommends using private key authentication to avoid any disruption of your service.
+Snowflake has issued a [deprecation notice](https://www.snowflake.com/en/blog/blocking-single-factor-password-authentification/) for single-factor password authentication. StarData supports and recommends using private key authentication to avoid any disruption of your service.
 
 :::
 
@@ -21,7 +21,7 @@ Snowflake has issued a [deprecation notice](https://www.snowflake.com/en/blog/bl
 
 ## Authentication Methods
 
-To connect to Snowflake, you need to provide authentication credentials. Rill supports two methods:
+To connect to Snowflake, you need to provide authentication credentials. StarData supports two methods:
 
 1. **Use Keypair Authentication** (recommended - required for production)
 2. **Use Password Authentication** (deprecated by Snowflake)
@@ -34,7 +34,7 @@ To connect to Snowflake, you need to provide authentication credentials. Rill su
 
 ## Method 1: Keypair Authentication (Recommended)
 
-Keypair authentication provides enhanced security and is the recommended method for connecting to Snowflake. This method works for both local development and Rill Cloud deployments.
+Keypair authentication provides enhanced security and is the recommended method for connecting to Snowflake. This method works for both local development and StarData Cloud deployments.
 
 ### Connection String Format
 
@@ -56,7 +56,7 @@ To determine your [Snowflake account identifier](https://docs.snowflake.com/en/u
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Snowflake** as the data source type
 3. In the authentication step:
    - Enter your connection string with keypair authentication
@@ -142,7 +142,7 @@ After creating the model, you can add additional [model settings](/developers/bu
 
 <DevProdSeparation />
 
-## Deploy to Rill Cloud
+## Deploy to StarData Cloud
 
 <DeployToCloud
   connector="Snowflake"
@@ -165,7 +165,7 @@ You can use keypair authentication for enhanced security when connecting to Snow
 
 #### Generate a Private Key
 
-Please refer to the [Snowflake documentation](https://docs.snowflake.com/en/guide/key-pair-auth) on how to configure an unencrypted private key to use in Rill.
+Please refer to the [Snowflake documentation](https://docs.snowflake.com/en/guide/key-pair-auth) on how to configure an unencrypted private key to use in StarData.
 
 The Snowflake Go Driver only supports **unencrypted PKCS#8 keys**. Make sure to include the `-nocrypt` flag, as encrypted keys are not supported. You can generate one using:
 

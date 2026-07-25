@@ -1,10 +1,10 @@
 ---
-title: Models in Rill
+title: Models in StarData
 sidebar_label: Build
 sidebar_position: 0
 ---
 
-Rill provides users the option to build various types of models based on different use cases. Take a look through the list of available types of models!
+StarData provides users the option to build various types of models based on different use cases. Take a look through the list of available types of models!
 
 ### Fundamentals
 - [**Getting Started with Models**](/developers/build/models/models-101) - What are models and important topics to remember as you create your own.

@@ -1,11 +1,11 @@
 ---
-title: Rill ISO 8601 Extensions
-description: Legacy rill- prefixed time syntax extensions
-sidebar_label: Rill ISO Extensions
+title: StarData ISO 8601 Extensions
+description: Legacy stardata- prefixed time syntax extensions
+sidebar_label: StarData ISO Extensions
 sidebar_position: 10
 ---
 
-Rill supports a set of legacy `rill-` prefixed keywords for common time ranges. These are retained for backward compatibility with existing configurations.
+StarData supports a set of legacy `stardata-` prefixed keywords for common time ranges. These are retained for backward compatibility with existing configurations.
 
 :::tip New Syntax Available
 For new configurations, use the modern [Time Range Syntax](/reference/time-syntax), which is more expressive and consistent across all contexts.
@@ -13,19 +13,19 @@ For new configurations, use the modern [Time Range Syntax](/reference/time-synta
 
 ## Time Range Extensions
 
-| Rill Extension | Description |
+| StarData Extension | Description |
 |----------------|-------------|
 | `inf` | All time |
-| `rill-TD` | Today |
-| `rill-WTD` | Week to Date |
-| `rill-MTD` | Month to Date |
-| `rill-QTD` | Quarter to Date |
-| `rill-YTD` | Year to Date |
-| `rill-PDC` | Yesterday (Previous Day Complete) |
-| `rill-PWC` | Previous Week Complete |
-| `rill-PMC` | Previous Month Complete |
-| `rill-PQC` | Previous Quarter Complete |
-| `rill-PYC` | Previous Year Complete |
+| `stardata-TD` | Today |
+| `stardata-WTD` | Week to Date |
+| `stardata-MTD` | Month to Date |
+| `stardata-QTD` | Quarter to Date |
+| `stardata-YTD` | Year to Date |
+| `stardata-PDC` | Yesterday (Previous Day Complete) |
+| `stardata-PWC` | Previous Week Complete |
+| `stardata-PMC` | Previous Month Complete |
+| `stardata-PQC` | Previous Quarter Complete |
+| `stardata-PYC` | Previous Year Complete |
 
 :::note Reference point behavior
 In a dashboard context, the reference point for these expressions is `latest` (most recent data timestamp). In alert contexts, the reference point is `watermark` (data completeness marker).
@@ -35,14 +35,14 @@ In a dashboard context, the reference point for these expressions is `latest` (m
 
 These extensions are used specifically in comparison contexts (the "Comparing" feature in dashboards).
 
-| Rill Extension | Description | Usage |
+| StarData Extension | Description | Usage |
 |----------------|-------------|-------|
-| `rill-PP` | Previous Period | Compares against the immediately preceding period of same duration |
-| `rill-PD` | Previous Day | Compares against the same time yesterday |
-| `rill-PW` | Previous Week | Compares against the same time last week |
-| `rill-PM` | Previous Month | Compares against the same time last month |
-| `rill-PQ` | Previous Quarter | Compares against the same time last quarter |
-| `rill-PY` | Previous Year | Compares against the same time last year |
+| `stardata-PP` | Previous Period | Compares against the immediately preceding period of same duration |
+| `stardata-PD` | Previous Day | Compares against the same time yesterday |
+| `stardata-PW` | Previous Week | Compares against the same time last week |
+| `stardata-PM` | Previous Month | Compares against the same time last month |
+| `stardata-PQ` | Previous Quarter | Compares against the same time last quarter |
+| `stardata-PY` | Previous Year | Compares against the same time last year |
 
 ## Usage Context
 
@@ -51,11 +51,11 @@ Extensions ending in `TD` (to-date) or `C` (complete) are valid as primary time 
 
 ```yaml
 # In metrics view or explore configuration
-default_time_range: "rill-MTD"  # Month to date
+default_time_range: "stardata-MTD"  # Month to date
 ```
 
 ### As Comparison
-Extensions starting with `rill-P` (previous) are typically used for comparisons:
+Extensions starting with `stardata-P` (previous) are typically used for comparisons:
 
 ```yaml
 # In explore configuration
@@ -68,7 +68,7 @@ Then select "Previous Period", "Previous Day", etc. in the dashboard UI.
 
 ## ISO 8601 Duration Support
 
-Rill also supports standard ISO 8601 duration format:
+StarData also supports standard ISO 8601 duration format:
 
 | Format | Description | Example |
 |--------|-------------|---------|
@@ -87,20 +87,20 @@ Combined durations:
 
 ## Migration to Modern Syntax
 
-The modern syntax provides equivalent functionality with more flexibility. One important distinction: `DTD` supports intraday ranges (e.g., `ref/D to ref/h+1h`) while `rill-TD` does not.
+The modern syntax provides equivalent functionality with more flexibility. One important distinction: `DTD` supports intraday ranges (e.g., `ref/D to ref/h+1h`) while `stardata-TD` does not.
 
 | Legacy | Modern Equivalent |
 |--------|-------------------|
-| `rill-TD` | `DTD` |
-| `rill-WTD` | `WTD` |
-| `rill-MTD` | `MTD` |
-| `rill-QTD` | `QTD` |
-| `rill-YTD` | `YTD` |
-| `rill-PDC` | `1D as of watermark/D` |
-| `rill-PWC` | `1W as of watermark/W` |
-| `rill-PMC` | `1M as of watermark/M` |
-| `rill-PQC` | `1Q as of watermark/Q` |
-| `rill-PYC` | `1Y as of watermark/Y` |
+| `stardata-TD` | `DTD` |
+| `stardata-WTD` | `WTD` |
+| `stardata-MTD` | `MTD` |
+| `stardata-QTD` | `QTD` |
+| `stardata-YTD` | `YTD` |
+| `stardata-PDC` | `1D as of watermark/D` |
+| `stardata-PWC` | `1W as of watermark/W` |
+| `stardata-PMC` | `1M as of watermark/M` |
+| `stardata-PQC` | `1Q as of watermark/Q` |
+| `stardata-PYC` | `1Y as of watermark/Y` |
 | `P7D` | `7D` |
 | `P1M` | `1M` or `30D` |
 

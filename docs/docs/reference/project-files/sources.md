@@ -26,7 +26,7 @@ _[string]_ - Refers to the connector type for the source, see [connectors](/refe
 
 ### `uri`
 
-_[string]_ - Refers to the URI of the remote connector you are using for the source. Rill also supports glob patterns as part of the URI for S3 and GCS (required for type: http, s3, gcs).
+_[string]_ - Refers to the URI of the remote connector you are using for the source. StarData also supports glob patterns as part of the URI for S3 and GCS (required for type: http, s3, gcs).
 
 - `s3://your-org/bucket/file.parquet` — the s3 URI of your file
 - `gs://your-org/bucket/file.parquet` — the gsutil URI of your file
@@ -67,7 +67,7 @@ _[string]_ - The maximum time to wait for source ingestion
 
 ### `refresh`
 
-_[object]_ - Specifies the refresh schedule that Rill should follow to re-ingest and update the underlying source data (optional).
+_[object]_ - Specifies the refresh schedule that StarData should follow to re-ingest and update the underlying source data (optional).
 ```yaml
 refresh:
   cron: "* * * * *"

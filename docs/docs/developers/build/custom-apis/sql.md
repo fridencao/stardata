@@ -63,7 +63,7 @@ sql: |
 
 ## Querying external databases
 
-You can query external databases directly by specifying a `connector`. This lets you access data in real-time without ingesting it into Rill.
+You can query external databases directly by specifying a `connector`. This lets you access data in real-time without ingesting it into StarData.
 
 ### Data warehouses
 
@@ -129,7 +129,7 @@ To minimize costs: use `LIMIT` clauses, apply filters to reduce data scanned, an
 | **Cost** | No additional cost | Per-query costs from your provider |
 | **Best for** | Low-latency APIs, pre-modeled data | Real-time access, ad-hoc queries |
 
-**Use your OLAP engine** when you need fast, low-cost queries against data already modeled in Rill. Your data refreshes on a schedule and is optimized for analytical queries.
+**Use your OLAP engine** when you need fast, low-cost queries against data already modeled in StarData. Your data refreshes on a schedule and is optimized for analytical queries.
 
 **Use external connectors** when you need real-time access to the latest data, your data lives in the source database, or you're building internal tools where query costs are acceptable.
 

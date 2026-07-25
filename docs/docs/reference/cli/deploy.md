@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill deploy
+title: stardata deploy
 ---
-## rill deploy
+## stardata deploy
 
-Deploy project to Rill Cloud
+Deploy project to StarData Cloud
 
 ```
-rill deploy [<path>] [flags]
+stardata deploy [<path>] [flags]
 ```
 
 ### Flags
@@ -22,9 +22,9 @@ rill deploy [<path>] [flags]
       --public                  Make dashboards publicly accessible
       --provisioner string      Project provisioner
       --primary-branch string   Git branch to deploy from (default: the default Git branch)
-      --push-env                Push local .env file to Rill Cloud (default true)
-      --force-push              Force push local changes in case of Rill managed repos
-      --managed                 Create project using rill managed repo
+      --push-env                Push local .env file to StarData Cloud (default true)
+      --force-push              Force push local changes in case of StarData managed repos
+      --managed                 Create project using stardata managed repo
       --github                  Use github repo to create the project
 ```
 
@@ -39,5 +39,5 @@ rill deploy [<path>] [flags]
 
 ### SEE ALSO
 
-* [rill](cli.md)	 - A CLI for Rill
+* [stardata](cli.md)	 - A CLI for StarData
 

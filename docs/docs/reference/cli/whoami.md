@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill whoami
+title: stardata whoami
 ---
-## rill whoami
+## stardata whoami
 
 Show current user
 
 ```
-rill whoami [flags]
+stardata whoami [flags]
 ```
 
 ### Global flags
@@ -21,5 +21,5 @@ rill whoami [flags]
 
 ### SEE ALSO
 
-* [rill](cli.md)	 - A CLI for Rill
+* [stardata](cli.md)	 - A CLI for StarData
 

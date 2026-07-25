@@ -11,7 +11,7 @@ StarData includes AI capabilities across both development and data exploration.
 
 ## Build Projects with AI
 
-StarData projects are defined as YAML and SQL files, which makes them a natural fit for AI coding agents. Run `rill init` to generate agent instructions for Claude Code, Cursor, or other tools, then use your AI agent to build connectors, models, metrics views, and dashboards. See the **[Agentic Quickstart](/developers/get-started/ai-quickstart)** to get started.
+StarData projects are defined as YAML and SQL files, which makes them a natural fit for AI coding agents. Run `stardata init` to generate agent instructions for Claude Code, Cursor, or other tools, then use your AI agent to build connectors, models, metrics views, and dashboards. See the **[Agentic Quickstart](/developers/get-started/ai-quickstart)** to get started.
 
 ## AI Chat
 

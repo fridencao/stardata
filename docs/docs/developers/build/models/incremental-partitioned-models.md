@@ -13,7 +13,7 @@ If you need any assistance with setting up an incremental partitioned model, [re
 
 :::tip Looking for an example?
 
-If you're looking for a working example, take a look at [my-rill-tutorial in our examples' repository](https://github.com/rilldata/rill-examples).
+If you're looking for a working example, take a look at [my-stardata-tutorial in our examples' repository](https://github.com/rilldata/rill-examples).
 
 :::
 
@@ -39,14 +39,14 @@ sql: |
 
 ### Refreshing Partitions in Incremental Models
 
-When this model loads, you will be able to both view the partitions and select a specific partition to refresh via the UI in Rill Developer. Unlike **partitioned-only** models, a new button is added in each of the partitions.
+When this model loads, you will be able to both view the partitions and select a specific partition to refresh via the UI in StarData Developer. Unlike **partitioned-only** models, a new button is added in each of the partitions.
 
 ![Incremental Partitions Developer](/img/build/advanced-models/incremental-partitions-developer.png)
 
 Likewise, if you refresh using the **CLI**:
 
 ```bash
-rill project refresh  --model CH_incremental_commits_directory --local --partition ba9f71625de8e042cabf3333576d502c
+stardata project refresh  --model CH_incremental_commits_directory --local --partition ba9f71625de8e042cabf3333576d502c
 Refresh initiated. Check the project logs for status updates.
 ```
 
@@ -58,11 +58,11 @@ When a model is first created, an initial ingestion will occur to bring in all t
 ![Initial Ingestion](/img/build/advanced-models/initial-ingestion.png)
 
 ### Additional Partition:
-If you add an additional partition to the source table, on the next manual or automatic refresh, Rill will detect the new partition and **only** add the additional partition to the model, as you can see in the diagram, the **blue** additional partition is added in its own partition in the partitioned model. If the other partitions have not been modified, these will not be touched.
+If you add an additional partition to the source table, on the next manual or automatic refresh, StarData will detect the new partition and **only** add the additional partition to the model, as you can see in the diagram, the **blue** additional partition is added in its own partition in the partitioned model. If the other partitions have not been modified, these will not be touched.
 
 ![Additional Partition](/img/build/advanced-models/additional-partition.png)
 
 ### Modify Existing Partition:
-If you modify any of the already existing partitions, **yellow**, Rill will re-ingest just the modified file during the scheduled refresh by checking the `last_modified_date` parameter.
+If you modify any of the already existing partitions, **yellow**, StarData will re-ingest just the modified file during the scheduled refresh by checking the `last_modified_date` parameter.
 
 ![Modified Partition](/img/build/advanced-models/modified-partition.png)

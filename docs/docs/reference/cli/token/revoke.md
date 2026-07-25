@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill token revoke
+title: stardata token revoke
 ---
-## rill token revoke
+## stardata token revoke
 
 Revoke personal access token(s)
 
 ```
-rill token revoke [token-id] [flags]
+stardata token revoke [token-id] [flags]
 ```
 
 ### Flags
@@ -27,5 +27,5 @@ rill token revoke [token-id] [flags]
 
 ### SEE ALSO
 
-* [rill token](token.md)	 - Manage personal access tokens
+* [stardata token](token.md)	 - Manage personal access tokens
 

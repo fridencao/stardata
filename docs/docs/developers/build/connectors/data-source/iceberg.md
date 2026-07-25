@@ -7,10 +7,10 @@ sidebar_position: 27
 
 ## Overview
 
-[Apache Iceberg](https://iceberg.apache.org/) is an open table format for large analytic datasets. Rill supports reading Iceberg tables directly from object storage through compatible query engine integrations. Today, this is powered by DuckDB's native [Iceberg extension](https://duckdb.org/docs/extensions/iceberg/overview.html).
+[Apache Iceberg](https://iceberg.apache.org/) is an open table format for large analytic datasets. StarData supports reading Iceberg tables directly from object storage through compatible query engine integrations. Today, this is powered by DuckDB's native [Iceberg extension](https://duckdb.org/docs/extensions/iceberg/overview.html).
 
 :::note Direct file access only
-Rill reads Iceberg tables by scanning the table's metadata and data files directly from object storage. Catalog-based access (e.g., through a Hive Metastore, AWS Glue, or REST catalog) is not currently supported.
+StarData reads Iceberg tables by scanning the table's metadata and data files directly from object storage. Catalog-based access (e.g., through a Hive Metastore, AWS Glue, or REST catalog) is not currently supported.
 :::
 
 ## Storage Backends
@@ -24,11 +24,11 @@ Iceberg tables can be read from any of the following storage backends:
 | Azure Blob Storage | `azure://container/path/to/table` | Requires an [Azure connector](/developers/build/connectors/data-source/azure) |
 | Local filesystem | `/path/to/table` | No authentication needed |
 
-For cloud storage backends, you must first configure the corresponding storage connector with valid credentials. Rill uses these credentials to authenticate when reading the Iceberg table files.
+For cloud storage backends, you must first configure the corresponding storage connector with valid credentials. StarData uses these credentials to authenticate when reading the Iceberg table files.
 
 ## Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Apache Iceberg** as the data source type
 3. Choose your storage backend (S3, GCS, Azure, or Local)
 4. Enter the path to your Iceberg table directory
@@ -116,19 +116,19 @@ FROM iceberg_scan('s3://my-bucket/path/to/iceberg_table',
   version = '2')
 ```
 
-## Deploy to Rill Cloud
+## Deploy to StarData Cloud
 
-Since Iceberg tables are read through DuckDB using your existing storage connector credentials, deploying to Rill Cloud follows the same process as the underlying storage connector:
+Since Iceberg tables are read through DuckDB using your existing storage connector credentials, deploying to StarData Cloud follows the same process as the underlying storage connector:
 
-- **S3**: Follow the [S3 deployment guide](/developers/build/connectors/data-source/s3#deploy-to-rill-cloud)
-- **GCS**: Follow the [GCS deployment guide](/developers/build/connectors/data-source/gcs#deploy-to-rill-cloud)
-- **Azure**: Follow the [Azure deployment guide](/developers/build/connectors/data-source/azure#deploy-to-rill-cloud)
+- **S3**: Follow the [S3 deployment guide](/developers/build/connectors/data-source/s3#deploy-to-stardata-cloud)
+- **GCS**: Follow the [GCS deployment guide](/developers/build/connectors/data-source/gcs#deploy-to-stardata-cloud)
+- **Azure**: Follow the [Azure deployment guide](/developers/build/connectors/data-source/azure#deploy-to-stardata-cloud)
 
-Ensure your storage connector credentials are configured in your Rill Cloud project before deploying.
+Ensure your storage connector credentials are configured in your StarData Cloud project before deploying.
 
 ## Limitations
 
-- **Direct file access only**: Rill reads Iceberg metadata and data files directly from storage. Catalog integrations (Hive Metastore, AWS Glue, REST catalog) are not supported.
+- **Direct file access only**: StarData reads Iceberg metadata and data files directly from storage. Catalog integrations (Hive Metastore, AWS Glue, REST catalog) are not supported.
 - **DuckDB engine**: Iceberg support is currently provided through DuckDB's Iceberg extension. Additional engine support (e.g., ClickHouse) is planned.
 - **GCS requires HMAC keys**: DuckDB's `iceberg_scan()` only supports HMAC authentication for GCS, not JSON service account credentials.
-- **Read-only**: Rill reads from Iceberg tables but does not write to them.
+- **Read-only**: StarData reads from Iceberg tables but does not write to them.

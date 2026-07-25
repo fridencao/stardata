@@ -15,7 +15,7 @@ On this page, we will walk through how to configure the latter.
 
 There could be reasons why you wish to configure multiple OLAP engines within the same project:
 - You have data sources that differ greatly in size but which you want to use within the same project. As a rule of thumb, DuckDB handles datasets _up to 50GB quite well_ and is performant. For much larger datasets, you may want a more enterprise-grade OLAP engine powering specific dashboards.
-- You have existing datasets/tables from other OLAP stores that you wish to use in Rill, which may already be optimized, and which you do not want to separately ingest into Rill. Instead, you would like to create dashboards off these tables directly and have the OLAP engine power them.
+- You have existing datasets/tables from other OLAP stores that you wish to use in StarData, which may already be optimized, and which you do not want to separately ingest into StarData. Instead, you would like to create dashboards off these tables directly and have the OLAP engine power them.
 
 :::info Don't see an OLAP engine?
 
@@ -29,23 +29,23 @@ To configure multiple OLAP engines, you'll want to leave the <u>default</u> OLAP
 
 ### Setting up your OLAP Engine connection string (DSN)
 
-Before getting started, you'll need to first configure the appropriate connection string for each OLAP engine that you plan to use in Rill. Besides the built-in DuckDB OLAP engine, each OLAP engine should have its own `connector.<olap-engine>.dsn` variable that needs to be configured.
+Before getting started, you'll need to first configure the appropriate connection string for each OLAP engine that you plan to use in StarData. Besides the built-in DuckDB OLAP engine, each OLAP engine should have its own `connector.<olap-engine>.dsn` variable that needs to be configured.
 
-**For Rill Developer:**
-- You can set these variables in your project's `.env` file or try pulling existing credentials locally using `rill env pull` if the project has already been deployed to Rill Cloud.
+**For StarData Developer:**
+- You can set these variables in your project's `.env` file or try pulling existing credentials locally using `stardata env pull` if the project has already been deployed to StarData Cloud.
 
 :::tip Getting DSN errors in dashboards after setting `.env`?
 
-There might be instances where you've configured the project's `.env` file with the appropriate connection DSN strings but dashboards are still throwing errors. In these situations, try restarting Rill using the `rill start --reset` command.
+There might be instances where you've configured the project's `.env` file with the appropriate connection DSN strings but dashboards are still throwing errors. In these situations, try restarting StarData using the `stardata start --reset` command.
 
 :::
 
-**For Rill Cloud:**
-- Add the required `connector.<olap-engine>.dsn` parameters to your project's `.env`, and you can push these updated variables to your deployed project directly using `rill env push`.
+**For StarData Cloud:**
+- Add the required `connector.<olap-engine>.dsn` parameters to your project's `.env`, and you can push these updated variables to your deployed project directly using `stardata env push`.
 
 ### Configuring DuckDB as the default OLAP engine
 
-Not much needs to be done here as _DuckDB is the inherent default OLAP engine_ that is used by Rill. However, in case a different `olap_connector` is set in the project's `rill.yaml` file, this property should either be removed and/or set back to `duckdb`.
+Not much needs to be done here as _DuckDB is the inherent default OLAP engine_ that is used by StarData. However, in case a different `olap_connector` is set in the project's `rill.yaml` file, this property should either be removed and/or set back to `duckdb`.
 
 ```yaml
 olap_connector: duckdb

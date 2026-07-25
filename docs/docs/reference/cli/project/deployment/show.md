@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project deployment show
+title: stardata project deployment show
 ---
-## rill project deployment show
+## stardata project deployment show
 
 Show details of a deployment
 
 ```
-rill project deployment show [<project>] <branch> [flags]
+stardata project deployment show [<project>] <branch> [flags]
 ```
 
 ### Flags
@@ -29,5 +29,5 @@ rill project deployment show [<project>] <branch> [flags]
 
 ### SEE ALSO
 
-* [rill project deployment](deployment.md)	 - Manage project deployments
+* [stardata project deployment](deployment.md)	 - Manage project deployments
 

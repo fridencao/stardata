@@ -5,7 +5,7 @@ sidebar_label: "Measure Formatting"
 sidebar_position: 15
 ---
 
-When creating your measures in Rill, you have the option to pick from a preset of formats that we provide to you or use the [d3-format](https://d3js.org/d3-format) parameter to format your data in any way you like. While the big number in the explore dashboard won't apply all the decimals changes (it will add currency or percentage if that is the type), you will be able to see the changes in the dimension leaderboard and pivot tables. 
+When creating your measures in StarData, you have the option to pick from a preset of formats that we provide to you or use the [d3-format](https://d3js.org/d3-format) parameter to format your data in any way you like. While the big number in the explore dashboard won't apply all the decimals changes (it will add currency or percentage if that is the type), you will be able to see the changes in the dimension leaderboard and pivot tables. 
 
 ![Metrics Editor](/img/build/metrics-view/metrics-editor.png)
 

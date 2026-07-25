@@ -1,6 +1,6 @@
 ---
 title: "Alerts"
-description: Setting up Alerts in Rill
+description: Setting up Alerts in StarData
 sidebar_label: "Alerts"
 sidebar_position: 50
 slug: /guide/alerts
@@ -34,7 +34,7 @@ Prefer video? Check out our [YouTube playlist](https://www.youtube.com/watch?v=w
 
 ## Overview
 
-Alerting is a key element for any BI or analytics workflow. Because Rill's dashboards are typically built off of raw or near-raw data, we expose alerting on a wide range of filters and depth, including high cardinality fields. Alerts are accessible from any dashboard via the upper-right alarm bell icon and can be used to create context-based triggers or alerts to bring you back to an analysis if an alert is triggered. This allows the analyst or end user to then dive deeper and use Rill dashboards to interactively explore their data as needed.
+Alerting is a key element for any BI or analytics workflow. Because StarData's dashboards are typically built off of raw or near-raw data, we expose alerting on a wide range of filters and depth, including high cardinality fields. Alerts are accessible from any dashboard via the upper-right alarm bell icon and can be used to create context-based triggers or alerts to bring you back to an analysis if an alert is triggered. This allows the analyst or end user to then dive deeper and use StarData dashboards to interactively explore their data as needed.
 
 
 ![Alerts](/img/explore/alerts/alerts.gif)
@@ -42,7 +42,7 @@ Alerting is a key element for any BI or analytics workflow. Because Rill's dashb
 
 ## Setting and managing alerts
 
-To set an alert, click on the alarm bell icon in the upper-right nav bar of Rill Cloud (next to your profile and bookmarks). This will trigger the Alert modal to open up and walk you through the alert creation process.
+To set an alert, click on the alarm bell icon in the upper-right nav bar of StarData Cloud (next to your profile and bookmarks). This will trigger the Alert modal to open up and walk you through the alert creation process.
 
 
 ![Alerts Icon](/img/explore/alerts/alerts_icon.png)
@@ -79,7 +79,7 @@ Afterwards, click **Create** to finish creating the alert.
 
 ## Available alert notification targets
 
-Rill Cloud currently supports the following notification targets:
+StarData Cloud currently supports the following notification targets:
 - Email (default)
 - Slack (can be enabled)
 
@@ -87,7 +87,7 @@ When creating an alert, all available notification targets that can be configure
 
 :::note Interested in other alerting notification targets?
 
-If there is a potential alerting destination that you'd like to use with Rill but don't currently see available as a target, please don't hesitate to [contact us](/contact). We're always iterating and would love to learn more about your use case!
+If there is a potential alerting destination that you'd like to use with StarData but don't currently see available as a target, please don't hesitate to [contact us](/contact). We're always iterating and would love to learn more about your use case!
 
 :::
 
@@ -99,7 +99,7 @@ Email is the default notification target for alerts and is automatically enabled
 
 ### Configuring Slack targets
 
-Slack is also an available target for alert notifications and Rill can be configured to send alerts to your workspace, either in specified Slack channels (public / private) or as private messages via a configured bot. However, Slack will <u>first need to be enabled</u> to show up as an available notification target for alerts. For more information, refer to our [Configuring Slack integration](/developers/build/connectors/services/slack) documentation.
+Slack is also an available target for alert notifications and StarData can be configured to send alerts to your workspace, either in specified Slack channels (public / private) or as private messages via a configured bot. However, Slack will <u>first need to be enabled</u> to show up as an available notification target for alerts. For more information, refer to our [Configuring Slack integration](/developers/build/connectors/services/slack) documentation.
 
 
 ![Slack Notifications](/img/explore/alerts/slack-notifications.png)

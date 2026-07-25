@@ -5,7 +5,7 @@ sidebar_label: Rollups
 sidebar_position: 25
 ---
 
-Rollups let a metrics view be backed by one or more pre-aggregated tables in addition to the base table. When a query's time grain, dimensions, measures, time range, and filters all match a rollup, Rill transparently rewrites the query to read from the rollup table instead of the base.
+Rollups let a metrics view be backed by one or more pre-aggregated tables in addition to the base table. When a query's time grain, dimensions, measures, time range, and filters all match a rollup, StarData transparently rewrites the query to read from the rollup table instead of the base.
 
 ## Defining a Rollup
 
@@ -42,7 +42,7 @@ Note that the rollup omits `country`. Queries that group by or filter on `countr
 
 ### Multiple Rollups
 
-You can define several rollups at different grains. Rill will pick the most efficient one that can answer a given query:
+You can define several rollups at different grains. StarData will pick the most efficient one that can answer a given query:
 
 ```yaml
 rollups:
@@ -72,7 +72,7 @@ rollups:
 
 ### Declaring Coverage with `data_time_range`
 
-By default Rill discovers a rollup's time coverage at query time by running `SELECT min(time), max(time)` against the rollup table. If you'd rather declare coverage statically — to skip the probe, or to scope a rollup to a specific window — set `data_time_range` on the rollup. The value is a [rilltime expression](/reference/time-syntax):
+By default StarData discovers a rollup's time coverage at query time by running `SELECT min(time), max(time)` against the rollup table. If you'd rather declare coverage statically — to skip the probe, or to scope a rollup to a specific window — set `data_time_range` on the rollup. The value is a [stardatatime expression](/reference/time-syntax):
 
 ```yaml
 rollups:
@@ -96,7 +96,7 @@ You can declare coverage on the metrics view itself the same way — this skips 
 data_time_range: -5Y to now
 ```
 
-When `data_time_range` is set, the rilltime expression is resolved against fixed anchors: `now`/`latest`/`watermark` all resolve to the current wallclock. The start must be bounded — `inf` and `earliest` are rejected, because they resolve start time to the zero time value, which the system treats as "no data". To declare full historical coverage, either omit `data_time_range` so the bounds are probed from the table, or use a concrete early bound such as `-100Y to now`. Mixing declared and undeclared rollups in the same metrics view is fine — each table independently decides whether to probe or to use its declaration.
+When `data_time_range` is set, the stardatatime expression is resolved against fixed anchors: `now`/`latest`/`watermark` all resolve to the current wallclock. The start must be bounded — `inf` and `earliest` are rejected, because they resolve start time to the zero time value, which the system treats as "no data". To declare full historical coverage, either omit `data_time_range` so the bounds are probed from the table, or use a concrete early bound such as `-100Y to now`. Mixing declared and undeclared rollups in the same metrics view is fine — each table independently decides whether to probe or to use its declaration.
 
 ### Selection Priority and Definition Order
 
@@ -129,13 +129,13 @@ A query on `publisher` alone is eligible against all three — `events_daily_nar
 - **`database`**, **`database_schema`** (optional) — Override the OLAP database and schema for the rollup table.
 - **`dimensions`** (optional) — Field selector for which base-view dimensions are present in the rollup. Defaults to all.
 - **`measures`** (optional) — Field selector for which base-view measures are present in the rollup. Defaults to all.
-- **`data_time_range`** (optional) — Rilltime expression describing the rollup's time coverage. When set, Rill skips the OLAP `min/max` probe for this rollup and uses the declared bounds for coverage checks.
+- **`data_time_range`** (optional) — Rilltime expression describing the rollup's time coverage. When set, StarData skips the OLAP `min/max` probe for this rollup and uses the declared bounds for coverage checks.
 
 A metrics view must define a `timeseries` to use rollups. The metrics view itself also accepts a top-level `data_time_range` to declare the base table's coverage. The full schema is documented in the [metrics view reference](/reference/project-files/metrics-views#rollups).
 
 ## How Rollup Selection Works
 
-For each query, Rill walks through three phases: a quick disqualification, a per-rollup eligibility check, and a selection step among the eligible rollups.
+For each query, StarData walks through three phases: a quick disqualification, a per-rollup eligibility check, and a selection step among the eligible rollups.
 
 ### 1. Quick Disqualification
 
@@ -157,7 +157,7 @@ A rollup is eligible for a given query only if **all** of the following hold:
 
 ### 3. Time Coverage
 
-For each eligible rollup, Rill checks that the rollup actually contains data for the requested range:
+For each eligible rollup, StarData checks that the rollup actually contains data for the requested range:
 
 - **With a time range.** The query range is first clamped to the base table's `[min, max]` (so a query that extends past the base data isn't penalized for the rollup also stopping there). The rollup must then cover the clamped start and end.
 - **Without a time range** ("all data"). The rollup must cover the base table's full `[min, max]`.
@@ -181,7 +181,7 @@ The base table is used if no rollup is eligible.
 - **Derived measures fall back.** A measure of type `derived` (one with `requires` or `per`) cannot match a rollup's measure list — only `simple` measures can. The base table is used.
 - **Rollups require a `timeseries`.** Metrics views without a primary time dimension cannot define rollups.
 - **Filters on missing dimensions disqualify the rollup.** A WHERE clause on `country` will skip a rollup that doesn't include `country`, even if the query's group-by columns are all in the rollup.
-- **The rollup is responsible for being correct.** Rill does not validate that the rollup's measure values are consistent with the base — it trusts the model. If the rollup model uses the wrong aggregation (e.g. `AVG` where the base measure is `SUM`), queries routed to it will return wrong numbers.
+- **The rollup is responsible for being correct.** StarData does not validate that the rollup's measure values are consistent with the base — it trusts the model. If the rollup model uses the wrong aggregation (e.g. `AVG` where the base measure is `SUM`), queries routed to it will return wrong numbers.
 - **Rollups are assumed to be roughly caught up with the base table.** Coverage is measured against the base table's latest timestamp. A rollup that lags behind the base will be silently skipped for any query that reaches the tail of the data — including common "last 24 hours" queries and queries without a time range — even if it has the right grain, dimensions, and measures. Refresh rollups in step with the base model so selection actually happens.
 - **Rollups must not extend beyond the base table.** Routing assumes the rollup's max timestamp is no later than the base's. A rollup that gets ahead of the base (e.g. ingested through a separate path) may return incorrect results at the tail of the data.
 

@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill usergroup remove
+title: stardata usergroup remove
 ---
-## rill usergroup remove
+## stardata usergroup remove
 
 Remove a group's role on a project or organization
 
 ```
-rill usergroup remove [flags]
+stardata usergroup remove [flags]
 ```
 
 ### Flags
@@ -29,5 +29,5 @@ rill usergroup remove [flags]
 
 ### SEE ALSO
 
-* [rill usergroup](usergroup.md)	 - Manage user groups
+* [stardata usergroup](usergroup.md)	 - Manage user groups
 

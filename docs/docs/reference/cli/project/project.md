@@ -1,8 +1,8 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project
+title: stardata project
 ---
-## rill project
+## stardata project
 
 Manage projects
 
@@ -23,22 +23,22 @@ Manage projects
 
 ### SEE ALSO
 
-* [rill](../cli.md)	 - A CLI for Rill
-* [rill project clone](clone.md)	 - Clone Project
-* [rill project connect-github](connect-github.md)	 - Deploy project to Rill Cloud by pulling project files from a git repository
-* [rill project delete](delete.md)	 - Delete the project
-* [rill project deploy](deploy.md)	 - Deploy project to Rill Cloud by using a Rill Managed Git repo
-* [rill project deployment](deployment/deployment.md)	 - Manage project deployments
-* [rill project describe](describe.md)	 - Retrieve detailed state for a resource
-* [rill project edit](edit.md)	 - Edit the project details
-* [rill project hibernate](hibernate.md)	 - Hibernate project
-* [rill project list](list.md)	 - List all the projects
-* [rill project logs](logs.md)	 - Show project logs
-* [rill project partitions](partitions.md)	 - List partitions for a model
-* [rill project refresh](refresh.md)	 - Refresh one or more resources
-* [rill project rename](rename.md)	 - Rename project
-* [rill project show](show.md)	 - Show project details
-* [rill project skip-partition](skip-partition.md)	 - Skip partitions for a model
-* [rill project status](status.md)	 - Project deployment status
-* [rill project tables](tables.md)	 - Get information about tables in a project
+* [stardata](../cli.md)	 - A CLI for StarData
+* [stardata project clone](clone.md)	 - Clone Project
+* [stardata project connect-github](connect-github.md)	 - Deploy project to StarData Cloud by pulling project files from a git repository
+* [stardata project delete](delete.md)	 - Delete the project
+* [stardata project deploy](deploy.md)	 - Deploy project to StarData Cloud by using a StarData Managed Git repo
+* [stardata project deployment](deployment/deployment.md)	 - Manage project deployments
+* [stardata project describe](describe.md)	 - Retrieve detailed state for a resource
+* [stardata project edit](edit.md)	 - Edit the project details
+* [stardata project hibernate](hibernate.md)	 - Hibernate project
+* [stardata project list](list.md)	 - List all the projects
+* [stardata project logs](logs.md)	 - Show project logs
+* [stardata project partitions](partitions.md)	 - List partitions for a model
+* [stardata project refresh](refresh.md)	 - Refresh one or more resources
+* [stardata project rename](rename.md)	 - Rename project
+* [stardata project show](show.md)	 - Show project details
+* [stardata project skip-partition](skip-partition.md)	 - Skip partitions for a model
+* [stardata project status](status.md)	 - Project deployment status
+* [stardata project tables](tables.md)	 - Get information about tables in a project
 

@@ -4,13 +4,13 @@ sidebar_label: Performance Optimization
 sidebar_position: 45
 ---
 
-Model performance is critical for maintaining responsive dashboards and ensuring users have access to the most current data. This guide covers strategies for optimizing your Rill models to deliver fast query results while keeping data fresh and up-to-date.
+Model performance is critical for maintaining responsive dashboards and ensuring users have access to the most current data. This guide covers strategies for optimizing your StarData models to deliver fast query results while keeping data fresh and up-to-date.
 
 By following these best practices, you can create models that provide both speed and accuracy, delivering insights when your users need them most.
 
-## Local Development / Rill Developer
+## Local Development / StarData Developer
 
-As discussed in the [templating section](/developers/build/models/templating), there are a few key recommendations to increase model performance in Rill Developer:
+As discussed in the [templating section](/developers/build/models/templating), there are a few key recommendations to increase model performance in StarData Developer:
 
 1. [Limiting the source data](/developers/build/models/templating#applying-a-one-week-sample-to-the-source-bucket-for-local-development) to a smaller time range (e.g., one week's worth of data instead of the full year)
 2. Creating smaller models for development by [applying a raw limit](/developers/build/models/templating#example-conditional-sql-limiting-dev-rows), which will then serve as the starting point for your actual downstream models/modeling
@@ -20,7 +20,7 @@ As discussed in the [templating section](/developers/build/models/templating), t
 
 ### Consider which models to materialize
 
-By default, models will be materialized as views (in DuckDB). This allows for a dynamic and highly interactive experience when modeling, such as keystroke-by-keystroke profiling. However, since views are logical in nature, as the complexity and size of your data models continue to grow (especially if the underlying data is very large), this can start to significantly impact performance as these complex queries will need to be continuously re-executed along with a number of profiling queries that the Rill runtime will send in the backend.
+By default, models will be materialized as views (in DuckDB). This allows for a dynamic and highly interactive experience when modeling, such as keystroke-by-keystroke profiling. However, since views are logical in nature, as the complexity and size of your data models continue to grow (especially if the underlying data is very large), this can start to significantly impact performance as these complex queries will need to be continuously re-executed along with a number of profiling queries that the StarData runtime will send in the backend.
 
 In such scenarios, we recommend materializing these models as tables. However, there are some tradeoffs to consider:
 - **Pros:** Materializing a model will generally ensure significantly improved performance for downstream dependent models and dashboards.
@@ -52,7 +52,7 @@ If you are seeing degraded performance, the first recommendation you'll hear fro
 
 ### Default Model Materialization
 
-If you want, you can change the default behavior of all models in Rill by setting the default model behavior in the rill.yaml file.
+If you want, you can change the default behavior of all models in StarData by setting the default model behavior in the rill.yaml file.
 
 ```yaml
 models:
@@ -77,11 +77,11 @@ If unsure, we would generally recommend leaving the defaults and/or [reaching ou
 
 ## Query Optimization
 
-Query optimization is crucial for maintaining high performance and efficiency, especially when working with data-intensive applications. As Rill dashboards are powered by [OLAP engines](/developers/build/connectors/olap), designed for analytical queries, ensuring that our queries are well-optimized can help maximize the responsiveness and speed of our dashboards. There are also additional potential second-order benefits to optimizing queries in Rill, such as improving ingestion times, how long it takes to build models, how resource-intensive it is to build models, how fast profiling queries run, and more.
+Query optimization is crucial for maintaining high performance and efficiency, especially when working with data-intensive applications. As StarData dashboards are powered by [OLAP engines](/developers/build/connectors/olap), designed for analytical queries, ensuring that our queries are well-optimized can help maximize the responsiveness and speed of our dashboards. There are also additional potential second-order benefits to optimizing queries in StarData, such as improving ingestion times, how long it takes to build models, how resource-intensive it is to build models, how fast profiling queries run, and more.
 
 ### Use appropriate data types and avoid casting when possible
 
-Casting can be expensive, especially when the underlying models are views and not [materialized](#consider-which-models-to-materialize) as a table. For example, if a timestamp column is actually incorrectly typed as a string, then for timeseries charts, Rill ends up having to iterate across each row to try to infer the timestamp and a lot of time parsing has to occur. Similarly, for incorrectly typed or cast columns that are used in calculations, the calculations will have to be constantly looped through, which can be both inefficient and expensive over time (and simply make everything slower).
+Casting can be expensive, especially when the underlying models are views and not [materialized](#consider-which-models-to-materialize) as a table. For example, if a timestamp column is actually incorrectly typed as a string, then for timeseries charts, StarData ends up having to iterate across each row to try to infer the timestamp and a lot of time parsing has to occur. Similarly, for incorrectly typed or cast columns that are used in calculations, the calculations will have to be constantly looped through, which can be both inefficient and expensive over time (and simply make everything slower).
 
 Similarly, choosing the right data type for each column is also important. Smaller data types, when applicable, consume less memory and can improve query performance. For example, use `INT` instead of `BIGINT` if your data range permits.
 
@@ -91,7 +91,7 @@ Because most [OLAP databases](/developers/build/connectors/olap) store data in a
 
 ### Consider sorting your data by an appropriate timestamp column
 
-Generally speaking, if possible, it is recommended to make sure that your upstream data is relatively well organized and/or sorted by timestamp before being ingested into Rill. This helps to ensure that timeseries queries are efficient when they execute against resulting models and can result in an order of magnitude difference in query performance. This can also help improve the effectiveness of filters by reducing I/O.
+Generally speaking, if possible, it is recommended to make sure that your upstream data is relatively well organized and/or sorted by timestamp before being ingested into StarData. This helps to ensure that timeseries queries are efficient when they execute against resulting models and can result in an order of magnitude difference in query performance. This can also help improve the effectiveness of filters by reducing I/O.
 
 :::info When to sort vs. not to sort?
 

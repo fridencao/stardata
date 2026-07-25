@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill start
+title: stardata start
 ---
-## rill start
+## stardata start
 
 Build project and start web app
 
 ```
-rill start [<path>] [flags]
+stardata start [<path>] [flags]
 ```
 
 ### Flags
@@ -16,7 +16,7 @@ rill start [<path>] [flags]
   -e, --env strings               Set environment variables
       --environment string        Environment name (default "dev")
       --reset                     Clear and re-ingest source data
-      --pull-env                  Pull environment variables from Rill Cloud before starting the project (default true)
+      --pull-env                  Pull environment variables from StarData Cloud before starting the project (default true)
       --no-open                   Do not open browser
       --verbose                   Sets the log level to debug
       --preview                   Start in dashboard-only view (no code editor)
@@ -41,5 +41,5 @@ rill start [<path>] [flags]
 
 ### SEE ALSO
 
-* [rill](cli.md)	 - A CLI for Rill
+* [stardata](cli.md)	 - A CLI for StarData
 

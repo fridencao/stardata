@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project deployment delete
+title: stardata project deployment delete
 ---
-## rill project deployment delete
+## stardata project deployment delete
 
 Delete a deployment by branch
 
 ```
-rill project deployment delete [<project>] <branch> [flags]
+stardata project deployment delete [<project>] <branch> [flags]
 ```
 
 ### Flags
@@ -29,5 +29,5 @@ rill project deployment delete [<project>] <branch> [flags]
 
 ### SEE ALSO
 
-* [rill project deployment](deployment.md)	 - Manage project deployments
+* [stardata project deployment](deployment.md)	 - Manage project deployments
 

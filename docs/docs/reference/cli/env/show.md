@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill env show
+title: stardata env show
 ---
-## rill env show
+## stardata env show
 
 Show credentials and other variables
 
 ```
-rill env show [<project-name>] [flags]
+stardata env show [<project-name>] [flags]
 ```
 
 ### Flags
@@ -30,5 +30,5 @@ rill env show [<project-name>] [flags]
 
 ### SEE ALSO
 
-* [rill env](env.md)	 - Manage variables for a project
+* [stardata env](env.md)	 - Manage variables for a project
 

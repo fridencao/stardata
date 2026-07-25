@@ -1,8 +1,8 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill billing
+title: stardata billing
 ---
-## rill billing
+## stardata billing
 
 Billing related commands for org
 
@@ -17,8 +17,8 @@ Billing related commands for org
 
 ### SEE ALSO
 
-* [rill](../cli.md)	 - A CLI for Rill
-* [rill billing list-issues](list-issues.md)	 - List billing issues for an organization
-* [rill billing plan](plan/plan.md)	 - Get billing plans
-* [rill billing subscription](subscription/subscription.md)	 - Manage organization subscriptions
+* [stardata](../cli.md)	 - A CLI for StarData
+* [stardata billing list-issues](list-issues.md)	 - List billing issues for an organization
+* [stardata billing plan](plan/plan.md)	 - Get billing plans
+* [stardata billing subscription](subscription/subscription.md)	 - Manage organization subscriptions
 

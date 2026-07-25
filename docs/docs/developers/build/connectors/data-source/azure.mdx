@@ -10,7 +10,7 @@ import { DeployToCloud } from '@site/src/components/connector';
 {/* WARNING: There are links to this page in source code. If you move it, find and replace the links and consider adding a redirect in docusaurus.config.js. */}
 
 ## Overview
-[Azure Blob Storage (ABS)](https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blobs-introduction) is a scalable, fully managed, and highly reliable object storage solution offered by Microsoft Azure, designed to store and access data from anywhere in the world. It provides a secure and cost-effective way to store data, including common storage formats such as CSV and Parquet. Rill supports connecting to and reading from Azure Blob Storage using the following Resource URI syntax:
+[Azure Blob Storage (ABS)](https://learn.microsoft.com/en-us/azure/storage/blobs/storage-blobs-introduction) is a scalable, fully managed, and highly reliable object storage solution offered by Microsoft Azure, designed to store and access data from anywhere in the world. It provides a secure and cost-effective way to store data, including common storage formats such as CSV and Parquet. StarData supports connecting to and reading from Azure Blob Storage using the following Resource URI syntax:
 
 ```bash
 azure://<account>.blob.core.windows.net/<container>/path/file.csv
@@ -26,7 +26,7 @@ To connect to Azure Blob Storage, you can choose from five authentication option
 4. **Public** (for publicly accessible containers - no authentication required)
 5. **Azure CLI authentication** (local development only - not recommended for production)
 
-When you add data from Azure Blob Storage through the Rill UI, you'll see three authentication options:
+When you add data from Azure Blob Storage through the StarData UI, you'll see three authentication options:
 
 - **Storage Account Key**, **Connection String**, or **SAS Token**: The process follows two steps:
   1. **Configure Authentication** - Set up your Azure connector with credentials
@@ -43,11 +43,11 @@ Azure CLI authentication is only available through manual configuration. See [Me
 
 ## Method 1: Storage Account Key (Recommended)
 
-Storage Account Key credentials provide reliable authentication for Azure Blob Storage. This method works for both local development and Rill Cloud deployments.
+Storage Account Key credentials provide reliable authentication for Azure Blob Storage. This method works for both local development and StarData Cloud deployments.
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Azure Blob Storage** as the data model type
 3. In the authentication step:
    - Choose **Storage Account Key**
@@ -70,7 +70,7 @@ Create `connectors/azure.yaml`:
 type: connector
 driver: azure
 
-azure_storage_account: rilltest
+azure_storage_account: stardatatest
 azure_storage_key: "{{ .env.AZURE_STORAGE_KEY }}"
 ```
 
@@ -88,7 +88,7 @@ Connection String provides an alternative authentication method for Azure Blob S
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Azure Blob Storage** as the data model type
 3. In the authentication step:
    - Choose **Connection String**
@@ -125,7 +125,7 @@ SAS tokens provide fine-grained access control with specific permissions and exp
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Azure Blob Storage** as the data model type
 3. In the authentication step:
    - Choose **SAS Token**
@@ -146,7 +146,7 @@ Create `connectors/azure.yaml`:
 type: connector
 driver: azure
 
-azure_storage_account: rilltest
+azure_storage_account: stardatatest
 azure_storage_sas_token: "{{ .env.AZURE_STORAGE_SAS_TOKEN }}"
 ```
 
@@ -164,7 +164,7 @@ For publicly accessible Azure Blob Storage containers, you don't need to create 
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Azure Blob Storage** as the data model type
 3. In the authentication step:
    - Choose **Public**
@@ -180,7 +180,7 @@ No connector configuration is needed for public containers. Proceed to [Create Y
 
 ## Method 5: Azure CLI Authentication (Local Development Only)
 
-For local development, you can use credentials from the Azure CLI. This method is **not suitable for production** or Rill Cloud deployments. This method is only available through manual configuration, and you don't need to create a connector file.
+For local development, you can use credentials from the Azure CLI. This method is **not suitable for production** or StarData Cloud deployments. This method is only available through manual configuration, and you don't need to create a connector file.
 
 ### Setup
 
@@ -199,10 +199,10 @@ For local development, you can use credentials from the Azure CLI. This method i
 
 No connector is needed when using local credentials. Proceed to [Create Your First Model](#create-your-first-model) below and omit the `create_secrets_from_connectors` line.
 
-Rill will automatically detect and use your local Azure CLI credentials when no connector is specified.
+StarData will automatically detect and use your local Azure CLI credentials when no connector is specified.
 
 :::warning
-This method only works for local development. Deploying to Rill Cloud with this configuration will fail because the cloud environment doesn't have access to your local credentials. Always use Storage Account Key, Connection String, or SAS tokens for production deployments.
+This method only works for local development. Deploying to StarData Cloud with this configuration will fail because the cloud environment doesn't have access to your local credentials. Always use Storage Account Key, Connection String, or SAS tokens for production deployments.
 :::
 
 ### Path Patterns
@@ -246,7 +246,7 @@ sql: SELECT * FROM read_parquet('azure://rilltest.blob.core.windows.net/my-conta
 
 After creating the model, you can add additional [model settings](/developers/build/models/source-models) directly to the file.
 
-## Deploy to Rill Cloud
+## Deploy to StarData Cloud
 
 <DeployToCloud
   connector="Azure Blob Storage"

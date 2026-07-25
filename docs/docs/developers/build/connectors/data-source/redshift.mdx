@@ -15,7 +15,7 @@ import { TwoStepFlowIntro, EnvPullTip, DevProdSeparation, DeployToCloud } from '
 
 ## Authentication Methods
 
-To connect to Amazon Redshift, you need to provide authentication credentials. Rill supports two methods:
+To connect to Amazon Redshift, you need to provide authentication credentials. StarData supports two methods:
 
 1. **Use Access Key/Secret Key** (recommended for production)
 2. **Use Local AWS credentials** (local development only - not recommended for production)
@@ -28,11 +28,11 @@ To connect to Amazon Redshift, you need to provide authentication credentials. R
 
 ## Method 1: Access Key and Secret Key (Recommended)
 
-Access Key and Secret Key credentials provide the most reliable authentication for Redshift. This method works for both local development and Rill Cloud deployments.
+Access Key and Secret Key credentials provide the most reliable authentication for Redshift. This method works for both local development and StarData Cloud deployments.
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Amazon Redshift** as the data source type
 3. In the authentication step:
    - Enter your AWS Access Key ID
@@ -74,10 +74,10 @@ Then, [create your first model](#create-your-first-model).
 
 ## Method 2: Local AWS Credentials
 
-For local development, you can use credentials from the AWS CLI. This method is **not suitable for production** or Rill Cloud deployments.
+For local development, you can use credentials from the AWS CLI. This method is **not suitable for production** or StarData Cloud deployments.
 
 :::warning Not recommended for production
-Local AWS credentials only work for local development. If you deploy to Rill Cloud using this method, your dashboards will fail. Always use Access Key/Secret Key for production deployments.
+Local AWS credentials only work for local development. If you deploy to StarData Cloud using this method, your dashboards will fail. Always use Access Key/Secret Key for production deployments.
 :::
 
 ### Setup
@@ -102,7 +102,7 @@ driver: redshift
 database: "dev"
 ```
 
-When no explicit credentials are provided in the connector, Rill will automatically use your local AWS CLI credentials. Then, [create your first model](#create-your-first-model).
+When no explicit credentials are provided in the connector, StarData will automatically use your local AWS CLI credentials. Then, [create your first model](#create-your-first-model).
 
 ## Create Your First Model
 
@@ -125,7 +125,7 @@ After creating the model, you can add additional [model settings](/developers/bu
 
 <DevProdSeparation />
 
-## Deploy to Rill Cloud
+## Deploy to StarData Cloud
 
 <DeployToCloud
   connector="Redshift"
@@ -143,7 +143,7 @@ Your account or service account will need to have the **appropriate permissions*
 
 When using **Redshift Serverless**, make sure to associate an [IAM role (that has S3 access)](https://docs.aws.amazon.com/redshift/latest/mgmt/serverless-iam.html) with the Serverless namespace or the Redshift cluster.
 
-:::info What happens when Rill is reading from Redshift Serverless?
+:::info What happens when StarData is reading from Redshift Serverless?
 
 Our Redshift connector will place temporary files in Parquet format in S3 to help accelerate the extraction process (maximizing performance). To provide more details, the Redshift connector will execute the following queries/requests while ingesting data from Redshift:
 
@@ -158,7 +158,7 @@ Our Redshift connector will place temporary files in Parquet format in S3 to hel
 
 Similarly, when using **Redshift Cluster**, make sure to associate an [IAM role (that has S3 access)](https://docs.aws.amazon.com/redshift/latest/mgmt/redshift-iam-authentication-access-control.html) with the appropriate Redshift cluster.
 
-:::info What happens when Rill is reading from a Redshift Cluster?
+:::info What happens when StarData is reading from a Redshift Cluster?
 
 Our Redshift connector will place temporary files in Parquet format in S3 to help accelerate the extraction process (maximizing performance). To provide more details, the Redshift connector will execute the following queries/requests while ingesting data from Redshift:
 

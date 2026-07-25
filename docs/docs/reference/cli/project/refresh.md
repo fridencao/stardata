@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project refresh
+title: stardata project refresh
 ---
-## rill project refresh
+## stardata project refresh
 
 Refresh one or more resources
 
 ```
-rill project refresh [<project-name>] [flags]
+stardata project refresh [<project-name>] [flags]
 ```
 
 ### Flags
@@ -16,7 +16,7 @@ rill project refresh [<project-name>] [flags]
       --project string         Project name
       --path string            Project directory (default ".")
       --branch string          Target deployment by Git branch (default: primary deployment)
-      --local                  Target locally running Rill
+      --local                  Target locally running StarData
       --all                    Refresh all resources except alerts and reports (default)
       --full                   Fully reload the targeted models (use with --all or --model)
       --model strings          Refresh a model
@@ -43,5 +43,5 @@ rill project refresh [<project-name>] [flags]
 
 ### SEE ALSO
 
-* [rill project](project.md)	 - Manage projects
+* [stardata project](project.md)	 - Manage projects
 

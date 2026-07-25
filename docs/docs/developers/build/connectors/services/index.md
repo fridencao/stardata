@@ -1,12 +1,12 @@
 ---
 title: "Service Integrations"
-description: Connect Rill to external services like OpenAI and Slack
+description: Connect StarData to external services like OpenAI and Slack
 sidebar_position: 7
 ---
 
 import ConnectorIcon from '@site/src/components/ConnectorIcon';
 
-Service Integrations extend Rill's capabilities by connecting to third-party services. Unlike data connectors that import data into Rill, these integrations enable features like AI-powered analytics and notifications.
+Service Integrations extend StarData's capabilities by connecting to third-party services. Unlike data connectors that import data into StarData, these integrations enable features like AI-powered analytics and notifications.
 
 ## AI Integrations
 
@@ -53,7 +53,7 @@ Service Integrations extend Rill's capabilities by connecting to third-party ser
   <ConnectorIcon
     icon={<img src="/img/build/connectors/icons/Logo-Slack.svg" alt="Slack" className="slack-icon" />}
     header="Slack"
-    content="Connect to Slack to send alerts and messages from Rill."
+    content="Connect to Slack to send alerts and messages from StarData."
     link="/developers/build/connectors/services/slack"
     linkLabel="Learn more"
     referenceLink="slack"

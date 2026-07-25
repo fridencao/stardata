@@ -10,12 +10,12 @@ sidebar_position: 40
 ## Overview
 
 [Slack](https://slack.com/) is a popular messaging platform that allows teams to communicate and collaborate in real-time. 
-Rill supports sending notifications to Slack channels using the [Slack API](https://api.slack.com/). 
+StarData supports sending notifications to Slack channels using the [Slack API](https://api.slack.com/). 
 This can be useful for sending alerts and reports to your team members. 
 
 ## Setting up the Slack integration
 
-Rill Cloud can send alert notifications to channels and/or as direct messages. This will require a Slack application to first be created and configured in your workspace with the necessary [permission scopes](https://api.slack.com/scopes). To set up your Slack application, follow the steps provided in the [Slack documentation](https://api.slack.com/start/quickstart) and configure your app within the appropriate permissions depending on the notification type that you wish to use (see below).
+StarData Cloud can send alert notifications to channels and/or as direct messages. This will require a Slack application to first be created and configured in your workspace with the necessary [permission scopes](https://api.slack.com/scopes). To set up your Slack application, follow the steps provided in the [Slack documentation](https://api.slack.com/start/quickstart) and configure your app within the appropriate permissions depending on the notification type that you wish to use (see below).
 
 
 
@@ -38,7 +38,7 @@ The last two scopes are required to find the user's ID by email.
 
 ## Enabling the Slack integration in your project
 
-Once the Slack integration has been set up, the Slack destination will need to be enabled on a per project basis (note - alerts can only be configured on projects deployed to Rill Cloud). This requires the `SLACK_BOT_TOKEN` connector variable to be set, which can be configured in Rill in a manner very similar to [setting credentials](/developers/deploy/deploy-credentials) for other connectors. Please use one of the available options below.
+Once the Slack integration has been set up, the Slack destination will need to be enabled on a per project basis (note - alerts can only be configured on projects deployed to StarData Cloud). This requires the `SLACK_BOT_TOKEN` connector variable to be set, which can be configured in StarData in a manner very similar to [setting credentials](/developers/deploy/deploy-credentials) for other connectors. Please use one of the available options below.
 
 ### Creating a Slack.yaml connector
 
@@ -53,17 +53,17 @@ SLACK_BOT_TOKEN=<BOT_USER_OAUTH_TOKEN>
 ```
 
 
-Afterwards, if the project has already been deployed to Rill Cloud, you can `rill env push` to update your cloud deployment accordingly.
+Afterwards, if the project has already been deployed to StarData Cloud, you can `stardata env push` to update your cloud deployment accordingly.
 
-### Using the `rill env set` command
+### Using the `stardata env set` command
 
-Another option to set this connector variable within your project is to use the `rill env set` command, i.e.:
+Another option to set this connector variable within your project is to use the `stardata env set` command, i.e.:
 
 ```shell
-rill env set SLACK_BOT_TOKEN <BOT_USER_OAUTH_TOKEN>
+stardata env set SLACK_BOT_TOKEN <BOT_USER_OAUTH_TOKEN>
 ```
 
-Afterwards, if the project has already been deployed to Rill Cloud, you can `rill env push` to update your cloud deployment accordingly.
+Afterwards, if the project has already been deployed to StarData Cloud, you can `stardata env push` to update your cloud deployment accordingly.
 
 ### Enabling the Slack connector through `rill.yaml`
 
@@ -76,12 +76,12 @@ connectors:
   type: slack
 ```
 
-## Deploy to Rill Cloud
+## Deploy to StarData Cloud
 
-When deploying a project to Rill Cloud, Rill requires you to explicitly provide Slack credentials used in your project. Please refer to our [connector YAML reference docs](/reference/project-files/connectors#slack) for more information.
+When deploying a project to StarData Cloud, StarData requires you to explicitly provide Slack credentials used in your project. Please refer to our [connector YAML reference docs](/reference/project-files/connectors#slack) for more information.
 
 If you subsequently add sources that require new credentials (or if you simply entered the wrong credentials during the initial deploy), you can update the credentials by pushing the `Deploy` button to update your project or by running the following command in the CLI:
 ```
-rill env push
+stardata env push
 ```
 

@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project edit
+title: stardata project edit
 ---
-## rill project edit
+## stardata project edit
 
 Edit the project details
 
 ```
-rill project edit [<project-name>] [flags]
+stardata project edit [<project-name>] [flags]
 ```
 
 ### Flags
@@ -39,5 +39,5 @@ rill project edit [<project-name>] [flags]
 
 ### SEE ALSO
 
-* [rill project](project.md)	 - Manage projects
+* [stardata project](project.md)	 - Manage projects
 

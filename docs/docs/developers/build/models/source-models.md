@@ -4,7 +4,7 @@ sidebar_label: Source Models
 sidebar_position: 10
 ---
 
-After [creating a connector to your data source](/developers/build/connectors/data-source), you'll need to create a model to bring that data into Rill. This can be implemented as either a SQL model with [defined connector parameters](/developers/build/models/sql-models#specifying-the-data-source-connector) or as a YAML configuration file. This guide focuses on YAML-based source models, which are auto-generated when using the UI.
+After [creating a connector to your data source](/developers/build/connectors/data-source), you'll need to create a model to bring that data into StarData. This can be implemented as either a SQL model with [defined connector parameters](/developers/build/models/sql-models#specifying-the-data-source-connector) or as a YAML configuration file. This guide focuses on YAML-based source models, which are auto-generated when using the UI.
 
 ```yaml
 # Model YAML
@@ -23,10 +23,10 @@ sql: |
 
 The YAML configuration file contains several key parameters:
 
-- **`type: model`**: Explicitly defines the file type. While Rill automatically detects the file type based on the parent folder, this parameter provides explicit definition.
+- **`type: model`**: Explicitly defines the file type. While StarData automatically detects the file type based on the parent folder, this parameter provides explicit definition.
 - **`connector`**: Defines the connector type used to create the model (e.g., `bigquery`, `athena`, `snowflake`, etc.).
-- **`sql`**: The actual SQL query to be executed. When nested under `dev:`, the query runs in the Rill Developer environment.
-- **`dev`**: Configuration for development mode. Rill Developer runs in dev mode by default, but when deployed to Rill Cloud, the root-level SQL configuration executes. See [Environment Templating](/developers/build/models/templating) for more information.
+- **`sql`**: The actual SQL query to be executed. When nested under `dev:`, the query runs in the StarData Developer environment.
+- **`dev`**: Configuration for development mode. StarData Developer runs in dev mode by default, but when deployed to StarData Cloud, the root-level SQL configuration executes. See [Environment Templating](/developers/build/models/templating) for more information.
 
 
 ## Retry Configuration
@@ -120,6 +120,6 @@ For more information, see our [model reference documentation](/reference/project
 
 ## Next Steps
 
-Rill provides automatic refresh capabilities for your source models at specified intervals to maintain data currency. This functionality enables you to establish scheduled data ingestion without manual intervention, ensuring your analytics dashboards remain current with the latest information from your data sources. For additional details, see [Scheduled Refreshes](/developers/build/models/data-refresh).
+StarData provides automatic refresh capabilities for your source models at specified intervals to maintain data currency. This functionality enables you to establish scheduled data ingestion without manual intervention, ensuring your analytics dashboards remain current with the latest information from your data sources. For additional details, see [Scheduled Refreshes](/developers/build/models/data-refresh).
 
-After validating your source model configuration and confirming the data preview appears correct, you can move forward to create your first metrics view. If no additional data transformations are needed, you can choose [Generate Metrics View with AI](/developers/build/metrics-view) from the top-right corner of the interface to initiate Rill's AI-powered dashboard generation.
+After validating your source model configuration and confirming the data preview appears correct, you can move forward to create your first metrics view. If no additional data transformations are needed, you can choose [Generate Metrics View with AI](/developers/build/metrics-view) from the top-right corner of the interface to initiate StarData's AI-powered dashboard generation.

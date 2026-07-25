@@ -9,19 +9,19 @@ sidebar_position: 65
 
 ## Overview
 
-[Salesforce](https://www.salesforce.com/) is a leading cloud-based Customer Relationship Management (CRM) platform designed to help businesses connect with and understand their customers better. It offers a comprehensive suite of applications focused on sales, customer service, marketing automation, analytics, and application development. Salesforce enables organizations of all sizes to build stronger relationships with their customers through personalized experiences, streamlined communication, and predictive insights. Rill can ingest data from Salesforce as a source by utilizing the Bulk API, which requires a Salesforce username and password (and, in some cases, a token, depending on the org configuration) to authenticate against a Salesforce org.
+[Salesforce](https://www.salesforce.com/) is a leading cloud-based Customer Relationship Management (CRM) platform designed to help businesses connect with and understand their customers better. It offers a comprehensive suite of applications focused on sales, customer service, marketing automation, analytics, and application development. Salesforce enables organizations of all sizes to build stronger relationships with their customers through personalized experiences, streamlined communication, and predictive insights. StarData can ingest data from Salesforce as a source by utilizing the Bulk API, which requires a Salesforce username and password (and, in some cases, a token, depending on the org configuration) to authenticate against a Salesforce org.
 
 
 ## Local credentials
 
-When using Rill Developer on your local machine, you will need to provide your credentials via a connector file. We would recommend not using plain text to create your file and instead use the `.env` file. For more details on your connector, see [connector YAML](/reference/project-files/connectors) for more details.
+When using StarData Developer on your local machine, you will need to provide your credentials via a connector file. We would recommend not using plain text to create your file and instead use the `.env` file. For more details on your connector, see [connector YAML](/reference/project-files/connectors) for more details.
 
 :::tip Updating the project environmental variable
 
-If you've already deployed to Rill Cloud, you can either [push/pull the credential]( /guide/administration/project-settings/variables-and-credentials#pushing-and-pulling-credentials-to--from-rill-cloud-via-the-cli) from the CLI with:
+If you've already deployed to StarData Cloud, you can either [push/pull the credential]( /guide/administration/project-settings/variables-and-credentials#pushing-and-pulling-credentials-to--from-stardata-cloud-via-the-cli) from the CLI with:
 ```
-rill env push
-rill env pull
+stardata env push
+stardata env pull
 ```
 :::
 
@@ -38,17 +38,17 @@ sobject: "Opportunity"
 
 :::tip Did you know?
 
-If this project has already been deployed to Rill Cloud and credentials have been set for this source, you can use `rill env pull` to [pull these cloud credentials](/developers/build/connectors/credentials/#rill-env-pull) locally (into your local `.env` file). Please note that this may override any credentials you have set locally for this source.
+If this project has already been deployed to StarData Cloud and credentials have been set for this source, you can use `stardata env pull` to [pull these cloud credentials](/developers/build/connectors/credentials/#stardata-env-pull) locally (into your local `.env` file). Please note that this may override any credentials you have set locally for this source.
 
 :::
 
-## Deploy to Rill Cloud
+## Deploy to StarData Cloud
 
-When deploying a project to Rill Cloud, Rill requires you to explicitly provide Salesforce credentials used in your project. Please refer to our [connector YAML reference docs](/reference/project-files/connectors) for more information.
+When deploying a project to StarData Cloud, StarData requires you to explicitly provide Salesforce credentials used in your project. Please refer to our [connector YAML reference docs](/reference/project-files/connectors) for more information.
 
 If you subsequently add sources that require new credentials (or if you simply entered the wrong credentials during the initial deploy), you can update the credentials by pushing the `Deploy` button to update your project or by running the following command in the CLI:
 ```
-rill env push
+stardata env push
 ```
 
 

@@ -22,7 +22,7 @@ To connect to Google Cloud Storage, you can choose from four authentication opti
 3. **Public** (for publicly accessible buckets - no authentication required)
 4. **Local Google Cloud CLI credentials** (local development only - not recommended for production)
 
-When you add data from GCS through the Rill UI, you'll see three authentication options:
+When you add data from GCS through the StarData UI, you'll see three authentication options:
 
 - **Service Account JSON** or **HMAC Keys**: The process follows two steps:
   1. **Configure Authentication** - Set up your GCS connector with credentials
@@ -35,11 +35,11 @@ When you add data from GCS through the Rill UI, you'll see three authentication 
 
 ## Method 1: Service Account JSON (Recommended)
 
-Service Account JSON credentials provide the most secure and reliable authentication for GCS. This method works for both local development and Rill Cloud deployments.
+Service Account JSON credentials provide the most secure and reliable authentication for GCS. This method works for both local development and StarData Cloud deployments.
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Google Cloud Storage (GCS)** as the data model type
 3. In the authentication step:
    - Choose **Service Account JSON**
@@ -78,7 +78,7 @@ HMAC keys provide S3-compatible authentication for GCS. This method is useful wh
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Google Cloud Storage (GCS)** as the data model type
 3. In the authentication step:
    - Choose **HMAC Keys**
@@ -122,7 +122,7 @@ For publicly accessible GCS buckets, you don't need to create a connector. Simpl
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Google Cloud Storage (GCS)** as the data model type
 3. In the authentication step:
    - Choose **Public**
@@ -138,7 +138,7 @@ No connector configuration is needed for public buckets. Proceed to [Create Your
 
 ## Method 4: Local Google Cloud CLI Credentials
 
-For local development, you can use credentials from the Google Cloud CLI. This method is **not suitable for production** or Rill Cloud deployments. This method is only available through manual configuration, and you don't need to create a connector file.
+For local development, you can use credentials from the Google Cloud CLI. This method is **not suitable for production** or StarData Cloud deployments. This method is only available through manual configuration, and you don't need to create a connector file.
 
 ### Setup
 
@@ -153,10 +153,10 @@ For local development, you can use credentials from the Google Cloud CLI. This m
 
 No connector is needed when using local credentials. Proceed to [Create Your First Model](#create-your-first-model) below and omit the `create_secrets_from_connectors` line.
 
-Rill will automatically detect and use your local Google Cloud CLI credentials when no connector is specified.
+StarData will automatically detect and use your local Google Cloud CLI credentials when no connector is specified.
 
 :::warning
-This method only works for local development. Deploying to Rill Cloud with this configuration will fail because the cloud environment doesn't have access to your local credentials. Always use Service Account JSON or HMAC keys for production deployments.
+This method only works for local development. Deploying to StarData Cloud with this configuration will fail because the cloud environment doesn't have access to your local credentials. Always use Service Account JSON or HMAC keys for production deployments.
 :::
 
 ## Create Your First Model
@@ -218,7 +218,7 @@ SELECT * FROM read_parquet('gs://my-bucket/data/**/*.parquet')
 SELECT * FROM read_parquet('gs://my-bucket/data/2024-*.parquet')
 ```
 
-## Deploy to Rill Cloud
+## Deploy to StarData Cloud
 
 <DeployToCloud
   connector="GCS"
@@ -253,9 +253,9 @@ You'll need to contact your internal cloud admin to create your Service Account 
     ```bash
     gcloud config get project
     ```
-3. Replace `[PROJECT_ID]` with your project ID in the following command, and run it to create a new service account (optionally also replace `rill-service-account` with a name of your choice):
+3. Replace `[PROJECT_ID]` with your project ID in the following command, and run it to create a new service account (optionally also replace `stardata-service-account` with a name of your choice):
     ```bash
-    gcloud iam service-accounts create rill-service-account --project [PROJECT_ID]
+    gcloud iam service-accounts create stardata-service-account --project [PROJECT_ID]
     ```
 4. Grant the service account access to data in Google Cloud Storage:
     - To grant access to data in all buckets, replace `[PROJECT_ID]` with your project ID in the following command, and run it:
@@ -272,10 +272,10 @@ You'll need to contact your internal cloud admin to create your Service Account 
         ```
 5. Replace `[PROJECT_ID]` with your project ID in the following command, and run it to create a key file for the service account:
     ```bash
-    gcloud iam service-accounts keys create rill-service-account.json \
-        --iam-account rill-service-account@[PROJECT_ID].iam.gserviceaccount.com
+    gcloud iam service-accounts keys create stardata-service-account.json \
+        --iam-account stardata-service-account@[PROJECT_ID].iam.gserviceaccount.com
     ```
-6. You have now created a JSON key file named `rill-service-account.json` in your current working directory.
+6. You have now created a JSON key file named `stardata-service-account.json` in your current working directory.
 
 ### How to create HMAC keys using the Google Cloud Console
 

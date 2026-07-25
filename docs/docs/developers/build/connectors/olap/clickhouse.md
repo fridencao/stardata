@@ -1,6 +1,6 @@
 ---
 title: ClickHouse
-description: Power Rill dashboards using ClickHouse
+description: Power StarData dashboards using ClickHouse
 sidebar_label: ClickHouse
 sidebar_position: 0
 ---
@@ -12,12 +12,12 @@ import LoomVideo from '@site/src/components/LoomVideo'; // Adjust the path as ne
 
 <LoomVideo loomId='b96143c386104576bcfe6cabe1038c38' /> <br />
 
-Rill supports connecting to an existing ClickHouse cluster via a "live connector" and using it as an OLAP engine built against [external tables](/developers/build/connectors/olap#external-olap-tables) to power Rill dashboards. This is particularly useful when working with extremely large datasets (hundreds of GBs or even TB+ in size).
+StarData supports connecting to an existing ClickHouse cluster via a "live connector" and using it as an OLAP engine built against [external tables](/developers/build/connectors/olap#external-olap-tables) to power StarData dashboards. This is particularly useful when working with extremely large datasets (hundreds of GBs or even TB+ in size).
 
 
 :::note Supported Versions
 
-Rill supports connecting to ClickHouse v22.7 or newer versions.
+StarData supports connecting to ClickHouse v22.7 or newer versions.
 
 :::
 
@@ -44,13 +44,13 @@ After creating the connector, you can edit the `.env` file manually in the proje
 
 :::tip Getting DSN errors in dashboards after setting `.env`?
 
-If you are facing issues related to DSN connection errors in your dashboards even after setting the connection string via the project's `.env` file, try restarting Rill using the `rill start --reset` command.
+If you are facing issues related to DSN connection errors in your dashboards even after setting the connection string via the project's `.env` file, try restarting StarData using the `stardata start --reset` command.
 
 :::
 
 ### Connection String (DSN)
 
-Rill is able to connect to ClickHouse using the [ClickHouse Go Driver](https://clickhouse.com/docs/en/integrations/go). An appropriate connection string (DSN) will need to be set through the `CLICKHOUSE_DSN` property in Rill.
+StarData is able to connect to ClickHouse using the [ClickHouse Go Driver](https://clickhouse.com/docs/en/integrations/go). An appropriate connection string (DSN) will need to be set through the `CLICKHOUSE_DSN` property in StarData.
 
 ```bash
 CLICKHOUSE_DSN="clickhouse://<hostname>:<port>?username=<username>&password=<password>"
@@ -95,13 +95,13 @@ https://<hostname>:<port>?username=<username>&password=<password>&secure=true&sk
 
 :::info Need help connecting to ClickHouse?
 
-If you would like to connect Rill to an existing ClickHouse instance, please don't hesitate to [contact us](/contact). We'd love to help!
+If you would like to connect StarData to an existing ClickHouse instance, please don't hesitate to [contact us](/contact). We'd love to help!
 
 :::
 
-## Rill Managed ClickHouse
+## StarData Managed ClickHouse
 
-By setting `managed: true` in your ClickHouse connector, you will enable an embedded ClickHouse server to spin up with Rill. This will allow you to import data directly into this ClickHouse server without having to worry about managing an external database.
+By setting `managed: true` in your ClickHouse connector, you will enable an embedded ClickHouse server to spin up with StarData. This will allow you to import data directly into this ClickHouse server without having to worry about managing an external database.
 
 ```yaml
 type: connector
@@ -121,11 +121,11 @@ You can configure your ClickHouse connector to operate in read-only mode by addi
 mode: read # readwrite
 ```
 
-## Configuring Rill Cloud
+## Configuring StarData Cloud
 
-When deploying a ClickHouse-backed project to Rill Cloud, you have the following options to pass the appropriate connection string to Rill Cloud:
+When deploying a ClickHouse-backed project to StarData Cloud, you have the following options to pass the appropriate connection string to StarData Cloud:
 1. If you have followed the UI to create your ClickHouse connector, the password or DSN should already exist in the .env file. During the deployment process, this `.env` file is automatically pushed with the deployment.
-2. If `CLICKHOUSE_DSN` has already been set in your project `.env`, you can push and update these variables directly in your cloud deployment by using the `rill env push` command.
+2. If `CLICKHOUSE_DSN` has already been set in your project `.env`, you can push and update these variables directly in your cloud deployment by using the `stardata env push` command.
 
 
 :::warning Local ClickHouse Server
@@ -150,7 +150,7 @@ Please see our [Using Multiple OLAP Engines](/developers/build/connectors/olap/m
 
 ## Reading from Multiple Schemas
 
-Rill supports reading from multiple schemas in ClickHouse from within the same project in Rill Developer, and all accessible tables (given the permission set of the underlying user) should automatically be listed in the lower left-hand tab, which can then be used to [create dashboards](/developers/build/dashboards).
+StarData supports reading from multiple schemas in ClickHouse from within the same project in StarData Developer, and all accessible tables (given the permission set of the underlying user) should automatically be listed in the lower left-hand tab, which can then be used to [create dashboards](/developers/build/dashboards).
 
 ## Caching Query Results
 
@@ -160,4 +160,4 @@ To reduce load on dashboards with repeat traffic, see [Caching query results](/d
 
 - At the moment, we do not officially support modeling with ClickHouse; however, this is available via a feature flag. If this is something you're interested in, please [contact us](/contact).
 - For dashboards powered by ClickHouse, [measure definitions](/developers/build/metrics-view/#measures) are required to follow standard [ClickHouse SQL](https://clickhouse.com/docs/en/sql-reference) syntax.
-- Because string columns in ClickHouse can theoretically contain [arbitrary binary data](https://github.com/ClickHouse/ClickHouse/issues/2976#issuecomment-416694860), if your column contains invalid UTF-8 characters, you may want to first cast the column by applying the `toValidUTF8` function ([see ClickHouse documentation](https://clickhouse.com/docs/en/sql-reference/functions/string-functions#tovalidutf8)) before reading the table into Rill to avoid any downstream issues.
+- Because string columns in ClickHouse can theoretically contain [arbitrary binary data](https://github.com/ClickHouse/ClickHouse/issues/2976#issuecomment-416694860), if your column contains invalid UTF-8 characters, you may want to first cast the column by applying the `toValidUTF8` function ([see ClickHouse documentation](https://clickhouse.com/docs/en/sql-reference/functions/string-functions#tovalidutf8)) before reading the table into StarData to avoid any downstream issues.

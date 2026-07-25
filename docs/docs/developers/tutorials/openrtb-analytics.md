@@ -10,7 +10,7 @@ tags:
 
 # OpenRTB Analytics Demo
 
-Learn how to analyze real-time bidding (RTB) data with Rill using the OpenRTB Analytics demo project. This guide shows you how to track ad impressions, bids, wins, and revenue across different publishers, advertisers, and campaigns.
+Learn how to analyze real-time bidding (RTB) data with StarData using the OpenRTB Analytics demo project. This guide shows you how to track ad impressions, bids, wins, and revenue across different publishers, advertisers, and campaigns.
 
 ## Step 1: Clone the Project
 
@@ -19,8 +19,8 @@ Learn how to analyze real-time bidding (RTB) data with Rill using the OpenRTB An
 git clone https://github.com/rilldata/rill-examples.git
 cd rill-examples/rill-openrtb-prog-ads
 
-# Start Rill Developer
-rill start
+# Start StarData Developer
+stardata start
 ```
 
 Visit [http://localhost:9009](http://localhost:9009) to explore your OpenRTB analytics dashboard.
@@ -30,7 +30,7 @@ Visit [http://localhost:9009](http://localhost:9009) to explore your OpenRTB ana
 The project is organized as follows:
 
 ```
-rill-openrtb-prog-ads/
+stardata-openrtb-prog-ads/
 ├── rill.yaml                           # Project configuration
 ├── sources/                            # Data source definitions
 │   ├── auction_data_raw.yaml           # Ad impression data
@@ -91,7 +91,7 @@ In this case, we are not joining the data models and having two unique explore m
 
 ## Step 5: Creating your Metrics View
 
-Metrics in Rill define the measures and dimensions that power your RTB dashboards:
+Metrics in StarData define the measures and dimensions that power your RTB dashboards:
 
 ```yaml
 # Metrics view YAML
@@ -235,4 +235,4 @@ Compare Bids and Auctions.
 ![OpenRTB Analytics 3](/img/tutorials/quickstart/openrtb-analytics-3.png)
 
 
-These are just some of the insights that you can find within your explore dashboard but you'll find more hidden gems in your data as you continue to use Rill. Please let us know if you have any other questions!
+These are just some of the insights that you can find within your explore dashboard but you'll find more hidden gems in your data as you continue to use StarData. Please let us know if you have any other questions!

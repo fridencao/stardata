@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill validate
+title: stardata validate
 ---
-## rill validate
+## stardata validate
 
 Validate project resources
 
 ```
-rill validate [<path>] [flags]
+stardata validate [<path>] [flags]
 ```
 
 ### Flags
@@ -15,7 +15,7 @@ rill validate [<path>] [flags]
 ```
   -e, --env strings                    Set environment variables
       --reset                          Clear and re-ingest source data
-      --pull-env                       Pull environment variables from Rill Cloud before starting the project (default true)
+      --pull-env                       Pull environment variables from StarData Cloud before starting the project (default true)
       --environment string             Environment name (default "dev")
       --verbose                        Sets the log level to debug
       --silent                         Suppress all log output by setting log level to panic, overrides verbose flag
@@ -36,5 +36,5 @@ rill validate [<path>] [flags]
 
 ### SEE ALSO
 
-* [rill](cli.md)	 - A CLI for Rill
+* [stardata](cli.md)	 - A CLI for StarData
 

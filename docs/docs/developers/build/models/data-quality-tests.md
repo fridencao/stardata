@@ -14,7 +14,7 @@ Tests are defined in your model's YAML file using the `tests:` property. Each te
 
 :::tip Using live connectors? Use alerts instead
 
-Data quality tests run when models refresh, which means they only work with models that Rill manages. If you're using [live connectors](/developers/build/connectors/olap) (ClickHouse, Druid, Pinot, StarRocks, etc.) where data lives in external systems, use [alerts](/developers/build/alerts) to monitor data quality on a schedule instead.
+Data quality tests run when models refresh, which means they only work with models that StarData manages. If you're using [live connectors](/developers/build/connectors/olap) (ClickHouse, Druid, Pinot, StarRocks, etc.) where data lives in external systems, use [alerts](/developers/build/alerts) to monitor data quality on a schedule instead.
 
 :::
 
@@ -204,7 +204,7 @@ Tests are executed automatically when your model is refreshed:
 
 - Tests run **after** successful model refresh
 - A failing test does **not** prevent the model from being available for queries
-- Test results are stored in the model's state and visible in the [Rill logs](/reference/cli/project/logs)
+- Test results are stored in the model's state and visible in the [StarData logs](/reference/cli/project/logs)
 - All tests run independently - one failure doesn't stop other tests
 - Tests can reference the model's output using the model name
 
@@ -263,7 +263,7 @@ tests:
 
 **Assert Syntax** - Define conditions that should be true for all rows:
 - You write: `assert: value > 0`
-- Rill converts this to: `SELECT * FROM model WHERE NOT (value > 0)`
+- StarData converts this to: `SELECT * FROM model WHERE NOT (value > 0)`
 - Tests **pass** if no rows are returned (all rows satisfy the condition)
 - Tests **fail** if any rows are returned (violations found)
 
@@ -283,7 +283,7 @@ With `assert`, you define what should be **true**. With `sql`, you query for wha
 - Testing row-level conditions
 - Checking simple constraints
 - The logic is straightforward
-- You want Rill to handle the "NOT" logic for you
+- You want StarData to handle the "NOT" logic for you
 
 **Use SQL when:**
 - Testing aggregate values (COUNT, SUM, AVG)

@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill public-url list
+title: stardata public-url list
 ---
-## rill public-url list
+## stardata public-url list
 
 List all public URLs
 
 ```
-rill public-url list [<project-name>] [flags]
+stardata public-url list [<project-name>] [flags]
 ```
 
 ### Flags
@@ -31,5 +31,5 @@ rill public-url list [<project-name>] [flags]
 
 ### SEE ALSO
 
-* [rill public-url](public-url.md)	 - Manage public URLs
+* [stardata public-url](public-url.md)	 - Manage public URLs
 

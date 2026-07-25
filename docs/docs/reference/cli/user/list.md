@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill user list
+title: stardata user list
 ---
-## rill user list
+## stardata user list
 
 List users
 
 ```
-rill user list [flags]
+stardata user list [flags]
 ```
 
 ### Flags
@@ -31,5 +31,5 @@ rill user list [flags]
 
 ### SEE ALSO
 
-* [rill user](user.md)	 - Manage users
+* [stardata user](user.md)	 - Manage users
 

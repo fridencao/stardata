@@ -28,7 +28,7 @@ security:
 
 Default time range controls the data analyzed on initial page load. Setting the default time range improves user experience by setting it to the most frequently used period— in particular, avoiding `all time` if you have a large data source but only analyze more recent data.
 
-The value must be either a valid [ISO 8601 duration](https://en.wikipedia.org/wiki/ISO_8601#Durations) (for example, `PT12H` for 12 hours, `P1M` for 1 month, or `P26W` for 26 weeks) or one of the [Rill ISO 8601 extensions](/reference/time-syntax/rill-iso-extensions#extensions).
+The value must be either a valid [ISO 8601 duration](https://en.wikipedia.org/wiki/ISO_8601#Durations) (for example, `PT12H` for 12 hours, `P1M` for 1 month, or `P26W` for 26 weeks) or one of the [StarData ISO 8601 extensions](/reference/time-syntax/rill-iso-extensions#extensions).
 
 
 ### Default Dimensions
@@ -59,7 +59,7 @@ defaults:
 
 ### Default Comparison Modes
 
-It is also possible to set up a default comparison mode for your dashboard. In Rill, we support both [time comparison](/guide/dashboards/time-series#time-comparisons) and [dimension comparison.](/guide/dashboards/filters#filter-by-dimensions) Note that only one of these comparisons can be set as default. 
+It is also possible to set up a default comparison mode for your dashboard. In StarData, we support both [time comparison](/guide/dashboards/time-series#time-comparisons) and [dimension comparison.](/guide/dashboards/filters#filter-by-dimensions) Note that only one of these comparisons can be set as default. 
 
 ```yaml
 defaults:
@@ -73,7 +73,7 @@ defaults:
 
 ## Time Ranges
 
-One of the more important configurations, available time ranges allow you to change the defaults in the time dropdown for periods to select. Updating this list allows users to quickly change between the most common analyses, like day over day, recent weeks, or period to date. The range must be a valid [ISO 8601 duration](https://en.wikipedia.org/wiki/ISO_8601#Durations) or one of the [Rill ISO 8601 extensions](/reference/time-syntax/rill-iso-extensions#extensions).
+One of the more important configurations, available time ranges allow you to change the defaults in the time dropdown for periods to select. Updating this list allows users to quickly change between the most common analyses, like day over day, recent weeks, or period to date. The range must be a valid [ISO 8601 duration](https://en.wikipedia.org/wiki/ISO_8601#Durations) or one of the [StarData ISO 8601 extensions](/reference/time-syntax/rill-iso-extensions#extensions).
 
 ```yaml
 time_ranges:
@@ -81,13 +81,13 @@ time_ranges:
   - PT1H
   - P7D
   - P4W
-  - rill-TD ## Today
-  - rill-WTD ## Week-To-date
+  - stardata-TD ## Today
+  - stardata-WTD ## Week-To-date
 ```
 
 ## Time Zones
 
-Rill will automatically select several time zones that should be pinned to the top of the time zone selector. It should be a list of [IANA time zone identifiers](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). You can add or remove relevant time zones for your team from this list.
+StarData will automatically select several time zones that should be pinned to the top of the time zone selector. It should be a list of [IANA time zone identifiers](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). You can add or remove relevant time zones for your team from this list.
 
 ```yaml
 time_zones:
@@ -106,7 +106,7 @@ time_zones:
 
 ## Changing Themes & Colors
 
-In your Rill project directory, create a `<theme_name>.yaml` file in any directory. Rill will automatically ingest the theme next time you run `rill start` or deploy to Rill Cloud and change the color scheme of your dashboard. All properties in the file are optional—any values you omit will fall back to Rill's standard theme defaults.
+In your StarData project directory, create a `<theme_name>.yaml` file in any directory. StarData will automatically ingest the theme next time you run `stardata start` or deploy to StarData Cloud and change the color scheme of your dashboard. All properties in the file are optional—any values you omit will fall back to StarData's standard theme defaults.
 
 First, create the YAML file as below. You can define separate color schemes for light and dark modes:
 
@@ -226,16 +226,16 @@ defaults:
   time_range: P7D
 
 time_ranges:
-  - rill-TD
-  - rill-WTD
-  - rill-MTD
-  - rill-QTD
-  - rill-YTD
-  - rill-PDC
-  - rill-PWC
-  - rill-PMC
-  - rill-PQC
-  - rill-PYC
+  - stardata-TD
+  - stardata-WTD
+  - stardata-MTD
+  - stardata-QTD
+  - stardata-YTD
+  - stardata-PDC
+  - stardata-PWC
+  - stardata-PMC
+  - stardata-PQC
+  - stardata-PYC
 theme:
   light:
     primary: "#14B8A6"  # Teal-500

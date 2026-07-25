@@ -1,18 +1,18 @@
 ---
 title: Snowflake
-description: Power Rill dashboards using Snowflake
+description: Power StarData dashboards using Snowflake
 sidebar_label: Snowflake
 sidebar_position: 24
 ---
 
-[Snowflake](https://docs.snowflake.com) is a cloud data platform known for its scalability, ease of use, and separation of storage and compute. Rill supports connecting to Snowflake as a live connector, allowing you to build metrics views and dashboards directly on top of existing Snowflake tables — no data movement required.
+[Snowflake](https://docs.snowflake.com) is a cloud data platform known for its scalability, ease of use, and separation of storage and compute. StarData supports connecting to Snowflake as a live connector, allowing you to build metrics views and dashboards directly on top of existing Snowflake tables — no data movement required.
 
 :::tip Snowflake as a Live Connector vs. Data Source Connector
-Rill supports Snowflake in two distinct modes:
+StarData supports Snowflake in two distinct modes:
 
-- **OLAP (Live Connector)** — Rill queries Snowflake directly at dashboard load time. No data is ingested into Rill. Use this when your data is already modeled and optimized in Snowflake and you want Rill as a visual layer on top. Set `olap_connector: snowflake` in `rill.yaml`.
+- **OLAP (Live Connector)** — StarData queries Snowflake directly at dashboard load time. No data is ingested into StarData. Use this when your data is already modeled and optimized in Snowflake and you want StarData as a visual layer on top. Set `olap_connector: snowflake` in `rill.yaml`.
 
-- **Data Source Connector** — Rill extracts data from Snowflake and ingests it into its embedded engine (DuckDB or ClickHouse). Use this when you want Rill to manage the data pipeline, apply transformations via SQL models, or combine Snowflake data with other sources. See the [Snowflake data source docs](/developers/build/connectors/data-source/snowflake).
+- **Data Source Connector** — StarData extracts data from Snowflake and ingests it into its embedded engine (DuckDB or ClickHouse). Use this when you want StarData to manage the data pipeline, apply transformations via SQL models, or combine Snowflake data with other sources. See the [Snowflake data source docs](/developers/build/connectors/data-source/snowflake).
 
 In general, use the live connector if your Snowflake tables are already production-ready and large. Use data source ingestion if you need to transform, join, or enrich the data before building dashboards.
 :::
@@ -42,7 +42,7 @@ For production use, Snowflake recommends key-pair authentication over passwords.
 # Generate a 2048-bit unencrypted PKCS#8 private key
 openssl genrsa 2048 | openssl pkcs8 -topk8 -nocrypt -out rsa_key.p8
 
-# Base64 URL-encode for use in Rill
+# Base64 URL-encode for use in StarData
 base64 -w 0 rsa_key.p8
 ```
 
@@ -87,7 +87,7 @@ measures:
 ```
 
 :::note
-Rill supports metrics views directly on Snowflake as a live connector. Incremental models and partitioned ingestion are not supported in live connector mode.
+StarData supports metrics views directly on Snowflake as a live connector. Incremental models and partitioned ingestion are not supported in live connector mode.
 :::
 
 To reduce warehouse spend on dashboards with repeat traffic, see [Caching query results](/developers/build/metrics-view/underlying-model#caching-query-results) on live connectors.

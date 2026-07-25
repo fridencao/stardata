@@ -3,13 +3,13 @@ note: GENERATED. DO NOT EDIT.
 title: CLI usage
 sidebar_position: 15
 ---
-## rill
+## stardata
 
-A CLI for Rill
+A CLI for StarData
 
 ### Synopsis
 
-Work with Rill projects from the command line.
+Work with StarData projects from the command line.
 
 ### Flags
 
@@ -18,31 +18,31 @@ Work with Rill projects from the command line.
       --format string      Output format (options: "human", "json", "csv") (default "human")
   -h, --help               Print usage
       --interactive        Prompt for missing required parameters (default true)
-  -v, --version            Show rill version
+  -v, --version            Show stardata version
 ```
 
 ### SEE ALSO
 
-* [rill billing](billing/billing.md)	 - Billing related commands for org
-* [rill chat](chat.md)	 - Chat with the Rill AI
-* [rill deploy](deploy.md)	 - Deploy project to Rill Cloud
-* [rill docs](docs/docs.md)	 - Open docs.rilldata.com
-* [rill env](env/env.md)	 - Manage variables for a project
-* [rill init](init.md)	 - Initialize a new Rill project
-* [rill login](login.md)	 - Authenticate with the Rill API
-* [rill logout](logout.md)	 - Logout of the Rill API
-* [rill org](org/org.md)	 - Manage organizations
-* [rill project](project/project.md)	 - Manage projects
-* [rill public-url](public-url/public-url.md)	 - Manage public URLs
-* [rill query](query.md)	 - Query data in a project
-* [rill service](service/service.md)	 - Manage service accounts
-* [rill start](start.md)	 - Build project and start web app
-* [rill token](token/token.md)	 - Manage personal access tokens
-* [rill uninstall](uninstall.md)	 - Uninstall the Rill binary
-* [rill upgrade](upgrade.md)	 - Upgrade Rill to the latest version
-* [rill user](user/user.md)	 - Manage users
-* [rill usergroup](usergroup/usergroup.md)	 - Manage user groups
-* [rill validate](validate.md)	 - Validate project resources
-* [rill version](version.md)	 - Show Rill version
-* [rill whoami](whoami.md)	 - Show current user
+* [stardata billing](billing/billing.md)	 - Billing related commands for org
+* [stardata chat](chat.md)	 - Chat with the StarData AI
+* [stardata deploy](deploy.md)	 - Deploy project to StarData Cloud
+* [stardata docs](docs/docs.md)	 - Open docs.rilldata.com
+* [stardata env](env/env.md)	 - Manage variables for a project
+* [stardata init](init.md)	 - Initialize a new StarData project
+* [stardata login](login.md)	 - Authenticate with the StarData API
+* [stardata logout](logout.md)	 - Logout of the StarData API
+* [stardata org](org/org.md)	 - Manage organizations
+* [stardata project](project/project.md)	 - Manage projects
+* [stardata public-url](public-url/public-url.md)	 - Manage public URLs
+* [stardata query](query.md)	 - Query data in a project
+* [stardata service](service/service.md)	 - Manage service accounts
+* [stardata start](start.md)	 - Build project and start web app
+* [stardata token](token/token.md)	 - Manage personal access tokens
+* [stardata uninstall](uninstall.md)	 - Uninstall the StarData binary
+* [stardata upgrade](upgrade.md)	 - Upgrade StarData to the latest version
+* [stardata user](user/user.md)	 - Manage users
+* [stardata usergroup](usergroup/usergroup.md)	 - Manage user groups
+* [stardata validate](validate.md)	 - Validate project resources
+* [stardata version](version.md)	 - Show StarData version
+* [stardata whoami](whoami.md)	 - Show current user
 

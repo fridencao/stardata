@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill user whitelist list
+title: stardata user whitelist list
 ---
-## rill user whitelist list
+## stardata user whitelist list
 
 List whitelisted email domains for the org or project
 
 ```
-rill user whitelist list [flags]
+stardata user whitelist list [flags]
 ```
 
 ### Flags
@@ -28,5 +28,5 @@ rill user whitelist list [flags]
 
 ### SEE ALSO
 
-* [rill user whitelist](whitelist.md)	 - Whitelist access by email domain
+* [stardata user whitelist](whitelist.md)	 - Whitelist access by email domain
 

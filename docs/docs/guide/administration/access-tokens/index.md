@@ -1,6 +1,6 @@
 ---
 title: "Access Tokens"
-description: "Manage access tokens in Rill Cloud"
+description: "Manage access tokens in StarData Cloud"
 sidebar_label: "Access Tokens"
 sidebar_position: 0
 ---

@@ -6,7 +6,7 @@ sidebar_position: 20
 
 import ImageCodeToggle from '@site/src/components/ImageCodeToggle';
 
-Miscellaneous widgets in Rill Canvas provide additional functionality for text, images, and other non-data elements. These widgets help enhance your dashboards with rich content. For more information, refer to our [Components reference doc](/reference/project-files/component).
+Miscellaneous widgets in StarData Canvas provide additional functionality for text, images, and other non-data elements. These widgets help enhance your dashboards with rich content. For more information, refer to our [Components reference doc](/reference/project-files/component).
 
 ## Text/Markdown
 
@@ -26,7 +26,7 @@ Text widgets allow you to add formatted text, markdown content, and documentatio
         ***Bold Italic***  
         ~~Strikethrough~~
 
-        [Rill Home](https://rilldata.com)
+        [StarData Home](https://rilldata.com)
         Inline code: \`print("Hello")\`
 
         Block code:
@@ -84,7 +84,7 @@ Image widgets let you embed images, logos, and visual elements into your dashboa
   image="/img/build/dashboard/canvas/components/image.png"
   imageAlt="Image component showing embedded logo"
   code={`- image:
-      url: https://cdn.prod.website-files.com/659ddac460dbacbdc813b204/660b0f85094eb576187342cf_rill_logo_sq_gradient.svg
+      url: https://cdn.prod.website-files.com/659ddac460dbacbdc813b204/660b0f85094eb576187342cf_stardata_logo_sq_gradient.svg
     width: 6`}
   codeLanguage="yaml"
 />

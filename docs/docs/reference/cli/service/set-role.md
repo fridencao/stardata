@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill service set-role
+title: stardata service set-role
 ---
-## rill service set-role
+## stardata service set-role
 
 Set role for service
 
 ```
-rill service set-role <service-name> [flags]
+stardata service set-role <service-name> [flags]
 ```
 
 ### Flags
@@ -29,5 +29,5 @@ rill service set-role <service-name> [flags]
 
 ### SEE ALSO
 
-* [rill service](service.md)	 - Manage service accounts
+* [stardata service](service.md)	 - Manage service accounts
 

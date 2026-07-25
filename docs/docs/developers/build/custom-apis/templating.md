@@ -5,7 +5,7 @@ sidebar_label: Templating
 sidebar_position: 40
 ---
 
-Rill's custom APIs support Go-style templating to make your SQL queries dynamic. You can accept parameters from API callers, reference user attributes from authentication tokens, and use conditional logic to build flexible endpoints.
+StarData's custom APIs support Go-style templating to make your SQL queries dynamic. You can accept parameters from API callers, reference user attributes from authentication tokens, and use conditional logic to build flexible endpoints.
 
 Templating works with both [SQL APIs](/developers/build/custom-apis/sql) and [Metrics SQL APIs](/developers/build/custom-apis/metrics-sql).
 
@@ -25,7 +25,7 @@ Every template has access to the following context:
 | `{{ .export }}` | `bool` | `true` when the API is being resolved for export (CSV, Excel, Parquet) |
 
 :::note
-When testing locally (`localhost:9009`), `.user` attributes are not available since no authentication is required. To test with user attributes, deploy to Rill Cloud and use a service token with [custom attributes](/developers/build/custom-apis/security#custom-attributes-on-service-tokens).
+When testing locally (`localhost:9009`), `.user` attributes are not available since no authentication is required. To test with user attributes, deploy to StarData Cloud and use a service token with [custom attributes](/developers/build/custom-apis/security#custom-attributes-on-service-tokens).
 :::
 
 ## Dynamic arguments
@@ -203,7 +203,7 @@ curl "http://localhost:9009/v1/instances/default/api/my-api?limit=10&offset=20"
 
 ## Sprig utility functions
 
-Rill uses standard Go templating together with [Sprig](http://masterminds.github.io/sprig/), which provides many utility functions. Commonly used ones:
+StarData uses standard Go templating together with [Sprig](http://masterminds.github.io/sprig/), which provides many utility functions. Commonly used ones:
 
 | Function | Example | Description |
 |----------|---------|-------------|

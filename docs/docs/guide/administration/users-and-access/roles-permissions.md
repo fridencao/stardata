@@ -1,11 +1,11 @@
 ---
 title: Roles and Permissions
-description: Learn more about roles and permissions for organizations and projects in Rill Cloud
+description: Learn more about roles and permissions for organizations and projects in StarData Cloud
 sidebar_label: Roles and Permissions
 sidebar_position: 30
 ---
 
-Access permissions in Rill Cloud are organized into roles at the organization and project level.
+Access permissions in StarData Cloud are organized into roles at the organization and project level.
 
 ## Role inheritance
 

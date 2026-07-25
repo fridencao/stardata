@@ -1,12 +1,12 @@
 ---
-title: Troubleshooting Performance in Rill
+title: Troubleshooting Performance in StarData
 description: Dev/Prod Setup
-sidebar_label: Optimize Performance in Rill
+sidebar_label: Optimize Performance in StarData
 sidebar_position: 10
 ---
 
 
-On this page, we've gathered a running list of recommendations and general guidelines to ensure your experience of using Rill remains performant and optimized. These best practices will help to ensure your dashboards remain performant, and that things continue to "just work" (for both Rill Developer and Rill Cloud), even as the size of your underlying data and deployment continues to grow. These best practices and guidelines will also continue to evolve but please don't hesitate to [reach out](/contact) if you start facing any bottlenecks or have further questions about ways to improve the Rill experience!
+On this page, we've gathered a running list of recommendations and general guidelines to ensure your experience of using StarData remains performant and optimized. These best practices will help to ensure your dashboards remain performant, and that things continue to "just work" (for both StarData Developer and StarData Cloud), even as the size of your underlying data and deployment continues to grow. These best practices and guidelines will also continue to evolve but please don't hesitate to [reach out](/contact) if you start facing any bottlenecks or have further questions about ways to improve the StarData experience!
 
 If you're looking for connector specific optimization see, [Dev/Prod Connector Environments](/developers/build/connectors/templating).
 
@@ -14,7 +14,7 @@ If you're looking for model specific optimization see, [Performance Optimization
 
 :::info Working with very large data from the get go?
 
-Generally speaking, Rill's [embedded DuckDB OLAP engine](/developers/build/connectors/olap/duckdb) works very well out-of-the-box for datasets _up to around 50GB in size_. If you plan to be working with and ingesting volumes of data larger than 50GB, please [**get in touch**](/contact) and we can explore using one of our other enterprise-grade [OLAP engine](/developers/build/connectors/olap) options. 
+Generally speaking, StarData's [embedded DuckDB OLAP engine](/developers/build/connectors/olap/duckdb) works very well out-of-the-box for datasets _up to around 50GB in size_. If you plan to be working with and ingesting volumes of data larger than 50GB, please [**get in touch**](/contact) and we can explore using one of our other enterprise-grade [OLAP engine](/developers/build/connectors/olap) options. 
 
 :::
 
@@ -24,7 +24,7 @@ Depending on the complexity of your underlying models and the size of the data m
 
 ### Consider which models to materialize
 
-By default, models will be materialized as views (in DuckDB). This allows for a dynamic and highly interactive experience when modeling, such as keystroke-by-keystroke profiling. However, since views are logical in nature, as the complexity and size of your data models continue grow (especially if the underlying data is very large), this can start to significantly impact performance as these complex queries will need to be continuously re-executed along with a number of profiling queries that the Rill runtime will send in the backend. 
+By default, models will be materialized as views (in DuckDB). This allows for a dynamic and highly interactive experience when modeling, such as keystroke-by-keystroke profiling. However, since views are logical in nature, as the complexity and size of your data models continue grow (especially if the underlying data is very large), this can start to significantly impact performance as these complex queries will need to be continuously re-executed along with a number of profiling queries that the StarData runtime will send in the backend. 
 
 In such scenarios, we recommend [materializing these models as tables.](/developers/build/models/performance#model-performance) However, there are some tradeoffs to consider.
 - **Pros:** Materializing a model will generally ensure significantly improved performance for downstream dependent models and dashboards. 
@@ -39,7 +39,7 @@ We strongly recommend materializing final models that are being used directly in
 
 ## Refreshing Source Models
 
-Another area to review when your data source starts getting larger is the ingestion performance. By default, when refreshing a [source model](/developers/build/models/source-models) in Rill, it drops and re-ingests the entire table/file. When your data is small, this isn't an issue, but it's not appropriate for larger datasets. In these cases, we recommend using [partitions and incremental models](/developers/build/models/incremental-partitioned-models).
+Another area to review when your data source starts getting larger is the ingestion performance. By default, when refreshing a [source model](/developers/build/models/source-models) in StarData, it drops and re-ingests the entire table/file. When your data is small, this isn't an issue, but it's not appropriate for larger datasets. In these cases, we recommend using [partitions and incremental models](/developers/build/models/incremental-partitioned-models).
 
 ### Partitioned Models
 
@@ -79,13 +79,13 @@ sql: |
 
 By combining partitioning and incremental processing, you'll significantly reduce model refresh times and ensure your dashboards display the most current information.
 
-## Local Development / Rill Developer
+## Local Development / StarData Developer
 
-When used in conjunction, Rill Developer and Rill Cloud are meant to serve two different but complementary purposes. For larger and distributed teams, Rill Developer is meant to primarily be used for local development purposes, which allow developers to quickly model their data and validate logic. Then, Rill Cloud enables shared collaboration at scale and where production consumption of dashboards should be happening (against your full data).
+When used in conjunction, StarData Developer and StarData Cloud are meant to serve two different but complementary purposes. For larger and distributed teams, StarData Developer is meant to primarily be used for local development purposes, which allow developers to quickly model their data and validate logic. Then, StarData Cloud enables shared collaboration at scale and where production consumption of dashboards should be happening (against your full data).
 
 ### Work with a subset of your source data for local development and modeling
 
-As a general rule of thumb, we strongly recommend working with a segment of the data for modeling purposes as part of your local development workflow. This becomes increasingly important as the size of your source data grows in size, which will help ensure that your developer experience remains optimal in Rill Developer. With Rill Developer, it's best to work with a "dev partition" to help validate that the model logic is correct and producing results as expected. Then, once finalized, you can push to Rill Cloud for primary dashboard consumption (including analysis and sharing as necessary).
+As a general rule of thumb, we strongly recommend working with a segment of the data for modeling purposes as part of your local development workflow. This becomes increasingly important as the size of your source data grows in size, which will help ensure that your developer experience remains optimal in StarData Developer. With StarData Developer, it's best to work with a "dev partition" to help validate that the model logic is correct and producing results as expected. Then, once finalized, you can push to StarData Cloud for primary dashboard consumption (including analysis and sharing as necessary).
 
 There are a few ways to achieve this:
 - Defining an [**environment-specific database/cluster**](/developers/build/connectors/templating#environment-specific-connectors) to connect to between development and production
@@ -126,7 +126,7 @@ dev:
   path: s3://bucket/path/year=2023/month=12/**/*.parquet
 ```
 
-By leveraging the [environment YAML syntax](/developers/build/models/templating), this ensures that only data from December 2023 will be read in from this S3 source when using Rill Developer locally while the full range of data will still be used in production (on Rill Cloud). However, if this data was **not** partitioned, then we could simply leverage DuckDB's ability to read from S3 files directly and _apply a filter post-download_ on the source. Taking this same example and using some [templating](/developers/build/connectors/templating), the `source.yaml` could be rewritten to something like the following:
+By leveraging the [environment YAML syntax](/developers/build/models/templating), this ensures that only data from December 2023 will be read in from this S3 source when using StarData Developer locally while the full range of data will still be used in production (on StarData Cloud). However, if this data was **not** partitioned, then we could simply leverage DuckDB's ability to read from S3 files directly and _apply a filter post-download_ on the source. Taking this same example and using some [templating](/developers/build/connectors/templating), the `source.yaml` could be rewritten to something like the following:
 ```yaml
 type: source
 connector: "duckdb"
@@ -162,21 +162,21 @@ As mentioned in an [above section](#consider-which-models-to-materialize), model
 
 :::warning When applying templated logic to model SQL, make sure to leverage the `ref` function
 
-If you use templating in SQL models, you must replace references to tables / models created by other sources or models with `ref` tags. See this section on ["Referencing other tables or models in SQL when using templating"](/developers/build/connectors/templating#environment-specific-data-source-location). This ensures that the native Go templating engine used by Rill is able to resolve and correctly compile the SQL syntax during runtime (to avoid any potential downstream errors).
+If you use templating in SQL models, you must replace references to tables / models created by other sources or models with `ref` tags. See this section on ["Referencing other tables or models in SQL when using templating"](/developers/build/connectors/templating#environment-specific-data-source-location). This ensures that the native Go templating engine used by StarData is able to resolve and correctly compile the SQL syntax during runtime (to avoid any potential downstream errors).
 
 :::
 
 #### Use data from a dev / staging environment
 
-Some organizations might have both a development and production version of source data. In these cases, your sources should be configured to use the "dev" bucket or database for local development (in Rill Developer) and pointed to the "prod" bucket or database when in production (when deployed to Rill Cloud). Please refer to [this example](/developers/build/connectors/templating#example-clickhouse-connector-with-environment-separation) and [this example](/developers/build/connectors/templating#environment-specific-data-source-location) for a complete walkthrough of how this can be configured.
+Some organizations might have both a development and production version of source data. In these cases, your sources should be configured to use the "dev" bucket or database for local development (in StarData Developer) and pointed to the "prod" bucket or database when in production (when deployed to StarData Cloud). Please refer to [this example](/developers/build/connectors/templating#example-clickhouse-connector-with-environment-separation) and [this example](/developers/build/connectors/templating#environment-specific-data-source-location) for a complete walkthrough of how this can be configured.
 
 ## Query Optimization
 
-Query optimization is crucial for maintaining high performance and efficiency, especially when working with data-intensive applications. As Rill dashboards are powered by [OLAP engines](/developers/build/connectors/olap), designed for analytical queries, ensuring that our queries are well-optimized can help maximize the responsiveness and speed of our dashboards. There are also additional potential second-order benefits to optimizing queries in Rill, such as improving ingestion times, how long it takes to build models, how resource-intensive it is to build models, how fast profiling queries run, and more.
+Query optimization is crucial for maintaining high performance and efficiency, especially when working with data-intensive applications. As StarData dashboards are powered by [OLAP engines](/developers/build/connectors/olap), designed for analytical queries, ensuring that our queries are well-optimized can help maximize the responsiveness and speed of our dashboards. There are also additional potential second-order benefits to optimizing queries in StarData, such as improving ingestion times, how long it takes to build models, how resource-intensive it is to build models, how fast profiling queries run, and more.
 
 ### Use appropriate data types and avoid casting when possible
 
-Casting can be expensive, especially when the underlying models are views and not [materialized](#consider-which-models-to-materialize) as a table. For example, if a timestamp column is actually incorrectly typed as a string, then for timeseries charts, Rill ends up having to iterate across each row to try to infer the timestamp and a lot of time parsing has to occur. Similarly, for incorrectly typed or cast columns that are used in calculations, the calculations will have to be constantly looped through, which can be both inefficient and expensive over time (and simply make everything slower).
+Casting can be expensive, especially when the underlying models are views and not [materialized](#consider-which-models-to-materialize) as a table. For example, if a timestamp column is actually incorrectly typed as a string, then for timeseries charts, StarData ends up having to iterate across each row to try to infer the timestamp and a lot of time parsing has to occur. Similarly, for incorrectly typed or cast columns that are used in calculations, the calculations will have to be constantly looped through, which can be both inefficient and expensive over time (and simply make everything slower).
 
 Similarly, choosing the right data type for each column is also important. Smaller data types, when applicable, consume less memory and can improve query performance. For example, use `INT` instead of `BIGINT` if your data range permits.
 
@@ -186,7 +186,7 @@ Because most [OLAP databases](/developers/build/connectors/olap) store data in a
 
 ### Consider sorting your data by an appropriate timestamp column
 
-Generally speaking, if possible, it is recommended to make sure that your upstream data is relatively well organized and/or sorted by timestamp before being ingested into Rill. This helps to ensure that timeseries queries are efficient when they execute against resulting models and can result in an order of magnitude difference in query performance. This can also help improve the effectiveness of filters by reducing I/O.
+Generally speaking, if possible, it is recommended to make sure that your upstream data is relatively well organized and/or sorted by timestamp before being ingested into StarData. This helps to ensure that timeseries queries are efficient when they execute against resulting models and can result in an order of magnitude difference in query performance. This can also help improve the effectiveness of filters by reducing I/O.
 
 :::info When to sort vs not to sort?
 
@@ -214,11 +214,11 @@ Depending on the [OLAP engine](/developers/build/connectors/olap), `UNION` can b
 
 ## OLAP Engines
 
-Often, data in external [OLAP engines](/developers/build/connectors/olap) is quite large in size and requires different considerations to improve performance. At Rill, we manage clusters in the 100's of TB so included some tips below based on our experience.
+Often, data in external [OLAP engines](/developers/build/connectors/olap) is quite large in size and requires different considerations to improve performance. At StarData, we manage clusters in the 100's of TB so included some tips below based on our experience.
 
 ### Data Lifecycle Management 
 
-One common way to decrease overall data size and improve query performance (by scanning less data) is to rollup your data to higher time grains historically. Typically, this means taking hourly data and rollup up to daily data when the additional level of granularity is no longer necessary for business needs. Databases like Apache Druid have these lifecycle tools built in or reach out to Rill with questions.
+One common way to decrease overall data size and improve query performance (by scanning less data) is to rollup your data to higher time grains historically. Typically, this means taking hourly data and rollup up to daily data when the additional level of granularity is no longer necessary for business needs. Databases like Apache Druid have these lifecycle tools built in or reach out to StarData with questions.
 
 A couple of considerations when rolling data from lower to higher time grains:
 
@@ -236,7 +236,7 @@ Dimension stripping is another tool to reduce data size by removing high cardina
 
 ### Sampling & Datasketches
 
-There are times where you may look at sampling data feeds to trade data accuracy for lower costs and faster query speeds. Sampling involves sending only a percentage of your data, then extrapolating the values to get an estimate. Rill does not recommend sampling your primary KPIs, any records that require a join or are tied to revenue. This filtered data should be decided in random fashion to not skew or bias the results. Please note, tracking uniques is not recommended if you choose to sample. 
+There are times where you may look at sampling data feeds to trade data accuracy for lower costs and faster query speeds. Sampling involves sending only a percentage of your data, then extrapolating the values to get an estimate. StarData does not recommend sampling your primary KPIs, any records that require a join or are tied to revenue. This filtered data should be decided in random fashion to not skew or bias the results. Please note, tracking uniques is not recommended if you choose to sample. 
 
 If looking to track uniques, but with smaller datasets and significantly improved performance, you can load unique values (ip addresses, user ids, URLs, etc) with [datasketches](https://datasketches.apache.org). There are multiple types of datasketches supported depending on your engine. At a high level, datasketches use algorithms to approximate unique values. Common use cases for datasketches include count distincts (campaign reach, unique visitors) and quantiles (time spent, frequency). Check out the [Apache Datasketches](https://datasketches.apache.org/docs/Architecture/MajorSketchFamilies.html) site for more details on methodology and use cases.
 

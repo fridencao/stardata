@@ -1,7 +1,7 @@
 ---
 id: iframe
 title: Embed Dashboards in an Iframe
-description: Embed Rill dashboards in your own applications using iframes
+description: Embed StarData dashboards in your own applications using iframes
 sidebar_label: Iframe
 sidebar_position: 10
 ---
@@ -11,12 +11,12 @@ import TabItem from '@theme/TabItem';
 
 ## Introduction
 
-Rill Cloud provides the ability to embed dashboards as components in your own application using iframes, with a few different options:
+StarData Cloud provides the ability to embed dashboards as components in your own application using iframes, with a few different options:
 - Embedding individual dashboards as standalone iframes
 - Embedding individual dashboards with the ability to navigate to other dashboards (that exist in the _same_ project)
-- Embedding the dashboard list page present in a Rill project (with the ability to select and navigate between dashboards)
+- Embedding the dashboard list page present in a StarData project (with the ability to select and navigate between dashboards)
 
-When embedding Rill, you need to generate a service token for your backend to request an authenticated iframe URL via the Rill API. Afterwards, the iframe URL can be passed to your frontend application for rendering. Here's a high-level diagram of what this flow looks like:
+When embedding StarData, you need to generate a service token for your backend to request an authenticated iframe URL via the StarData API. Afterwards, the iframe URL can be passed to your frontend application for rendering. Here's a high-level diagram of what this flow looks like:
 
 ```mermaid
 sequenceDiagram
@@ -27,7 +27,7 @@ sequenceDiagram
   participant E as node.region.runtime.rilldata.com
   A ->> B: Get iframe URL
   B ->> B: Resolve the user's email <br />using ezcommerce's own auth
-  B ->>+ C: Get iframe URL for:<br />project="ezcommerce"<br />user="john@example.com"<br/>(uses Rill service token)
+  B ->>+ C: Get iframe URL for:<br />project="ezcommerce"<br />user="john@example.com"<br/>(uses StarData service token)
   Note right of C: 1. Lookup deployment<br/>2. Generate JWT<br />3. Build iframe URL
   C ->>- B: iframe URL
   B ->> A: iframe URL
@@ -39,13 +39,13 @@ sequenceDiagram
 ```
 
 ## Create a service token
-Use the Rill CLI to create a service token for your current organization using the following command:
+Use the StarData CLI to create a service token for your current organization using the following command:
 ```bash
 # Create with organization role
-rill service create <service_name> --org-role admin
+stardata service create <service_name> --org-role admin
 
 # Or create with project-specific role
-rill service create <service_name> --project <project_name> --project-role admin
+stardata service create <service_name> --project <project_name> --project-role admin
 ```
 
 :::info
@@ -61,10 +61,10 @@ Service tokens can have broad permissions and should be handled confidentially. 
 :::
 
 ## Backend: Build an iframe URL
-You should implement an API on your backend that uses the service token to retrieve and return an iframe URL from Rill's API (which is hosted on `api.rilldata.com`).
+You should implement an API on your backend that uses the service token to retrieve and return an iframe URL from StarData's API (which is hosted on `api.rilldata.com`).
 
 There are multiple reasons why the iframe URL <u>must</u> be constructed on your backend:
-- To avoid leaking your master Rill service token in the browser
+- To avoid leaking your master StarData service token in the browser
 - To allow you to use your own authentication and authorization logic to restrict access to the dashboard
 - To optionally use your backend's context about the authenticated user to include user attributes in the iframe URL for enforcement of row-level security policies
 
@@ -76,7 +76,7 @@ Here are examples of how to get an iframe URL using different languages:
 ```bash
 curl -X POST --location 'https://api.rilldata.com/v1/orgs/<org-name>/projects/<project-name>/iframe' \
 --header 'Content-Type: application/json' \
---header 'Authorization: Bearer <rill-svc-token>' \
+--header 'Authorization: Bearer <stardata-svc-token>' \
 --data-raw '{
 "type": "explore",
 "resource": "<explore-name>",
@@ -91,20 +91,20 @@ curl -X POST --location 'https://api.rilldata.com/v1/orgs/<org-name>/projects/<p
 const express = require('express');
 const fetch = require('node-fetch');
 
-const rillServiceToken = "<YOUR RILL SERVICE TOKEN>";
-const rillOrg = "<YOUR RILL ORG NAME>";
-const rillProject = "<YOUR RILL PROJECT NAME>";
+const stardataServiceToken = "<YOUR RILL SERVICE TOKEN>";
+const stardataOrg = "<YOUR RILL ORG NAME>";
+const stardataProject = "<YOUR RILL PROJECT NAME>";
 
 const app = express();
 app.use(express.json());
 app.post('/api/rill/iframe', async (req, res) => {
   const dashboardName = req.body.resource;
   try {
-    const response = await fetch(`https://api.rilldata.com/v1/orgs/${rillOrg}/projects/${rillProject}/iframe`, {
+    const response = await fetch(`https://api.rilldata.com/v1/orgs/${stardataOrg}/projects/${stardataProject}/iframe`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${rillServiceToken}`,
+        Authorization: `Bearer ${stardataServiceToken}`,
       },
       body: JSON.stringify({
         type: 'explore',
@@ -144,14 +144,14 @@ import requests
 app = Flask(__name__)
 
 @app.route('/api/rill/iframe', methods=['POST'])
-def get_rill_iframe():
+def get_stardata_iframe():
     dashboard_name = request.json.get('resource')
     try:
         response = requests.post(
             'https://api.rilldata.com/v1/orgs/<org-name>/projects/<project-name>/iframe',
             headers={
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer <rill-svc-token>',
+                'Authorization': 'Bearer <stardata-svc-token>',
             },
             json={
                 'type': 'explore',
@@ -263,7 +263,7 @@ public class DashboardController {
         String dashboardName = (String) payload.get("resource");
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Type", "application/json");
-        headers.set("Authorization", "Bearer <rill-svc-token>");
+        headers.set("Authorization", "Bearer <stardata-svc-token>");
 
         Map<String, Object> request = new HashMap<>();
         request.put("type", "explore");
@@ -323,13 +323,13 @@ The `user_email`, `attributes` and `external_user_id` parameters serve two purpo
 - **Per-user state:** `external_user_id` establishes a stable user identity that isolates per-user features such as AI chat history. Without a user identity, these features are not available.
 
 Only one of `user_email` or `attributes` can be provided for a given iframe. The `external_user_id` parameter can optionally be combined with either of them. Here is how each parameter works:
-- `user_email`: Looks up the user in Rill Cloud by email and populates their standard attributes. If no matching user is found, it generates limited attributes with only the fields `email`, `domain` (the part of the email after `@`) and `admin` (set to `false`). The derived `domain` is commonly used in security policies (e.g. `app_site_domain = '{{ .user.domain }}'`). Does not enable per-user state on its own; combine with `external_user_id` to enable per-user state.
+- `user_email`: Looks up the user in StarData Cloud by email and populates their standard attributes. If no matching user is found, it generates limited attributes with only the fields `email`, `domain` (the part of the email after `@`) and `admin` (set to `false`). The derived `domain` is commonly used in security policies (e.g. `app_site_domain = '{{ .user.domain }}'`). Does not enable per-user state on its own; combine with `external_user_id` to enable per-user state.
 - `attributes`: Passes the provided attributes through directly. Make sure to include all attributes referenced in your security policies (e.g. `email`, `domain`, `admin`, or custom attributes like `tenant_id`). Does not enable per-user state on its own; combine with `external_user_id` to enable per-user state.
 - `external_user_id`: Any stable identifier for the end user. This is usually the user's ID in your own database. Setting it enables per-user state such as AI chat history.
 
 ## Embedding the project vs embedding an individual dashboard
 
-One of the most common differences between how developers may wish to iframe Rill is whether they wish to embed at the project level or individual dashboard level. This behavior can be controlled through the combination of the `resource` and `navigation` properties!
+One of the most common differences between how developers may wish to iframe StarData is whether they wish to embed at the project level or individual dashboard level. This behavior can be controlled through the combination of the `resource` and `navigation` properties!
 
 If you wish to embed a single dashboard **only**, your payload might look like:
 ```json
@@ -348,7 +348,7 @@ If you wish to still embed a dashboard _but allow navigation between dashboards_
 }
 ```
 
-Finally, _if you wish to embed the project list view of dashboards instead (what you see when you first open a project in Rill Cloud)_, then you can simply omit the `resource` and appropriately set `navigation` in your payload:
+Finally, _if you wish to embed the project list view of dashboards instead (what you see when you first open a project in StarData Cloud)_, then you can simply omit the `resource` and appropriately set `navigation` in your payload:
 ```json
 {
   "navigation": true
@@ -357,7 +357,7 @@ Finally, _if you wish to embed the project list view of dashboards instead (what
 
 ## Testing the dashboard
 
-While it is possible to create the iframeSrc URL via the CLI or code to _test_ your embedded dashboard, it might be easier to start off using [Rill Developer's mock users](/developers/build/metrics-view/security#advanced-example-custom-attributes-embed-dashboards), especially if you have multiple attribute views that you want to test before deploying to Rill Cloud. You can pass specific custom_attributes as you would during iframe URL generation to view the pre-filtered explore dashboard.
+While it is possible to create the iframeSrc URL via the CLI or code to _test_ your embedded dashboard, it might be easier to start off using [StarData Developer's mock users](/developers/build/metrics-view/security#advanced-example-custom-attributes-embed-dashboards), especially if you have multiple attribute views that you want to test before deploying to StarData Cloud. You can pass specific custom_attributes as you would during iframe URL generation to view the pre-filtered explore dashboard.
 
 ```yaml
 - email: embed@rilldata.com
@@ -370,7 +370,7 @@ While it is possible to create the iframeSrc URL via the CLI or code to _test_ y
 ## Frontend: Embed the dashboard
 Your frontend should request an iframe URL from your backend API (which you set up in the previous step) and use the `iframeSrc` value of the response to render an HTML `<iframe>` element:
 ```html
-<iframe title="rill-dashboard" src="<iframeSrc>" width="100%" height="100%" />
+<iframe title="stardata-dashboard" src="<iframeSrc>" width="100%" height="100%" />
 ```
 
 Once the dashboard is embedded, the parent page can also read and write its UI state (selected resource, filters, time range, view type, and so on) using a `postMessage`-based API exposed by the iframe. See the [postMessage API](/developers/embed/postmessage) reference for details.
@@ -379,7 +379,7 @@ Once the dashboard is embedded, the parent page can also read and write its UI s
 
 ### React Example
 
-Depending on how your app is written and the language being used, you can then use the resulting iframe URL to embed and display Rill dashboards accordingly. Below is a basic example of how to fetch and render a dashboard in **React**:
+Depending on how your app is written and the language being used, you can then use the resulting iframe URL to embed and display StarData dashboards accordingly. Below is a basic example of how to fetch and render a dashboard in **React**:
 
 ```jsx
 import React, { useEffect, useState } from 'react';
@@ -416,7 +416,7 @@ export default function RillDashboard() {
   if (error) return <p>Failed with error: {error}</p>;
 
   return (
-    <iframe title="rill-dashboard"
+    <iframe title="stardata-dashboard"
       src={iframeSrc}
       width="100%"
       height="1000"
@@ -427,4 +427,4 @@ export default function RillDashboard() {
 
 ### Next.js Example
 
-You can find a different end-to-end example of embedding a Rill dashboard in a **Next.js** project in [`rilldata/rill-examples/embedding`](https://github.com/rilldata/rill-examples/tree/main/embedding).
+You can find a different end-to-end example of embedding a StarData dashboard in a **Next.js** project in [`rilldata/rill-examples/embedding`](https://github.com/rilldata/rill-examples/tree/main/embedding).

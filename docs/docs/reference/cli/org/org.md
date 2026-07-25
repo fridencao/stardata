@@ -1,8 +1,8 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill org
+title: stardata org
 ---
-## rill org
+## stardata org
 
 Manage organizations
 
@@ -17,14 +17,14 @@ Manage organizations
 
 ### SEE ALSO
 
-* [rill](../cli.md)	 - A CLI for Rill
-* [rill org create](create.md)	 - Create organization
-* [rill org delete](delete.md)	 - Delete organization
-* [rill org edit](edit.md)	 - Edit organization details
-* [rill org list](list.md)	 - List all organizations
-* [rill org rename](rename.md)	 - Rename organization
-* [rill org show](show.md)	 - Show org details
-* [rill org switch](switch.md)	 - Switch to other organization
-* [rill org upload-favicon](upload-favicon.md)	 - Upload a custom favicon
-* [rill org upload-logo](upload-logo.md)	 - Upload a custom logo
+* [stardata](../cli.md)	 - A CLI for StarData
+* [stardata org create](create.md)	 - Create organization
+* [stardata org delete](delete.md)	 - Delete organization
+* [stardata org edit](edit.md)	 - Edit organization details
+* [stardata org list](list.md)	 - List all organizations
+* [stardata org rename](rename.md)	 - Rename organization
+* [stardata org show](show.md)	 - Show org details
+* [stardata org switch](switch.md)	 - Switch to other organization
+* [stardata org upload-favicon](upload-favicon.md)	 - Upload a custom favicon
+* [stardata org upload-logo](upload-logo.md)	 - Upload a custom logo
 

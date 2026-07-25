@@ -1,8 +1,8 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill service
+title: stardata service
 ---
-## rill service
+## stardata service
 
 Manage service accounts
 
@@ -23,13 +23,13 @@ Manage service accounts
 
 ### SEE ALSO
 
-* [rill](../cli.md)	 - A CLI for Rill
-* [rill service create](create.md)	 - Create service
-* [rill service delete](delete.md)	 - Delete service
-* [rill service edit](edit.md)	 - edit service properties
-* [rill service list](list.md)	 - List service
-* [rill service remove](remove.md)	 - remove service from org or project
-* [rill service set-role](set-role.md)	 - Set role for service
-* [rill service show](show.md)	 - Show service
-* [rill service token](token/token.md)	 - Manage service tokens
+* [stardata](../cli.md)	 - A CLI for StarData
+* [stardata service create](create.md)	 - Create service
+* [stardata service delete](delete.md)	 - Delete service
+* [stardata service edit](edit.md)	 - edit service properties
+* [stardata service list](list.md)	 - List service
+* [stardata service remove](remove.md)	 - remove service from org or project
+* [stardata service set-role](set-role.md)	 - Set role for service
+* [stardata service show](show.md)	 - Show service
+* [stardata service token](token/token.md)	 - Manage service tokens
 

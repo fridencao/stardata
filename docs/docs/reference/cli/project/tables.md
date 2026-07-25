@@ -1,20 +1,20 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project tables
+title: stardata project tables
 ---
-## rill project tables
+## stardata project tables
 
 Get information about tables in a project
 
 ```
-rill project tables [<project-name>] [flags]
+stardata project tables [<project-name>] [flags]
 ```
 
 ### Flags
 
 ```
       --branch string    Target deployment by Git branch (default: primary deployment)
-      --local            Target local runtime instead of Rill Cloud
+      --local            Target local runtime instead of StarData Cloud
       --path string      Project directory (default ".")
       --project string   Project name
 ```
@@ -31,5 +31,5 @@ rill project tables [<project-name>] [flags]
 
 ### SEE ALSO
 
-* [rill project](project.md)	 - Manage projects
+* [stardata project](project.md)	 - Manage projects
 

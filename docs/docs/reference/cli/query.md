@@ -1,8 +1,8 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill query
+title: stardata query
 ---
-## rill query
+## stardata query
 
 Query data in a project
 
@@ -17,17 +17,17 @@ Note that large results are automatically truncated (use --limit to override).
 
 
 ```
-rill query [<project>] [flags]
+stardata query [<project>] [flags]
 ```
 
 ### Examples
 
 ```
-  # SQL query against a Rill Cloud project
-  rill query my-project --sql "SELECT * FROM my-table"
+  # SQL query against a StarData Cloud project
+  stardata query my-project --sql "SELECT * FROM my-table"
 
-  # SQL query against a local Rill project running with 'rill start'
-  rill query --local --sql "SELECT * FROM my-table"
+  # SQL query against a local StarData project running with 'stardata start'
+  stardata query --local --sql "SELECT * FROM my-table"
 ```
 
 ### Flags
@@ -37,7 +37,7 @@ rill query [<project>] [flags]
       --branch string               Target deployment by Git branch (default: primary deployment)
       --connector string            Connector to execute against. Defaults to the OLAP connector.
       --limit int                   The maximum number of rows to print (default 100)
-      --local                       Target local runtime instead of Rill Cloud
+      --local                       Target local runtime instead of StarData Cloud
       --org string                  Organization Name
       --path string                 Project directory (default ".")
       --project string              Project name
@@ -57,5 +57,5 @@ rill query [<project>] [flags]
 
 ### SEE ALSO
 
-* [rill](cli.md)	 - A CLI for Rill
+* [stardata](cli.md)	 - A CLI for StarData
 

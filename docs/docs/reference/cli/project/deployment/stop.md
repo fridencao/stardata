@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project deployment stop
+title: stardata project deployment stop
 ---
-## rill project deployment stop
+## stardata project deployment stop
 
 Stop a deployment by branch
 
 ```
-rill project deployment stop [<project>] <branch> [flags]
+stardata project deployment stop [<project>] <branch> [flags]
 ```
 
 ### Flags
@@ -29,5 +29,5 @@ rill project deployment stop [<project>] <branch> [flags]
 
 ### SEE ALSO
 
-* [rill project deployment](deployment.md)	 - Manage project deployments
+* [stardata project deployment](deployment.md)	 - Manage project deployments
 

@@ -1,13 +1,13 @@
 ---
 title: "Settings"
-description: "Configure organization and project settings in Rill Cloud"
+description: "Configure organization and project settings in StarData Cloud"
 sidebar_label: "Settings"
 sidebar_position: 0
 ---
 
 # Settings
 
-Configure your organization and project settings in Rill Cloud, including organization management, project configuration, and service tokens.
+Configure your organization and project settings in StarData Cloud, including organization management, project configuration, and service tokens.
 
 ## Organization Settings
 
@@ -60,7 +60,7 @@ Configure your organization and project settings in Rill Cloud, including organi
 
 ## Access Tokens
 
-**[User Tokens](/guide/administration/access-tokens)** provide programmatic access to Rill Cloud. Manage:
+**[User Tokens](/guide/administration/access-tokens)** provide programmatic access to StarData Cloud. Manage:
 - Personal access tokens for API access
 - Token permissions and scopes
 - Token lifecycle and security
@@ -68,7 +68,7 @@ Configure your organization and project settings in Rill Cloud, including organi
 ## Service Tokens
 
 **[Service Tokens](/guide/administration/access-tokens/service-tokens)** enable automated access for services and applications. Create:
-- Service tokens for programmatic access to Rill Cloud
+- Service tokens for programmatic access to StarData Cloud
 - Long-lived tokens for automated workflows
 - Secure authentication for integrations
 

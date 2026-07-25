@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill usergroup list
+title: stardata usergroup list
 ---
-## rill usergroup list
+## stardata usergroup list
 
 List groups
 
 ```
-rill usergroup list [flags]
+stardata usergroup list [flags]
 ```
 
 ### Flags
@@ -30,5 +30,5 @@ rill usergroup list [flags]
 
 ### SEE ALSO
 
-* [rill usergroup](usergroup.md)	 - Manage user groups
+* [stardata usergroup](usergroup.md)	 - Manage user groups
 

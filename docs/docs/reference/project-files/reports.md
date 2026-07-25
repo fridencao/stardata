@@ -131,7 +131,7 @@ Supports ai resolvers only as of now.
 
         - **`end`** - _[string]_ - End timestamp in ISO 8601 format
 
-        - **`expression`** - _[string]_ - Rill time expression (e.g., 'last 7 days', 'this month')
+        - **`expression`** - _[string]_ - StarData time expression (e.g., 'last 7 days', 'this month')
 
       - **`comparison_time_range`** - _[object]_ - Optional comparison time range for period-over-period analysis
 
@@ -143,7 +143,7 @@ Supports ai resolvers only as of now.
 
         - **`end`** - _[string]_ - End timestamp in ISO 8601 format
 
-        - **`expression`** - _[string]_ - Rill time expression for comparison period
+        - **`expression`** - _[string]_ - StarData time expression for comparison period
 
       - **`context`** - _[object]_ - Context to constrain the AI analysis
 

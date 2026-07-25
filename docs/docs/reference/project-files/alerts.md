@@ -129,7 +129,7 @@ _[oneOf]_ - Data source for the alert _(required)_
 
         - **`end`** - _[string]_ - End timestamp in ISO 8601 format
 
-        - **`expression`** - _[string]_ - Rill time expression (e.g., 'last 7 days', 'this month')
+        - **`expression`** - _[string]_ - StarData time expression (e.g., 'last 7 days', 'this month')
 
       - **`comparison_time_range`** - _[object]_ - Optional comparison time range for period-over-period analysis
 
@@ -141,7 +141,7 @@ _[oneOf]_ - Data source for the alert _(required)_
 
         - **`end`** - _[string]_ - End timestamp in ISO 8601 format
 
-        - **`expression`** - _[string]_ - Rill time expression for comparison period
+        - **`expression`** - _[string]_ - StarData time expression for comparison period
 
       - **`context`** - _[object]_ - Context to constrain the AI analysis
 
@@ -232,7 +232,7 @@ _[object]_ - Overrides any properties in production environment.
 ## Examples
 
 ```yaml
-# Example: To send alert when data lags by more than 1 day to slack channel #rill-cloud-alerts
+# Example: To send alert when data lags by more than 1 day to slack channel #stardata-cloud-alerts
 type: alert
 display_name: Data lags by more than 1 day
 # Check the alert every hour.
@@ -245,12 +245,12 @@ data:
         FROM
         (
           SELECT  MAX(event_time) AS max_time
-          FROM rill_metrics_model
+          FROM stardata_metrics_model
         )
         WHERE max_time < NOW() - INTERVAL '1 day'
 # Send notifications in Slack.
 notify:
     slack:
         channels:
-            - '#rill-cloud-alerts'
+            - '#stardata-cloud-alerts'
 ```

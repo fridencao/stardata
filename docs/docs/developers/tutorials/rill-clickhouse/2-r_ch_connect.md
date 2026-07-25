@@ -13,7 +13,7 @@ import TabItem from '@theme/TabItem';
 
 ## Default OLAP connection and Connect to ClickHouse
 
-Within Rill you can set the default OLAP connection on the [project level](https://docs.rilldata.com/reference/project-files/rill-yaml) or the [dashboard level](https://docs.rilldata.com/reference/project-files/explore-dashboards). 
+Within StarData you can set the default OLAP connection on the [project level](https://docs.rilldata.com/reference/project-files/rill-yaml) or the [dashboard level](https://docs.rilldata.com/reference/project-files/explore-dashboards). 
 For this course, we will set it up on the project level so all of our dashboards will be based on our ClickHouse table.
 
 :::tip
@@ -41,9 +41,9 @@ You can obtain the credentials from your ClickHouse Cloud account by clicking th
 Once this is created, a `clickhouse.yaml` file will appear in the `connectors` directory and the following will be added to your rill.yaml.
 
 ```yaml
-compiler: rillv1
+compiler: stardatav1
 
-title: "Rill and ClickHouse Project"
+title: "StarData and ClickHouse Project"
 olap_connector: clickhouse #automatically added
 ```
 
@@ -63,8 +63,8 @@ dsn: "clickhouse://localhost:9000"
 
 Please see our documentation to find the DSN for [your ClickHouse Cloud instance](https://docs.rilldata.com/developers/build/connectors/olap/clickhouse#connecting-to-clickhouse-cloud). 
 
-### How to pass the credentials to Rill
-There are a few way to define the credentials within Rill.
+### How to pass the credentials to StarData
+There are a few way to define the credentials within StarData.
 
 <Tabs>
 <TabItem value="yaml" label="via yaml" default>
@@ -88,10 +88,10 @@ dsn: "clickhouse://localhost:9000"
 
 </TabItem>
 <TabItem value="variable" label="via variables">
-Navigate back to the Terminal and stop the Rill process. You can run the following to add a variable and use this is within Rill.
+Navigate back to the Terminal and stop the StarData process. You can run the following to add a variable and use this is within StarData.
 
 ```
-rill start --env host='localhost' --env  port='9000'
+stardata start --env host='localhost' --env  port='9000'
 ```
 
 Afterwards, create a file called clickhouse.yaml and add the following contents:
@@ -110,7 +110,7 @@ port: "{{ .env.port }}"
 
 
   <TabItem value="env" label="via .env">
-There's a few way to generate the .env file. Making a source that requires credentials will automatically generate it. Else, you can create it using `touch .env` in the rill directory.
+There's a few way to generate the .env file. Making a source that requires credentials will automatically generate it. Else, you can create it using `touch .env` in the stardata directory.
 
 ```
 CLICKHOUSE_HOST="localhost"
@@ -129,7 +129,7 @@ CLICKHOUSE_DSN="..."
 
 :::tip Via the UI
 
-If you connect to ClickHouse via the UI, this will automatically create a template with connectors/clickhouse.yaml as well as a reference of your DSN to the .env folder. This will automatically get pushed along with your project to Rill Cloud. 
+If you connect to ClickHouse via the UI, this will automatically create a template with connectors/clickhouse.yaml as well as a reference of your DSN to the .env folder. This will automatically get pushed along with your project to StarData Cloud. 
 
 :::
 

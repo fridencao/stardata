@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill user set-resources
+title: stardata user set-resources
 ---
-## rill user set-resources
+## stardata user set-resources
 
 Set a user's project resources and restriction flag (overwrites existing list)
 
 ```
-rill user set-resources [flags]
+stardata user set-resources [flags]
 ```
 
 ### Flags
@@ -32,5 +32,5 @@ rill user set-resources [flags]
 
 ### SEE ALSO
 
-* [rill user](user.md)	 - Manage users
+* [stardata user](user.md)	 - Manage users
 

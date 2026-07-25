@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill env push
+title: stardata env push
 ---
-## rill env push
+## stardata env push
 
 Push local .env contents to cloud
 
 ```
-rill env push [<project-name>] [flags]
+stardata env push [<project-name>] [flags]
 ```
 
 ### Flags
@@ -30,5 +30,5 @@ rill env push [<project-name>] [flags]
 
 ### SEE ALSO
 
-* [rill env](env.md)	 - Manage variables for a project
+* [stardata env](env.md)	 - Manage variables for a project
 

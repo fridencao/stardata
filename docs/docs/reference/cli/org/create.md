@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill org create
+title: stardata org create
 ---
-## rill org create
+## stardata org create
 
 Create organization
 
 ```
-rill org create <org-name> [flags]
+stardata org create <org-name> [flags]
 ```
 
 ### Flags
@@ -28,5 +28,5 @@ rill org create <org-name> [flags]
 
 ### SEE ALSO
 
-* [rill org](org.md)	 - Manage organizations
+* [stardata org](org.md)	 - Manage organizations
 

@@ -1,8 +1,8 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill billing subscription
+title: stardata billing subscription
 ---
-## rill billing subscription
+## stardata billing subscription
 
 Manage organization subscriptions
 
@@ -23,9 +23,9 @@ Manage organization subscriptions
 
 ### SEE ALSO
 
-* [rill billing](../billing.md)	 - Billing related commands for org
-* [rill billing subscription cancel](cancel.md)	 - Cancel subscription for an organization
-* [rill billing subscription edit](edit.md)	 - Edit organization subscription
-* [rill billing subscription list](list.md)	 - List subscriptions for an organization
-* [rill billing subscription renew](renew.md)	 - Renew cancelled organization subscription
+* [stardata billing](../billing.md)	 - Billing related commands for org
+* [stardata billing subscription cancel](cancel.md)	 - Cancel subscription for an organization
+* [stardata billing subscription edit](edit.md)	 - Edit organization subscription
+* [stardata billing subscription list](list.md)	 - List subscriptions for an organization
+* [stardata billing subscription renew](renew.md)	 - Renew cancelled organization subscription
 

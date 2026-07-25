@@ -10,7 +10,7 @@ import { EnvPullTip, DeployToCloud } from '@site/src/components/connector';
 {/* WARNING: There are links to this page in source code. If you move it, find and replace the links and consider adding a redirect in docusaurus.config.js. */}
 
 ## Overview
-[Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html) is a scalable, fully managed, and highly reliable object storage solution offered by AWS, designed to store and access data from anywhere in the world. It provides a secure and cost-effective way to store data, including common storage formats such as CSV and Parquet. Rill natively supports connecting to S3 using the provided [S3 URI](https://repost.aws/questions/QUFXlwQxxJQQyg9PMn2b6nTg/what-is-s3-uri-in-simple-storage-service) of your bucket to retrieve and read files.
+[Amazon S3](https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html) is a scalable, fully managed, and highly reliable object storage solution offered by AWS, designed to store and access data from anywhere in the world. It provides a secure and cost-effective way to store data, including common storage formats such as CSV and Parquet. StarData natively supports connecting to S3 using the provided [S3 URI](https://repost.aws/questions/QUFXlwQxxJQQyg9PMn2b6nTg/what-is-s3-uri-in-simple-storage-service) of your bucket to retrieve and read files.
 
 ## Authentication Methods
 
@@ -27,7 +27,7 @@ To connect to Amazon S3, you can choose from four authentication options:
 You can also connect to S3-compatible storage services by specifying a custom endpoint in your connector configuration.
 :::
 
-When you add data from S3 through the Rill UI, you'll see two authentication options:
+When you add data from S3 through the StarData UI, you'll see two authentication options:
 
 - **Access Key/Secret Key**: The process follows two steps:
   1. **Configure Authentication** - Set up your S3 connector with credentials
@@ -44,11 +44,11 @@ IAM Role Assumption and Local AWS credentials are only available through manual 
 
 ## Method 1: Access Key/Secret Key (Recommended)
 
-Access Key/Secret Key credentials provide reliable authentication for S3. This method works for both local development and Rill Cloud deployments.
+Access Key/Secret Key credentials provide reliable authentication for S3. This method works for both local development and StarData Cloud deployments.
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Amazon S3** as the data model type
 3. In the authentication step:
    - Choose **Access Key/Secret Key**
@@ -88,7 +88,7 @@ Then, [create your first model](#create-your-first-model).
 
 ## Method 2: IAM Role Assumption
 
-Rill supports AWS IAM role assumption for enhanced security. This method allows Rill to temporarily assume an IAM role to access S3 resources. This method is only available through manual configuration.
+StarData supports AWS IAM role assumption for enhanced security. This method allows StarData to temporarily assume an IAM role to access S3 resources. This method is only available through manual configuration.
 
 ### Benefits of Using IAM Roles
 
@@ -126,7 +126,7 @@ For publicly accessible S3 buckets, you don't need to create a connector. Simply
 
 ### Using the UI
 
-1. Click **Add Data** in your Rill project
+1. Click **Add Data** in your StarData project
 2. Select **Amazon S3** as the data model type
 3. In the authentication step:
    - Choose **Public**
@@ -146,7 +146,7 @@ This method only works with publicly accessible buckets. Most production S3 buck
 
 ## Method 4: Local AWS Credentials (Local Development Only)
 
-For local development, you can use credentials from the AWS CLI. This method is **not suitable for production** or Rill Cloud deployments. This method is only available through manual configuration, and you don't need to create a connector file.
+For local development, you can use credentials from the AWS CLI. This method is **not suitable for production** or StarData Cloud deployments. This method is only available through manual configuration, and you don't need to create a connector file.
 
 ### Setup
 
@@ -160,10 +160,10 @@ For local development, you can use credentials from the AWS CLI. This method is 
 
 No connector is needed when using local credentials. Proceed to [Create Your First Model](#create-your-first-model) below and omit the `create_secrets_from_connectors` line.
 
-Rill will automatically detect and use your local AWS CLI credentials when no connector is specified.
+StarData will automatically detect and use your local AWS CLI credentials when no connector is specified.
 
 :::warning
-This method only works for local development. Deploying to Rill Cloud with this configuration will fail because the cloud environment doesn't have access to your local credentials. Always use Access Key/Secret Key or IAM Role Assumption for production deployments.
+This method only works for local development. Deploying to StarData Cloud with this configuration will fail because the cloud environment doesn't have access to your local credentials. Always use Access Key/Secret Key or IAM Role Assumption for production deployments.
 :::
 
 ### Path Patterns
@@ -205,7 +205,7 @@ sql: SELECT * FROM read_parquet('s3://my-bucket/**/*.parquet')
 
 After creating the model, you can add additional [model settings](/developers/build/models/source-models) directly to the file.
 
-## Deploy to Rill Cloud
+## Deploy to StarData Cloud
 
 <DeployToCloud
   connector="S3"
@@ -272,9 +272,9 @@ Here is a step-by-step guide on how to create an AWS service account with read-o
 
 1. Open a terminal window and [install the AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) if it is not already installed on your system.
 
-2. Run the following command to create a new user (optionally replace `rill-service-account` with a name of your choice):
+2. Run the following command to create a new user (optionally replace `stardata-service-account` with a name of your choice):
     ```bash
-    aws iam create-user --no-cli-pager --user-name rill-service-account
+    aws iam create-user --no-cli-pager --user-name stardata-service-account
     ```
 
 3. Grant the user read access to data in S3:
@@ -282,7 +282,7 @@ Here is a step-by-step guide on how to create an AWS service account with read-o
         ```bash
         aws iam attach-user-policy \
             --policy-arn arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess \
-            --user-name rill-service-account
+            --user-name stardata-service-account
         ```
     
     - To only grant access to data in a specific bucket:
@@ -313,19 +313,19 @@ Here is a step-by-step guide on how to create an AWS service account with read-o
             ```bash
             aws iam attach-user-policy \
                 --policy-arn arn:aws:iam::aws:policy/[POLICY_NAME] \
-                --user-name rill-service-account
+                --user-name stardata-service-account
             ```
 
 4. Run the following command to create an access key pair for the user:
     ```bash
-    aws iam create-access-key --user-name rill-service-account
+    aws iam create-access-key --user-name stardata-service-account
     ```
 
 5. Note down the `AccessKeyId` and `SecretAccessKey` values in the returned JSON object. Press "q" to exit the page.
 
-### How to create an IAM role for cross-account access with Rill-provided AWS account
+### How to create an IAM role for cross-account access with StarData-provided AWS account
 
-To set up an IAM role that grants Rill's AWS account access to your S3 buckets:
+To set up an IAM role that grants StarData's AWS account access to your S3 buckets:
 
 1. Log in to the AWS Management Console of your account that owns the S3 bucket (your resource account).
 
@@ -335,9 +335,9 @@ To set up an IAM role that grants Rill's AWS account access to your S3 buckets:
 
 4. For trust relationship, select "AWS account" and choose "Another AWS account".
 
-5. Enter Rill's AWS account ID that was provided to you by your Rill representative.
+5. Enter StarData's AWS account ID that was provided to you by your StarData representative.
 
-6. Select "Require external ID" and enter the External ID provided by Rill. This helps prevent the confused deputy problem.
+6. Select "Require external ID" and enter the External ID provided by StarData. This helps prevent the confused deputy problem.
 
 7. Click "Next: Permissions".
 
@@ -355,4 +355,4 @@ To set up an IAM role that grants Rill's AWS account access to your S3 buckets:
 
 13. Note the "Role ARN" value which looks like: `arn:aws:iam::123456789012:role/RillDataAccess`
 
-14. Share this Role ARN with your Rill representative to complete the setup. Rill will configure their systems to assume this role when accessing your data.
+14. Share this Role ARN with your StarData representative to complete the setup. StarData will configure their systems to assume this role when accessing your data.

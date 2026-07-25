@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill docs
+title: stardata docs
 ---
-## rill docs
+## stardata docs
 
 Open docs.rilldata.com
 
 ```
-rill docs [flags]
+stardata docs [flags]
 ```
 
 ### Global flags
@@ -21,5 +21,5 @@ rill docs [flags]
 
 ### SEE ALSO
 
-* [rill](../cli.md)	 - A CLI for Rill
+* [stardata](../cli.md)	 - A CLI for StarData
 

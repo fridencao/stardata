@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project deployment list
+title: stardata project deployment list
 ---
-## rill project deployment list
+## stardata project deployment list
 
 List all deployments for a project
 
 ```
-rill project deployment list [<project>] [flags]
+stardata project deployment list [<project>] [flags]
 ```
 
 ### Flags
@@ -30,5 +30,5 @@ rill project deployment list [<project>] [flags]
 
 ### SEE ALSO
 
-* [rill project deployment](deployment.md)	 - Manage project deployments
+* [stardata project deployment](deployment.md)	 - Manage project deployments
 

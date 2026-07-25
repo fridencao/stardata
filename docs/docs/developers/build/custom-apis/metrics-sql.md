@@ -43,14 +43,14 @@ When you write:
 SELECT publisher, domain, total_records FROM ad_bids_metrics
 ```
 
-Rill translates this to:
+StarData translates this to:
 ```sql
 SELECT toUpper(publisher) AS publisher, domain AS domain, COUNT(*) AS total_records
 FROM ad_bids
 GROUP BY publisher, domain
 ```
 
-This means you write simple queries using business-friendly names, while Rill handles the underlying SQL complexity.
+This means you write simple queries using business-friendly names, while StarData handles the underlying SQL complexity.
 
 ## Why use Metrics SQL over raw SQL?
 

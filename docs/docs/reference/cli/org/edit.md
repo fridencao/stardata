@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill org edit
+title: stardata org edit
 ---
-## rill org edit
+## stardata org edit
 
 Edit organization details
 
 ```
-rill org edit [<org-name>] [flags]
+stardata org edit [<org-name>] [flags]
 ```
 
 ### Flags
@@ -31,5 +31,5 @@ rill org edit [<org-name>] [flags]
 
 ### SEE ALSO
 
-* [rill org](org.md)	 - Manage organizations
+* [stardata org](org.md)	 - Manage organizations
 

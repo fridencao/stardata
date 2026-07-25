@@ -32,4 +32,4 @@ In another example, we are provided with a directory_path column that gives us i
 ```
 
 ## Demo
-[See this project live in our demo!](https://ui.rilldata.com/demo/my-rill-tutorial/explore/advanced_explore?f=directory_path_unnested+IN+%28%27docs%27%29)
+[See this project live in our demo!](https://ui.rilldata.com/demo/my-stardata-tutorial/explore/advanced_explore?f=directory_path_unnested+IN+%28%27docs%27%29)

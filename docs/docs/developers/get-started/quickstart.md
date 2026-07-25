@@ -1,5 +1,5 @@
 ---
-title: Getting Started with Rill Developer 
+title: Getting Started with StarData Developer 
 sidebar_label: Quickstart
 sidebar_position: 10
 ---
@@ -7,13 +7,13 @@ import Video from '@site/src/components/Video';
 
 <!-- WARNING: There are links to this page in source code. If you move it, find and replace the links and consider adding a redirect in docusaurus.config.js. -->
 
-:::tip Rill's Default Engine
-This guide assumes you'll be using Rill's default embedded engine, DuckDB. If you're looking to set up Rill with ClickHouse, check out our [ClickHouse Guide](/developers/tutorials/rill-clickhouse)!
+:::tip StarData's Default Engine
+This guide assumes you'll be using StarData's default embedded engine, DuckDB. If you're looking to set up StarData with ClickHouse, check out our [ClickHouse Guide](/developers/tutorials/rill-clickhouse)!
 :::
 
-## What is Rill Developer?
+## What is StarData Developer?
 
-Rill Developer is your comprehensive toolkit for transforming raw data into actionable insights. It's designed to streamline the entire analytics workflow—from data ingestion to dashboard creation—all within a single, intuitive interface.
+StarData Developer is your comprehensive toolkit for transforming raw data into actionable insights. It's designed to streamline the entire analytics workflow—from data ingestion to dashboard creation—all within a single, intuitive interface.
 
 **Key capabilities:**
 - **Connect to any data source** - Support for databases, cloud storage, APIs, and more
@@ -24,34 +24,34 @@ Rill Developer is your comprehensive toolkit for transforming raw data into acti
 
 ## Quick Start: From Zero to Dashboard in Minutes
 
-### Step 1: Install and Launch Rill
+### Step 1: Install and Launch StarData
 
 Get started with just two commands:
 
 ```bash
 curl https://rill.sh | sh
-rill start my-rill-project
+stardata start my-stardata-project
 ```
 
 This will:
-- Download and install Rill Developer
+- Download and install StarData Developer
 - Create a new project directory
-- Launch the Rill interface in your browser
+- Launch the StarData interface in your browser
 
-![New Rill Project](/img/tutorials/rill-basics/new-rill-project.png)
-:::note Rill Developer vs Rill Cloud
-Rill Developer is your local development environment where you build and test your analytics projects. Once ready, you can deploy to Rill Cloud for team collaboration and production use. For more details, see our [Developer vs Cloud comparison](/developers/deploy/cloud-vs-developer).
+![New StarData Project](/img/tutorials/rill-basics/new-stardata-project.png)
+:::note StarData Developer vs StarData Cloud
+StarData Developer is your local development environment where you build and test your analytics projects. Once ready, you can deploy to StarData Cloud for team collaboration and production use. For more details, see our [Developer vs Cloud comparison](/developers/deploy/cloud-vs-developer).
 :::
 
 ### Step 2: Connect Your Data
 
-Rill supports a wide range of data sources through our [connector library](/developers/build/connectors). For this tutorial, we'll use a sample dataset hosted on Google Cloud Storage. Select Add Data in the dropdown, GCS, and use the following dataset:
+StarData supports a wide range of data sources through our [connector library](/developers/build/connectors). For this tutorial, we'll use a sample dataset hosted on Google Cloud Storage. Select Add Data in the dropdown, GCS, and use the following dataset:
 ```
 gs://rilldata-public/auction_data.parquet
 ```
 
 **What happens when you connect data:**
-- Rill automatically detects your data schema
+- StarData automatically detects your data schema
 - Provides a preview of the first 150 rows
 - Analyzes data types, value ranges, and patterns
 - Creates a foundation for your analytics
@@ -81,9 +81,9 @@ gs://rilldata-public/auction_data.parquet
 
 ### Step 3: Create Your First Dashboard
 
-Rill's AI-powered dashboard creation makes it easy to go from data to insights in seconds. The system automatically generates relevant visualizations and suggests key metrics based on your data.
+StarData's AI-powered dashboard creation makes it easy to go from data to insights in seconds. The system automatically generates relevant visualizations and suggests key metrics based on your data.
 
-Select the model's side menu and select "Generate dashboard with AI". Watch as Rill configures your metrics view and creates an Explore dashboard. Once finished, you can navigate the different features of our [Explore dashboard](/guide/dashboards).
+Select the model's side menu and select "Generate dashboard with AI". Watch as StarData configures your metrics view and creates an Explore dashboard. Once finished, you can navigate the different features of our [Explore dashboard](/guide/dashboards).
 
 <div style={{ 
   position: "relative", 
@@ -121,18 +121,18 @@ Once your dashboard is created, you can:
 
 ## Preview Mode
 
-[Preview Mode](/developers/build/getting-started#preview-mode) gives you a dashboard-only view of your project — no file editor, no code. Start it with `rill start my-rill-project --preview`.
+[Preview Mode](/developers/build/getting-started#preview-mode) gives you a dashboard-only view of your project — no file editor, no code. Start it with `stardata start my-stardata-project --preview`.
 
 ## Build with AI
 
-Rill projects are YAML and SQL files, which makes them a natural fit for AI coding agents like Claude Code and Cursor. See the [Agentic Quickstart](/developers/get-started/ai-quickstart) to get started.
+StarData projects are YAML and SQL files, which makes them a natural fit for AI coding agents like Claude Code and Cursor. See the [Agentic Quickstart](/developers/get-started/ai-quickstart) to get started.
 
-## What else can Rill do?
+## What else can StarData do?
 
-This quick start covered the basics, but Rill offers much more:
+This quick start covered the basics, but StarData offers much more:
 
 - **[Data Modeling](/developers/build/models)** - Transform and prepare your data with SQL
 - **[Metrics Layer](/developers/build/metrics-view)** - Define business KPIs and calculations
 - **[Deployment](/developers/deploy/deploy-dashboard)** - Share your dashboards with your team
 
-Ready to build something more complex? Check out our [comprehensive tutorial](/developers/tutorials/rill-basics/launch) for a complete walkthrough of Rill's advanced features.
+Ready to build something more complex? Check out our [comprehensive tutorial](/developers/tutorials/rill-basics/launch) for a complete walkthrough of StarData's advanced features.

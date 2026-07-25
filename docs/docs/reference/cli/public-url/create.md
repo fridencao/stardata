@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill public-url create
+title: stardata public-url create
 ---
-## rill public-url create
+## stardata public-url create
 
 Create a public URL
 
 ```
-rill public-url create [<project-name>] <explore> [flags]
+stardata public-url create [<project-name>] <explore> [flags]
 ```
 
 ### Flags
@@ -32,5 +32,5 @@ rill public-url create [<project-name>] <explore> [flags]
 
 ### SEE ALSO
 
-* [rill public-url](public-url.md)	 - Manage public URLs
+* [stardata public-url](public-url.md)	 - Manage public URLs
 

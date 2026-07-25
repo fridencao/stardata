@@ -6,7 +6,7 @@ sidebar_position: 10
 
 import ImageCodeToggle from '@site/src/components/ImageCodeToggle';
 
-Chart widgets in Rill Canvas allow you to visualize your data in various formats. You can create charts dynamically in the Canvas Dashboard or through individual component files. For more information, refer to our [Components reference doc](/reference/project-files/component).
+Chart widgets in StarData Canvas allow you to visualize your data in various formats. You can create charts dynamically in the Canvas Dashboard or through individual component files. For more information, refer to our [Components reference doc](/reference/project-files/component).
 
 ## Bar Chart
 
@@ -90,7 +90,7 @@ Stacked bar charts show multiple data series stacked on top of each other.
   imageAlt="Stacked bar chart showing multiple measures"
   code={`- stacked_bar:
       color:
-        field: rill_measures
+        field: stardata_measures
         legendOrientation: top
         type: value
       metrics_view: bids_metrics
@@ -124,7 +124,7 @@ Normalized stacked bars show proportions instead of absolute values.
         field: username
         limit: 3
         type: nominal
-      metrics_view: rill_commits_metrics
+      metrics_view: stardata_commits_metrics
       x:
         field: date
         limit: 20
@@ -152,7 +152,7 @@ Donut charts display data as segments of a circle with a hollow center.
       measure:
         field: number_of_commits
         type: quantitative
-      metrics_view: rill_commits_metrics`}
+      metrics_view: stardata_commits_metrics`}
   codeLanguage="yaml"
 />
 

@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project clone
+title: stardata project clone
 ---
-## rill project clone
+## stardata project clone
 
 Clone Project
 
 ```
-rill project clone <project-name> [flags]
+stardata project clone <project-name> [flags]
 ```
 
 ### Flags
@@ -28,5 +28,5 @@ rill project clone <project-name> [flags]
 
 ### SEE ALSO
 
-* [rill project](project.md)	 - Manage projects
+* [stardata project](project.md)	 - Manage projects
 

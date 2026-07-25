@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill service create
+title: stardata service create
 ---
-## rill service create
+## stardata service create
 
 Create service
 
 ```
-rill service create <service-name> [flags]
+stardata service create <service-name> [flags]
 ```
 
 ### Flags
@@ -31,5 +31,5 @@ rill service create <service-name> [flags]
 
 ### SEE ALSO
 
-* [rill service](service.md)	 - Manage service accounts
+* [stardata service](service.md)	 - Manage service accounts
 

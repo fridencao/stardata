@@ -5,7 +5,7 @@ sidebar_label: Security & Access Control
 sidebar_position: 50
 ---
 
-Rill's custom APIs support fine-grained access control through security rules and custom attributes on tokens. You can restrict who can call an API, and filter the data each caller sees — all without writing backend code.
+StarData's custom APIs support fine-grained access control through security rules and custom attributes on tokens. You can restrict who can call an API, and filter the data each caller sees — all without writing backend code.
 
 ## API access rules
 
@@ -52,7 +52,7 @@ Custom attributes are key-value pairs you attach to [service tokens](/guide/admi
 ### Creating a service token with attributes
 
 ```bash
-rill service create acme-api \
+stardata service create acme-api \
   --project my-project \
   --project-role viewer \
   --attributes '{"customer_id": "acme-corp", "region": "us-west", "tier": "premium"}'
@@ -63,7 +63,7 @@ This creates a token with three custom attributes: `customer_id`, `region`, and 
 ### Updating attributes on an existing service
 
 ```bash
-rill service edit acme-api \
+stardata service edit acme-api \
   --attributes '{"customer_id": "acme-corp", "region": "eu-central", "tier": "enterprise"}'
 ```
 
@@ -86,7 +86,7 @@ When an API is called with a service token, here's what happens:
                     ↓
 2. API call with bearer token
                     ↓
-3. Rill extracts attributes from the token into JWT claims
+3. StarData extracts attributes from the token into JWT claims
                     ↓
 4. Template engine makes attributes available as {{ .user.customer_id }}
                     ↓
@@ -125,18 +125,18 @@ security:
 
 ```bash
 # Token for Acme Corp
-rill service create acme-api \
+stardata service create acme-api \
   --project my-project \
   --project-role viewer \
   --attributes '{"customer_id": "acme-corp"}'
-# Returns: rill_svc_abc123...
+# Returns: stardata_svc_abc123...
 
 # Token for Globex Inc
-rill service create globex-api \
+stardata service create globex-api \
   --project my-project \
   --project-role viewer \
   --attributes '{"customer_id": "globex-inc"}'
-# Returns: rill_svc_def456...
+# Returns: stardata_svc_def456...
 ```
 
 ### Step 3: Call the API
@@ -144,7 +144,7 @@ rill service create globex-api \
 **Acme sees only their orders:**
 ```bash
 curl "https://api.rilldata.com/v1/organizations/my-org/projects/my-project/runtime/api/customer-orders" \
-  -H "Authorization: Bearer rill_svc_abc123..."
+  -H "Authorization: Bearer stardata_svc_abc123..."
 ```
 
 ```json
@@ -157,7 +157,7 @@ curl "https://api.rilldata.com/v1/organizations/my-org/projects/my-project/runti
 **Globex sees only their orders:**
 ```bash
 curl "https://api.rilldata.com/v1/organizations/my-org/projects/my-project/runtime/api/customer-orders" \
-  -H "Authorization: Bearer rill_svc_def456..."
+  -H "Authorization: Bearer stardata_svc_def456..."
 ```
 
 ```json
@@ -234,7 +234,7 @@ The `row_filter` from the metrics view is automatically applied — each custome
 
 ## Skipping nested security
 
-By default, when an API queries a metrics view, Rill enforces the security policies on both the API itself and the underlying metrics view. In some cases, you may want the API to handle all access control itself and skip checks on nested resources:
+By default, when an API queries a metrics view, StarData enforces the security policies on both the API itself and the underlying metrics view. In some cases, you may want the API to handle all access control itself and skip checks on nested resources:
 
 ```yaml
 type: api

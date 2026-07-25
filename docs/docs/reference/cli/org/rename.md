@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill org rename
+title: stardata org rename
 ---
-## rill org rename
+## stardata org rename
 
 Rename organization
 
 ```
-rill org rename [flags]
+stardata org rename [flags]
 ```
 
 ### Flags
@@ -29,5 +29,5 @@ rill org rename [flags]
 
 ### SEE ALSO
 
-* [rill org](org.md)	 - Manage organizations
+* [stardata org](org.md)	 - Manage organizations
 

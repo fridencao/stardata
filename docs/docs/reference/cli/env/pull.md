@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill env pull
+title: stardata env pull
 ---
-## rill env pull
+## stardata env pull
 
 Pull cloud credentials into local .env file
 
 ```
-rill env pull [<project-name>] [flags]
+stardata env pull [<project-name>] [flags]
 ```
 
 ### Flags
@@ -30,5 +30,5 @@ rill env pull [<project-name>] [flags]
 
 ### SEE ALSO
 
-* [rill env](env.md)	 - Manage variables for a project
+* [stardata env](env.md)	 - Manage variables for a project
 

@@ -1,13 +1,13 @@
 ---
 note: GENERATED. DO NOT EDIT.
-title: rill project show
+title: stardata project show
 ---
-## rill project show
+## stardata project show
 
 Show project details
 
 ```
-rill project show [<project-name>] [flags]
+stardata project show [<project-name>] [flags]
 ```
 
 ### Flags
@@ -29,5 +29,5 @@ rill project show [<project-name>] [flags]
 
 ### SEE ALSO
 
-* [rill project](project.md)	 - Manage projects
+* [stardata project](project.md)	 - Manage projects
 
