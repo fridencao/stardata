@@ -87,12 +87,12 @@ checksum:
 
 dockers:
   - image_templates:
-      - rilldata/rill:latest
-      - rilldata/rill:{{ .Tag }}
+      - fridencao/stardata:latest
+      - fridencao/stardata:{{ .Tag }}
     skip_build: "{{ .IsNightly }}"
     skip_push: "{{ .IsNightly }}"
   - image_templates:
-      - rilldata/rill:nightly
+      - fridencao/stardata:nightly
     skip_build: "{{ .IsRelease }}"
     skip_push: "{{ .IsRelease }}"
 
