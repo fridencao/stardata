@@ -6,10 +6,10 @@ import (
 	"strings"
 
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/runtime/drivers"
-	rillmysql "github.com/rilldata/rill/runtime/drivers/mysql"
-	"github.com/rilldata/rill/runtime/drivers/postgres"
-	"github.com/rilldata/rill/runtime/pkg/mapstructureutil"
+	"github.com/fridencao/stardata/runtime/drivers"
+	rillmysql "github.com/fridencao/stardata/runtime/drivers/mysql"
+	"github.com/fridencao/stardata/runtime/drivers/postgres"
+	"github.com/fridencao/stardata/runtime/pkg/mapstructureutil"
 )
 
 type sqlStoreToSelfInputProps struct {

@@ -10,9 +10,9 @@ import (
 	"time"
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/pkg/activity"
-	"github.com/rilldata/rill/runtime/server/auth"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/pkg/activity"
+	"github.com/fridencao/stardata/runtime/server/auth"
 	"go.opentelemetry.io/otel/attribute"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"

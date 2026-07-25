@@ -41,7 +41,7 @@
             >
               30-day FREE trial
             </a>
-            of Rill Cloud, where you can set alerts, share dashboards, and more.
+            of StarData Cloud, where you can set alerts, share dashboards, and more.
             The trial grants you 1 project up to 10GB.
           </AlertDialogDescription>
         </AlertDialogHeader>

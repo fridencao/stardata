@@ -8,8 +8,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/drivers/s3"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers/s3"
 )
 
 type selfToObjectStoreExecutor struct {

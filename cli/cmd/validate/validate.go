@@ -9,12 +9,12 @@ import (
 	"time"
 
 	"github.com/fatih/color"
-	"github.com/rilldata/rill/cli/cmd/start"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	"github.com/rilldata/rill/cli/pkg/local"
-	"github.com/rilldata/rill/cli/pkg/printer"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
+	"github.com/fridencao/stardata/cli/cmd/start"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/cli/pkg/local"
+	"github.com/fridencao/stardata/cli/pkg/printer"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
 	"github.com/spf13/cobra"
 )
 

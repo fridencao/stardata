@@ -9,8 +9,8 @@ import (
 	"text/template/parse"
 
 	"github.com/Masterminds/sprig/v3"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/pkg/duckdbsql"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/pkg/duckdbsql"
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 )

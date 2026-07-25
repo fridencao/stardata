@@ -15,9 +15,9 @@ import (
 	"time"
 
 	"github.com/orbcorp/orb-go"
-	"github.com/rilldata/rill/admin/jobs"
-	"github.com/rilldata/rill/runtime/pkg/httputil"
-	"github.com/rilldata/rill/runtime/pkg/observability"
+	"github.com/fridencao/stardata/admin/jobs"
+	"github.com/fridencao/stardata/runtime/pkg/httputil"
+	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.uber.org/zap"
 )
 

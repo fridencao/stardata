@@ -4,11 +4,11 @@ import (
 	"context"
 	"strings"
 
-	aiv1 "github.com/rilldata/rill/proto/gen/rill/ai/v1"
-	rillai "github.com/rilldata/rill/runtime/ai"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/activity"
-	"github.com/rilldata/rill/runtime/storage"
+	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
+	rillai "github.com/fridencao/stardata/runtime/ai"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/activity"
+	"github.com/fridencao/stardata/runtime/storage"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/structpb"
 )

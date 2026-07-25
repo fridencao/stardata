@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import RillLogoSquareNegative from "@rilldata/web-common/components/icons/RillLogoSquareNegative.svelte";
+  import StarDataLogoSquareNegative from "@rilldata/web-common/components/icons/StarDataLogoSquareNegative.svelte";
   import { Button } from "@rilldata/web-common/components/button/index.ts";
   import {
     themeControl,
@@ -41,7 +41,7 @@
 </script>
 
 <div class="flex flex-col gap-4 justify-center">
-  <RillLogoSquareNegative size="36px" />
+  <StarDataLogoSquareNegative size="36px" />
   <div class="text-2xl font-extrabold text-fg-accent text-center">
     Pick your color mode
   </div>

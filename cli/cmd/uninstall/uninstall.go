@@ -1,8 +1,8 @@
 package uninstall
 
 import (
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	"github.com/rilldata/rill/cli/pkg/installscript"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/cli/pkg/installscript"
 	"github.com/spf13/cobra"
 )
 

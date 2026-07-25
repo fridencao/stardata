@@ -8,7 +8,7 @@ package runtimev1
 
 import (
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
-	v1 "github.com/rilldata/rill/proto/gen/rill/ai/v1"
+	v1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"

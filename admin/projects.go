@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rilldata/rill/admin/database"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/pkg/observability"
+	"github.com/fridencao/stardata/admin/database"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.uber.org/multierr"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"

@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/rilldata/rill/cli/cmd/project"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
-	"github.com/rilldata/rill/runtime/pkg/gitutil"
+	"github.com/fridencao/stardata/cli/cmd/project"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +28,7 @@ func SeedCmd(ch *cmdutil.Helper) *cobra.Command {
 				return err
 			}
 			defer os.RemoveAll(temp)
-			err = gitutil.Clone(cmd.Context(), temp, "https://github.com/rilldata/rill-examples.git", "", false, false)
+			err = gitutil.Clone(cmd.Context(), temp, "https://github.com/fridencao/stardata-examples.git", "", false, false)
 			if err != nil {
 				return err
 			}

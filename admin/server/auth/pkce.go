@@ -14,9 +14,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rilldata/rill/admin/database"
-	"github.com/rilldata/rill/admin/pkg/oauth"
-	"github.com/rilldata/rill/admin/pkg/urlutil"
+	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/admin/pkg/oauth"
+	"github.com/fridencao/stardata/admin/pkg/urlutil"
 	"go.uber.org/zap"
 )
 

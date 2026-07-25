@@ -2,7 +2,7 @@
   import SyntaxElement from "./SyntaxElement.svelte";
   import { localStorageStore } from "@rilldata/web-common/lib/store-utils";
   import { Clock } from "lucide-svelte";
-  import { parseRillTime } from "../../../url-state/time-ranges/parser";
+  import { parseStardataTime } from "../../../url-state/time-ranges/parser";
   import { ALL_TIME_RANGE_ALIAS } from "../../new-time-controls";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
@@ -47,7 +47,7 @@
       }
 
       try {
-        parseRillTime(searchValue);
+        parseStardataTime(searchValue);
 
         unableToParse = false;
 

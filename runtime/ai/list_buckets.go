@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	"github.com/rilldata/rill/runtime"
+	"github.com/fridencao/stardata/runtime"
 )
 
 const ListBucketsName = "list_buckets"

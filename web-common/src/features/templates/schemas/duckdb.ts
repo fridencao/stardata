@@ -19,9 +19,9 @@ export const duckdbSchema: MultiStepFormSchema = {
       default: "rill-managed",
       "x-display": "select",
       "x-select-style": "rich",
-      "x-enum-labels": ["Rill Managed", "Local File"],
+      "x-enum-labels": ["StarData Managed", "Local File"],
       "x-enum-descriptions": [
-        "Rill manages your DuckDB infrastructure",
+        "StarData manages your DuckDB infrastructure",
         "Connect to your own DuckDB database file",
       ],
       "x-ui-only": true,
@@ -35,7 +35,7 @@ export const duckdbSchema: MultiStepFormSchema = {
       type: "boolean",
       title: "Managed",
       description:
-        "This option uses DuckDB as an OLAP engine with Rill-managed infrastructure. No additional configuration is required - Rill will handle the setup and management of your DuckDB instance.",
+        "This option uses DuckDB as an OLAP engine with StarData-managed infrastructure. No additional configuration is required - StarData will handle the setup and management of your DuckDB instance.",
       default: false,
       "x-informational": true,
       "x-ui-only": true,
@@ -58,7 +58,7 @@ export const duckdbSchema: MultiStepFormSchema = {
       type: "boolean",
       title: "Enable write mode",
       description:
-        "Read-write mode allows Rill to drop, create, and modify tables, not just query them",
+        "Read-write mode allows StarData to drop, create, and modify tables, not just query them",
       default: false,
       "x-display": "toggle",
       "x-yaml-value": "readwrite",

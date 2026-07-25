@@ -7,8 +7,8 @@ import (
 	"slices"
 	"strings"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/pkg/pagination"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/pkg/pagination"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"

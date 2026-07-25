@@ -3,8 +3,8 @@ package executor
 import (
 	"fmt"
 
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/metricsview"
 )
 
 // rewriteDruidGroups rewrites the AST to always have GROUP BY in every SELECT node for Druid queries.

@@ -11,9 +11,9 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/athena"
 	"github.com/aws/aws-sdk-go-v2/service/athena/types"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/sqlconvert"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/sqlconvert"
 )
 
 var _ drivers.OLAPStore = &Connection{}

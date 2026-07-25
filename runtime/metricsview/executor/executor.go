@@ -10,14 +10,14 @@ import (
 	"strings"
 	"time"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/drivers/druid"
-	"github.com/rilldata/rill/runtime/metricsview"
-	"github.com/rilldata/rill/runtime/parser"
-	"github.com/rilldata/rill/runtime/pkg/jsonval"
-	"github.com/rilldata/rill/runtime/pkg/rilltime"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers/druid"
+	"github.com/fridencao/stardata/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/parser"
+	"github.com/fridencao/stardata/runtime/pkg/jsonval"
+	"github.com/fridencao/stardata/runtime/pkg/rilltime"
 )
 
 const (

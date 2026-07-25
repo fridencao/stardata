@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/rilldata/rill/admin"
-	"github.com/rilldata/rill/admin/billing"
-	"github.com/rilldata/rill/admin/database"
-	"github.com/rilldata/rill/runtime/pkg/email"
+	"github.com/fridencao/stardata/admin"
+	"github.com/fridencao/stardata/admin/billing"
+	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/runtime/pkg/email"
 	"github.com/riverqueue/river"
 	"go.uber.org/zap"
 )

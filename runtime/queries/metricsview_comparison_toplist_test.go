@@ -8,12 +8,12 @@ import (
 	"testing"
 	"time"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/pkg/expressionpb"
-	"github.com/rilldata/rill/runtime/queries"
-	"github.com/rilldata/rill/runtime/testruntime"
-	"github.com/rilldata/rill/runtime/testruntime/testmode"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/pkg/expressionpb"
+	"github.com/fridencao/stardata/runtime/queries"
+	"github.com/fridencao/stardata/runtime/testruntime"
+	"github.com/fridencao/stardata/runtime/testruntime/testmode"
 	"github.com/stretchr/testify/require"
 	"github.com/xuri/excelize/v2"
 	"google.golang.org/protobuf/types/known/structpb"
@@ -21,7 +21,7 @@ import (
 
 	// Register drivers
 
-	_ "github.com/rilldata/rill/runtime/drivers/duckdb"
+	_ "github.com/fridencao/stardata/runtime/drivers/duckdb"
 )
 
 func TestMetricsViewsComparisonAgainstClickHouse(t *testing.T) {

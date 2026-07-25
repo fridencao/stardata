@@ -175,7 +175,7 @@
   {#if currentTab === "options"}
     <div class="page-param">
       <Input
-        hint="Shown in global header and when deployed to Rill Cloud"
+        hint="Shown in global header and when deployed to StarData"
         capitalizeLabel={false}
         size="sm"
         labelGap={2}

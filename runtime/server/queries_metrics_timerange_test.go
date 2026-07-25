@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
 )
 
 func TestServer_MetricsViewTimeRange(t *testing.T) {

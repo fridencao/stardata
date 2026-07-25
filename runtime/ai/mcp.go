@@ -38,7 +38,7 @@ func (s *Session) MCPServer(ctx context.Context) *mcp.Server {
 	// Create the MCP server
 	srv := mcp.NewServer(
 		&mcp.Implementation{
-			Name:    "rill",
+			Name:    "stardata",
 			Title:   "Rill MCP Server",
 			Version: s.runner.Runtime.Version().String(),
 		},

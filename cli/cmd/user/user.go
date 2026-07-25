@@ -1,8 +1,8 @@
 package user
 
 import (
-	"github.com/rilldata/rill/cli/cmd/user/whitelist"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/cli/cmd/user/whitelist"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
 	"github.com/spf13/cobra"
 )
 

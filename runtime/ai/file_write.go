@@ -8,7 +8,7 @@ import (
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	"github.com/pmezard/go-difflib/difflib"
-	"github.com/rilldata/rill/runtime"
+	"github.com/fridencao/stardata/runtime"
 )
 
 const WriteFileName = "write_file"

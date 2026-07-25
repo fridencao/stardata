@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/runtime/pkg/sqlparse"
+	"github.com/fridencao/stardata/runtime/pkg/sqlparse"
 	"gopkg.in/yaml.v3"
 )
 

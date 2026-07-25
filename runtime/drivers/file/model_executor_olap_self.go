@@ -9,8 +9,8 @@ import (
 
 	"github.com/c2h5oh/datasize"
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/driverutil"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/driverutil"
 )
 
 type olapToSelfExecutor struct {

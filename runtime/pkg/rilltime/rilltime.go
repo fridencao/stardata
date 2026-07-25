@@ -9,8 +9,8 @@ import (
 
 	"github.com/alecthomas/participle/v2"
 	"github.com/alecthomas/participle/v2/lexer"
-	"github.com/rilldata/rill/runtime/pkg/duration"
-	"github.com/rilldata/rill/runtime/pkg/timeutil"
+	"github.com/fridencao/stardata/runtime/pkg/duration"
+	"github.com/fridencao/stardata/runtime/pkg/timeutil"
 )
 
 var (

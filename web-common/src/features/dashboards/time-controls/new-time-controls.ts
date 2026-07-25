@@ -5,10 +5,10 @@
 // The functions below UTILS are being used
 
 import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
-import { fetchTimeRanges } from "@rilldata/web-common/features/dashboards/time-controls/rill-time-ranges.ts";
+import { fetchTimeRanges } from "@rilldata/web-common/features/dashboards/time-controls/stardata-time-ranges.ts";
 import {
-  overrideRillTimeRef,
-  parseRillTime,
+  overrideStardataTimeRef,
+  parseStardataTime,
 } from "@rilldata/web-common/features/dashboards/url-state/time-ranges/parser";
 import { humaniseISODuration } from "@rilldata/web-common/lib/time/ranges/iso-ranges";
 import type {
@@ -30,8 +30,8 @@ import { get, writable, type Writable } from "svelte/store";
 
 // CONSTANTS -> time-control-constants.ts
 
-export const RILL_TO_UNIT: Record<
-  RillPeriodToDate | RillPreviousPeriod,
+export const STAR_TO_UNIT: Record<
+  StarPeriodToDate | StarPreviousPeriod,
   DateTimeUnit
 > = {
   "rill-PDC": "day",
@@ -46,8 +46,8 @@ export const RILL_TO_UNIT: Record<
   "rill-YTD": "year",
 };
 
-export const RILL_TO_LABEL: Record<
-  RillPeriodToDate | RillPreviousPeriod | AllTime | CustomRange,
+export const STAR_TO_LABEL: Record<
+  StarPeriodToDate | StarPreviousPeriod | AllTime | CustomRange,
   string
 > = {
   get inf() {
@@ -88,7 +88,7 @@ export const RILL_TO_LABEL: Record<
   },
 } as any;
 
-export const RILL_PERIOD_TO_DATE = [
+export const STAR_PERIOD_TO_DATE = [
   "rill-TD",
   "rill-WTD",
   "rill-MTD",
@@ -96,7 +96,7 @@ export const RILL_PERIOD_TO_DATE = [
   "rill-YTD",
 ] as const;
 
-export const RILL_PREVIOUS_PERIOD = [
+export const STAR_PREVIOUS_PERIOD = [
   "rill-PDC",
   "rill-PWC",
   "rill-PMC",
@@ -104,7 +104,7 @@ export const RILL_PREVIOUS_PERIOD = [
   "rill-PYC",
 ] as const;
 
-export const RILL_LATEST = [
+export const STAR_LATEST = [
   "PT6H",
   "PT24H",
   "P7D",
@@ -128,14 +128,14 @@ export const TIME_GRAIN_TO_SHORTHAND: Record<V1TimeGrain, string> = {
 
 // TYPES -> time-control-types.ts
 
-type RillPeriodToDateTuple = typeof RILL_PERIOD_TO_DATE;
-export type RillPeriodToDate = RillPeriodToDateTuple[number];
+type StarPeriodToDateTuple = typeof STAR_PERIOD_TO_DATE;
+export type StarPeriodToDate = StarPeriodToDateTuple[number];
 
-type RillPreviousPeriodTuple = typeof RILL_PREVIOUS_PERIOD;
-export type RillPreviousPeriod = RillPreviousPeriodTuple[number];
+type StarPreviousPeriodTuple = typeof STAR_PREVIOUS_PERIOD;
+export type StarPreviousPeriod = StarPreviousPeriodTuple[number];
 
-type RillLatestTuple = typeof RILL_LATEST;
-export type RillLatest = RillLatestTuple[number];
+type StarLatestTuple = typeof STAR_LATEST;
+export type StarLatest = StarLatestTuple[number];
 
 export const CUSTOM_TIME_RANGE_ALIAS = "CUSTOM";
 export const ALL_TIME_RANGE_ALIAS = "inf";
@@ -144,8 +144,8 @@ export type CustomRange = typeof CUSTOM_TIME_RANGE_ALIAS;
 export type ISODurationString = string;
 
 export type NamedRange =
-  | RillPeriodToDate
-  | RillPreviousPeriod
+  | StarPeriodToDate
+  | StarPreviousPeriod
   | AllTime
   | CustomRange;
 
@@ -258,7 +258,7 @@ class MetricsTimeControls {
 
     if (string === ALL_TIME_RANGE_ALIAS) {
       this.applyAllTime();
-    } else if (isRillPeriodToDate(string) || isRillPreviousPeriod(string)) {
+    } else if (isStarPeriodToDate(string) || isStarPreviousPeriod(string)) {
       this.applyNamedRange(string);
     } else if (isValidISODuration(string)) {
       this.applyISODuration(string);
@@ -345,14 +345,14 @@ export const timeControls = new TimeControls();
 
 // UTILS -> time-control-utils.ts
 
-export function isRillPreviousPeriod(
+export function isStarPreviousPeriod(
   value: string,
 ): value is RillPreviousPeriod {
-  return RILL_PREVIOUS_PERIOD.includes(value as RillPreviousPeriod);
+  return STAR_PREVIOUS_PERIOD.includes(value as RillPreviousPeriod);
 }
 
-export function isRillPeriodToDate(value: string): value is RillPeriodToDate {
-  return RILL_PERIOD_TO_DATE.includes(value as RillPeriodToDate);
+export function isStarPeriodToDate(value: string): value is RillPeriodToDate {
+  return STAR_PERIOD_TO_DATE.includes(value as RillPeriodToDate);
 }
 
 import {
@@ -361,14 +361,14 @@ import {
   V1TimeGrainToAlias,
 } from "@rilldata/web-common/lib/time/new-grains";
 import {
-  RillLegacyDaxInterval,
-  RillLegacyIsoInterval,
-  RillPeriodToGrainInterval,
-  RillShorthandInterval,
-  RillTimeLabel,
-  RillTimeStartEndInterval,
-  type RillTime,
-} from "../url-state/time-ranges/RillTime";
+  StardataLegacyDaxInterval,
+  StardataLegacyIsoInterval,
+  StardataPeriodToGrainInterval,
+  StardataShorthandInterval,
+  StardataTimeLabel,
+  StardataTimeStartEndInterval,
+  type StardataTime,
+} from "../url-state/time-ranges/StardataTime";
 import { getDefaultRangeBuckets } from "@rilldata/web-common/lib/time/defaults";
 
 export async function deriveInterval(
@@ -392,15 +392,15 @@ export async function deriveInterval(
   }
 
   try {
-    const parsed = parseRillTime(name);
+    const parsed = parseStardataTime(name);
 
-    // We have a RillTime string
+    // We have a StardataTime string
     const cacheBust = name.includes("now");
 
     const response = await fetchTimeRanges({
       client,
       metricsViewName,
-      rillTimes: [name],
+      stardataTimes: [name],
       timeZone: activeTimeZone,
       timeDimension,
       cacheBust,
@@ -530,7 +530,7 @@ export function getDurationLabel(isoDuration: string): string {
 
 export function getRangeLabel(range: string | undefined): string {
   if (!range) return m.time_custom();
-  if (isRillPeriodToDate(range) || isRillPreviousPeriod(range)) {
+  if (isStarPeriodToDate(range) || isStarPreviousPeriod(range)) {
     return RILL_TO_LABEL[range];
   }
 
@@ -543,29 +543,29 @@ export function getRangeLabel(range: string | undefined): string {
   }
 
   try {
-    const rt = parseRillTime(range);
+    const rt = parseStardataTime(range);
 
     const label = rt.getLabel();
 
     return label;
   } catch (e) {
-    console.error("Error parsing RillTime", e);
+    console.error("Error parsing StardataTime", e);
     return m.time_custom();
   }
 }
 
 export type RangeBuckets = {
-  custom: RillTime[];
-  latest: RillTime[];
-  periodToDate: RillTime[];
-  previous: RillTime[];
+  custom: StardataTime[];
+  latest: StardataTime[];
+  periodToDate: StardataTime[];
+  previous: StardataTime[];
   allTime: boolean;
 };
 
 const defaultBuckets: RangeBuckets = {
-  latest: RILL_LATEST.map((r) => parseRillTime(r)),
-  periodToDate: RILL_PERIOD_TO_DATE.map((r) => parseRillTime(r)),
-  previous: RILL_PREVIOUS_PERIOD.map((r) => parseRillTime(r)),
+  latest: STAR_LATEST.map((r) => parseStardataTime(r)),
+  periodToDate: STAR_PERIOD_TO_DATE.map((r) => parseStardataTime(r)),
+  previous: STAR_PREVIOUS_PERIOD.map((r) => parseStardataTime(r)),
   custom: [],
   allTime: false,
 };
@@ -574,7 +574,7 @@ const previousPeriodRegex =
   /-\d+[sSmMhHdDwWqQYy]\/[sSmMhHdDwWqQYy]\s+to\s+ref\/[sSmMhHdDwWqQYy]/;
 
 // rangeWithinCap returns true unless the range can be statically sized to more than maxRange.
-// rill-time expressions and unparseable inputs pass through; the backend has the final say.
+// stardata-time expressions and unparseable inputs pass through; the backend has the final say.
 function rangeWithinCap(range: string, maxRange: Duration): boolean {
   if (range === "inf") return false;
   if (!range.startsWith("P") && !range.startsWith("p")) return true;
@@ -586,7 +586,7 @@ function rangeWithinCap(range: string, maxRange: Duration): boolean {
 export function bucketYamlRanges(
   yamlRanges: V1ExploreTimeRange[],
   minTimeGrain: V1TimeGrain | undefined,
-  usingRillTime: boolean,
+  usingStarDataTime: boolean,
   maxQueryTimeRange?: Duration,
 ): RangeBuckets {
   const capped = maxQueryTimeRange
@@ -600,13 +600,13 @@ export function bucketYamlRanges(
   }
 
   if (showDefaults) {
-    if (!usingRillTime) {
+    if (!usingStarDataTime) {
       if (!capped) return defaultBuckets;
       return {
         ...defaultBuckets,
-        latest: RILL_LATEST.filter((r) =>
+        latest: STAR_LATEST.filter((r) =>
           rangeWithinCap(r, maxQueryTimeRange!),
-        ).map((r) => parseRillTime(r)),
+        ).map((r) => parseStardataTime(r)),
         allTime: false,
       };
     }
@@ -643,7 +643,7 @@ export function bucketYamlRanges(
     if (capped && !rangeWithinCap(range, maxQueryTimeRange!)) return;
 
     try {
-      const parsed = parseRillTime(range);
+      const parsed = parseStardataTime(range);
 
       const { interval } = parsed;
 
@@ -652,7 +652,7 @@ export function bucketYamlRanges(
         interval instanceof RillShorthandInterval
       ) {
         skeleton.latest.push(parsed);
-      } else if (interval instanceof RillTimeStartEndInterval) {
+      } else if (interval instanceof StardataTimeStartEndInterval) {
         if (previousPeriodRegex.test(range)) {
           skeleton.previous.push(parsed);
         } else {
@@ -661,9 +661,9 @@ export function bucketYamlRanges(
       } else if (interval instanceof RillPeriodToGrainInterval) {
         skeleton.periodToDate.push(parsed);
       } else if (interval instanceof RillLegacyDaxInterval) {
-        if (isRillPreviousPeriod(range)) {
+        if (isStarPreviousPeriod(range)) {
           skeleton.previous.push(parsed);
-        } else if (isRillPeriodToDate(range)) {
+        } else if (isStarPeriodToDate(range)) {
           skeleton.periodToDate.push(parsed);
         } else {
           skeleton.custom.push(parsed);
@@ -672,14 +672,14 @@ export function bucketYamlRanges(
         skeleton.custom.push(parsed);
       }
     } catch (e) {
-      console.error("Error parsing RillTime", e);
+      console.error("Error parsing StardataTime", e);
     }
   });
 
   return skeleton;
 }
 
-function convertIsoToRillTime(iso: string): string {
+function convertIsoToStardataTime(iso: string): string {
   const upper = iso.toUpperCase();
 
   if (!upper.startsWith("P")) {
@@ -734,29 +734,29 @@ export function convertLegacyTime(timeString: string) {
     if (previousCompleteMap[stripped]) return previousCompleteMap[stripped];
     return timeString.replace("rill-", "");
   } else if (timeString.startsWith("P") || timeString.startsWith("p")) {
-    return convertIsoToRillTime(timeString);
+    return convertIsoToStardataTime(timeString);
   }
   return timeString;
 }
 
 export function constructAsOfString(
-  asOf: RillTimeLabel | string | undefined,
+  asOf: StardataTimeLabel | string | undefined,
   grain: V1TimeGrain | undefined | null,
   pad: boolean,
 ): string {
   if (!grain) {
-    return asOf ?? RillTimeLabel.Now;
+    return asOf ?? StardataTimeLabel.Now;
   }
 
   const alias = V1TimeGrainToAlias[grain];
 
   let base: string;
 
-  if (asOf === RillTimeLabel.Latest || asOf === undefined) {
+  if (asOf === StardataTimeLabel.Latest || asOf === undefined) {
     base = `latest/${alias}`;
-  } else if (asOf === RillTimeLabel.Watermark) {
+  } else if (asOf === StardataTimeLabel.Watermark) {
     base = `watermark/${alias}`;
-  } else if (asOf === RillTimeLabel.Now) {
+  } else if (asOf === StardataTimeLabel.Now) {
     base = `now/${alias}`;
   } else {
     base = `${asOf}/${alias}`;
@@ -787,17 +787,17 @@ export function constructNewString({
   currentString: string;
   truncationGrain: V1TimeGrain | undefined | null;
   snapToEnd: boolean;
-  ref: RillTimeLabel | string | undefined;
+  ref: StardataTimeLabel | string | undefined;
 }): string {
   const legacy = isUsingLegacyTime(currentString);
 
-  const rillTime = parseRillTime(
+  const stardataTime = parseStardataTime(
     legacy ? convertLegacyTime(currentString) : currentString,
   );
 
   const newAsOfString = constructAsOfString(ref, truncationGrain, snapToEnd);
 
-  overrideRillTimeRef(rillTime, newAsOfString);
+  overrideStardataTimeRef(stardataTime, newAsOfString);
 
-  return rillTime.toString();
+  return stardataTime.toString();
 }

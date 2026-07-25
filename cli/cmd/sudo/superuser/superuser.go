@@ -1,7 +1,7 @@
 package superuser
 
 import (
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
 	"github.com/spf13/cobra"
 )
 

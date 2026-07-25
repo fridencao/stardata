@@ -5,9 +5,9 @@ import (
 	"errors"
 	"fmt"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/metricsview/metricssql"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/metricsview/metricssql"
 )
 
 // CollectCanvasComponentNames collects the names of all components referenced by the given rows,

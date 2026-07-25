@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/iancoleman/strcase"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/parser"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/parser"
 	"golang.org/x/exp/maps"
 )
 
@@ -36,8 +36,8 @@ var defaultFeatureFlags = map[string]string{
 	"dimension_search": "false",
 	// TODO: more info
 	"two_tiered_navigation": "false",
-	// Controls visibility of the RillTime syntax range picker
-	"rill_time": "true",
+	// Controls visibility of the StardataTime syntax range picker
+	"stardata_time": "true",
 	// Controls visibility of the public URL sharing option in dashboards
 	"hide_public_url": "{{.user.embed}}",
 	// TODO: more info

@@ -4,13 +4,13 @@ import (
 	"context"
 	"os"
 
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/activity"
-	"github.com/rilldata/rill/runtime/storage"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/activity"
+	"github.com/fridencao/stardata/runtime/storage"
 	"go.uber.org/zap"
 
 	// Ensure file driver is loaded
-	_ "github.com/rilldata/rill/runtime/drivers/file"
+	_ "github.com/fridencao/stardata/runtime/drivers/file"
 )
 
 // RepoForProjectPath creates an ad-hoc drivers.RepoStore for a local project file path

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/rilldata/rill/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/metricsview"
 )
 
 // enforceQueryLimits checks that the query adheres to any limits specified in the QueryLimits or on the metrics view spec.

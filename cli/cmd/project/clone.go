@@ -7,10 +7,10 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/rilldata/rill/cli/cmd/env"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
-	"github.com/rilldata/rill/runtime/pkg/gitutil"
+	"github.com/fridencao/stardata/cli/cmd/env"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"github.com/spf13/cobra"
 )
 

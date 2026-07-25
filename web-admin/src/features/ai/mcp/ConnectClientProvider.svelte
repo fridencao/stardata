@@ -1,7 +1,7 @@
 <!--
   Sets the connect-client context so ConnectClientPopover instances in descendant
   chat surfaces can open the MCPConnectDialog rendered here. Chat surfaces without
-  this provider (Rill Developer, embeds, edit mode) render no connect CTA.
+  this provider (local StarData, embeds, edit mode) render no connect CTA.
 -->
 <script lang="ts">
   import { page } from "$app/stores";

@@ -14,8 +14,8 @@ import (
 	"github.com/duckdb/duckdb-go/v2"
 	"github.com/google/uuid"
 	"github.com/paulmach/orb"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/drivers/clickhouse/clickhouseutil"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/drivers/clickhouse/clickhouseutil"
 	"google.golang.org/protobuf/types/known/structpb"
 )
 

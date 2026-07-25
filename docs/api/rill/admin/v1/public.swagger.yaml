@@ -8,7 +8,7 @@ info:
     url: https://rilldata.com
   license:
     name: Apache 2.0
-    url: https://github.com/rilldata/rill/blob/main/LICENSE.md
+    url: https://github.com/fridencao/stardata/blob/main/LICENSE.md
 host: api.rilldata.com
 consumes:
   - application/json

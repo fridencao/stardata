@@ -7,9 +7,9 @@ import (
 	"strings"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	aiv1 "github.com/rilldata/rill/proto/gen/rill/ai/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/ai/instructions"
+	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/ai/instructions"
 )
 
 const DeveloperAgentName = "developer_agent"
@@ -174,7 +174,7 @@ func checkDeveloperAccess(ctx context.Context, rt *runtime.Runtime, internal boo
 
 	// Don't expose agent tools to external clients (like MCP)
 	if internal {
-		if !strings.HasPrefix(s.CatalogSession().UserAgent, "rill") {
+		if !strings.HasPrefix(s.CatalogSession().UserAgent, "stardata") {
 			return false, nil
 		}
 	}

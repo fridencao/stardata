@@ -22,7 +22,7 @@
         Request admin access for project: {project.name}
       </Alert.Title>
       <Alert.Description>
-        You don’t have permissions to update this project in Rill Cloud. To gain
+        You don’t have permissions to update this project in StarData Cloud. To gain
         access, please request to be added as an Admin.
       </Alert.Description>
     </Alert.Header>

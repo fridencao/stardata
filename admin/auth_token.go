@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/rilldata/rill/admin/database"
-	"github.com/rilldata/rill/admin/pkg/authtoken"
+	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/admin/pkg/authtoken"
 )
 
 // Cache settings for s.authCache.

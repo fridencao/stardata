@@ -8,7 +8,7 @@ import {
   createSubQueryExpression,
 } from "@rilldata/web-common/features/dashboards/stores/filter-utils.ts";
 import { getExploreStateFromYAMLConfig } from "@rilldata/web-common/features/dashboards/stores/get-explore-state-from-yaml-config.ts";
-import { getRillDefaultExploreState } from "@rilldata/web-common/features/dashboards/stores/get-rill-default-explore-state.ts";
+import { getStarDataDefaultExploreState } from "@rilldata/web-common/features/dashboards/stores/get-stardata-default-explore-state.ts";
 import {
   AD_BIDS_BID_PRICE_MEASURE,
   AD_BIDS_DOMAIN_DIMENSION,
@@ -380,7 +380,7 @@ async function runTest({
 
   expect(mapQueryResp.error).toBeNull();
 
-  const rillDefaultExploreState = getRillDefaultExploreState(
+  const starDataDefaultExploreState = getStarDataDefaultExploreState(
     AD_BIDS_METRICS_3_MEASURES_DIMENSIONS_WITH_TIME,
     AD_BIDS_EXPLORE_WITH_3_MEASURES_DIMENSIONS,
     AD_BIDS_TIME_RANGE_SUMMARY.timeRangeSummary,
@@ -391,7 +391,7 @@ async function runTest({
     AD_BIDS_METRICS_3_MEASURES_DIMENSIONS_WITH_TIME.smallestTimeGrain,
   );
   const expectedExploreState = {
-    ...rillDefaultExploreState,
+    ...starDataDefaultExploreState,
     ...exploreStateFromYAMLConfig,
     ...expectedAdditionalExploreState,
   };

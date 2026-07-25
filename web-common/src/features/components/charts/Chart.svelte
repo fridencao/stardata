@@ -1,6 +1,6 @@
 <script lang="ts">
   import { sanitizeFieldName } from "@rilldata/web-common/components/vega/util";
-  import { getRillTheme } from "@rilldata/web-common/components/vega/vega-config";
+  import { getStarDataTheme } from "@rilldata/web-common/components/vega/vega-config";
   import {
     resolveSignalField,
     resolveSignalIntervalField,
@@ -269,7 +269,7 @@
       renderer="canvas"
       {expressionFunctions}
       {hasComparison}
-      config={getRillTheme(isThemeModeDark, theme)}
+      config={getStarDataTheme(isThemeModeDark, theme)}
     />
   </div>
 {/if}

@@ -7,8 +7,8 @@ import (
 	"strings"
 
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/mapstructureutil"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/mapstructureutil"
 )
 
 type mdToSelfInputProps struct {

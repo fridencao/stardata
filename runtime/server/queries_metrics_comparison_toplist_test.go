@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"testing"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/pkg/activity"
-	"github.com/rilldata/rill/runtime/pkg/expressionpb"
-	"github.com/rilldata/rill/runtime/pkg/ratelimit"
-	"github.com/rilldata/rill/runtime/server"
-	"github.com/rilldata/rill/runtime/testruntime"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/pkg/activity"
+	"github.com/fridencao/stardata/runtime/pkg/expressionpb"
+	"github.com/fridencao/stardata/runtime/pkg/ratelimit"
+	"github.com/fridencao/stardata/runtime/server"
+	"github.com/fridencao/stardata/runtime/testruntime"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/types/known/structpb"
 )

@@ -8,10 +8,10 @@ import (
 
 	"github.com/google/jsonschema-go/jsonschema"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/metricsview"
-	"github.com/rilldata/rill/runtime/pkg/pathutil"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/pkg/pathutil"
 )
 
 const CreateChartName = "create_chart"
@@ -63,7 +63,7 @@ func (t *CreateChart) CheckAccess(ctx context.Context) (bool, error) {
 	}
 
 	// Only allow for rill user agents since it doesn't work with external MCP clients
-	if !strings.HasPrefix(s.CatalogSession().UserAgent, "rill") {
+	if !strings.HasPrefix(s.CatalogSession().UserAgent, "stardata") {
 		return false, nil
 	}
 

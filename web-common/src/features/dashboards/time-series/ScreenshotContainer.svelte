@@ -174,7 +174,7 @@
         </div>
 
         <footer class="flex items-center justify-between text-xs text-fg-muted">
-          <span>Rill</span>
+          <span>StarData</span>
           <span>{m.dashboard_generated({ time: generatedTime })}</span>
         </footer>
       </div>

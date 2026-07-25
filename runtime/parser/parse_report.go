@@ -8,10 +8,10 @@ import (
 	"strings"
 	"time"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/drivers/slack"
-	"github.com/rilldata/rill/runtime/pkg/duration"
-	"github.com/rilldata/rill/runtime/pkg/pbutil"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/drivers/slack"
+	"github.com/fridencao/stardata/runtime/pkg/duration"
+	"github.com/fridencao/stardata/runtime/pkg/pbutil"
 	"google.golang.org/protobuf/types/known/structpb"
 )
 

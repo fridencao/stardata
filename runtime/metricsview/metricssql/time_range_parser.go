@@ -7,14 +7,14 @@ import (
 	"time"
 
 	"github.com/pingcap/tidb/pkg/parser/ast"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/metricsview"
-	"github.com/rilldata/rill/runtime/pkg/rilltime"
-	"github.com/rilldata/rill/runtime/pkg/timeutil"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/pkg/rilltime"
+	"github.com/fridencao/stardata/runtime/pkg/timeutil"
 )
 
 func (q *query) parseTimeRangeStart(ctx context.Context, node *ast.FuncCallExpr, timeDimNode *ast.ColumnNameExpr) (*metricsview.Expression, error) {
-	rillTime, err := parseTimeRangeArgs(node.Args, q.metricsViewSpec)
+	stardataTime, err := parseTimeRangeArgs(node.Args, q.metricsViewSpec)
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func (q *query) parseTimeRangeStart(ctx context.Context, node *ast.FuncCallExpr,
 		return nil, err
 	}
 
-	watermark, _, _ := rillTime.Eval(rilltime.EvalOptions{
+	watermark, _, _ := stardataTime.Eval(rilltime.EvalOptions{
 		Now:        time.Now(),
 		MinTime:    ts.Min,
 		MaxTime:    ts.Max,
@@ -48,7 +48,7 @@ func (q *query) parseTimeRangeStart(ctx context.Context, node *ast.FuncCallExpr,
 }
 
 func (q *query) parseTimeRangeEnd(ctx context.Context, node *ast.FuncCallExpr, timeDimNode *ast.ColumnNameExpr) (*metricsview.Expression, error) {
-	rillTime, err := parseTimeRangeArgs(node.Args, q.metricsViewSpec)
+	stardataTime, err := parseTimeRangeArgs(node.Args, q.metricsViewSpec)
 	if err != nil {
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (q *query) parseTimeRangeEnd(ctx context.Context, node *ast.FuncCallExpr, t
 		return nil, err
 	}
 
-	_, watermark, _ := rillTime.Eval(rilltime.EvalOptions{
+	_, watermark, _ := stardataTime.Eval(rilltime.EvalOptions{
 		Now:        time.Now(),
 		MinTime:    ts.Min,
 		MaxTime:    ts.Max,

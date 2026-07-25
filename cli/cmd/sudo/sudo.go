@@ -1,18 +1,18 @@
 package sudo
 
 import (
-	"github.com/rilldata/rill/cli/cmd/sudo/annotations"
-	"github.com/rilldata/rill/cli/cmd/sudo/billing"
-	"github.com/rilldata/rill/cli/cmd/sudo/embed"
-	"github.com/rilldata/rill/cli/cmd/sudo/org"
-	"github.com/rilldata/rill/cli/cmd/sudo/project"
-	"github.com/rilldata/rill/cli/cmd/sudo/quota"
-	"github.com/rilldata/rill/cli/cmd/sudo/runtime"
-	"github.com/rilldata/rill/cli/cmd/sudo/superuser"
-	"github.com/rilldata/rill/cli/cmd/sudo/user"
-	"github.com/rilldata/rill/cli/cmd/sudo/virtualfiles"
-	"github.com/rilldata/rill/cli/cmd/sudo/whitelist"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/cli/cmd/sudo/annotations"
+	"github.com/fridencao/stardata/cli/cmd/sudo/billing"
+	"github.com/fridencao/stardata/cli/cmd/sudo/embed"
+	"github.com/fridencao/stardata/cli/cmd/sudo/org"
+	"github.com/fridencao/stardata/cli/cmd/sudo/project"
+	"github.com/fridencao/stardata/cli/cmd/sudo/quota"
+	"github.com/fridencao/stardata/cli/cmd/sudo/runtime"
+	"github.com/fridencao/stardata/cli/cmd/sudo/superuser"
+	"github.com/fridencao/stardata/cli/cmd/sudo/user"
+	"github.com/fridencao/stardata/cli/cmd/sudo/virtualfiles"
+	"github.com/fridencao/stardata/cli/cmd/sudo/whitelist"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
 	"github.com/spf13/cobra"
 )
 

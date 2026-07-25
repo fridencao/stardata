@@ -19,7 +19,7 @@ import (
 	"github.com/jackc/pgconn"
 	"github.com/jackc/pgtype"
 	"github.com/jmoiron/sqlx"
-	"github.com/rilldata/rill/admin/database"
+	"github.com/fridencao/stardata/admin/database"
 	semconv "go.opentelemetry.io/otel/semconv/v1.21.0"
 
 	// Load postgres driver

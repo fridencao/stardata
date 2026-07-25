@@ -12,7 +12,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/joho/godotenv"
-	"github.com/rilldata/rill/runtime/testruntime/testmode"
+	"github.com/fridencao/stardata/runtime/testruntime/testmode"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
 )

@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
 	"github.com/spf13/cobra"
 	"google.golang.org/protobuf/types/known/structpb"
 )

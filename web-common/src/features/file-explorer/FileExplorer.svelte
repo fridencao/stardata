@@ -81,10 +81,10 @@
   $: ({ data: fileTree } = $getFileTree);
 
   $: projectTitleQuery = useProjectTitle(runtimeClient);
-  $: projectTitle = $projectTitleQuery?.data ?? "Untitled Rill Project";
+  $: projectTitle = $projectTitleQuery?.data ?? "Untitled Project";
 
   // Scope the persisted expand/collapse state per project. In the cloud the
-  // instanceId is unique per project; in Rill Developer it is always "default",
+  // instanceId is unique per project; in local StarData it is always "default",
   // so fall back to the on-disk project path there (GetMetadata is a local-only
   // endpoint that simply errors in the cloud).
   $: ({ instanceId } = runtimeClient);

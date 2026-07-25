@@ -3,7 +3,7 @@
   import CtaButton from "@rilldata/web-common/components/calls-to-action/CTAButton.svelte";
   import CtaContentContainer from "@rilldata/web-common/components/calls-to-action/CTAContentContainer.svelte";
   import CtaLayoutContainer from "@rilldata/web-common/components/calls-to-action/CTALayoutContainer.svelte";
-  import RillLogoSquareNegative from "@rilldata/web-common/components/icons/RillLogoSquareNegative.svelte";
+  import StarDataLogoSquareNegative from "@rilldata/web-common/components/icons/StarDataLogoSquareNegative.svelte";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import type { PageData } from "./$types";
 
@@ -78,7 +78,7 @@
 
 <CtaLayoutContainer>
   <CtaContentContainer>
-    <RillLogoSquareNegative size="84px" />
+    <StarDataLogoSquareNegative size="84px" />
     <h1 class="text-xl font-normal text-fg-primary">
       {m.auth_authorize_rill_cli()}
     </h1>

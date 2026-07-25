@@ -3,8 +3,8 @@ package metricssql_test
 import (
 	"testing"
 
-	"github.com/rilldata/rill/runtime/metricsview"
-	"github.com/rilldata/rill/runtime/metricsview/metricssql"
+	"github.com/fridencao/stardata/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/metricsview/metricssql"
 	"github.com/stretchr/testify/require"
 )
 

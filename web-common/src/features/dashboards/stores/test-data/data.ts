@@ -4,8 +4,8 @@ import {
   createInExpression,
 } from "@rilldata/web-common/features/dashboards/stores/filter-utils";
 import type { ExploreState } from "@rilldata/web-common/features/dashboards/stores/explore-state";
-import { getRillDefaultExploreState } from "@rilldata/web-common/features/dashboards/stores/get-rill-default-explore-state.ts";
-import { getRillDefaultExploreUrlParams } from "@rilldata/web-common/features/dashboards/url-state/get-rill-default-explore-url-params.ts";
+import { getStarDataDefaultExploreState } from "@rilldata/web-common/features/dashboards/stores/get-stardata-default-explore-state.ts";
+import { getStarDataDefaultExploreUrlParams } from "@rilldata/web-common/features/dashboards/url-state/get-stardata-default-explore-url-params.ts";
 import { getDefaultExplorePreset } from "@rilldata/web-common/features/dashboards/url-state/getDefaultExplorePreset";
 import { getLocalIANA } from "@rilldata/web-common/lib/time/timezone";
 import {
@@ -450,13 +450,13 @@ export const AD_BIDS_PIVOT_ENTITY: Partial<ExploreState> = {
   },
 };
 
-export const AD_BIDS_RILL_DEFAULT_EXPLORE_STATE = getRillDefaultExploreState(
+export const AD_BIDS_STAR_DATA_DEFAULT_EXPLORE_STATE = getStarDataDefaultExploreState(
   AD_BIDS_METRICS_3_MEASURES_DIMENSIONS_WITH_TIME,
   AD_BIDS_EXPLORE_WITH_3_MEASURES_DIMENSIONS,
   AD_BIDS_TIME_RANGE_SUMMARY.timeRangeSummary,
 );
-export const AD_BIDS_RILL_DEFAULT_EXPLORE_URL_PARAMS =
-  getRillDefaultExploreUrlParams(
+export const AD_BIDS_STAR_DATA_DEFAULT_EXPLORE_URL_PARAMS =
+  getStarDataDefaultExploreUrlParams(
     AD_BIDS_METRICS_3_MEASURES_DIMENSIONS_WITH_TIME,
     AD_BIDS_EXPLORE_WITH_3_MEASURES_DIMENSIONS,
     AD_BIDS_TIME_RANGE_SUMMARY.timeRangeSummary,

@@ -14,8 +14,8 @@ import (
 	"time"
 
 	"github.com/benbjohnson/clock"
-	"github.com/rilldata/rill/admin/database"
-	"github.com/rilldata/rill/admin/pkg/oauth"
+	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/admin/pkg/oauth"
 )
 
 // Most parts of this file are copied from https://github.com/planetscale/cli/blob/main/internal/auth/authenticator.go

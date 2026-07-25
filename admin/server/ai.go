@@ -8,10 +8,10 @@ import (
 	"strings"
 
 	"github.com/google/jsonschema-go/jsonschema"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
-	aiv1 "github.com/rilldata/rill/proto/gen/rill/ai/v1"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/observability"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.opentelemetry.io/otel/attribute"
 	"go.uber.org/zap"
 )

@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-  <title>Rill Developer</title>
+  <title>StarData</title>
 </svelte:head>
 
 <div class="flex size-full overflow-hidden bg-surface-subtle">

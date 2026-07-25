@@ -9,29 +9,29 @@
   import {
     ALL_TIME_RANGE_ALIAS,
     getRangeLabel,
-    RILL_TO_LABEL,
+    STAR_TO_LABEL,
   } from "../../new-time-controls";
   import CalendarPlusDateInput from "@rilldata/web-common/features/dashboards/time-controls/super-pill/components/CalendarPlusDateInput.svelte";
   import { V1TimeGrain } from "@rilldata/web-common/runtime-client";
   import TimeRangeSearch from "@rilldata/web-common/features/dashboards/time-controls/super-pill/components/TimeRangeSearch.svelte";
-  import { parseRillTime } from "../../../url-state/time-ranges/parser";
+  import { parseStardataTime } from "../../../url-state/time-ranges/parser";
   import {
-    RillAllTimeInterval,
-    RillIsoInterval,
-    RillPeriodToGrainInterval,
-    RillTimeLabel,
-    type RillTime,
-  } from "../../../url-state/time-ranges/RillTime";
+    StardataAllTimeInterval,
+    StardataIsoInterval,
+    StardataPeriodToGrainInterval,
+    StardataTimeLabel,
+    type StardataTime,
+  } from "../../../url-state/time-ranges/StardataTime";
   import {
     getGrainOrder,
     V1TimeGrainToDateTimeUnit,
   } from "@rilldata/web-common/lib/time/new-grains";
-  import { getTruncationGrain } from "@rilldata/web-common/lib/time/rill-time-grains";
+  import { getTruncationGrain } from "@rilldata/web-common/lib/time/stardata-time-grains";
   import * as Popover from "@rilldata/web-common/components/popover";
   import TimeRangeOptionGroup from "./TimeRangeOptionGroup.svelte";
   import RangeDisplay from "../components/RangeDisplay.svelte";
   import TruncationSelector from "./TruncationSelector.svelte";
-  import { overrideRillTimeRef } from "../../../url-state/time-ranges/parser";
+  import { overrideStardataTimeRef } from "../../../url-state/time-ranges/parser";
   import { getAbbreviationForIANA } from "@rilldata/web-common/lib/time/timezone";
   import * as Tooltip from "@rilldata/web-common/components/tooltip-v2";
   import ZoneContent from "../components/ZoneContent.svelte";
@@ -81,7 +81,7 @@
   );
   let searchComponent: TimeRangeSearch;
   let filter = "";
-  let parsedTime: RillTime | undefined = undefined;
+  let parsedTime: StardataTime | undefined = undefined;
   let showCalendarPicker = false;
   let timeZonePickerOpen = false;
   let timeAxisPickerOpen = false;
@@ -89,7 +89,7 @@
 
   $: if (timeString) {
     try {
-      parsedTime = parseRillTime(timeString);
+      parsedTime = parseStardataTime(timeString);
     } catch {
       parsedTime = undefined;
     }
@@ -105,7 +105,7 @@
 
   $: snapToEnd = usingLegacyTime ? true : !!parsedTime?.asOfLabel?.offset;
   $: ref = usingLegacyTime
-    ? RillTimeLabel.Latest
+    ? StardataTimeLabel.Latest
     : parsedTime?.asOfLabel?.label;
 
   $: truncationGrain = getTruncationGrain(parsedTime);
@@ -129,7 +129,7 @@
 
   function handleRangeSelect(range: string, ignoreSnap?: boolean) {
     try {
-      const parsed = parseRillTime(range);
+      const parsed = parseStardataTime(range);
 
       const isPeriodToDate =
         parsed.interval instanceof RillPeriodToGrainInterval;
@@ -150,7 +150,7 @@
         const isTruncationGrainAllowed =
           getGrainOrder(truncationGrain) >= smallestTimeGrainOrder;
         const newAsOfString = constructAsOfString(
-          ref ?? RillTimeLabel.Latest,
+          ref ?? StardataTimeLabel.Latest,
           ignoreSnap
             ? undefined
             : truncationGrain
@@ -161,7 +161,7 @@
           hasAsOfClause || snapToEnd ? snapToEnd : true,
         );
 
-        overrideRillTimeRef(parsed, newAsOfString);
+        overrideStardataTimeRef(parsed, newAsOfString);
       }
 
       onSelectRange(parsed.toString());
@@ -185,7 +185,7 @@
   }
 
   function onSelectAsOfOption(
-    ref: RillTimeLabel | string | undefined,
+    ref: StardataTimeLabel | string | undefined,
     inclusive: boolean,
   ) {
     if (!timeString) return;
@@ -322,7 +322,7 @@
             <TimeRangeOptionGroup
               {filter}
               {timeString}
-              options={[parseRillTime(defaultTimeRange)]}
+              options={[parseStardataTime(defaultTimeRange)]}
               onClick={handleRangeSelect}
             />
           {/if}
@@ -368,7 +368,7 @@
                 }}
               >
                 <span class:font-bold={timeString === ALL_TIME_RANGE_ALIAS}>
-                  {RILL_TO_LABEL[ALL_TIME_RANGE_ALIAS]}
+                  {STAR_TO_LABEL[ALL_TIME_RANGE_ALIAS]}
                 </span>
               </button>
             </div>

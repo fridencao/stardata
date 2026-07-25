@@ -4,7 +4,7 @@
   import CreateNewOrgForm, {
     CreateNewOrgFormId,
   } from "@rilldata/web-common/features/organization/CreateNewOrgForm.svelte";
-  import RillLogoSquareNegative from "@rilldata/web-common/components/icons/RillLogoSquareNegative.svelte";
+  import StarDataLogoSquareNegative from "@rilldata/web-common/components/icons/StarDataLogoSquareNegative.svelte";
   import {
     createAdminServiceCreateOrganization,
     getAdminServiceListOrganizationsQueryKey,
@@ -38,7 +38,7 @@
 </script>
 
 <div class="flex flex-col gap-4 mx-auto w-fit">
-  <RillLogoSquareNegative size="36px" />
+  <StarDataLogoSquareNegative size="36px" />
   <div class="text-2xl font-extrabold text-fg-accent text-center">
     Create an organization
   </div>

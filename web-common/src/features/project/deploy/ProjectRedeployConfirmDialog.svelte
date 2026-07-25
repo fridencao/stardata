@@ -32,14 +32,14 @@
           Update
         </Button>
         <TooltipContent slot="tooltip-content">
-          Push changes to Rill Cloud
+          Push changes to StarData
         </TooltipContent>
       </Tooltip>
     {/snippet}
   </AlertDialogTrigger>
   <AlertDialogContent>
     <AlertDialogHeader>
-      <AlertDialogTitle>Push updates to Rill Cloud?</AlertDialogTitle>
+      <AlertDialogTitle>Push updates to StarData?</AlertDialogTitle>
       <AlertDialogDescription>
         <div class="mt-1">
           Would you like to send local changes to the deployed version of this

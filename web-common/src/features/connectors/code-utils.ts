@@ -317,7 +317,7 @@ driver: ${driverName}`;
   return `${topOfFile}\n` + compiledKeyValues;
 }
 
-export async function updateRillYAMLWithOlapConnector(
+export async function updateStarDataYAMLWithOlapConnector(
   client: RuntimeClient,
   queryClient: QueryClient,
   newConnector: string,
@@ -364,7 +364,7 @@ export function maybeUnsetOlapConnectorInYaml(
   return [true, blob.replace(olapConnectorRegex, "")];
 }
 
-export async function updateRillYAMLWithAiConnector(
+export async function updateStarDataYAMLWithAiConnector(
   client: RuntimeClient,
   queryClient: QueryClient,
   newConnector: string,

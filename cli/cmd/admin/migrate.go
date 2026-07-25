@@ -6,8 +6,8 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/kelseyhightower/envconfig"
-	"github.com/rilldata/rill/admin/database"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"

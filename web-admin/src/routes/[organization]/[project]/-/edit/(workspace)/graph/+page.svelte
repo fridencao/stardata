@@ -3,7 +3,7 @@
 </script>
 
 <svelte:head>
-  <title>Rill | Project graph</title>
+  <title>StarData | Project graph</title>
 </svelte:head>
 
 <GraphWorkspace />

@@ -12,9 +12,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/ai"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/ai"
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 	"google.golang.org/grpc/codes"

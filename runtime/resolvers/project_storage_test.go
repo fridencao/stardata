@@ -5,9 +5,9 @@ import (
 	"io"
 	"testing"
 
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/pkg/mapstructureutil"
-	"github.com/rilldata/rill/runtime/testruntime"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/pkg/mapstructureutil"
+	"github.com/fridencao/stardata/runtime/testruntime"
 	"github.com/stretchr/testify/require"
 )
 

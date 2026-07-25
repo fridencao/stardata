@@ -3,9 +3,9 @@ package env
 import (
 	"fmt"
 
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
-	"github.com/rilldata/rill/runtime/parser"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	"github.com/fridencao/stardata/runtime/parser"
 	"github.com/spf13/cobra"
 )
 

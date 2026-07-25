@@ -8,7 +8,7 @@
   import SettingsContainer from "@rilldata/web-admin/features/organizations/settings/SettingsContainer.svelte";
   import UploadImagePopover from "@rilldata/web-admin/features/organizations/settings/UploadImagePopover.svelte";
   import { Button } from "@rilldata/web-common/components/button";
-  import Rill from "@rilldata/web-common/components/icons/Rill.svelte";
+  import StarDataLogo from "@rilldata/web-common/components/icons/StarDataLogo.svelte";
   import { queryClient } from "@rilldata/web-common/lib/svelte-query/globalQueryClient";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
@@ -120,7 +120,7 @@
           onSave={onSaveLight}
           onRemove={onRemoveLight}
         >
-          <Rill width="64" height="40" mode="light" />
+          <StarDataLogo width="64" height="40" mode="light" />
         </UploadImagePopover>
         {#if organizationLogoUrl}
           <Button
@@ -155,7 +155,7 @@
           onSave={onSaveDark}
           onRemove={onRemoveDark}
         >
-          <Rill width="64" height="40" mode="dark" />
+          <StarDataLogo width="64" height="40" mode="dark" />
         </UploadImagePopover>
         {#if organizationLogoDarkUrl}
           <Button

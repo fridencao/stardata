@@ -54,8 +54,8 @@
 
   const { cloudDataViewer, readOnly } = featureFlags;
 
-  $: isRillDeveloper = $readOnly === false;
-  $: canShowDataViewer = Boolean($cloudDataViewer || isRillDeveloper);
+  $: isStarDataDeveloper = $readOnly === false;
+  $: canShowDataViewer = Boolean($cloudDataViewer || isStarDataDeveloper);
 
   const pivotExploreState = derived(dashboardStore, (dashboard) => {
     return dashboard?.pivot;

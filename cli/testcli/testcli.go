@@ -4,11 +4,11 @@ import (
 	"bytes"
 	"testing"
 
-	"github.com/rilldata/rill/admin/testadmin"
-	"github.com/rilldata/rill/cli/cmd"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	"github.com/rilldata/rill/cli/pkg/dotrill"
-	"github.com/rilldata/rill/cli/pkg/version"
+	"github.com/fridencao/stardata/admin/testadmin"
+	"github.com/fridencao/stardata/cli/cmd"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/cli/pkg/dotrill"
+	"github.com/fridencao/stardata/cli/pkg/version"
 	"github.com/stretchr/testify/require"
 )
 

@@ -5,13 +5,13 @@ import (
 	"testing"
 	"time"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/metricsview"
-	"github.com/rilldata/rill/runtime/metricsview/executor"
-	"github.com/rilldata/rill/runtime/metricsview/metricssql"
-	"github.com/rilldata/rill/runtime/testruntime"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/metricsview/executor"
+	"github.com/fridencao/stardata/runtime/metricsview/metricssql"
+	"github.com/fridencao/stardata/runtime/testruntime"
 	"github.com/stretchr/testify/require"
 )
 

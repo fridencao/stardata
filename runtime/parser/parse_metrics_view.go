@@ -7,9 +7,9 @@ import (
 	"strings"
 	"time"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/pkg/duration"
-	"github.com/rilldata/rill/runtime/pkg/rilltime"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/pkg/duration"
+	"github.com/fridencao/stardata/runtime/pkg/rilltime"
 	"golang.org/x/exp/maps"
 	"google.golang.org/protobuf/types/known/structpb"
 	"gopkg.in/yaml.v3"

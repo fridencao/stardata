@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	_ "github.com/rilldata/rill/runtime/drivers/s3"
-	"github.com/rilldata/rill/runtime/testruntime"
+	_ "github.com/fridencao/stardata/runtime/drivers/s3"
+	"github.com/fridencao/stardata/runtime/testruntime"
 	"github.com/stretchr/testify/require"
 )
 

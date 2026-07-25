@@ -9,10 +9,10 @@ import (
 	"time"
 
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/admin/pkg/urlutil"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/pbutil"
+	"github.com/fridencao/stardata/admin/pkg/urlutil"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/pbutil"
 	"github.com/slack-go/slack"
 )
 

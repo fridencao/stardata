@@ -39,7 +39,7 @@
         <AlertDialogDescription>
           {@html m.billing_congrats_plan({
             planName: `<b>${escapeHtml(planDisplayName)}</b>`,
-            docsLink: `<a href="https://docs.rilldata.com/" target="_blank" class="text-primary-600 font-medium">${escapeHtml(m.billing_refer_to_docs())}</a>`,
+            docsLink: `<a href="https://docs.stardata.ai/" target="_blank" class="text-primary-600 font-medium">${escapeHtml(m.billing_refer_to_docs())}</a>`,
           })}
         </AlertDialogDescription>
       </AlertDialogHeader>

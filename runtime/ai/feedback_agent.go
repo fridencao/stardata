@@ -6,8 +6,8 @@ import (
 	"strings"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	aiv1 "github.com/rilldata/rill/proto/gen/rill/ai/v1"
-	"github.com/rilldata/rill/runtime"
+	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
+	"github.com/fridencao/stardata/runtime"
 	"go.uber.org/zap"
 )
 
@@ -59,7 +59,7 @@ func (t *FeedbackAgent) CheckAccess(ctx context.Context) (bool, error) {
 	}
 
 	// Only allow for rill user agents since it's not useful in MCP contexts.
-	if !strings.HasPrefix(s.CatalogSession().UserAgent, "rill") {
+	if !strings.HasPrefix(s.CatalogSession().UserAgent, "stardata") {
 		return false, nil
 	}
 	return true, nil
@@ -149,7 +149,7 @@ Write in first person ("I") when referring to yourself and second person ("you")
 
 <categories>
 Classify the feedback into one of three categories:
-1. "rill" - You (the AI) made an error, or the user is providing product feedback. For example:
+1. "stardata" - You (the AI) made an error, or the user is providing product feedback. For example:
 		- Made an error in reasoning or misunderstood a clear question
 		- Used tools incorrectly or generated an incorrect response
 		- User is pushing back on scope limitations (e.g., guardrails about focusing on data analysis)
@@ -160,14 +160,14 @@ Classify the feedback into one of three categories:
 		- Project-level or metrics view-level AI instructions are missing
 3. "user" - The user's question was vague, ambiguous, or lacked sufficient context. You responded reasonably given the input.
 
-If you are unsure which category to use, choose "rill" so the Rill team can take a closer look.
+If you are unsure which category to use, choose "stardata" so the Rill team can take a closer look.
 </categories>
 
 <output_format>
 Write attribution_reasoning as a brief explanation (1-2 sentences) for internal analytics. Be specific about what went wrong.
 
 For "project" and "user" attribution, provide a suggested_action as a complete sentence starting with an action verb addressed to the user (e.g., "Consider adding...", "Try being more specific about..."). This will be shown to the user, so it should be helpful and actionable.
-For "rill" attribution, set suggested_action to null (internal errors don't require user action).
+For "stardata" attribution, set suggested_action to null (internal errors don't require user action).
 </output_format>
 `, nil)
 }
@@ -210,7 +210,7 @@ func (t *FeedbackAgent) generateFeedbackResponse(attribution *feedbackAttributio
 	response.WriteString("Thanks for your feedback. ")
 
 	switch attribution.PredictedAttribution {
-	case "rill":
+	case "stardata":
 		// Internal error - generic acknowledgment only (reasoning is for analytics)
 		response.WriteString("I made an error in my response. I'll work on improving.")
 

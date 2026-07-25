@@ -7,10 +7,10 @@ import (
 	"slices"
 	"strings"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/pkg/mapstructureutil"
-	"github.com/rilldata/rill/runtime/pkg/typepb"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/pkg/mapstructureutil"
+	"github.com/fridencao/stardata/runtime/pkg/typepb"
 	"golang.org/x/exp/maps"
 )
 

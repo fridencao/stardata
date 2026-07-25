@@ -14,9 +14,9 @@ import (
 
 	"github.com/Azure/azure-sdk-for-go/sdk/storage/azblob"
 	"github.com/joho/godotenv"
-	"github.com/rilldata/rill/admin/pkg/pgtestcontainer"
-	"github.com/rilldata/rill/runtime/drivers/clickhouse/testclickhouse"
-	"github.com/rilldata/rill/runtime/testruntime/testmode"
+	"github.com/fridencao/stardata/admin/pkg/pgtestcontainer"
+	"github.com/fridencao/stardata/runtime/drivers/clickhouse/testclickhouse"
+	"github.com/fridencao/stardata/runtime/testruntime/testmode"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/azure/azurite"

@@ -119,7 +119,7 @@ function drawFooter(
   const yPt = result.pageHeightPt - 10;
   const generatedText = `Generated ${meta.generatedAt}`;
   const linkPrefix = "Open the live dashboard: ";
-  const linkText = "View in Rill";
+  const linkText = "View in StarData";
 
   doc.setFontSize(8);
   setTextColor(doc, FOOTER_TEXT_COLOR);

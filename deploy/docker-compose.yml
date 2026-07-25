@@ -1,0 +1,100 @@
+# StarData 智能 BI 平台 — Docker Compose 部署
+# 用法: docker compose up -d
+#
+# 依赖:
+#   - stardata 镜像 (build 或 ghcr)
+#   - PostgreSQL (元数据存储)
+#   - ClickHouse (可选, 生产 OLAP 引擎)
+#   - Keycloak (可选, OIDC SSO)
+---
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: stardata
+      POSTGRES_PASSWORD: "${STARDATA_DB_PASSWORD:-changeme}"
+      POSTGRES_DB: stardata
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stardata"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ClickHouse 可选 — 生产级高性能 OLAP 引擎
+  clickhouse:
+    image: clickhouse/clickhouse-server:24.3-alpine
+    restart: unless-stopped
+    profiles:
+      - full
+    environment:
+      CLICKHOUSE_DB: stardata
+      CLICKHOUSE_DEFAULT_ACCESS_MANAGEMENT: 1
+      CLICKHOUSE_USER: stardata
+      CLICKHOUSE_PASSWORD: "${CLICKHOUSE_PASSWORD:-changeme}"
+    volumes:
+      - ch_data:/var/lib/clickhouse
+    ulimits:
+      nofile:
+        soft: 262144
+        hard: 262144
+
+  stardata:
+    image: "${STARDATA_IMAGE:-ghcr.io/fridencao/stardata:latest}"
+    restart: unless-stopped
+    ports:
+      - "${STARDATA_HTTP_PORT:-9080}:9080"
+      - "${STARDATA_GRPC_PORT:-9090}:9090"
+    environment:
+      STARDATA_CONFIG: /etc/stardata/config.yaml
+    volumes:
+      - ./config.yaml:/etc/stardata/config.yaml:ro
+      - stardata_data:/data/stardata
+      - stardata_storage:/data/storage
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # stardata start 命令会在第一次运行时初始化项目
+    command: ["start", "--project", "/data/stardata/project"]
+
+  # Nginx 反向代理 — 可选, 提供 SSL termination 和统一入口
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    profiles:
+      - full
+    ports:
+      - "${NGINX_HTTP_PORT:-80}:80"
+      - "${NGINX_HTTPS_PORT:-443}:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - stardata
+
+  # Keycloak — 可选, OIDC SSO 认证
+  keycloak:
+    image: quay.io/keycloak/keycloak:25.0
+    restart: unless-stopped
+    profiles:
+      - full
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/stardata
+      KC_DB_USERNAME: stardata
+      KC_DB_PASSWORD: "${STARDATA_DB_PASSWORD:-changeme}"
+      KC_HOSTNAME: auth.star-data.company.com
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: "${KEYCLOAK_ADMIN_PASSWORD:-admin}"
+    command: ["start-dev"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pg_data:
+  ch_data:
+  stardata_data:
+  stardata_storage:

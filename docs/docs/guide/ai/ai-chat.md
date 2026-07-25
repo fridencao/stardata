@@ -1,15 +1,15 @@
 ---
 title: "Contextual AI Chat"
-description: Chat with your data using natural language in Rill Cloud
+description: Chat with your data using natural language in StarData Cloud
 sidebar_label: "AI Chat"
 sidebar_position: 01
 ---
 
 ## Overview
 
-AI Chat in Rill Cloud allows you to have natural language conversations with your data directly in your browser. Instead of building queries or navigating through dashboards, simply ask questions using everyday conversational language and get instant insights backed by your metrics views—complete with **interactive charts and visualizations** that render right in the chat interface, plus **direct links** to your existing dashboards for deeper exploration.
+AI Chat in StarData Cloud allows you to have natural language conversations with your data directly in your browser. Instead of building queries or navigating through dashboards, simply ask questions using everyday conversational language and get instant insights backed by your metrics views—complete with **interactive charts and visualizations** that render right in the chat interface, plus **direct links** to your existing dashboards for deeper exploration.
 
-AI Chat is powered by [Rill's Model Context Protocol (MCP)](/guide/ai/mcp) integration, which ensures that responses are accurate, governed, and consistent with the metrics displayed in your dashboards. By querying data with **predefined measures and dimensions**, you can trust that the answers you receive are as reliable as the data in your Rill dashboards. 
+AI Chat is powered by [StarData's Model Context Protocol (MCP)](/guide/ai/mcp) integration, which ensures that responses are accurate, governed, and consistent with the metrics displayed in your dashboards. By querying data with **predefined measures and dimensions**, you can trust that the answers you receive are as reliable as the data in your StarData dashboards. 
 
 **What makes AI Chat different?** Every response includes direct links to your Explore dashboards with filters pre-applied, so you can always **verify where the numbers came from**. No black box—just transparent, trustworthy analytics.
 
@@ -17,9 +17,9 @@ AI Chat is powered by [Rill's Model Context Protocol (MCP)](/guide/ai/mcp) integ
 
 ## How It Works 
 
-AI Chat uses the same [Rill MCP Server](/guide/ai/mcp) technology that powers external AI integrations with tools like Claude Desktop. This means:
+AI Chat uses the same [StarData MCP Server](/guide/ai/mcp) technology that powers external AI integrations with tools like Claude Desktop. This means:
 
-- **Fast!** - Get instant answers powered by Rill's optimized query engine 
+- **Fast!** - Get instant answers powered by StarData's optimized query engine 
 - **Accurate Responses** - The Agent only queries [metrics views](/developers/build/metrics-view) you've already defined, ensuring accuracy and consistency
 - **Secure Data Access** - Respects your [project's access](/developers/build/metrics-view/security) controls and user permissions
 
@@ -27,7 +27,7 @@ AI Chat uses the same [Rill MCP Server](/guide/ai/mcp) technology that powers ex
 
 ### Access AI Chat from Project Home
 
-1. Navigate to your [Rill Cloud](https://ui.rilldata.com) project home page
+1. Navigate to your [StarData Cloud](https://ui.rilldata.com) project home page
 2. Click on the **AI** tab in the project navigation
 3. Start typing your question in the chat interface
 
@@ -114,7 +114,7 @@ For detailed examples and best practices on writing effective AI instructions, s
 
 ## Use in Your Favorite AI Client
 
-Prefer to chat with your data in Claude Desktop, ChatGPT, or another AI assistant? You can connect your Rill projects to external AI clients using the **[Rill MCP Server](/guide/ai/mcp)**. This gives you the same governed, accurate analytics experience—powered by your predefined metrics—but integrated into your preferred AI workflow. Perfect for data teams who want deep analysis sessions, local development access, or integration with other tools. See the **[Rill MCP Server documentation](/guide/ai/mcp)** to learn more.
+Prefer to chat with your data in Claude Desktop, ChatGPT, or another AI assistant? You can connect your StarData projects to external AI clients using the **[StarData MCP Server](/guide/ai/mcp)**. This gives you the same governed, accurate analytics experience—powered by your predefined metrics—but integrated into your preferred AI workflow. Perfect for data teams who want deep analysis sessions, local development access, or integration with other tools. See the **[StarData MCP Server documentation](/guide/ai/mcp)** to learn more.
 
 <!-- 
 ### Start Broad, Then Narrow

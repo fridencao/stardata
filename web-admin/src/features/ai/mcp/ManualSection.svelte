@@ -31,7 +31,7 @@
         "Authorization:\${AUTH_HEADER}"
       ],
       "env": {
-        "AUTH_HEADER": "Bearer ${issuedToken ? issuedToken : "<Rill personal access token>"}"
+        "AUTH_HEADER": "Bearer ${issuedToken ? issuedToken : "<StarData personal access token>"}"
       }
     }
   }

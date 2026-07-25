@@ -3,8 +3,8 @@ package cmd
 import (
 	"runtime"
 
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	"github.com/rilldata/rill/runtime/pkg/activity"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/runtime/pkg/activity"
 	"github.com/spf13/cobra"
 	"go.opentelemetry.io/otel/attribute"
 )

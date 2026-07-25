@@ -6,16 +6,16 @@ import (
 	"strings"
 	"time"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/metricsview"
-	"github.com/rilldata/rill/runtime/pkg/timeutil"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/pkg/timeutil"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"google.golang.org/protobuf/proto"
 )
 
-var tracer = otel.Tracer("github.com/rilldata/rill/runtime/metricsview/executor")
+var tracer = otel.Tracer("github.com/fridencao/stardata/runtime/metricsview/executor")
 
 // Rollup rejection reasons: eligibility phase
 const (

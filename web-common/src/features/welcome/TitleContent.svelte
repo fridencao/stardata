@@ -1,11 +1,11 @@
 <script lang="ts">
-  import RillLogoSquareNegative from "@rilldata/web-common/components/icons/RillLogoSquareNegative.svelte";
+  import StarDataLogoSquareNegative from "@rilldata/web-common/components/icons/StarDataLogoSquareNegative.svelte";
   import RadixH1 from "@rilldata/web-common/components/typography/RadixH1.svelte";
   import Subheading from "@rilldata/web-common/components/typography/Subheading.svelte";
 </script>
 
 <section class="flex flex-col gap-y-4 pb-4 items-center text-center">
-  <RillLogoSquareNegative size="84px" gradient />
+  <StarDataLogoSquareNegative size="84px" gradient />
   <RadixH1>
     <span
       class="bg-gradient-to-r from-primary-900 to-primary-800 text-transparent bg-clip-text opacity-75"

@@ -4,9 +4,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/ai"
-	"github.com/rilldata/rill/runtime/testruntime"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/ai"
+	"github.com/fridencao/stardata/runtime/testruntime"
 	"github.com/stretchr/testify/require"
 )
 

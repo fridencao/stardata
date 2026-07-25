@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/pkg/mapstructureutil"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/pkg/mapstructureutil"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"
 )

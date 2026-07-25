@@ -3,7 +3,7 @@ import {
   getCompoundQuery,
 } from "@rilldata/web-common/features/compound-query-result";
 import { getMetricsViewTimeRangeFromExploreQueryOptions } from "@rilldata/web-common/features/dashboards/selectors.ts";
-import { getRillDefaultExploreState } from "@rilldata/web-common/features/dashboards/stores/get-rill-default-explore-state";
+import { getStarDataDefaultExploreState } from "@rilldata/web-common/features/dashboards/stores/get-stardata-default-explore-state";
 import { getTimeControlState } from "@rilldata/web-common/features/dashboards/time-controls/time-control-store";
 import { convertPartialExploreStateToUrlParams } from "@rilldata/web-common/features/dashboards/url-state/convert-partial-explore-state-to-url-params";
 import {
@@ -20,12 +20,12 @@ import {
 import { createQuery } from "@tanstack/svelte-query";
 import { derived, type Readable } from "svelte/store";
 
-export function getRillDefaultExploreUrlParams(
+export function getStarDataDefaultExploreUrlParams(
   metricsViewSpec: V1MetricsViewSpec,
   exploreSpec: V1ExploreSpec,
   timeRangeSummary: V1TimeRangeSummary | undefined,
 ) {
-  const rillDefaultExploreState = getRillDefaultExploreState(
+  const starDataDefaultExploreState = getStarDataDefaultExploreState(
     metricsViewSpec,
     exploreSpec,
     timeRangeSummary,
@@ -34,17 +34,17 @@ export function getRillDefaultExploreUrlParams(
     metricsViewSpec,
     exploreSpec,
     timeRangeSummary,
-    rillDefaultExploreState,
+    starDataDefaultExploreState,
   );
   return convertPartialExploreStateToUrlParams(
     exploreSpec,
     metricsViewSpec,
-    rillDefaultExploreState,
+    starDataDefaultExploreState,
     timeControlState,
   );
 }
 
-export function createRillDefaultExploreUrlParams(
+export function createStarDataDefaultExploreUrlParams(
   validSpecQuery: ReturnType<typeof useExploreValidSpec>,
   fullTimeRangeQuery: CompoundQueryResult<V1MetricsViewTimeRangeResponse>,
 ) {
@@ -64,7 +64,7 @@ export function createRillDefaultExploreUrlParams(
         return undefined;
       }
 
-      return getRillDefaultExploreUrlParams(
+      return getStarDataDefaultExploreUrlParams(
         metricsViewSpec,
         exploreSpec,
         metricsViewTimeRangeResp?.timeRangeSummary,
@@ -74,13 +74,13 @@ export function createRillDefaultExploreUrlParams(
 }
 
 /**
- * Version of createRillDefaultExploreUrlParams that is meant to have a stable non-reactive query object.
+ * Version of createStarDataDefaultExploreUrlParams that is meant to have a stable non-reactive query object.
  * All reactivity will instead be in the query options.
  *
  * Uses {@link getExploreValidSpecQueryOptions} and {@link getMetricsViewTimeRangeFromExploreQueryOptions} for reactive query options.
- * TODO: replace {@link createRillDefaultExploreUrlParams} with this
+ * TODO: replace {@link createStarDataDefaultExploreUrlParams} with this
  */
-export function createRillDefaultExploreUrlParamsV2(
+export function createStarDataDefaultExploreUrlParamsV2(
   client: RuntimeClient,
   exploreNameStore: Readable<string>,
 ) {
@@ -107,7 +107,7 @@ export function createRillDefaultExploreUrlParamsV2(
         return undefined;
       }
 
-      return getRillDefaultExploreUrlParams(
+      return getStarDataDefaultExploreUrlParams(
         metricsViewSpec,
         exploreSpec,
         timeRangeSummary,

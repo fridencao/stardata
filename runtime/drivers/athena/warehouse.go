@@ -15,16 +15,16 @@ import (
 	"github.com/aws/smithy-go/tracing/smithyoteltracing"
 	"github.com/google/uuid"
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/blob"
-	"github.com/rilldata/rill/runtime/pkg/graceful"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/blob"
+	"github.com/fridencao/stardata/runtime/pkg/graceful"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/codes"
 	"go.uber.org/zap"
 	"gocloud.dev/blob/s3blob"
 )
 
-var tracer = otel.Tracer("github.com/rilldata/rill/runtime/drivers/athena")
+var tracer = otel.Tracer("github.com/fridencao/stardata/runtime/drivers/athena")
 
 var _ drivers.Warehouse = &Connection{}
 

@@ -87,7 +87,7 @@
     selectedDimensionName && $getDimensionByName(selectedDimensionName);
   $: expandedMeasureName = $exploreState?.tdd?.expandedMeasureName;
 
-  $: isRillDeveloper = $readOnly === false;
+  $: isStarDataDeveloper = $readOnly === false;
 
   // Check if the mock user (if selected) has access to the explore
   $: exploreQuery = useExploreValidSpec(client, exploreName);
@@ -282,7 +282,7 @@
 
     <CellInspector />
 
-    {#if (isRillDeveloper || $cloudDataViewer) && !showTimeDimensionDetail && !mockUserHasNoAccess}
+    {#if (isStarDataDeveloper || $cloudDataViewer) && !showTimeDimensionDetail && !mockUserHasNoAccess}
       <RowsViewerAccordion {metricsViewName} {exploreName} />
     {/if}
   </article>

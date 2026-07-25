@@ -82,7 +82,7 @@ export const clickhouseSchema: MultiStepFormSchema = {
       type: "boolean",
       title: "Managed",
       description:
-        "This option uses ClickHouse as an OLAP engine with Rill-managed infrastructure. No additional configuration is required - Rill will handle the setup and management of your ClickHouse instance.",
+        "This option uses ClickHouse as an OLAP engine with StarData-managed infrastructure. No additional configuration is required - StarData will handle the setup and management of your ClickHouse instance.",
       default: true,
       "x-informational": true,
       "x-visible-if": {
@@ -94,7 +94,7 @@ export const clickhouseSchema: MultiStepFormSchema = {
       type: "boolean",
       title: "Playground",
       description:
-        'Connect to ClickHouse\'s free public <a href="https://play.clickhouse.com/play?user=play" target="_blank" class="text-primary-600 hover:underline">playground instance</a>. This is a read-only demo environment with sample datasets, perfect for testing Rill\'s ClickHouse integration without any setup. No credentials required.',
+        'Connect to ClickHouse\'s free public <a href="https://play.clickhouse.com/play?user=play" target="_blank" class="text-primary-600 hover:underline">playground instance</a>. This is a read-only demo environment with sample datasets, perfect for testing StarData\'s ClickHouse integration without any setup. No credentials required.',
       default: true,
       "x-informational": true,
       "x-ui-only": true,
@@ -187,7 +187,7 @@ export const clickhouseSchema: MultiStepFormSchema = {
       type: "boolean",
       title: "Enable write mode",
       description:
-        "Read-write mode allows Rill to drop, create, and modify tables, not just query them",
+        "Read-write mode allows StarData to drop, create, and modify tables, not just query them",
       default: false,
       "x-display": "toggle",
       "x-yaml-value": "readwrite",

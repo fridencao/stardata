@@ -4284,7 +4284,7 @@ export class ResolveCanvasRequest extends Message<ResolveCanvasRequest> {
 
   /**
    * If true, fall back to the unvalidated spec when no valid spec is available.
-   * Only for use by the visual editor in Rill Developer. Must never be sent by
+   * Only for use by the visual editor in StarData. Must never be sent by
    * Rill Cloud, read-only previews, shared token access, or embedded viewers.
    *
    * @generated from field: bool unsafe = 4;

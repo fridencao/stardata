@@ -1,7 +1,7 @@
 import type { QueryClient } from "@tanstack/query-core";
 import { runtimeServicePutFile } from "../../../runtime-client";
 import type { RuntimeClient } from "../../../runtime-client/v2";
-import { generateYAML, updateRillYAMLWithAiConnector } from "../code-utils";
+import { generateYAML, updateStarDataYAMLWithAiConnector } from "../code-utils";
 import { getFileAPIPathFromNameAndType } from "../../entity-management/entity-mappers";
 import { fileArtifacts } from "../../entity-management/file-artifacts";
 import { getName } from "../../entity-management/name-utils";
@@ -20,14 +20,14 @@ import {
 import { maybeInitProject } from "@rilldata/web-common/features/add-data/manager/steps/connector.ts";
 import type { EnvEditSession } from "@rilldata/web-common/features/env-management/env-edit-session.ts";
 
-async function setAiConnectorInRillYAML(
+async function setAiConnectorInStarDataYAML(
   queryClient: QueryClient,
   client: RuntimeClient,
   newConnectorName: string,
 ): Promise<void> {
   await runtimeServicePutFile(client, {
     path: "rill.yaml",
-    blob: await updateRillYAMLWithAiConnector(
+    blob: await updateStarDataYAMLWithAiConnector(
       client,
       queryClient,
       newConnectorName,
@@ -95,7 +95,7 @@ export async function saveAiConnector(
   });
 
   // Register as the project's AI connector
-  await setAiConnectorInRillYAML(queryClient, client, newConnectorName);
+  await setAiConnectorInStarDataYAML(queryClient, client, newConnectorName);
 
   await navigateToFile(`/${newConnectorFilePath}`);
 }

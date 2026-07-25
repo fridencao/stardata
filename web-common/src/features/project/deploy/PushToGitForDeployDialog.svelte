@@ -34,7 +34,7 @@
       <AlertDialogDescription class="flex flex-col gap-y-4 pt-2">
         <div>
           This project has already been connected to a GitHub repo. Please push
-          changes directly to GitHub and the project in Rill Cloud will
+          changes directly to GitHub and the project in StarData Cloud will
           automatically be updated.
           <a
             href="https://docs.rilldata.com/developers/deploy/deploy-dashboard/github-101"

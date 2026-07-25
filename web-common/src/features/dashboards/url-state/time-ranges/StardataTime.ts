@@ -21,7 +21,7 @@ import type { TimeRangeMeta } from "@rilldata/web-common/lib/time/types";
 const absTimeRegex =
   /(?<year>\d{4})(-(?<month>\d{2})(-(?<day>\d{2})(T(?<hour>\d{2})(:(?<minute>\d{2})(:(?<second>\d{2})Z)?)?)?)?)?/;
 
-export enum RillTimeLabel {
+export enum StardataTimeLabel {
   Earliest = "earliest",
   Latest = "latest",
   Now = "now",
@@ -29,35 +29,35 @@ export enum RillTimeLabel {
   Ref = "ref",
 }
 
-export type RillTimeAsOfLabel = {
-  label: RillTimeLabel | string;
+export type StardataTimeAsOfLabel = {
+  label: StardataTimeLabel | string;
   snap: string | undefined;
   offset: number;
 };
 
-export class RillTime {
+export class StardataTime {
   public isComplete: boolean = false;
   public timezone: string | undefined;
-  public anchorOverrides: RillPointInTime[] = [];
+  public anchorOverrides: StardataPointInTime[] = [];
 
   public readonly rangeGrain: V1TimeGrain | undefined;
   public byGrain: V1TimeGrain | undefined;
   public readonly isShorthandSyntax: boolean;
-  public asOfLabel: RillTimeAsOfLabel | undefined = undefined;
+  public asOfLabel: StardataTimeAsOfLabel | undefined = undefined;
 
   public isOldFormat = false;
 
-  public constructor(public readonly interval: RillTimeInterval) {
+  public constructor(public readonly interval: StardataTimeInterval) {
     this.updateIsComplete();
 
     this.isShorthandSyntax =
-      interval instanceof RillShorthandInterval ||
-      interval instanceof RillPeriodToGrainInterval;
+      interval instanceof StardataShorthandInterval ||
+      interval instanceof StardataPeriodToGrainInterval;
     this.rangeGrain = this.interval.getGrain();
     this.isOldFormat =
-      interval instanceof RillLegacyIsoInterval ||
-      interval instanceof RillLegacyDaxInterval ||
-      interval instanceof RillAllTimeInterval;
+      interval instanceof StardataLegacyIsoInterval ||
+      interval instanceof StardataLegacyDaxInterval ||
+      interval instanceof StardataAllTimeInterval;
   }
 
   public withGrain(grain: string) {
@@ -70,7 +70,7 @@ export class RillTime {
     return this;
   }
 
-  public withAnchorOverrides(anchorOverrides: RillPointInTime[]) {
+  public withAnchorOverrides(anchorOverrides: StardataPointInTime[]) {
     this.anchorOverrides = anchorOverrides;
     this.asOfLabel = this.getAsOfLabel();
     this.updateIsComplete();
@@ -83,7 +83,7 @@ export class RillTime {
     return supported ? capitalizeFirstChar(label) : this.toString();
   }
 
-  public overrideRef(override: RillPointInTime) {
+  public overrideRef(override: StardataPointInTime) {
     if (this.isOldFormat) return;
 
     const pointUsingRefIndex = this.anchorOverrides.findIndex((pt) =>
@@ -101,7 +101,7 @@ export class RillTime {
   }
 
   public isAbsoluteTime() {
-    return this.interval instanceof RillIsoInterval;
+    return this.interval instanceof StardataIsoInterval;
   }
 
   public toString() {
@@ -137,7 +137,7 @@ export class RillTime {
     return offset;
   }
 
-  private getAsOfLabel(): RillTimeAsOfLabel | undefined {
+  private getAsOfLabel(): StardataTimeAsOfLabel | undefined {
     const labelledAnchor = this.anchorOverrides.find((anchor) =>
       anchor.hasLabelledPart(),
     );
@@ -145,7 +145,7 @@ export class RillTime {
 
     const labelledPart = labelledAnchor.getLabelledPart();
     if (!labelledPart || labelledPart.snaps.length > 1) return undefined;
-    const labelledPoint = labelledPart.point as RillLabelledPointInTime;
+    const labelledPoint = labelledPart.point as StardataLabelledPointInTime;
 
     const snap = labelledPart.snaps[0];
     const offsetForSnap =
@@ -161,30 +161,30 @@ export class RillTime {
   }
 }
 
-interface RillTimeInterval {
+interface StardataTimeInterval {
   isComplete(
     offset: Duration,
-    asOfLabel: RillTimeAsOfLabel | undefined,
+    asOfLabel: StardataTimeAsOfLabel | undefined,
   ): boolean;
   getLabel(offset: Duration): [label: string, supported: boolean];
   getGrain(): V1TimeGrain | undefined;
   toString(): string;
 }
 
-export class RillShorthandInterval implements RillTimeInterval {
-  private readonly expandedInterval: RillTimeStartEndInterval;
+export class StardataShorthandInterval implements StardataTimeInterval {
+  private readonly expandedInterval: StardataTimeStartEndInterval;
 
-  public constructor(private readonly parts: RillGrain[]) {
-    this.expandedInterval = new RillTimeStartEndInterval(
-      new RillPointInTime([
-        new RillPointInTimeWithSnap(
-          new RillGrainPointInTime([new RillGrainPointInTimePart("-", parts)]),
+  public constructor(private readonly parts: StardataGrain[]) {
+    this.expandedInterval = new StardataTimeStartEndInterval(
+      new StardataPointInTime([
+        new StardataPointInTimeWithSnap(
+          new StardataGrainPointInTime([new StardataGrainPointInTimePart("-", parts)]),
           [],
         ),
       ]),
-      new RillPointInTime([
-        new RillPointInTimeWithSnap(
-          new RillLabelledPointInTime(RillTimeLabel.Ref),
+      new StardataPointInTime([
+        new StardataPointInTimeWithSnap(
+          new StardataLabelledPointInTime(StardataTimeLabel.Ref),
           [],
         ),
       ]),
@@ -193,7 +193,7 @@ export class RillShorthandInterval implements RillTimeInterval {
 
   public isComplete(
     offset: Duration,
-    asOfLabel: RillTimeAsOfLabel | undefined,
+    asOfLabel: StardataTimeAsOfLabel | undefined,
   ) {
     return this.expandedInterval.isComplete(offset, asOfLabel);
   }
@@ -216,20 +216,20 @@ export class RillShorthandInterval implements RillTimeInterval {
   }
 }
 
-export class RillPeriodToGrainInterval implements RillTimeInterval {
-  private readonly expandedInterval: RillTimeStartEndInterval;
+export class StardataPeriodToGrainInterval implements StardataTimeInterval {
+  private readonly expandedInterval: StardataTimeStartEndInterval;
 
   public constructor(private readonly grain: string) {
-    this.expandedInterval = new RillTimeStartEndInterval(
-      new RillPointInTime([
-        new RillPointInTimeWithSnap(
-          new RillLabelledPointInTime(RillTimeLabel.Ref),
+    this.expandedInterval = new StardataTimeStartEndInterval(
+      new StardataPointInTime([
+        new StardataPointInTimeWithSnap(
+          new StardataLabelledPointInTime(StardataTimeLabel.Ref),
           [grain],
         ),
       ]),
-      new RillPointInTime([
-        new RillPointInTimeWithSnap(
-          new RillLabelledPointInTime(RillTimeLabel.Ref),
+      new StardataPointInTime([
+        new StardataPointInTimeWithSnap(
+          new StardataLabelledPointInTime(StardataTimeLabel.Ref),
           [],
         ),
       ]),
@@ -238,7 +238,7 @@ export class RillPeriodToGrainInterval implements RillTimeInterval {
 
   public isComplete(
     offset: Duration,
-    asOfLabel: RillTimeAsOfLabel | undefined,
+    asOfLabel: StardataTimeAsOfLabel | undefined,
   ) {
     return this.expandedInterval.isComplete(offset, asOfLabel);
   }
@@ -260,8 +260,8 @@ export class RillPeriodToGrainInterval implements RillTimeInterval {
   }
 }
 
-export class RillTimeOrdinalInterval implements RillTimeInterval {
-  public constructor(private readonly parts: RillOrdinal[]) {}
+export class StardataTimeOrdinalInterval implements StardataTimeInterval {
+  public constructor(private readonly parts: StardataOrdinal[]) {}
 
   public isComplete() {
     return false;
@@ -286,15 +286,15 @@ export class RillTimeOrdinalInterval implements RillTimeInterval {
   }
 }
 
-export class RillTimeStartEndInterval implements RillTimeInterval {
+export class StardataTimeStartEndInterval implements StardataTimeInterval {
   public constructor(
-    public readonly start: RillPointInTime,
-    public readonly end: RillPointInTime,
+    public readonly start: StardataPointInTime,
+    public readonly end: StardataPointInTime,
   ) {}
 
   public isComplete(
     offset: Duration,
-    asOfLabel: RillTimeAsOfLabel | undefined,
+    asOfLabel: StardataTimeAsOfLabel | undefined,
   ) {
     const endOffset = this.end.offset.plus(offset).toObject();
     const grains = Object.keys(endOffset);
@@ -314,7 +314,7 @@ export class RillTimeStartEndInterval implements RillTimeInterval {
     let endOffset = this.end.offset.toObject();
     const parentOffset = offset.toObject();
 
-    if (this.start?.parts?.[0]?.point instanceof RillAbsoluteTime) {
+    if (this.start?.parts?.[0]?.point instanceof StardataAbsoluteTime) {
       return [m.time_custom(), true];
     }
 
@@ -402,10 +402,10 @@ export class RillTimeStartEndInterval implements RillTimeInterval {
   }
 }
 
-export class RillIsoInterval implements RillTimeInterval {
+export class StardataIsoInterval implements StardataTimeInterval {
   public constructor(
-    private readonly start: RillAbsoluteTime,
-    private readonly end: RillAbsoluteTime | undefined,
+    private readonly start: StardataAbsoluteTime,
+    private readonly end: StardataAbsoluteTime | undefined,
   ) {}
 
   public isComplete() {
@@ -454,7 +454,7 @@ export class RillIsoInterval implements RillTimeInterval {
   }
 }
 
-export class RillAllTimeInterval implements RillTimeInterval {
+export class StardataAllTimeInterval implements StardataTimeInterval {
   public isComplete() {
     return false;
   }
@@ -472,10 +472,10 @@ export class RillAllTimeInterval implements RillTimeInterval {
   }
 }
 
-export class RillLegacyIsoInterval implements RillTimeInterval {
+export class StardataLegacyIsoInterval implements StardataTimeInterval {
   public constructor(
-    private readonly dateGrains: RillGrain[],
-    private readonly timeGrains: RillGrain[],
+    private readonly dateGrains: StardataGrain[],
+    private readonly timeGrains: StardataGrain[],
   ) {}
 
   public isComplete() {
@@ -526,7 +526,7 @@ export class RillLegacyIsoInterval implements RillTimeInterval {
   }
 }
 
-export class RillLegacyDaxInterval implements RillTimeInterval {
+export class StardataLegacyDaxInterval implements StardataTimeInterval {
   public constructor(public readonly name: string) {}
 
   public isComplete() {
@@ -552,10 +552,10 @@ export class RillLegacyDaxInterval implements RillTimeInterval {
   }
 }
 
-export class RillPointInTime {
+export class StardataPointInTime {
   public readonly offset: Duration;
 
-  public constructor(public readonly parts: RillPointInTimeWithSnap[]) {
+  public constructor(public readonly parts: StardataPointInTimeWithSnap[]) {
     let offset = Duration.fromObject({});
     parts.forEach((part) => {
       offset = offset.plus(part.offset);
@@ -572,11 +572,11 @@ export class RillPointInTime {
   }
 
   public hasLabelledPart() {
-    return this.parts.some((p) => p.point instanceof RillLabelledPointInTime);
+    return this.parts.some((p) => p.point instanceof StardataLabelledPointInTime);
   }
 
   public getLabelledPart() {
-    return this.parts.find((p) => p.point instanceof RillLabelledPointInTime);
+    return this.parts.find((p) => p.point instanceof StardataLabelledPointInTime);
   }
 
   public hasSnap() {
@@ -588,14 +588,14 @@ export class RillPointInTime {
   }
 }
 
-export class RillPointInTimeWithSnap {
+export class StardataPointInTimeWithSnap {
   public readonly offset = Duration.fromObject({});
 
   public constructor(
-    public readonly point: RillPointInTimeVariant,
+    public readonly point: StardataPointInTimeVariant,
     public snaps: string[],
   ) {
-    if (this.point instanceof RillGrainPointInTime) {
+    if (this.point instanceof StardataGrainPointInTime) {
       this.offset = this.point.offset;
     }
   }
@@ -605,20 +605,20 @@ export class RillPointInTimeWithSnap {
   }
 }
 
-interface RillPointInTimeVariant {
+interface StardataPointInTimeVariant {
   getGrain(): V1TimeGrain | undefined;
   toString(): string;
 }
 
-export type RillOrdinal = {
+export type StardataOrdinal = {
   grain: string;
   num: number;
 };
 
-export class RillGrainPointInTime implements RillPointInTimeVariant {
+export class StardataGrainPointInTime implements StardataPointInTimeVariant {
   public readonly offset: Duration;
 
-  public constructor(public readonly parts: RillGrainPointInTimePart[]) {
+  public constructor(public readonly parts: StardataGrainPointInTimePart[]) {
     let offset = Duration.fromObject({});
     parts.forEach((part) => {
       if (part.prefix === "+") {
@@ -650,12 +650,12 @@ export class RillGrainPointInTime implements RillPointInTimeVariant {
   }
 }
 
-export class RillGrainPointInTimePart {
+export class StardataGrainPointInTimePart {
   public readonly offset: Duration;
 
   public constructor(
     public readonly prefix: string,
-    public readonly grains: RillGrain[],
+    public readonly grains: StardataGrain[],
   ) {
     let offset = Duration.fromObject({});
     grains.forEach(({ grain, num }) => {
@@ -678,11 +678,11 @@ export class RillGrainPointInTimePart {
   }
 }
 
-export class RillLabelledPointInTime implements RillPointInTimeVariant {
-  public constructor(public readonly label: RillTimeLabel) {}
+export class StardataLabelledPointInTime implements StardataPointInTimeVariant {
+  public constructor(public readonly label: StardataTimeLabel) {}
 
   public static postProcessor([label]: string[]) {
-    return new RillLabelledPointInTime(label.toLowerCase() as RillTimeLabel);
+    return new StardataLabelledPointInTime(label.toLowerCase() as StardataTimeLabel);
   }
 
   public getGrain(): V1TimeGrain | undefined {
@@ -694,7 +694,7 @@ export class RillLabelledPointInTime implements RillPointInTimeVariant {
   }
 }
 
-export class RillAbsoluteTime implements RillPointInTimeVariant {
+export class StardataAbsoluteTime implements StardataPointInTimeVariant {
   readonly dateObject: DateObjectUnits = {};
 
   public constructor(private readonly timeStr: string) {
@@ -718,7 +718,7 @@ export class RillAbsoluteTime implements RillPointInTimeVariant {
   }
 
   public static postProcessor(args: string[]) {
-    return new RillAbsoluteTime(args.flat().join(""));
+    return new StardataAbsoluteTime(args.flat().join(""));
   }
 
   public getGrain(): V1TimeGrain | undefined {
@@ -752,7 +752,7 @@ export class RillAbsoluteTime implements RillPointInTimeVariant {
   }
 }
 
-type RillGrain = {
+type StardataGrain = {
   grain: string;
   num?: number;
 };

@@ -1,9 +1,9 @@
 # Internationalization (i18n)
 
-Rill's frontend is localized with [Paraglide JS](https://inlang.com/m/gerre34r/library-inlang-paraglideJs)
+StarData's frontend is localized with [Paraglide JS](https://inlang.com/m/gerre34r/library-inlang-paraglideJs)
 (inlang). Translatable strings live in this directory and compile to
 tree-shakeable, type-safe message functions consumed by both `web-local`
-(Rill Developer) and `web-admin` (Rill Cloud).
+(StarData local CLI) and `web-admin` (StarData Cloud).
 
 ## Layout
 

@@ -18,7 +18,7 @@
 </script>
 
 <svelte:head>
-  <title>Rill Developer | {table}</title>
+  <title>StarData | {table}</title>
 </svelte:head>
 
 <TablePreviewWorkspace connector={name} {table} />

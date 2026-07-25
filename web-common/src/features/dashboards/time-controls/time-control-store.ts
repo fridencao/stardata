@@ -52,8 +52,8 @@ import { createQuery, type QueryObserverResult } from "@tanstack/svelte-query";
 import type { Readable } from "svelte/store";
 import { derived } from "svelte/store";
 import { memoizeMetricsStore } from "../state-managers/memoize-metrics-store";
-import { parseRillTime } from "../url-state/time-ranges/parser";
-import type { RillTime } from "../url-state/time-ranges/RillTime";
+import { parseStardataTime } from "../url-state/time-ranges/parser";
+import type { StardataTime } from "../url-state/time-ranges/StardataTime";
 import { DateTime, Interval } from "luxon";
 import { getComparisonInterval } from "@rilldata/web-common/lib/time/comparisons";
 
@@ -332,13 +332,13 @@ export function calculateTimeRangePartial(
   );
   if (!selectedTimeRange) return undefined;
 
-  let parsed: RillTime | undefined;
+  let parsed: StardataTime | undefined;
 
   if (currentSelectedTimeRange.name === TimeRangePreset.CUSTOM) {
     parsed = undefined;
   } else if (currentSelectedTimeRange?.name) {
     try {
-      parsed = parseRillTime(currentSelectedTimeRange.name);
+      parsed = parseStardataTime(currentSelectedTimeRange.name);
     } catch {
       //no-op
     }

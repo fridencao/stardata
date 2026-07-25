@@ -5,9 +5,9 @@ import (
 	"slices"
 	"strings"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/drivers/slack"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers/slack"
 	"go.uber.org/zap"
 	"golang.org/x/exp/maps"
 	"google.golang.org/protobuf/types/known/structpb"

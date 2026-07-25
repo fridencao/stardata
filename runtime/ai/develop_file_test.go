@@ -5,9 +5,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/rilldata/rill/runtime/ai"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/testruntime"
+	"github.com/fridencao/stardata/runtime/ai"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/testruntime"
 	"github.com/stretchr/testify/require"
 )
 

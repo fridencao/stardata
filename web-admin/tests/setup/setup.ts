@@ -308,7 +308,7 @@ setup.describe("global setup", () => {
         },
         { intervals: Array(4).fill(30_000), timeout: 120_000 },
       )
-      .toContain(`Welcome to Untitled Rill Project`);
+      .toContain(`Welcome to Untitled StarData Project`);
 
     // Navigate to the dashboards page to validate the deployment
     await adminPage.getByRole("link", { name: "Dashboards" }).click();

@@ -20,7 +20,7 @@
     {
       icon: Github,
       label: m.footer_report_issue(),
-      href: "https://github.com/rilldata/rill/issues/new?assignees=&labels=bug&template=bug_report.md&title=",
+      href: "https://github.com/fridencao/stardata/issues/new?assignees=&labels=bug&template=bug_report.md&title=",
       className: "fill-fg-secondary",
       shrinkIcon: true,
     },

@@ -1,9 +1,9 @@
 package env
 
 import (
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
-	envValidator "github.com/rilldata/rill/runtime/pkg/env"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	envValidator "github.com/fridencao/stardata/runtime/pkg/env"
 	"github.com/spf13/cobra"
 )
 

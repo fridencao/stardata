@@ -2,10 +2,10 @@
   import { page } from "$app/stores";
   import { createAdminServiceGetCurrentUser } from "@rilldata/web-admin/client";
   import {
-    showWelcomeToRillDialog,
-    showWelcomeToRillDialogForPlan,
+    showWelcomeToStarDataDialog,
+    showWelcomeToStarDataDialogForPlan,
   } from "@rilldata/web-admin/features/billing/plans/utils";
-  import WelcomeToRillCloudDialog from "@rilldata/web-admin/features/billing/plans/dialog/WelcomeToRillCloudDialog.svelte";
+  import WelcomeToStarDataCloudDialog from "@rilldata/web-admin/features/billing/plans/dialog/WelcomeToStarDataCloudDialog.svelte";
   import { getActiveOrgLocalStorageKey } from "@rilldata/web-admin/features/organizations/active-org/local-storage";
 
   const user = createAdminServiceGetCurrentUser();
@@ -23,7 +23,7 @@
 
 <slot />
 
-<WelcomeToRillCloudDialog
-  bind:open={$showWelcomeToRillDialog}
-  planName={$showWelcomeToRillDialogForPlan}
+<WelcomeToStarDataCloudDialog
+  bind:open={$showWelcomeToStarDataDialog}
+  planName={$showWelcomeToStarDataDialogForPlan}
 />

@@ -18,7 +18,7 @@ builds:
     binary: rill
 
 brews:
-  - homepage: https://github.com/rilldata/rill
+  - homepage: https://github.com/fridencao/stardata
     description: The Rill CLI
     name: rill
     license: Apache 2.0

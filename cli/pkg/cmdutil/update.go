@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	versionCheckURI = "https://api.github.com/repos/rilldata/rill/releases/latest"
+	versionCheckURI = "https://api.github.com/repos/fridencao/stardata/releases/latest"
 	versionCheckTTL = 24 * time.Hour
 )
 

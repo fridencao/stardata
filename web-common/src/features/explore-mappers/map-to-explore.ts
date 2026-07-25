@@ -1,6 +1,6 @@
 import type { ExploreState } from "@rilldata/web-common/features/dashboards/stores/explore-state";
 import { getExploreStateFromYAMLConfig } from "@rilldata/web-common/features/dashboards/stores/get-explore-state-from-yaml-config.ts";
-import { getRillDefaultExploreState } from "@rilldata/web-common/features/dashboards/stores/get-rill-default-explore-state.ts";
+import { getStarDataDefaultExploreState } from "@rilldata/web-common/features/dashboards/stores/get-stardata-default-explore-state.ts";
 import { getDashboardFromAggregationRequest } from "@rilldata/web-common/features/explore-mappers/get-dashboard-from-aggregation-request.ts";
 import { getDashboardFromComparisonRequest } from "@rilldata/web-common/features/explore-mappers/get-dashboard-from-comparison-request.ts";
 import type {
@@ -162,7 +162,7 @@ export function mapQueryToDashboard(
 
       const { metricsView, explore } = validSpecResp.data;
 
-      const rillDefaultExploreState = getRillDefaultExploreState(
+      const starDataDefaultExploreState = getStarDataDefaultExploreState(
         validSpecResp.data.metricsView,
         validSpecResp.data.explore,
         timeRangeSummary.data?.timeRangeSummary,
@@ -173,7 +173,7 @@ export function mapQueryToDashboard(
         metricsView.smallestTimeGrain,
       );
       const defaultExploreState = {
-        ...rillDefaultExploreState,
+        ...starDataDefaultExploreState,
         ...exploreStateFromYAMLConfig,
       };
       getDashboardState({

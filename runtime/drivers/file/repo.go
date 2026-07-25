@@ -16,9 +16,9 @@ import (
 	"time"
 
 	"github.com/bmatcuk/doublestar/v4"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/filewatcher"
-	"github.com/rilldata/rill/runtime/pkg/gitutil"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/filewatcher"
+	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"golang.org/x/exp/maps"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

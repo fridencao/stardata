@@ -1,7 +1,7 @@
 ---
-title: "Rill MCP Server"
-description: How to connect to Rill MCP and query your metrics views
-sidebar_label: "Rill MCP Server"
+title: "StarData MCP Server"
+description: How to connect to StarData MCP and query your metrics views
+sidebar_label: "StarData MCP Server"
 sidebar_position: 05
 ---
 
@@ -30,20 +30,20 @@ sidebar_position: 05
 <br/>
 
 
-The Rill Model Context Protocol (MCP) server exposes Rill's most essential APIs to LLMs. It is currently designed primarily for data analysts, not data engineers, and focuses on consuming Rill metrics views—not creating them.
+The StarData Model Context Protocol (MCP) server exposes StarData's most essential APIs to LLMs. It is currently designed primarily for data analysts, not data engineers, and focuses on consuming StarData metrics views—not creating them.
 
-:::tip Looking for AI Chat in Rill Cloud?
-If you want to chat with your data directly in your browser without any setup, check out [AI Chat](/guide/ai/ai-chat), which uses the same MCP technology but is built right into Rill Cloud.
+:::tip Looking for AI Chat in StarData?
+If you want to chat with your data directly in your browser without any setup, check out [AI Chat](/guide/ai/ai-chat), which uses the same MCP technology but is built right into StarData.
 :::
 
-## Why use MCP with Rill?
-Instead of blindly exposing your entire data warehouse to external platforms in hopes of uncovering trends, Rill's MCP integration provides a **structured and governed** alternative. By querying data that already has **predefined measures and dimensions**, the responses you get are guaranteed to be as **accurate and consistent** as the metrics displayed in your Rill dashboards.
+## Why use MCP with StarData?
+Instead of blindly exposing your entire data warehouse to external platforms in hopes of uncovering trends, StarData's MCP integration provides a **structured and governed** alternative. By querying data that already has **predefined measures and dimensions**, the responses you get are guaranteed to be as **accurate and consistent** as the metrics displayed in your StarData dashboards.
 
-Rill offers two ways to use MCP:
-- **Rill MCP Server** (this guide) - Connect external AI assistants like Claude Desktop to your Rill projects
-- **[AI Chat](/guide/ai/ai-chat)** - Built-in chat interface in Rill Cloud with zero setup required
+StarData offers two ways to use MCP:
+- **StarData MCP Server** (this guide) - Connect external AI assistants like Claude Desktop to your StarData projects
+- **[AI Chat](/guide/ai/ai-chat)** - Built-in chat interface with zero setup required
 
-You can also add `ai_instructions` to your project file and metrics views, which will give your LLM additional context on how to use the Rill MCP Server for best results.
+You can also add `ai_instructions` to your project file and metrics views, which will give your LLM additional context on how to use the StarData MCP Server for best results.
 
 :::tip Configure AI instructions
 Set project-wide AI instructions to provide context unique to your project and improve MCP responses.
@@ -63,14 +63,14 @@ This ensures **trustworthy, governed analytics** while empowering users to **sel
 
 ### Prerequisites
 
-To use the Rill MCP server, you'll need:
+To use the StarData MCP server, you'll need:
 
 - An **MCP client** 
-- A **running Rill project** (locally or hosted on Rill Cloud)
+- A **running StarData project** (locally or hosted)
 
 ## Connect using OAuth (Recommended)
 
-The easiest way to connect your Rill app to Claude Desktop or ChatGPT is through their custom connector interfaces, which handle authentication automatically via OAuth. This eliminates the need to manually create access tokens or edit configuration files.
+The easiest way to connect your StarData app to Claude Desktop or ChatGPT is through their custom connector interfaces, which handle authentication automatically via OAuth. This eliminates the need to manually create access tokens or edit configuration files.
 
 ### Claude Desktop (Paid Plan)
 
@@ -80,29 +80,29 @@ Custom connectors are only available in the paid plan of Claude Desktop. [Learn 
 
 1. Open Claude Desktop and navigate to **Settings → Connectors**
 2. Click **Add custom connector**
-3. Enter the Rill MCP URL for your project:
+3. Enter the StarData MCP URL for your project:
    ```
-   https://api.rilldata.com/v1/orgs/{org_name}/projects/{project_name}/runtime/mcp
-   ```
-   Replace `{org_name}` and `{project_name}` with your organization and project names.
+    https://api.rilldata.com/v1/orgs/{org_name}/projects/{project_name}/runtime/mcp
+    ```
+    Replace `{org_name}` and `{project_name}` with your organization and project names.
 4. The OAuth flow will automatically start in your browser
-5. Log in to Rill and authorize the connection
-6. Claude Desktop will receive an access token and your Rill app will be connected
+5. Log in to StarData and authorize the connection
+6. Claude Desktop will receive an access token and your StarData app will be connected
 
 ### Claude Code (Paid Plan)
 
 1. In your terminal, run the following command to add an MCP server with Claude Code:
     ```bash
-    claude mcp add --transport http <rill-mcp-server-name> https://api.rilldata.com/v1/orgs/{org_name}/projects/{project_name}/runtime/mcp 
+    claude mcp add --transport http <stardata-mcp-server-name> https://api.rilldata.com/v1/orgs/{org_name}/projects/{project_name}/runtime/mcp 
     ```
-    Replace `{org_name}` and `{project_name}` with your organization and project names. `<rill-mcp-server-name>` will be the name you assign to this MCP server.
+    Replace `{org_name}` and `{project_name}` with your organization and project names. `<stardata-mcp-server-name>` will be the name you assign to this MCP server.
 
 2. Open Claude Code using `claude` cmd.
 3. In Claude Code, use `/mcp` command to see the list of MCP servers.
-4. Choose the Rill MCP server you just added.
+4. Choose the StarData MCP server you just added.
 5. Select `Authenticate` to start the OAuth flow in your browser.
-6. Log in to Rill and authorize the connection.
-7. Claude Code will receive an access token, and your Rill app will be connected.
+6. Log in to StarData and authorize the connection.
+7. Claude Code will receive an access token, and your StarData app will be connected.
 
 ### ChatGPT Web Interface (Paid Plan)
 
@@ -113,14 +113,14 @@ Custom apps with Developer mode are only available in the paid plans of ChatGPT.
 1. Open ChatGPT and navigate to **Settings → Apps & Connectors → Advanced Settings**
 2. Enable **Developer mode**
 3. Go back to **Apps & Connectors** and click **Create** in the Apps section
-4. Enter the Rill MCP URL for your project:
+4. Enter the StarData MCP URL for your project:
    ```
-   https://api.rilldata.com/v1/orgs/{org_name}/projects/{project_name}/runtime/mcp
-   ```
-   Replace `{org_name}` and `{project_name}` with your organization and project names.
+    https://api.rilldata.com/v1/orgs/{org_name}/projects/{project_name}/runtime/mcp
+    ```
+    Replace `{org_name}` and `{project_name}` with your organization and project names.
 5. The OAuth flow will automatically start in your browser
-6. Log in to Rill and authorize the connection
-7. ChatGPT will receive an access token and your Rill app will be connected
+6. Log in to StarData and authorize the connection
+7. ChatGPT will receive an access token and your StarData app will be connected
 
 ### Connecting to a specific branch
 
@@ -132,10 +132,10 @@ https://api.rilldata.com/v1/orgs/{org_name}/projects/{project_name}/branch/{bran
 
 ## Manual Configuration (Alternative Method)
 
-If you prefer to manually configure the connection or need to connect to a local Rill instance, you can edit configuration files directly and provide your own access token.
+If you prefer to manually configure the connection or need to connect to a local StarData instance, you can edit configuration files directly and provide your own access token.
 Note: If you select this option, you must have Node.js installed on your system. It can be downloaded from [nodejs.org](https://nodejs.org/en).
 
-### Create a Rill Personal Access Token (if your project is on Rill Cloud)
+### Create a Personal Access Token (if your project is on StarData Cloud)
 
 **Via UI (recommended):**
 
@@ -146,11 +146,11 @@ Navigate to the AI tab in your project to retrieve both the JSON config and crea
 **Via CLI:**
 
 ```bash
-# Install the Rill CLI if you haven't already
+# Install the StarData CLI if you haven't already
 curl https://rill.sh | sh
 
 # Create a token
-rill token issue
+stardata token issue
 ```
 
 :::tip Learn more about user tokens
@@ -166,16 +166,16 @@ By default, the JSON file is found in the following directories:
 - Windows: `C:\Users\{USER}\AppData\Roaming\Claude\claude_desktop_config.json`
 
 ### config.json
-Depending on which Rill instance you are trying to connect to (locally running Rill Developer, public Rill project on Rill Cloud, or private Rill project on Rill Cloud (default)), the configuration will vary. For Rill Cloud deployed projects, you can navigate to the AI page to retrieve the `config.json`.
+Depending on which StarData instance you are trying to connect to (locally running StarData Developer, public StarData project on StarData Cloud, or private StarData project on StarData Cloud (default)), the configuration will vary. For StarData Cloud deployed projects, you can navigate to the AI page to retrieve the `config.json`.
 
-__*Private Rill Project on Rill Cloud*__
+__*Private StarData Project on StarData Cloud*__
 
 Replace `org` and `project` with the ID of your organization and project.
 
 ```json
 {
     "mcpServers": {
-        "rill": {
+        "stardata": {
             "command": "npx",
             "args": [
                 "mcp-remote",
@@ -184,21 +184,21 @@ Replace `org` and `project` with the ID of your organization and project.
                 "Authorization:${AUTH_HEADER}"
             ],
             "env": {
-                "AUTH_HEADER": "Bearer <Rill access token>"
+                "AUTH_HEADER": "Bearer <StarData access token>"
             }
         }
     }
 }
 ```
 
-__*Public Rill Project on Rill Cloud*__
+__*Public StarData Project on StarData Cloud*__
 
 See [our demo page](https://ui.rilldata.com/demo) for public projects to test.
 
 ```json
 {
     "mcpServers": {
-        "rill": {
+        "stardata": {
             "command": "npx",
             "args": [
                 "mcp-remote",
@@ -209,12 +209,12 @@ See [our demo page](https://ui.rilldata.com/demo) for public projects to test.
 }
 ```
 
-__*Locally Running Rill Developer*__
+__*Locally Running StarData Developer*__
 
 ```json
 {
     "mcpServers": {
-        "rill": {
+        "stardata": {
             "command": "npx",
             "args": [
                 "mcp-remote",
@@ -230,17 +230,17 @@ Restart Claude Desktop for any changes to your JSON file to take effect.
 :::
 
 ### Troubleshooting
-If Claude Desktop cannot connect to the MCP server, check that Rill is running (locally) or that you are able to connect to your [Rill project](https://ui.rilldata.com) from your browser. If your project is private, check that the token is valid via the CLI or create a new one in the UI and edit the `config.json` file.
+If Claude Desktop cannot connect to the MCP server, check that StarData is running (locally) or that you are able to connect to your [StarData project](https://ui.rilldata.com) from your browser. If your project is private, check that the token is valid via the CLI or create a new one in the UI and edit the `config.json` file.
 
 If you're still experiencing issues, check the logs in Claude Desktop. Click on Developer → Open MCP Log File and check the logs for any errors.
 
 ## Adding AI instructions to your metrics view or project YAML
 
-LLMs give their best results when they have good context. For a conversation with Rill Data, this means things like clarifying project-specific terms, routing questions to the correct metrics view, or defining business rules. Rather than expecting the user to provide this context every time, you can add `ai_instructions` to your model. This adds the context automatically for every conversation.
+LLMs give their best results when they have good context. For a conversation with StarData, this means things like clarifying project-specific terms, routing questions to the correct metrics view, or defining business rules. Rather than expecting the user to provide this context every time, you can add `ai_instructions` to your model. This adds the context automatically for every conversation.
 
 There are two places to add `ai_instructions`:
 
-1. `rill.yaml` for project-wide context, such as instructions on how to use Rill MCP Server
+1. `rill.yaml` for project-wide context, such as instructions on how to use StarData MCP Server
 2. Every metrics view YAML (`<metrics_view>.yaml`), with examples of Explore URLs for that metrics view
 
 For detailed examples and best practices on writing effective AI instructions, see the [AI Configuration guide](/developers/build/ai-configuration).
@@ -248,7 +248,7 @@ For detailed examples and best practices on writing effective AI instructions, s
 You can look at one of our [example projects](https://github.com/rilldata/rill-examples/tree/main/rill-openrtb-prog-ads) to see how these are used. Experiment with the instructions and see what works best for your requirements.
 
 
-## Using Rill MCP Server in Claude
+## Using StarData MCP Server in Claude
 
 ![MCP Main](/img/explore/mcp/mcp-main.gif)
 
@@ -262,7 +262,7 @@ You can look at one of our [example projects](https://github.com/rilldata/rill-e
 
 ### Usage Examples
 
-Using all the above concepts, you can ask the Rill MCP server questions like:
+Using all the above concepts, you can ask the StarData MCP server questions like:
 - What are my *week-on-week* __increases or decreases in sales__ of `XYZ service`?
 - During the *current year*, do I have any __outliers in website views__? What might this correlate to?
 - In the *previous quarter*, compared to the current ongoing quarter, what are the __trends for customer access__?
@@ -270,9 +270,9 @@ Using all the above concepts, you can ask the Rill MCP server questions like:
 
 
 ## Conclusion
-While [Explore dashboards](/guide/dashboards/explore) are a great way to slice and dice to find insights, sometimes you just need a quick, overall summary of your data via a text conversation. The Rill MCP server enables this through external AI assistants like Claude Desktop. Since Rill MCP is built on top of your existing metrics, you can be confident that the returned data will be correct.
+While [Explore dashboards](/guide/dashboards/explore) are a great way to slice and dice to find insights, sometimes you just need a quick, overall summary of your data via a text conversation. The StarData MCP server enables this through external AI assistants like Claude Desktop. Since StarData MCP is built on top of your existing metrics, you can be confident that the returned data will be correct.
 
-**Want AI chat directly in Rill Cloud?** Check out [AI Chat](/guide/ai/ai-chat) for a browser-based experience that uses the same MCP technology with zero setup required.
+**Want AI chat directly in StarData Cloud?** Check out [AI Chat](/guide/ai/ai-chat) for a browser-based experience that uses the same MCP technology with zero setup required.
 
 
 ## Need help?

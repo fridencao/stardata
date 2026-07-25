@@ -87,12 +87,12 @@ export function getSubscriptionResumedText(endDate: string) {
 
 // Since this could be triggered in a route that could be navigated from,
 // we add a global and show it in org route's layout
-export const showWelcomeToRillDialog = writable(false);
-export const showWelcomeToRillDialogForPlan = writable("");
+export const showWelcomeToStarDataDialog = writable(false);
+export const showWelcomeToStarDataDialogForPlan = writable("");
 
-export function triggerWelcomeToRillDialog(planName: string) {
-  showWelcomeToRillDialog.set(true);
-  showWelcomeToRillDialogForPlan.set(planName);
+export function triggerWelcomeToStarDataDialog(planName: string) {
+  showWelcomeToStarDataDialog.set(true);
+  showWelcomeToStarDataDialogForPlan.set(planName);
 }
 
 export function formatCredit(credits: number): string {

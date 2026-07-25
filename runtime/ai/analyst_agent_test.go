@@ -6,10 +6,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rilldata/rill/runtime/ai"
-	"github.com/rilldata/rill/runtime/metricsview"
-	"github.com/rilldata/rill/runtime/pkg/mapstructureutil"
-	"github.com/rilldata/rill/runtime/testruntime"
+	"github.com/fridencao/stardata/runtime/ai"
+	"github.com/fridencao/stardata/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/pkg/mapstructureutil"
+	"github.com/fridencao/stardata/runtime/testruntime"
 	"github.com/stretchr/testify/require"
 )
 

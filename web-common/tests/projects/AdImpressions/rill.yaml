@@ -1,6 +1,6 @@
 compiler: rillv1
 
-display_name: Untitled Rill Project
+display_name: Untitled StarData Project
 
 # The project's default OLAP connector.
 # Learn more: https://docs.rilldata.com/reference/olap-engines

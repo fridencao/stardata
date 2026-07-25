@@ -10,12 +10,12 @@ import (
 	"testing"
 
 	"github.com/joho/godotenv"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/metricsview"
-	"github.com/rilldata/rill/runtime/metricsview/metricssql"
-	"github.com/rilldata/rill/runtime/pkg/fileutil"
-	"github.com/rilldata/rill/runtime/testruntime"
-	"github.com/rilldata/rill/runtime/testruntime/testmode"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/metricsview/metricssql"
+	"github.com/fridencao/stardata/runtime/pkg/fileutil"
+	"github.com/fridencao/stardata/runtime/testruntime"
+	"github.com/fridencao/stardata/runtime/testruntime/testmode"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 )

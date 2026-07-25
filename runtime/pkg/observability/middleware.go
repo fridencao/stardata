@@ -11,8 +11,8 @@ import (
 
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	"github.com/rilldata/rill/runtime/pkg/activity"
-	"github.com/rilldata/rill/runtime/pkg/httputil"
+	"github.com/fridencao/stardata/runtime/pkg/activity"
+	"github.com/fridencao/stardata/runtime/pkg/httputil"
 	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/trace"

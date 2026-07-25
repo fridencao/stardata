@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/metricsview"
 )
 
 // rewriteQueryDruidExactify applies an approach to get more accurate measure values for TopN queries in Druid (which are approximate).

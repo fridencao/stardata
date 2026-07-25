@@ -11,7 +11,7 @@ import (
 	"text/template"
 
 	"github.com/google/jsonschema-go/jsonschema"
-	"github.com/rilldata/rill/runtime/parser"
+	"github.com/fridencao/stardata/runtime/parser"
 	"gopkg.in/yaml.v3"
 )
 

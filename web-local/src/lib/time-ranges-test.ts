@@ -10,7 +10,7 @@ const GRAINS = ["Y", "Q", "M", "W", "D", "H", "m", "s"] as const;
 
 const REF = "ref";
 
-type RillGrain = (typeof GRAINS)[number];
+type StarDataGrain = (typeof GRAINS)[number];
 
 type TimeMetadata = {
   watermark: DateTime;

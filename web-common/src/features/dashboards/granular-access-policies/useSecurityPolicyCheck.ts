@@ -25,7 +25,7 @@ export function useDashboardPolicyCheck(
   );
 }
 
-export function useRillYamlPolicyCheck(client: RuntimeClient) {
+export function useStarDataYamlPolicyCheck(client: RuntimeClient) {
   return createRuntimeServiceGetFile(
     client,
     {

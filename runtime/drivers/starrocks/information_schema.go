@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/drivers"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/drivers"
 )
 
 // StarRocks Uses fully qualified names (catalog.information_schema.tables) instead of SET CATALOG/USE

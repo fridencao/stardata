@@ -7,7 +7,7 @@ import (
 	"net/mail"
 	"strings"
 
-	"github.com/rilldata/rill/admin/database"
+	"github.com/fridencao/stardata/admin/database"
 	"go.uber.org/zap"
 )
 

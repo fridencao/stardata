@@ -108,7 +108,7 @@
     onSelectDay={onValidDateInput}
   />
 
-  <!-- {#if usingRillTime} -->
+  <!-- {#if usingStarDataTime} -->
   <div class="w-full h-px bg-border"></div>
 
   <div class="flex flex-col gap-y-2">

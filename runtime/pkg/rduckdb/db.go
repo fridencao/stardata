@@ -21,7 +21,7 @@ import (
 	"github.com/XSAM/otelsql"
 	"github.com/duckdb/duckdb-go/v2"
 	"github.com/jmoiron/sqlx"
-	"github.com/rilldata/rill/runtime/pkg/observability"
+	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
@@ -34,7 +34,7 @@ import (
 var (
 	errNotFound       = errors.New("rduckdb: not found")
 	createSecretRegex = regexp.MustCompile(`(?i)\bcreate\b(?:\s+\w+)*\s+\bsecret\b`)
-	tracer            = otel.Tracer("github.com/rilldata/rill/runtime/pkg/rduckdb")
+	tracer            = otel.Tracer("github.com/fridencao/stardata/runtime/pkg/rduckdb")
 )
 
 type DB interface {

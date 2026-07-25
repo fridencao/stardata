@@ -7,10 +7,10 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/graceful"
-	"github.com/rilldata/rill/runtime/pkg/rduckdb"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/graceful"
+	"github.com/fridencao/stardata/runtime/pkg/rduckdb"
 	"go.uber.org/zap"
 )
 

@@ -20,7 +20,7 @@ export const SIDEBAR_DEFAULTS = {
 // =============================================================================
 
 // Per-surface open state. Keeping the developer and dashboard panels on
-// independent keys means publishing from a Rill Developer tab does not flip
+// independent keys means publishing from a local StarData tab does not flip
 // the chat-open flag in the freshly opened production tab — Chromium clones
 // sessionStorage when window.open inherits the opener context.
 export const developerChatOpen = sessionStorageStore<boolean>(

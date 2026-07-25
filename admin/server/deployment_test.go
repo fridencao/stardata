@@ -9,11 +9,11 @@ import (
 	"testing"
 
 	"github.com/golang-jwt/jwt/v4"
-	"github.com/rilldata/rill/admin/testadmin"
-	"github.com/rilldata/rill/cli/testcli"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/testruntime/testmode"
+	"github.com/fridencao/stardata/admin/testadmin"
+	"github.com/fridencao/stardata/cli/testcli"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/testruntime/testmode"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/types/known/structpb"
 )

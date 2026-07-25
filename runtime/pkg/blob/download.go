@@ -9,10 +9,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/fileutil"
-	"github.com/rilldata/rill/runtime/pkg/observability"
-	"github.com/rilldata/rill/runtime/pkg/pagination"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/fileutil"
+	"github.com/fridencao/stardata/runtime/pkg/observability"
+	"github.com/fridencao/stardata/runtime/pkg/pagination"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
@@ -30,8 +30,8 @@ const _defaultBatchSizeBytes = 1024 * 1024 * 1024 // 1 GB
 
 // Metrics
 var (
-	tracer                = otel.Tracer("github.com/rilldata/rill/runtime/pkg/blob")
-	meter                 = otel.Meter("github.com/rilldata/rill/runtime/pkg/blob")
+	tracer                = otel.Tracer("github.com/fridencao/stardata/runtime/pkg/blob")
+	meter                 = otel.Meter("github.com/fridencao/stardata/runtime/pkg/blob")
 	downloadTimeHistogram = observability.Must(meter.Float64Histogram("download.time", metric.WithUnit("s")))
 	downloadSizeCounter   = observability.Must(meter.Int64UpDownCounter("download.size", metric.WithUnit("bytes")))
 	downloadSpeedCounter  = observability.Must(meter.Float64UpDownCounter("download.speed", metric.WithUnit("bytes/s")))

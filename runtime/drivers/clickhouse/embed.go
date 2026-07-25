@@ -23,7 +23,7 @@ import (
 	"time"
 
 	"github.com/ClickHouse/clickhouse-go/v2"
-	"github.com/rilldata/rill/cli/pkg/dotrill"
+	"github.com/fridencao/stardata/cli/pkg/dotrill"
 	"go.uber.org/zap"
 )
 

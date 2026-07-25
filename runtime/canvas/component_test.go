@@ -3,8 +3,8 @@ package canvas_test
 import (
 	"testing"
 
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/testruntime"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/testruntime"
 )
 
 // metricsViewFiles returns the standard model and metrics view fixture for chart tests.

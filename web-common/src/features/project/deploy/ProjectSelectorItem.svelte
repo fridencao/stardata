@@ -1,7 +1,7 @@
 <script lang="ts">
   import ExternalLink from "@rilldata/web-common/components/icons/ExternalLink.svelte";
   import Github from "@rilldata/web-common/components/icons/Github.svelte";
-  import RillFilled from "@rilldata/web-common/components/icons/RillFilled.svelte";
+  import StarDataLogoFilled from "@rilldata/web-common/components/icons/StarDataLogoFilled.svelte";
   import type { Project } from "@rilldata/web-common/proto/gen/rill/admin/v1/api_pb";
   import * as Tooltip from "@rilldata/web-common/components/tooltip-v2";
 
@@ -25,9 +25,9 @@
     {#if isManaged}
       <Tooltip.Root>
         <Tooltip.Trigger>
-          <RillFilled size="14" />
+          <StarDataLogoFilled size="14" />
         </Tooltip.Trigger>
-        <Tooltip.Content side="bottom">Rill-managed</Tooltip.Content>
+        <Tooltip.Content side="bottom">StarData-managed</Tooltip.Content>
       </Tooltip.Root>
     {:else}
       <Github size="14" />
@@ -46,7 +46,7 @@
           <ExternalLink className="fill-gray-700" />
         </a>
       </Tooltip.Trigger>
-      <Tooltip.Content side="bottom">Open Rill Cloud project</Tooltip.Content>
+      <Tooltip.Content side="bottom">Open StarData Cloud project</Tooltip.Content>
     </Tooltip.Root>
   {/if}
 </button>

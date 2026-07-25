@@ -5,10 +5,10 @@ import (
 	"errors"
 
 	"connectrpc.com/connect"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
-	localv1 "github.com/rilldata/rill/proto/gen/rill/local/v1"
-	"github.com/rilldata/rill/runtime/pkg/gitutil"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	localv1 "github.com/fridencao/stardata/proto/gen/rill/local/v1"
+	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 )
 
 func (s *Server) GitStatus(ctx context.Context, r *connect.Request[localv1.GitStatusRequest]) (*connect.Response[localv1.GitStatusResponse], error) {

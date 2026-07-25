@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rilldata/rill/admin/database"
+	"github.com/fridencao/stardata/admin/database"
 )
 
 const DeviceAuthCodeTTL = 10 * time.Minute

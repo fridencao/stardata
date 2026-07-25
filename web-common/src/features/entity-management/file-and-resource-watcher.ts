@@ -63,7 +63,7 @@ export interface FileAndResourceWatcherOptions {
   /** Lifecycle preset. "none" skips attaching an SSEConnectionLifecycle entirely. */
   lifecycle: LifecyclePreset;
   /** Hook fired before each reconnect attempt. Cloud editor passes a JWT
-   * refresh here; local Rill Developer does not. */
+   * refresh here; local StarData does not. */
   onBeforeReconnect?: () => Promise<void>;
 }
 

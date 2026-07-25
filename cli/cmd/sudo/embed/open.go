@@ -4,9 +4,9 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/rilldata/rill/cli/pkg/browser"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
+	"github.com/fridencao/stardata/cli/pkg/browser"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
 	"github.com/spf13/cobra"
 	"google.golang.org/protobuf/types/known/structpb"
 )

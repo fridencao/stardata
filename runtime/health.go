@@ -6,8 +6,8 @@ import (
 	"errors"
 	"fmt"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/drivers"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/drivers"
 )
 
 // Health reports a combined health status for the runtime and all instances.

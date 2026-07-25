@@ -10,9 +10,9 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/drivers/duckdb"
-	"github.com/rilldata/rill/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers/duckdb"
+	"github.com/fridencao/stardata/runtime/metricsview"
 	"go.uber.org/zap"
 )
 

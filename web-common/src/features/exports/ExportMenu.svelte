@@ -71,7 +71,7 @@
   }
 
   // Only import the Scheduled Report dialog if in the Cloud context.
-  // This ensures Rill Developer doesn't try and fail to import the admin-client.
+  // This ensures the local StarData CLI doesn't try and fail to import the admin-client.
   let ScheduledReportDialog: typeof TScheduledReportDialog;
   onMount(async () => {
     if (includeScheduledReport) {

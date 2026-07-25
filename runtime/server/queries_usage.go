@@ -5,10 +5,10 @@ import (
 	"errors"
 	"io"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/pkg/mapstructureutil"
-	"github.com/rilldata/rill/runtime/server/auth"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/pkg/mapstructureutil"
+	"github.com/fridencao/stardata/runtime/server/auth"
 )
 
 func (s *Server) ProjectStorage(ctx context.Context, req *runtimev1.ProjectStorageRequest) (*runtimev1.ProjectStorageResponse, error) {

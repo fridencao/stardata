@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/metricsview"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/metricsview"
 	"github.com/stretchr/testify/require"
 )
 

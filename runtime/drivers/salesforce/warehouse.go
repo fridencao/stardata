@@ -7,12 +7,12 @@ import (
 	"os"
 
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/codes"
 )
 
-var tracer = otel.Tracer("github.com/rilldata/rill/runtime/drivers/salesforce")
+var tracer = otel.Tracer("github.com/fridencao/stardata/runtime/drivers/salesforce")
 
 const defaultClientID = "3MVG9KsVczVNcM8y6w3Kjszy.DW9gMzcYDHT97WIX3NYNYA35UvITypEhtYc6FDY8qqcDEIQc_qJgZErv6Q_d"
 

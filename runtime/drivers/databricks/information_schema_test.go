@@ -3,7 +3,7 @@ package databricks_test
 import (
 	"testing"
 
-	"github.com/rilldata/rill/runtime/testruntime/testmode"
+	"github.com/fridencao/stardata/runtime/testruntime/testmode"
 	"github.com/stretchr/testify/require"
 )
 

@@ -3,7 +3,7 @@
 
   export let organization: string;
 
-  $: addUserCommand = `rill user add --org ${organization} --role viewer`;
+  $: addUserCommand = `stardata user add --org ${organization} --role viewer`;
 </script>
 
 <div class="flex flex-col">
@@ -11,7 +11,7 @@
     >Share</span
   >
   <div>
-    Run this command in the Rill CLI to invite a teammate to view this
+    Run this command in the StarData CLI to invite a teammate to view this
     organization.
   </div>
   <CLICommandDisplay command={addUserCommand} />

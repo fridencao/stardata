@@ -9,9 +9,9 @@ import (
 
 	"github.com/c2h5oh/datasize"
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/admin/database"
-	"github.com/rilldata/rill/admin/provisioner"
-	"github.com/rilldata/rill/runtime/pkg/observability"
+	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/admin/provisioner"
+	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.uber.org/zap"
 )
 

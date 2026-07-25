@@ -6,16 +6,16 @@ import (
 	"fmt"
 
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/admin/client"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/activity"
-	"github.com/rilldata/rill/runtime/storage"
+	"github.com/fridencao/stardata/admin/client"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/activity"
+	"github.com/fridencao/stardata/runtime/storage"
 	"go.opentelemetry.io/otel"
 	"go.uber.org/zap"
 )
 
-var tracer = otel.Tracer("github.com/rilldata/rill/runtime/drivers/admin")
+var tracer = otel.Tracer("github.com/fridencao/stardata/runtime/drivers/admin")
 
 var spec = drivers.Spec{
 	DisplayName: "Rill Admin",

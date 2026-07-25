@@ -19,8 +19,8 @@ import {
   AD_BIDS_EXPLORE_WITH_3_MEASURES_DIMENSIONS,
   AD_BIDS_METRICS_3_MEASURES_DIMENSIONS_WITH_TIME,
   AD_BIDS_PUBLISHER_DIMENSION,
-  AD_BIDS_RILL_DEFAULT_EXPLORE_STATE,
-  AD_BIDS_RILL_DEFAULT_EXPLORE_URL_PARAMS,
+AD_BIDS_STAR_DATA_DEFAULT_EXPLORE_STATE,
+  AD_BIDS_STAR_DATA_DEFAULT_EXPLORE_URL_PARAMS,
   AD_BIDS_TIME_RANGE_SUMMARY,
 } from "@rilldata/web-common/features/dashboards/stores/test-data/data.ts";
 import { getTimeControlState } from "@rilldata/web-common/features/dashboards/time-controls/time-control-store.ts";
@@ -176,7 +176,7 @@ describe("getBookmarkData and parseBookmarks", () => {
     // Generate the bookmark data as base64 of the url search
     const bookmarkUrlData = getBookmarkData({
       curUrlParams,
-      defaultUrlParams: AD_BIDS_RILL_DEFAULT_EXPLORE_URL_PARAMS,
+      defaultUrlParams: AD_BIDS_STAR_DATA_DEFAULT_EXPLORE_URL_PARAMS,
       filtersOnly,
     });
     // Generate the bookmark data as proto state for legacy parsing test
@@ -207,7 +207,7 @@ describe("getBookmarkData and parseBookmarks", () => {
               { data: bookmarkProtoData, displayName: "old" },
             ],
             new URLSearchParams(curUrlSearch),
-            AD_BIDS_RILL_DEFAULT_EXPLORE_URL_PARAMS,
+            AD_BIDS_STAR_DATA_DEFAULT_EXPLORE_URL_PARAMS,
             (data) =>
               // Use the explore transformer to match the ExploreBookmarks components and to parse legacy proto state
               exploreBookmarkDataTransformer({

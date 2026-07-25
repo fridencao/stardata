@@ -7,17 +7,17 @@ import (
 	"testing"
 	"time"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/drivers"
-	activity "github.com/rilldata/rill/runtime/pkg/activity"
-	"github.com/rilldata/rill/runtime/storage"
-	"github.com/rilldata/rill/runtime/testruntime"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/drivers"
+	activity "github.com/fridencao/stardata/runtime/pkg/activity"
+	"github.com/fridencao/stardata/runtime/storage"
+	"github.com/fridencao/stardata/runtime/testruntime"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
 
 	_ "github.com/duckdb/duckdb-go/v2"
-	_ "github.com/rilldata/rill/runtime/resolvers"
+	_ "github.com/fridencao/stardata/runtime/resolvers"
 )
 
 func TestDuckDBToDuckDBTransfer(t *testing.T) {

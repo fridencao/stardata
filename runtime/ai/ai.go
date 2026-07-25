@@ -16,12 +16,12 @@ import (
 	"github.com/google/jsonschema-go/jsonschema"
 	"github.com/google/uuid"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	aiv1 "github.com/rilldata/rill/proto/gen/rill/ai/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/activity"
-	"github.com/rilldata/rill/runtime/pkg/graceful"
-	"github.com/rilldata/rill/runtime/pkg/observability"
+	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/activity"
+	"github.com/fridencao/stardata/runtime/pkg/graceful"
+	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	semconv "go.opentelemetry.io/otel/semconv/v1.17.0"
@@ -33,7 +33,7 @@ import (
 )
 
 // Tracer for instrumenting requests.
-var tracer = otel.Tracer("github.com/rilldata/rill/runtime/ai")
+var tracer = otel.Tracer("github.com/fridencao/stardata/runtime/ai")
 
 // Runner tracks available tools and manages the lifecycle of AI sessions.
 type Runner struct {

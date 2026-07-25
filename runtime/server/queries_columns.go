@@ -3,11 +3,11 @@ package server
 import (
 	"context"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/pkg/observability"
-	"github.com/rilldata/rill/runtime/queries"
-	"github.com/rilldata/rill/runtime/server/auth"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/pkg/observability"
+	"github.com/fridencao/stardata/runtime/queries"
+	"github.com/fridencao/stardata/runtime/server/auth"
 	"go.opentelemetry.io/otel/attribute"
 )
 

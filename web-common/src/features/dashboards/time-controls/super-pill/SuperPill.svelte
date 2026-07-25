@@ -59,7 +59,7 @@
   export let onTimeDimensionSelect: ((dimension: string) => void) | undefined =
     undefined;
 
-  const newPicker = featureFlags.rillTime;
+  const newPicker = featureFlags.stardataTime;
 
   $: rangeBuckets = bucketYamlRanges(
     timeRanges,

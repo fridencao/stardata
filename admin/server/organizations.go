@@ -8,13 +8,13 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/rilldata/rill/admin/billing"
-	"github.com/rilldata/rill/admin/database"
-	"github.com/rilldata/rill/admin/pkg/publicemail"
-	"github.com/rilldata/rill/admin/server/auth"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
-	"github.com/rilldata/rill/runtime/pkg/email"
-	"github.com/rilldata/rill/runtime/pkg/observability"
+	"github.com/fridencao/stardata/admin/billing"
+	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/admin/pkg/publicemail"
+	"github.com/fridencao/stardata/admin/server/auth"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	"github.com/fridencao/stardata/runtime/pkg/email"
+	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.opentelemetry.io/otel/attribute"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -78,7 +78,7 @@ func (s *Server) GetOrganization(ctx context.Context, req *adminv1.GetOrganizati
 	}
 
 	// TODO: This is used to update plan name cache and can be removed a few months after Feb 2025 when plans have been cached for most orgs.
-	// after that we can return nil plan name for uncached orgs, discussion - https://github.com/rilldata/rill/pull/6338#discussion_r1952713404
+	// after that we can return nil plan name for uncached orgs, discussion - https://github.com/fridencao/stardata/pull/6338#discussion_r1952713404
 	if org.BillingPlanName == nil && org.BillingCustomerID != "" {
 		_, org, err = s.getSubscriptionAndUpdateOrg(ctx, org)
 		if err != nil {

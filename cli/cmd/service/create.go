@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/rilldata/rill/cli/cmd/project"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
+	"github.com/fridencao/stardata/cli/cmd/project"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
 	"github.com/spf13/cobra"
 	"google.golang.org/protobuf/types/known/structpb"
 )

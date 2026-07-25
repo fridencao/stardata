@@ -15,7 +15,7 @@ import (
 var ErrMalformed = errors.New("malformed auth token")
 
 // Prefix is prepended to every auth token.
-const Prefix = "rill"
+const Prefix = "stardata"
 
 // Type is part of the token prefix in the string representation.
 type Type string

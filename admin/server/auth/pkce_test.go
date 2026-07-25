@@ -3,7 +3,7 @@ package auth
 import (
 	"testing"
 
-	"github.com/rilldata/rill/admin/database"
+	"github.com/fridencao/stardata/admin/database"
 	"github.com/stretchr/testify/require"
 )
 

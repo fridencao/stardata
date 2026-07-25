@@ -173,7 +173,7 @@
       Deploy
     </Button>
     <TooltipContent slot="tooltip-content">
-      Deploy this project to Rill Cloud
+      Deploy this project to StarData
     </TooltipContent>
   </Tooltip>
 {/if}

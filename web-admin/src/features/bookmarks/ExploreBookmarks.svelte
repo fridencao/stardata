@@ -8,7 +8,7 @@
   } from "@rilldata/web-admin/features/bookmarks/utils.ts";
   import { getBookmarksQueryOptions } from "@rilldata/web-admin/features/bookmarks/selectors.ts";
   import { createUrlForExploreYAMLDefaultState } from "@rilldata/web-common/features/dashboards/stores/get-explore-state-from-yaml-config.ts";
-  import { createRillDefaultExploreUrlParamsV2 } from "@rilldata/web-common/features/dashboards/url-state/get-rill-default-explore-url-params.ts";
+  import { createStarDataDefaultExploreUrlParamsV2 } from "@rilldata/web-common/features/dashboards/url-state/get-stardata-default-explore-url-params.ts";
   import { ResourceKind } from "@rilldata/web-common/features/entity-management/resource-selectors.ts";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import { createQuery } from "@tanstack/svelte-query";
@@ -36,7 +36,7 @@
 
   // Rill opinionated url params that are removed from url to keep the url short.
   // To keep bookmarks exhaustive, these are added on top of current url params while creating bookmarks.
-  const rillDefaultExploreURLParams = createRillDefaultExploreUrlParamsV2(
+  const starDataDefaultExploreURLParams = createStarDataDefaultExploreUrlParamsV2(
     runtimeClient,
     exploreNameStore,
   );
@@ -59,7 +59,7 @@
   $: parsedBookmarks = parseBookmarks(
     bookmarks,
     $page.url.searchParams,
-    $rillDefaultExploreURLParams,
+    $starDataDefaultExploreURLParams,
     $exploreBookmarkLegacyDataTransformer,
   );
   // Categorize bookmarks into home, shared and personal bookmarks.
@@ -73,7 +73,7 @@
   bookmarkData={{
     bookmarks,
     categorizedBookmarks,
-    defaultUrlParams: $rillDefaultExploreURLParams,
+    defaultUrlParams: $starDataDefaultExploreURLParams,
     defaultHomeBookmarkUrl: $urlForExploreYAMLDefaultState,
   }}
   metricsViewNames={[metricsViewName]}

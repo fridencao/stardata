@@ -3,14 +3,14 @@ FROM ubuntu
 
 RUN apt-get update && apt-get install -y ca-certificates git
 
-COPY rill /usr/local/bin
-RUN chmod 777 /usr/local/bin/rill
+COPY stardata /usr/local/bin
+RUN chmod 777 /usr/local/bin/stardata
 
-RUN groupadd -g 1001 rill \
-    && useradd -m -u 1001 -s /bin/sh -g rill rill
-USER rill
+RUN groupadd -g 1001 stardata \
+    && useradd -m -u 1001 -s /bin/sh -g stardata stardata
+USER stardata
 
-RUN rill runtime install-duckdb-extensions
+RUN stardata runtime install-duckdb-extensions
 
-ENTRYPOINT ["rill"]
+ENTRYPOINT ["stardata"]
 CMD ["start"]

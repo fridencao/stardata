@@ -5,7 +5,7 @@ import { mapScreenName } from "@rilldata/web-common/metrics/mapScreenName";
 import { BehaviourEventFactory } from "@rilldata/web-common/metrics/service/BehaviourEventFactory";
 import { MetricsService } from "@rilldata/web-common/metrics/service/MetricsService";
 import { ProductHealthEventFactory } from "@rilldata/web-common/metrics/service/ProductHealthEventFactory";
-import { RillIntakeClient } from "@rilldata/web-common/metrics/service/RillIntakeClient";
+import { StarDataIntakeClient } from "@rilldata/web-common/metrics/service/StarDataIntakeClient";
 import { GetMetadataResponse } from "@rilldata/web-common/proto/gen/rill/local/v1/api_pb";
 import { get } from "svelte/store";
 import { ActiveEventHandler } from "./ActiveEventHandler";
@@ -22,7 +22,7 @@ export async function initMetrics(
   localConfig: GetMetadataResponse,
   host: string,
 ) {
-  metricsService = new MetricsService(new RillIntakeClient(host), [
+  metricsService = new MetricsService(new StarDataIntakeClient(host), [
     new ProductHealthEventFactory(),
     new BehaviourEventFactory(),
     new ErrorEventFactory(),

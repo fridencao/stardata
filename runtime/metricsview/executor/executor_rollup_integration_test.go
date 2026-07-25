@@ -6,13 +6,13 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/metricsview"
-	"github.com/rilldata/rill/runtime/metricsview/executor"
-	"github.com/rilldata/rill/runtime/testruntime"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/metricsview/executor"
+	"github.com/fridencao/stardata/runtime/testruntime"
 	"github.com/stretchr/testify/require"
 
-	_ "github.com/rilldata/rill/runtime/resolvers"
+	_ "github.com/fridencao/stardata/runtime/resolvers"
 )
 
 const (

@@ -279,14 +279,14 @@ describe("display-utils", () => {
       ).toBe("DuckLake");
     });
 
-    it("shows Rill-managed for provisioned ClickHouse", () => {
+    it("shows StarData-managed for provisioned ClickHouse", () => {
       expect(
         getOlapEngineLabel({
           type: "clickhouse",
           name: "clickhouse",
           provision: true,
         }),
-      ).toBe("ClickHouse (Rill-managed)");
+      ).toBe("ClickHouse (StarData-managed)");
     });
 
     it("returns bare label for non-provisioned ClickHouse", () => {

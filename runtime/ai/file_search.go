@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	"github.com/rilldata/rill/runtime"
+	"github.com/fridencao/stardata/runtime"
 )
 
 const SearchFilesName = "search_files"

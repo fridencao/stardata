@@ -31,7 +31,7 @@ const createDirectoryStore = (): CustomWritable<DirectoryState> => {
   });
 
   // The persisted state is scoped per project via setProjectScope(): the
-  // instanceId is always "default" in Rill Developer, so different projects
+  // instanceId is always "default" in local StarData, so different projects
   // opened in the same browser would otherwise share one collapsed/expanded map.
   // localStorageStore can't be reused here because its key is fixed at creation,
   // whereas the active project (and thus the key) is only known once the runtime

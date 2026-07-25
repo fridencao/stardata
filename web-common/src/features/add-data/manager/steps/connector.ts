@@ -32,7 +32,7 @@ import {
 import { EntityType } from "@rilldata/web-common/features/entity-management/types.ts";
 import {
   maybeUnsetOlapConnectorInYaml,
-  updateRillYAMLWithOlapConnector,
+  updateStarDataYAMLWithOlapConnector,
 } from "@rilldata/web-common/features/connectors/code-utils.ts";
 import type { QueryClient } from "@tanstack/svelte-query";
 import { fileArtifacts } from "@rilldata/web-common/features/entity-management/file-artifacts.ts";
@@ -145,7 +145,7 @@ export async function createConnector({
     }
 
     if (OLAP_ENGINES.includes(connectorDriver.name as string)) {
-      await setOlapConnectorInRillYAML(
+      await setOlapConnectorInStarDataYAML(
         queryClient,
         runtimeClient,
         connectorName,
@@ -186,7 +186,7 @@ export async function maybeDeleteConnector(
   await envEditSession.rollback();
 
   // Update the rill.yaml file to remove the connector as the OLAP connector.
-  await unsetOlapConnectorInRillYAML(runtimeClient, queryClient, connectorName);
+  await unsetOlapConnectorInStarDataYAML(runtimeClient, queryClient, connectorName);
 }
 
 export async function maybeInitProject(client: RuntimeClient) {
@@ -205,14 +205,14 @@ export async function maybeInitProject(client: RuntimeClient) {
   await invalidate("init");
 }
 
-async function setOlapConnectorInRillYAML(
+async function setOlapConnectorInStarDataYAML(
   queryClient: QueryClient,
   client: RuntimeClient,
   newConnectorName: string,
 ): Promise<void> {
   await runtimeServicePutFile(client, {
     path: "rill.yaml",
-    blob: await updateRillYAMLWithOlapConnector(
+      blob: await updateStarDataYAMLWithOlapConnector(
       client,
       queryClient,
       newConnectorName,
@@ -226,7 +226,7 @@ const ConnectorUnsetCheckMaxRetries = 5;
 const ConnectorUnsetCheckIntervalConstant = 300;
 const ConnectorUnsetCheckIntervalMultiplier = 300;
 
-async function unsetOlapConnectorInRillYAML(
+async function unsetOlapConnectorInStarDataYAML(
   runtimeClient: RuntimeClient,
   queryClient: QueryClient,
   connectorName: string,

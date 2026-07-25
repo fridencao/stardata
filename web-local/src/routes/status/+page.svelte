@@ -122,7 +122,7 @@
       <span class="info-value">
         {instance?.aiConnector && instance.aiConnector !== "admin"
           ? formatConnectorName(instance.aiConnector)
-          : "Rill Managed"}
+          : "StarData Managed"}
       </span>
     </div>
   </div>

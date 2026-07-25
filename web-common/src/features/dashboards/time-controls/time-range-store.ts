@@ -28,7 +28,7 @@ import {
   V1TimeGrain,
 } from "@rilldata/web-common/runtime-client";
 import type { QueryObserverResult } from "@tanstack/svelte-query";
-import { RillTime } from "../url-state/time-ranges/RillTime";
+import { StardataTime } from "../url-state/time-ranges/StardataTime";
 import { DateTime, Interval } from "luxon";
 import { getComparisonInterval } from "@rilldata/web-common/lib/time/comparisons";
 
@@ -279,5 +279,5 @@ export function getValidComparisonOption(
 export type UITimeRange = V1ExploreTimeRange & {
   meta?: TimeRangeMeta;
   enabled?: boolean;
-  parsed?: RillTime;
+  parsed?: StardataTime;
 };

@@ -3,9 +3,9 @@ package duckdb_test
 import (
 	"testing"
 
-	"github.com/rilldata/rill/runtime/testruntime"
+	"github.com/fridencao/stardata/runtime/testruntime"
 
-	_ "github.com/rilldata/rill/runtime/resolvers"
+	_ "github.com/fridencao/stardata/runtime/resolvers"
 )
 
 func TestCreateSecrets(t *testing.T) {

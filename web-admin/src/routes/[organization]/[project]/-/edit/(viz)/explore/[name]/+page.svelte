@@ -28,7 +28,7 @@
 </script>
 
 <svelte:head>
-  <title>Rill | {exploreName}</title>
+  <title>StarData | {exploreName}</title>
 </svelte:head>
 
 {#if measures.length === 0}

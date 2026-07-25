@@ -11,9 +11,9 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/bmatcuk/doublestar/v4"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/fileutil"
-	"github.com/rilldata/rill/runtime/pkg/pagination"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/fileutil"
+	"github.com/fridencao/stardata/runtime/pkg/pagination"
 	"go.uber.org/zap"
 	"gocloud.dev/blob"
 )

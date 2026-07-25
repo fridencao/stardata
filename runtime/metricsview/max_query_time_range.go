@@ -3,7 +3,7 @@ package metricsview
 import (
 	"time"
 
-	"github.com/rilldata/rill/runtime/pkg/rilltime"
+	"github.com/fridencao/stardata/runtime/pkg/rilltime"
 )
 
 // ResolveMaxQueryTimeRange resolves a metrics view's max_query_time_range property to a duration relative to now.

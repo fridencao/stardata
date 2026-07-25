@@ -9,8 +9,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/rilldata/rill/cli/pkg/printer"
-	"github.com/rilldata/rill/runtime/pkg/gitutil"
+	"github.com/fridencao/stardata/cli/pkg/printer"
+	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"github.com/stretchr/testify/require"
 )
 

@@ -7,14 +7,14 @@ import {
   useExploreState,
 } from "@rilldata/web-common/features/dashboards/stores/dashboard-stores";
 import type { ExploreState } from "@rilldata/web-common/features/dashboards/stores/explore-state";
-import { resolveTimeRanges } from "@rilldata/web-common/features/dashboards/time-controls/rill-time-ranges";
+import { resolveTimeRanges } from "@rilldata/web-common/features/dashboards/time-controls/stardata-time-ranges";
 import {
   createTimeControlStoreFromName,
   type TimeControlStore,
 } from "@rilldata/web-common/features/dashboards/time-controls/time-control-store";
 import { updateExploreSessionStore } from "@rilldata/web-common/features/dashboards/state-managers/loaders/explore-web-view-store";
 import { getCleanedUrlParamsForGoto } from "@rilldata/web-common/features/dashboards/url-state/convert-partial-explore-state-to-url-params";
-import { createRillDefaultExploreUrlParams } from "@rilldata/web-common/features/dashboards/url-state/get-rill-default-explore-url-params";
+import { createStarDataDefaultExploreUrlParams } from "@rilldata/web-common/features/dashboards/url-state/get-stardata-default-explore-url-params";
 import type { RuntimeClient } from "@rilldata/web-common/runtime-client/v2";
 import type { AfterNavigate } from "@sveltejs/kit";
 import { getContext, setContext } from "svelte";
@@ -34,7 +34,7 @@ export class DashboardStateSync {
   private readonly timeControlStore: TimeControlStore;
   // Cached url params for a rill opinionated dashboard defaults. Used to remove params from url.
   // To avoid converting the default explore state to url evey time it is needed we maintain a cached version here.
-  private readonly rillDefaultExploreURLParams: CompoundQueryResult<URLSearchParams>;
+  private readonly starDataDefaultExploreURLParams: CompoundQueryResult<URLSearchParams>;
 
   private readonly unsubInit: (() => void) | undefined;
   private readonly unsubExploreState: (() => void) | undefined;
@@ -62,7 +62,7 @@ export class DashboardStateSync {
       exploreName,
     );
 
-    this.rillDefaultExploreURLParams = createRillDefaultExploreUrlParams(
+    this.starDataDefaultExploreURLParams = createStarDataDefaultExploreUrlParams(
       dataLoader.validSpecQuery,
       dataLoader.fullTimeRangeQuery,
     );
@@ -99,11 +99,11 @@ export class DashboardStateSync {
     const exploreSpec = validSpecData?.explore ?? {};
     const metricsViewSpec = validSpecData?.metricsView ?? {};
     const pageState = get(page);
-    const { data: rillDefaultExploreURLParams } = get(
-      this.rillDefaultExploreURLParams,
+    const { data: starDataDefaultExploreURLParams } = get(
+      this.starDataDefaultExploreURLParams,
     );
     // Type-safety
-    if (!rillDefaultExploreURLParams) return pageState.url;
+    if (!starDataDefaultExploreURLParams) return pageState.url;
 
     const timeControlsState = get(this.timeControlStore);
 
@@ -113,7 +113,7 @@ export class DashboardStateSync {
       metricsViewSpec,
       exploreState,
       timeControlsState,
-      rillDefaultExploreURLParams,
+      starDataDefaultExploreURLParams,
       pageState.url,
     );
 
@@ -133,12 +133,12 @@ export class DashboardStateSync {
     const { data: validSpecData } = get(this.dataLoader.validSpecQuery);
     const metricsViewSpec = validSpecData?.metricsView ?? {};
     const exploreSpec = validSpecData?.explore ?? {};
-    const { data: rillDefaultExploreURLParams } = get(
-      this.rillDefaultExploreURLParams,
+    const { data: starDataDefaultExploreURLParams } = get(
+      this.starDataDefaultExploreURLParams,
     );
 
     // Ensure dashboard data is loaded before we proceed.
-    if (!rillDefaultExploreURLParams) return;
+    if (!starDataDefaultExploreURLParams) return;
 
     const pageState = get(page);
 
@@ -216,12 +216,12 @@ export class DashboardStateSync {
     const { data: validSpecData } = get(this.dataLoader.validSpecQuery);
     const metricsViewSpec = validSpecData?.metricsView ?? {};
     const exploreSpec = validSpecData?.explore ?? {};
-    const { data: rillDefaultExploreURLParams } = get(
-      this.rillDefaultExploreURLParams,
+    const { data: starDataDefaultExploreURLParams } = get(
+      this.starDataDefaultExploreURLParams,
     );
 
     // Type-safety
-    if (!rillDefaultExploreURLParams) return;
+    if (!starDataDefaultExploreURLParams) return;
 
     const partialExplore = this.dataLoader.getExploreStateFromURLParams(
       urlSearchParams,

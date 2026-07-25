@@ -14,14 +14,14 @@ import (
 	"github.com/XSAM/otelsql"
 	"github.com/jmoiron/sqlx"
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/activity"
-	"github.com/rilldata/rill/runtime/storage"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/activity"
+	"github.com/fridencao/stardata/runtime/storage"
 	"go.opentelemetry.io/otel/attribute"
 	"go.uber.org/zap"
 
 	// Load Druid database/sql driver
-	_ "github.com/rilldata/rill/runtime/drivers/druid/druidsqldriver"
+	_ "github.com/fridencao/stardata/runtime/drivers/druid/druidsqldriver"
 )
 
 func init() {

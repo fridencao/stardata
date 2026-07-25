@@ -13,7 +13,7 @@
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { getConnectClientContext } from "./connect-client-context";
 
-  // The MCPConnectDialog is wired only on Rill Cloud chat surfaces whose layout
+  // The MCPConnectDialog is wired only on StarData Cloud chat surfaces whose layout
   // sets the connect-client context. Elsewhere there is nothing to open, so the
   // popover renders nothing.
   const connectClient = getConnectClientContext();

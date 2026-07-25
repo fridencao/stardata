@@ -13,8 +13,8 @@ import (
 	"strings"
 
 	"github.com/ClickHouse/clickhouse-go/v2"
-	"github.com/rilldata/rill/admin/database"
-	"github.com/rilldata/rill/admin/provisioner"
+	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/admin/provisioner"
 	"go.uber.org/zap"
 )
 
@@ -335,7 +335,7 @@ func newPassword() string {
 func generateDatabaseName(resourceID string, annotations map[string]string) string {
 	// Format: rill_<id>_<org>_<project> truncated to 63 characters.
 	// Note that we add the ID first to prevent it from being truncated (it adds 32 characters), which would be a security risk.
-	name := "rill"
+	name := "stardata"
 	name += "_" + nonAlphanumericRegexp.ReplaceAllString(resourceID, "")
 	if org, ok := annotations["organization_name"]; ok {
 		name += "_" + nonAlphanumericRegexp.ReplaceAllString(org, "")

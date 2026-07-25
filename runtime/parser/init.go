@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/rilldata/rill/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers"
 )
 
 // IsInit returns true if a Rill project exists in the repo

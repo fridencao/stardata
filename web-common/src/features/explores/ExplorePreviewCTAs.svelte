@@ -10,7 +10,7 @@
   import ViewAsButton from "../dashboards/granular-access-policies/ViewAsButton.svelte";
   import {
     useDashboardPolicyCheck,
-    useRillYamlPolicyCheck,
+    useStarDataYamlPolicyCheck,
   } from "../dashboards/granular-access-policies/useSecurityPolicyCheck";
   import StateManagersProvider from "../dashboards/state-managers/StateManagersProvider.svelte";
   import { featureFlags } from "../feature-flags";
@@ -34,13 +34,13 @@
     runtimeClient,
     metricsViewFilePath,
   );
-  $: rillYamlPolicyCheck = useRillYamlPolicyCheck(runtimeClient);
+  $: starDataYamlPolicyCheck = useStarDataYamlPolicyCheck(runtimeClient);
 
   const { readOnly, dashboardChat } = featureFlags;
 </script>
 
 <div class="flex gap-2 flex-shrink-0 ml-auto">
-  {#if $explorePolicyCheck.data || $metricsPolicyCheck.data || $rillYamlPolicyCheck.data}
+  {#if $explorePolicyCheck.data || $metricsPolicyCheck.data || $starDataYamlPolicyCheck.data}
     <ViewAsButton />
   {/if}
   <StateManagersProvider {metricsViewName} {exploreName} let:ready>

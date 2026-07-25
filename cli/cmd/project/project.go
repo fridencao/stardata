@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/rilldata/rill/cli/cmd/project/deployment"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
+	"github.com/fridencao/stardata/cli/cmd/project/deployment"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
 	"github.com/spf13/cobra"
 )
 

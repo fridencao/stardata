@@ -9,7 +9,7 @@ import (
 	"path/filepath"
 
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/runtime/pkg/gcputil"
+	"github.com/fridencao/stardata/runtime/pkg/gcputil"
 	"gocloud.dev/blob"
 	"gocloud.dev/blob/gcsblob"
 	"gocloud.dev/gcp"
@@ -23,7 +23,7 @@ type Client struct {
 }
 
 func New(dataDir string, bucketCfg map[string]any) (*Client, error) {
-	tempDirPath, err := os.MkdirTemp("", "rill")
+	tempDirPath, err := os.MkdirTemp("", "stardata")
 	if err != nil {
 		return nil, err
 	}

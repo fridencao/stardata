@@ -1,6 +1,6 @@
 import { SortDirection } from "@rilldata/web-common/features/dashboards/proto-state/derived-types";
 import { getMetricsViewTimeRangeFromExploreQueryOptions } from "@rilldata/web-common/features/dashboards/selectors.ts";
-import { getGrainForRange } from "@rilldata/web-common/features/dashboards/stores/get-rill-default-explore-state";
+import { getGrainForRange } from "@rilldata/web-common/features/dashboards/stores/get-stardata-default-explore-state";
 import type { ExploreState } from "@rilldata/web-common/features/dashboards/stores/explore-state";
 import { getTimeControlState } from "@rilldata/web-common/features/dashboards/time-controls/time-control-store";
 import { getValidComparisonOption } from "@rilldata/web-common/features/dashboards/time-controls/time-range-store";

@@ -9,9 +9,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/gitutil"
-	"github.com/rilldata/rill/runtime/pkg/observability"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/gitutil"
+	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.uber.org/zap"
 )
 

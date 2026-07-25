@@ -7,7 +7,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/rilldata/rill/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers"
 )
 
 // executeExport enables exporting data from a connector to a temporary local file in the given format.

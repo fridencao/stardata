@@ -1,12 +1,12 @@
 import {
-  overrideRillTimeRef,
-  parseRillTime,
+  overrideStardataTimeRef,
+  parseStardataTime,
 } from "@rilldata/web-common/features/dashboards/url-state/time-ranges/parser";
 import {
   capitalizeFirstChar,
-  type RillTimeAsOfLabel,
-  RillTimeLabel,
-} from "@rilldata/web-common/features/dashboards/url-state/time-ranges/RillTime.ts";
+  type StardataTimeAsOfLabel,
+  StardataTimeLabel,
+} from "@rilldata/web-common/features/dashboards/url-state/time-ranges/StardataTime.ts";
 import {
   getLowerOrderGrain,
   GrainAliasToV1TimeGrain,
@@ -15,7 +15,7 @@ import { V1TimeGrain } from "@rilldata/web-common/runtime-client";
 import type { DateTimeUnit } from "luxon";
 import nearley from "nearley";
 import { describe, expect, it } from "vitest";
-import grammar from "./rill-time.js";
+import grammar from "./stardata-time.js";
 
 const GRAINS = ["Y", "Q", "M", "W", "D", "H", "m", "s"] as const;
 const GRAIN_TO_LUXON: Record<string, DateTimeUnit> = {
@@ -180,7 +180,7 @@ function getLegacyDAXTestCases(): TestCase[] {
   ];
 }
 
-describe("rill time", () => {
+describe("stardata time", () => {
   describe("positive cases", () => {
     const Cases: TestCase[] = [
       ...getSinglePeriodTestCases(),
@@ -223,80 +223,80 @@ describe("rill time", () => {
     ];
 
     const compiledGrammar = nearley.Grammar.fromCompiled(grammar);
-    for (const [rillTime, label, complete, rangeGrain, byGrain] of Cases) {
-      it(rillTime, () => {
+    for (const [stardataTime, label, complete, rangeGrain, byGrain] of Cases) {
+      it(stardataTime, () => {
         const parser = new nearley.Parser(compiledGrammar);
-        parser.feed(rillTime);
+        parser.feed(stardataTime);
         // assert that there is only match. this ensures unambiguous grammar.
         expect(parser.results).length(1);
 
-        const rt = parseRillTime(rillTime);
-        expect(rt).not.toBeUndefined();
-        expect(rt.getLabel()).toEqual(label);
-        expect(rt.isComplete).toEqual(complete);
-        expect(rt.rangeGrain).toEqual(rangeGrain);
-        expect(rt.byGrain).toEqual(byGrain);
+        const st = parseStardataTime(stardataTime);
+        expect(st).not.toBeUndefined();
+        expect(st.getLabel()).toEqual(label);
+        expect(st.isComplete).toEqual(complete);
+        expect(st.rangeGrain).toEqual(rangeGrain);
+        expect(st.byGrain).toEqual(byGrain);
 
-        const serialisedRillTime = rt.toString();
-        const newRt = parseRillTime(serialisedRillTime);
-        expect(newRt.toString()).toEqual(serialisedRillTime);
+        const serialisedStardataTime = st.toString();
+        const newSt = parseStardataTime(serialisedStardataTime);
+        expect(newSt.toString()).toEqual(serialisedStardataTime);
       });
     }
   });
 
   describe("override ref", () => {
     const Cases: [
-      rillTime: string,
+      stardataTime: string,
       refOverride: string,
-      updatedRillTime: string,
+      updatedStardataTime: string,
     ][] = [
       ["7D AS OF watermark/Y", "watermark/Y+1Y", "7D AS OF watermark/Y+1Y"],
       ["7D AS OF watermark/Y+1Y", "watermark/Y", "7D AS OF watermark/Y"],
       ["7D AS OF watermark/Y", "now/Y", "7D AS OF now/Y"],
     ];
 
-    for (const [rillTime, refOverride, updatedRillTime] of Cases) {
-      it(`${rillTime} <> ${refOverride}`, () => {
-        const rt = parseRillTime(rillTime);
-        overrideRillTimeRef(rt, refOverride);
-        expect(rt.toString(), updatedRillTime);
+    for (const [stardataTime, refOverride, updatedStardataTime] of Cases) {
+      it(`${stardataTime} <> ${refOverride}`, () => {
+        const st = parseStardataTime(stardataTime);
+        overrideStardataTimeRef(st, refOverride);
+        expect(st.toString(), updatedStardataTime);
       });
     }
   });
 
   describe("as of label", () => {
     const Cases: [
-      rillTime: string,
-      asOfLabel: RillTimeAsOfLabel | undefined,
+      stardataTime: string,
+      asOfLabel: StardataTimeAsOfLabel | undefined,
     ][] = [
       ["7D", undefined],
       ["7D as of -2D", undefined],
       [
         "7D as of -2D as of watermark",
-        { label: RillTimeLabel.Watermark, snap: undefined, offset: 0 },
+        { label: StardataTimeLabel.Watermark, snap: undefined, offset: 0 },
       ],
       [
         "7D as of -2D as of watermark/D",
-        { label: RillTimeLabel.Watermark, snap: "D", offset: 0 },
+        { label: StardataTimeLabel.Watermark, snap: "D", offset: 0 },
       ],
       [
         "7D as of -2D as of watermark/D+1D",
-        { label: RillTimeLabel.Watermark, snap: "D", offset: 1 },
+        { label: StardataTimeLabel.Watermark, snap: "D", offset: 1 },
       ],
       [
         "7D as of -2D as of watermark/D+1h",
-        { label: RillTimeLabel.Watermark, snap: "D", offset: 0 },
+        { label: StardataTimeLabel.Watermark, snap: "D", offset: 0 },
       ],
       [
         "7D as of -2D as of watermark/h+1h",
-        { label: RillTimeLabel.Watermark, snap: "h", offset: 1 },
+        { label: StardataTimeLabel.Watermark, snap: "h", offset: 1 },
       ],
     ];
 
-    for (const [rillTime, asOfLabel] of Cases) {
-      it(rillTime, () => {
-        const rt = parseRillTime(rillTime);
-        expect(rt.asOfLabel).toEqual(asOfLabel);
+    for (const [stardataTime, asOfLabel] of Cases) {
+      it(stardataTime, () => {
+        const st = parseStardataTime(stardataTime);
+        expect(st.asOfLabel).toEqual(asOfLabel);
       });
     }
   });

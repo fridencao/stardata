@@ -8,7 +8,7 @@ import (
 
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
-	"github.com/rilldata/rill/runtime/pkg/observability"
+	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.uber.org/zap"
 )
 

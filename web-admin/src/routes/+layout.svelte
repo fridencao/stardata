@@ -141,7 +141,7 @@
 </script>
 
 <svelte:head>
-  <meta content="Rill Cloud" name="description" />
+  <meta content="StarData" name="description" />
   {#if organizationFaviconUrl}
     <link rel="icon" href={organizationFaviconUrl} />
   {:else}

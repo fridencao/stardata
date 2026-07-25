@@ -6,12 +6,12 @@ import (
 	"testing"
 	"time"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/drivers/clickhouse/testclickhouse"
-	"github.com/rilldata/rill/runtime/queries"
-	"github.com/rilldata/rill/runtime/testruntime"
-	"github.com/rilldata/rill/runtime/testruntime/testmode"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/drivers/clickhouse/testclickhouse"
+	"github.com/fridencao/stardata/runtime/queries"
+	"github.com/fridencao/stardata/runtime/testruntime"
+	"github.com/fridencao/stardata/runtime/testruntime/testmode"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	"github.com/stretchr/testify/assert"

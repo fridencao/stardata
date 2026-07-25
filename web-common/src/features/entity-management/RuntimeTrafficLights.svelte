@@ -40,11 +40,11 @@
         {#if status === ConnectionStatus.CONNECTING}
           Attempting to reconnect
         {:else if status === ConnectionStatus.CLOSED}
-          Disconnected from Rill engine
+          Disconnected from StarData engine
         {:else if status === ConnectionStatus.PAUSED}
           Connection paused due to inactivity
         {:else if status === ConnectionStatus.OPEN}
-          Connected to Rill engine
+          Connected to StarData engine
         {/if}
       </TooltipContent>
     </Tooltip.Content>

@@ -9,7 +9,7 @@
 
   // Surface-agnostic PDF export form (title, options, and action). The caller
   // supplies `runExport` (bound to the canvas or explore orchestrator), so this
-  // form is shared across the cloud share modal today and the Rill Developer UI
+  // form is shared across the cloud share modal today and the local StarData UI
   // in the future.
   export let runExport: (opts: PdfExportRunOptions) => Promise<void>;
   export let onComplete: () => void = () => {};

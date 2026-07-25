@@ -7,16 +7,16 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/activity"
-	"github.com/rilldata/rill/runtime/storage"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/activity"
+	"github.com/fridencao/stardata/runtime/storage"
 	"github.com/stretchr/testify/require"
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/wait"
 	"go.uber.org/zap"
 
-	_ "github.com/rilldata/rill/runtime/drivers/duckdb"
-	_ "github.com/rilldata/rill/runtime/drivers/mysql"
+	_ "github.com/fridencao/stardata/runtime/drivers/duckdb"
+	_ "github.com/fridencao/stardata/runtime/drivers/mysql"
 )
 
 var mysqlInitStmt = `

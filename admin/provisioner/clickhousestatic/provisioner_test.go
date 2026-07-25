@@ -10,8 +10,8 @@ import (
 
 	"github.com/ClickHouse/clickhouse-go/v2"
 	"github.com/google/uuid"
-	"github.com/rilldata/rill/admin/provisioner"
-	"github.com/rilldata/rill/runtime/drivers/clickhouse/testclickhouse"
+	"github.com/fridencao/stardata/admin/provisioner"
+	"github.com/fridencao/stardata/runtime/drivers/clickhouse/testclickhouse"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
 )

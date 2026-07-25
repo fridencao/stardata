@@ -1,12 +1,12 @@
 import { cascadingExploreStateMerge } from "@rilldata/web-common/features/dashboards/state-managers/cascading-explore-state-merge";
 import { correctExploreState } from "@rilldata/web-common/features/dashboards/stores/correct-explore-state";
 import type { ExploreState } from "@rilldata/web-common/features/dashboards/stores/explore-state";
-import { getRillDefaultExploreState } from "@rilldata/web-common/features/dashboards/stores/get-rill-default-explore-state";
+import { getStarDataDefaultExploreState } from "@rilldata/web-common/features/dashboards/stores/get-stardata-default-explore-state";
 import { getTimeControlState } from "@rilldata/web-common/features/dashboards/time-controls/time-control-store";
 import { cleanEmbedUrlParams } from "@rilldata/web-common/features/dashboards/url-state/clean-url-params";
 import { convertURLSearchParamsToExploreState } from "@rilldata/web-common/features/dashboards/url-state/convertURLSearchParamsToExploreState";
 import { getCleanedUrlParamsForGoto } from "@rilldata/web-common/features/dashboards/url-state/convert-partial-explore-state-to-url-params";
-import { getRillDefaultExploreUrlParams } from "@rilldata/web-common/features/dashboards/url-state/get-rill-default-explore-url-params";
+import { getStarDataDefaultExploreUrlParams } from "@rilldata/web-common/features/dashboards/url-state/get-stardata-default-explore-url-params";
 import { queryClient } from "@rilldata/web-common/lib/svelte-query/globalQueryClient";
 import {
   getQueryServiceMetricsViewTimeRangeQueryOptions,
@@ -70,14 +70,14 @@ export async function buildValidatedExploreUrl(
 
   // Back-fill rill opinionated defaults so that fields not present in the url (like time range)
   // resolve to a complete, valid state.
-  const rillDefaultExploreState = getRillDefaultExploreState(
+  const starDataDefaultExploreState = getStarDataDefaultExploreState(
     metricsViewSpec,
     exploreSpec,
     timeRangeSummary,
   );
   const exploreState = cascadingExploreStateMerge([
     partialExploreState,
-    rillDefaultExploreState,
+    starDataDefaultExploreState,
   ]) as ExploreState;
   correctExploreState(metricsViewSpec, exploreState);
 
@@ -87,7 +87,7 @@ export async function buildValidatedExploreUrl(
     timeRangeSummary,
     exploreState,
   );
-  const defaultExploreUrlParams = getRillDefaultExploreUrlParams(
+  const defaultExploreUrlParams = getStarDataDefaultExploreUrlParams(
     metricsViewSpec,
     exploreSpec,
     timeRangeSummary,

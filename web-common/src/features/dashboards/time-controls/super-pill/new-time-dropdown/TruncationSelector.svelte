@@ -17,7 +17,7 @@
   import TooltipDescription from "@rilldata/web-common/components/tooltip/TooltipDescription.svelte";
   import { onDestroy, onMount } from "svelte";
   import SyntaxElement from "../components/SyntaxElement.svelte";
-  import { RillTimeLabel } from "../../../url-state/time-ranges/RillTime";
+  import { StardataTimeLabel } from "../../../url-state/time-ranges/StardataTime";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let dateTimeAnchor: DateTime;
@@ -29,8 +29,8 @@
   export let watermark: DateTime | undefined;
   export let latest: DateTime | undefined;
   export let zone: string;
-  export let ref: RillTimeLabel | string | undefined;
-  export let onSelectAsOfOption: (ref: RillTimeLabel) => void;
+  export let ref: StardataTimeLabel | string | undefined;
+  export let onSelectAsOfOption: (ref: StardataTimeLabel) => void;
   export let onToggleAlignment: (forward: boolean) => void;
   export let onSelectEnding: (
     grain: V1TimeGrain | undefined,
@@ -87,19 +87,19 @@
 
   $: options = [
     {
-      id: RillTimeLabel.Watermark,
+      id: StardataTimeLabel.Watermark,
       label: m.dashboard_complete_data(),
       timestamp: watermark,
       description: m.dashboard_complete_data_description(),
     },
     {
-      id: RillTimeLabel.Latest,
+      id: StardataTimeLabel.Latest,
       label: m.dashboard_latest_data(),
       timestamp: latest,
       description: m.dashboard_latest_data_description(),
     },
     {
-      id: RillTimeLabel.Now,
+      id: StardataTimeLabel.Now,
       label: m.dashboard_current_time(),
       timestamp: now,
       description: m.dashboard_current_time_description(),
@@ -120,16 +120,16 @@
   }
 
   function humanizeRef(
-    ref: RillTimeLabel | string | undefined,
+    ref: StardataTimeLabel | string | undefined,
     grain: V1TimeGrain | undefined,
   ): string {
     switch (ref) {
-      case RillTimeLabel.Watermark:
+      case StardataTimeLabel.Watermark:
         if (grain) return m.time_ref_complete();
         return m.time_ref_complete_data();
-      case RillTimeLabel.Latest:
+      case StardataTimeLabel.Latest:
         return m.time_ref_latest();
-      case RillTimeLabel.Now:
+      case StardataTimeLabel.Now:
         if (grain) return m.time_ref_current();
         return m.time_ref_now();
       default:
@@ -184,7 +184,7 @@
               {/if}
             </b>
             {#if grain}
-              {#if snapToEnd || ref === RillTimeLabel.Watermark}
+              {#if snapToEnd || ref === StardataTimeLabel.Watermark}
                 {m.dashboard_end()}
               {:else}
                 {m.dashboard_start()}
@@ -219,7 +219,7 @@
         {m.dashboard_reference()}
       </h3>
       {#each options as { id, label, description, timestamp } (id)}
-        {#if id !== RillTimeLabel.Watermark || (id === RillTimeLabel.Watermark && !!timestamp)}
+        {#if id !== StardataTimeLabel.Watermark || (id === StardataTimeLabel.Watermark && !!timestamp)}
           <Tooltip.Root open={hoveredOption === id}>
             <TooltipPrimitive.Trigger>
               {#snippet child({ props: tooltipProps })}
@@ -257,7 +257,7 @@
                     <SyntaxElement dark range={id} />
                   </div>
 
-                  {#if id !== RillTimeLabel.Now}
+                  {#if id !== StardataTimeLabel.Now}
                     <div>
                       {getColloquialOffset(timestamp)}
                     </div>
@@ -303,9 +303,9 @@
           <span>{m.dashboard_anchor_period_end()}</span>
 
           <Switch
-            disabled={ref === RillTimeLabel.Watermark}
+            disabled={ref === StardataTimeLabel.Watermark}
             small
-            checked={snapToEnd || ref === RillTimeLabel.Watermark}
+            checked={snapToEnd || ref === StardataTimeLabel.Watermark}
             onclick={() => {
               onToggleAlignment(!snapToEnd);
             }}

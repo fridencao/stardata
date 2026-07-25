@@ -18,7 +18,7 @@ import (
 
 	"google.golang.org/protobuf/types/known/anypb"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
 )
 
 // ensure the imports are used

@@ -9,7 +9,7 @@ package adminv1
 import (
 	_ "github.com/envoyproxy/protoc-gen-validate/validate"
 	_ "github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2/options"
-	v1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
+	v1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"

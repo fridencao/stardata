@@ -48,7 +48,7 @@
   import ThreeDot from "@rilldata/web-common/components/icons/ThreeDot.svelte";
   import ScreenshotContainer from "@rilldata/web-common/features/dashboards/time-series/ScreenshotContainer.svelte";
 
-  const { rillTime } = featureFlags;
+  const { stardataTime } = featureFlags;
 
   // Singleton scrub controller — shared across all charts
   const scrubController = new ScrubController();
@@ -302,7 +302,7 @@
         selectedItems={visibleMeasureNames}
       />
 
-      {#if $rillTime && activeTimeGrain}
+      {#if $stardataTime && activeTimeGrain}
         <DropdownMenu.Root bind:open={grainDropdownOpen}>
           <DropdownMenu.Trigger>
             {#snippet child({ props })}

@@ -74,7 +74,7 @@ import {
 } from "@rilldata/web-common/features/dashboards/stores/test-data/store-mutations";
 import { getTimeControlState } from "@rilldata/web-common/features/dashboards/time-controls/time-control-store";
 import { getCleanedUrlParamsForGoto } from "@rilldata/web-common/features/dashboards/url-state/convert-partial-explore-state-to-url-params";
-import { getRillDefaultExploreUrlParams } from "@rilldata/web-common/features/dashboards/url-state/get-rill-default-explore-url-params";
+import { getStarDataDefaultExploreUrlParams } from "@rilldata/web-common/features/dashboards/url-state/get-stardata-default-explore-url-params";
 import { getDefaultExplorePreset } from "@rilldata/web-common/features/dashboards/url-state/getDefaultExplorePreset";
 import {
   type DashboardTimeControls,
@@ -579,7 +579,7 @@ describe("Human readable URL state variations", () => {
           ),
         );
         const initState = getCleanMetricsExploreForAssertion();
-        const defaultExploreUrlSearch = getRillDefaultExploreUrlParams(
+        const defaultExploreUrlSearch = getStarDataDefaultExploreUrlParams(
           AD_BIDS_METRICS_VIEW,
           explore,
           AD_BIDS_TIME_RANGE_SUMMARY.timeRangeSummary,
@@ -698,7 +698,7 @@ describe("Human readable URL state variations", () => {
         AD_BIDS_TIME_RANGE_SUMMARY,
       ),
     );
-    const defaultExploreUrlSearch = getRillDefaultExploreUrlParams(
+    const defaultExploreUrlSearch = getStarDataDefaultExploreUrlParams(
       AD_BIDS_METRICS_VIEW,
       AD_BIDS_EXPLORE,
       AD_BIDS_TIME_RANGE_SUMMARY.timeRangeSummary,
@@ -765,7 +765,7 @@ describe("Human readable URL state variations", () => {
           AD_BIDS_TIME_RANGE_SUMMARY,
         ),
       );
-      const defaultExploreUrlSearch = getRillDefaultExploreUrlParams(
+      const defaultExploreUrlSearch = getStarDataDefaultExploreUrlParams(
         AD_BIDS_METRICS_3_MEASURES_DIMENSIONS_WITH_TIME,
         explore,
         AD_BIDS_TIME_RANGE_SUMMARY.timeRangeSummary,

@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/rilldata/rill/admin/database"
+	"github.com/fridencao/stardata/admin/database"
 )
 
 // This script generates a new encryption keyring for the database and prints it to stdout. Existing keyring can be provided as an argument like:

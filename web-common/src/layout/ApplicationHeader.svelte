@@ -63,7 +63,7 @@
   $: canvasQuery = useValidCanvases(runtimeClient);
   $: projectTitleQuery = useProjectTitle(runtimeClient);
 
-  $: projectTitle = $projectTitleQuery?.data ?? "Untitled Rill Project";
+  $: projectTitle = $projectTitleQuery?.data ?? "Untitled Project";
 
   $: explores = $exploresQuery?.data ?? [];
   $: canvases = $canvasQuery?.data ?? [];

@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/rilldata/rill/runtime/pkg/gitutil"
+	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
 )

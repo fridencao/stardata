@@ -26,8 +26,8 @@ import {
   FromURLParamViewMap,
 } from "@rilldata/web-common/features/dashboards/url-state/mappers";
 import {
-  parseRillTime,
-  validateRillTime,
+  parseStardataTime,
+  validateStardataTime,
 } from "@rilldata/web-common/features/dashboards/url-state/time-ranges/parser";
 import { ExploreStateURLParams } from "@rilldata/web-common/features/dashboards/url-state/url-params";
 import {
@@ -39,7 +39,7 @@ import {
   DateTimeUnitToV1TimeGrain,
   V1TimeGrainToDateTimeUnit,
 } from "@rilldata/web-common/lib/time/new-grains";
-import { getAggregationGrain } from "@rilldata/web-common/lib/time/rill-time-grains";
+import { getAggregationGrain } from "@rilldata/web-common/lib/time/stardata-time-grains";
 import { DashboardState } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
 import {
   type MetricsViewSpecDimension,
@@ -344,8 +344,8 @@ export function fromTimeRangesParams(
   if (searchParams.has(ExploreStateURLParams.TimeRange)) {
     const tr = searchParams.get(ExploreStateURLParams.TimeRange) as string;
 
-    const rillTimeError = validateRillTime(tr);
-    if (rillTimeError) {
+    const stardataTimeError = validateStardataTime(tr);
+    if (stardataTimeError) {
       errors.push(getSingleFieldError("time range", tr));
     } else {
       preset.timeRange = tr;
@@ -385,7 +385,7 @@ export function fromTimeRangesParams(
     }
   } else {
     try {
-      const parsed = parseRillTime(preset.timeRange ?? "");
+      const parsed = parseStardataTime(preset.timeRange ?? "");
       const grain = getAggregationGrain(parsed);
 
       if (grain && grain in V1TimeGrainToDateTimeUnit) {

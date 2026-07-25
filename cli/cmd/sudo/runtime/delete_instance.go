@@ -3,10 +3,10 @@ package runtime
 import (
 	"fmt"
 
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	runtimeclient "github.com/rilldata/rill/runtime/client"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimeclient "github.com/fridencao/stardata/runtime/client"
 	"github.com/spf13/cobra"
 )
 

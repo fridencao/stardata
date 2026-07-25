@@ -37,8 +37,8 @@
   />
 {/if}
 <div class="text-base text-fg-secondary">
-  In order to link Rill Cloud to this repo to sync project updates, you’ll need
-  to authenticate and install Rill
+  In order to link the cloud platform to this repo to sync project updates, you’ll need
+  to authenticate and install StarData
 </div>
 
 <Button

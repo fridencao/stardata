@@ -6,11 +6,11 @@ import (
 	"time"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/ai"
-	"github.com/rilldata/rill/runtime/pkg/middleware"
-	"github.com/rilldata/rill/runtime/pkg/observability"
-	"github.com/rilldata/rill/runtime/server/auth"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/ai"
+	"github.com/fridencao/stardata/runtime/pkg/middleware"
+	"github.com/fridencao/stardata/runtime/pkg/observability"
+	"github.com/fridencao/stardata/runtime/server/auth"
 	"go.uber.org/zap"
 )
 

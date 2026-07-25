@@ -3,10 +3,10 @@ package metricsview
 import (
 	"testing"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/drivers/clickhouse"
-	"github.com/rilldata/rill/runtime/drivers/duckdb"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers/clickhouse"
+	"github.com/fridencao/stardata/runtime/drivers/duckdb"
 	"github.com/stretchr/testify/require"
 )
 

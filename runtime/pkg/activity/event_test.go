@@ -8,7 +8,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rilldata/rill/runtime/pkg/activity"
+	"github.com/fridencao/stardata/runtime/pkg/activity"
 	"github.com/stretchr/testify/assert"
 )
 

@@ -6,7 +6,7 @@ import { expressionInterpreter } from "vega-interpreter";
 import type { Config } from "vega-lite";
 import type { ExpressionFunction } from "./types";
 import { sanitizeTitleForVegaTooltip } from "./util";
-import { getRillTheme } from "./vega-config";
+import { getStarDataTheme } from "./vega-config";
 
 export interface CreateEmbedOptionsParams {
   client: RuntimeClient;
@@ -36,7 +36,7 @@ export function createEmbedOptions({
   const jwt = client.getJwt();
 
   return {
-    config: config || getRillTheme(themeMode === "dark"),
+    config: config || getStarDataTheme(themeMode === "dark"),
     renderer,
     tooltip: {
       theme: themeMode,

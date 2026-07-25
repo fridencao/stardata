@@ -9,5 +9,5 @@ export function getOrgRolesDescriptionMap() {
   };
 }
 
-// Source: https://github.com/rilldata/rill/blob/main/admin/database/validate.go#L57
+// Source: https://github.com/fridencao/stardata/blob/main/admin/database/validate.go#L57
 export const SLUG_REGEX = /^[_a-zA-Z0-9][-_a-zA-Z0-9]*$/;

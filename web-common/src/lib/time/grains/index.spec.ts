@@ -7,7 +7,7 @@ import {
   getValidatedTimeGrain,
 } from "../grains";
 import { Interval, DateTime } from "luxon";
-import { parseRillTime } from "@rilldata/web-common/features/dashboards/url-state/time-ranges/parser";
+import { parseStardataTime } from "@rilldata/web-common/features/dashboards/url-state/time-ranges/parser";
 import { describe, it, expect } from "vitest";
 
 const allowedGrainTests = [
@@ -226,10 +226,10 @@ describe("getValidatedTimeGrain", () => {
     });
   });
 
-  describe("uses rangePrecision from parsed RillTime as fallback", () => {
+  describe("uses rangePrecision from parsed StardataTime as fallback", () => {
     it("uses rangePrecision when requestedPrecision is not provided", () => {
       const interval = createInterval(7); // 7 days: allows hour, day
-      const parsed = parseRillTime("7d as of latest/d"); // snap to day
+      const parsed = parseStardataTime("7d as of latest/d"); // snap to day
       const result = getValidatedTimeGrain(
         interval,
         V1TimeGrain.TIME_GRAIN_MINUTE,
@@ -241,7 +241,7 @@ describe("getValidatedTimeGrain", () => {
 
     it("uses rangePrecision when requestedPrecision is not allowed", () => {
       const interval = createInterval(30); // 30 days: allows hour, day, week
-      const parsed = parseRillTime("30d as of latest/d"); // snap to day
+      const parsed = parseStardataTime("30d as of latest/d"); // snap to day
       const result = getValidatedTimeGrain(
         interval,
         V1TimeGrain.TIME_GRAIN_MINUTE,
@@ -253,7 +253,7 @@ describe("getValidatedTimeGrain", () => {
 
     it("ignores rangePrecision when not in allowed grains", () => {
       const interval = createInterval(365); // ~1 year: allows day, week, month, quarter
-      const parsed = parseRillTime("365d as of latest/h"); // snap to hour, not allowed for 365 days
+      const parsed = parseStardataTime("365d as of latest/h"); // snap to hour, not allowed for 365 days
       const result = getValidatedTimeGrain(
         interval,
         V1TimeGrain.TIME_GRAIN_MINUTE,
@@ -279,7 +279,7 @@ describe("getValidatedTimeGrain", () => {
 
     it("uses first allowed grain when both precisions are invalid", () => {
       const interval = createInterval(365); // ~1 year
-      const parsed = parseRillTime("365d as of latest/m"); // minute precision, not allowed
+      const parsed = parseStardataTime("365d as of latest/m"); // minute precision, not allowed
       const result = getValidatedTimeGrain(
         interval,
         V1TimeGrain.TIME_GRAIN_MINUTE,
@@ -320,7 +320,7 @@ describe("getValidatedTimeGrain", () => {
   describe("integration with real Rill time strings", () => {
     it("derives day grain for 365d as of latest/h", () => {
       const interval = createInterval(365);
-      const parsed = parseRillTime("365d as of latest/h");
+      const parsed = parseStardataTime("365d as of latest/h");
       const result = getValidatedTimeGrain(
         interval,
         V1TimeGrain.TIME_GRAIN_MINUTE,
@@ -333,7 +333,7 @@ describe("getValidatedTimeGrain", () => {
 
     it("derives hour grain for 24h as of latest/h", () => {
       const interval = createIntervalHours(24);
-      const parsed = parseRillTime("24h as of latest/h");
+      const parsed = parseStardataTime("24h as of latest/h");
       const result = getValidatedTimeGrain(
         interval,
         V1TimeGrain.TIME_GRAIN_MINUTE,
@@ -345,7 +345,7 @@ describe("getValidatedTimeGrain", () => {
 
     it("derives week grain for 52w as of latest/w", () => {
       const interval = createInterval(52 * 7); // 52 weeks
-      const parsed = parseRillTime("52w as of latest/w");
+      const parsed = parseStardataTime("52w as of latest/w");
       const result = getValidatedTimeGrain(
         interval,
         V1TimeGrain.TIME_GRAIN_MINUTE,
@@ -357,7 +357,7 @@ describe("getValidatedTimeGrain", () => {
 
     it("derives minute grain for 24h as of latest/m (1440 buckets)", () => {
       const interval = createIntervalHours(24);
-      const parsed = parseRillTime("24h as of latest/m");
+      const parsed = parseStardataTime("24h as of latest/m");
       const result = getValidatedTimeGrain(
         interval,
 

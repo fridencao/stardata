@@ -9,22 +9,22 @@ import (
 	"time"
 
 	"github.com/joho/godotenv"
-	"github.com/rilldata/rill/cli/pkg/version"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/parser"
-	"github.com/rilldata/rill/runtime/pkg/activity"
-	"github.com/rilldata/rill/runtime/pkg/conncache"
-	"github.com/rilldata/rill/runtime/pkg/email"
-	"github.com/rilldata/rill/runtime/pkg/gitutil"
-	"github.com/rilldata/rill/runtime/storage"
+	"github.com/fridencao/stardata/cli/pkg/version"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/parser"
+	"github.com/fridencao/stardata/runtime/pkg/activity"
+	"github.com/fridencao/stardata/runtime/pkg/conncache"
+	"github.com/fridencao/stardata/runtime/pkg/email"
+	"github.com/fridencao/stardata/runtime/pkg/gitutil"
+	"github.com/fridencao/stardata/runtime/storage"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.uber.org/zap"
 	"google.golang.org/protobuf/types/known/structpb"
 )
 
-var tracer = otel.Tracer("github.com/rilldata/rill/runtime")
+var tracer = otel.Tracer("github.com/fridencao/stardata/runtime")
 
 type Options struct {
 	MetastoreConnector           string

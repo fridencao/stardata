@@ -5,10 +5,10 @@ import (
 	"errors"
 	"path/filepath"
 
-	"github.com/rilldata/rill/admin/client"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/gitutil"
+	"github.com/fridencao/stardata/admin/client"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 )
 
 var errProjectNotFound = errors.New("not connected to a rill project")

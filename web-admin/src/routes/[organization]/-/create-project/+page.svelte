@@ -8,7 +8,7 @@
   import { getName } from "@rilldata/web-common/features/entity-management/name-utils.ts";
   import { EntityStatus } from "@rilldata/web-common/features/entity-management/types.ts";
   import Spinner from "@rilldata/web-common/features/entity-management/Spinner.svelte";
-  import RillLogoSquareNegative from "@rilldata/web-common/components/icons/RillLogoSquareNegative.svelte";
+  import StarDataLogoSquareNegative from "@rilldata/web-common/components/icons/StarDataLogoSquareNegative.svelte";
   import {
     type DeployError,
     isQuotaDeployError,
@@ -63,7 +63,7 @@
         >{m.common_back()}</Button
       >
     {:else}
-      <RillLogoSquareNegative size="36px" />
+      <StarDataLogoSquareNegative size="36px" />
       <div class="text-2xl font-extrabold text-fg-accent text-center">
         {hasProjects ? m.project_create_first() : m.project_create_new()}
       </div>

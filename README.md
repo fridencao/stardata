@@ -1,80 +1,68 @@
-<p align="center">
-    <a href="https://rilldata.com/" target="_blank">
-        <img width="10%" src="https://cdn.prod.website-files.com/659ddac460dbacbdc813b204/660b0f85094eb576187342cf_rill_logo_sq_gradient.svg" alt="Rill logo">
-    </a>
-</p>
-
-<h3 align="center">Agent-first, human-friendly business intelligence</h3>
+<h3 align="center">StarData — 智能问数 · 智能 BI</h3>
 
 <p align="center">
-    <a href="LICENSE.md" target="_blank">
-        <img src="https://img.shields.io/github/license/rilldata/rill.svg" alt="GitHub license">
-    </a>
-    <a href="https://github.com/rilldata/rill/releases" target="_blank">
-        <img src="https://img.shields.io/github/tag/rilldata/rill.svg" alt="GitHub tag (latest SemVer)">
-    </a>
-    <a href="https://github.com/rilldata/rill/commits" target="_blank">
-        <img src="https://img.shields.io/github/commit-activity/y/rilldata/rill.svg" alt="GitHub commit activity">
-    </a>
-    <a href="https://github.com/rilldata/rill/graphs/contributors" target="_blank">
-        <img src="https://img.shields.io/github/contributors-anon/rilldata/rill.svg" alt="GitHub contributors">
-    </a>
-    <a href="https://github.com/rilldata/rill/releases" target="_blank">
-        <img src="https://img.shields.io/github/downloads/rilldata/rill/total.svg" alt="GitHub downloads">
-    </a>
-    <a href="https://github.com/rilldata/rill/actions/workflows/rill-cloud.yml" target="_blank">
-        <img src="https://github.com/rilldata/rill/actions/workflows/rill-cloud.yml/badge.svg" alt="CI/CD">
-    </a>
+  Based on <a href="https://github.com/rilldata/rill">rilldata/rill</a> (Apache-2.0)
 </p>
 
 <p align="center">
-  <a href="https://docs.rilldata.com/">Docs</a> · <a href="https://datatalks.rilldata.com/">Data Talks</a>
+  <a href="LICENSE.md" target="_blank">
+    <img src="https://img.shields.io/github/license/fridencao/stardata.svg" alt="GitHub license">
+  </a>
+  <a href="https://github.com/fridencao/stardata/releases" target="_blank">
+    <img src="https://img.shields.io/github/tag/fridencao/stardata.svg" alt="GitHub tag">
+  </a>
+  <a href="https://github.com/fridencao/stardata/commits" target="_blank">
+    <img src="https://img.shields.io/github/commit-activity/y/fridencao/stardata.svg" alt="GitHub commit activity">
+  </a>
 </p>
 
 ---
 
-<p align="center">
-  <img src="https://docs.rilldata.com/img/explore/dashboard101/multi-measure-select.png" alt="Rill dashboard" width="80%">
-</p>
+**StarData** 是一个面向中文用户的智能 BI 平台，基于 Rill 开源项目定制开发。
 
-**Rill** is the fastest BI tool for humans and agents, powered by OLAP engines like ClickHouse and DuckDB.
+核心能力:
+- **智能问数** — 用中文自然语言提问，AI 自动完成数据查询与分析
+- **语义层** — 统一的维度/度量定义体系
+- **高性能 OLAP** — 基于 DuckDB / ClickHouse，亚秒级查询
+- **私有化部署** — Docker Compose 一键拉起，支持 OIDC 企业认证
 
 ## Get Started
 
 ```bash
-curl https://rill.sh | sh        # install
-rill start my-project            # create a project and open the UI
+# From source
+go build -o stardata cli/main.go
+./stardata start my-project        # create a project and open the UI
 ```
 
-### Scaffold a project with agent context
+### Scaffold a project
 
-Use `rill init` to scaffold a project interactively:
+Use `stardata init` to scaffold a project interactively:
 
 ```
-➜ rill init
-? Project name my-rill-project
+➜ stardata init
+? Project name my-project
 ? OLAP engine duckdb
 ? Agent instructions claude
 
-Created a new Rill project at ~/my-rill-project
+Created a new StarData project at ~/my-project
 Added Claude instructions in .claude and .mcp.json
 
 Success! Run the following command to start the project:
 
-  rill start my-rill-project
+  stardata start my-project
 ```
 
-## Why Rill?
+## Why StarData?
 
-- **Build with agents** — BI-as-code (YAML + SQL) means coding agents like Claude Code and Cursor can author projects, dashboards, and security policies end-to-end
+- **Build with agents** — BI-as-code (YAML + SQL) means coding agents can author projects, dashboards, and security policies end-to-end
 - **Semantic layer** — Single source of truth for dimensions, measures, and time grains — defined in YAML, generating SQL at query time against your OLAP engine
-- **Explore with agents** — Conversational BI lets business users query metrics in natural language; the [MCP server](https://docs.rilldata.com/explore/mcp) connects AI agents directly to your semantic layer
+- **AI-powered analytics** — Conversational BI in Chinese; AI agents connect via MCP server
 - **Real-time performance** — Sub-second queries at any scale; ClickHouse for billions of rows, DuckDB for smaller datasets and fast iteration
-- **Embeddable** — Dashboards, APIs, and agent interfaces you can ship in your product
+- **Private deployment** — Docker Compose or single binary, fully on-premise
 
 ## Capabilities
 
-### Rill Developer (local)
+### Local Development
 
 - [**Connectors**](https://docs.rilldata.com/build/connectors/) — S3, GCS, databases, and 20+ sources
 - [**OLAP Engines**](https://docs.rilldata.com/developers/build/connectors/olap) — Managed ClickHouse or DuckDB included, or connect an external engine (ClickHouse Cloud, Druid, Pinot, MotherDuck)
@@ -85,14 +73,14 @@ Success! Run the following command to start the project:
 - [**Row Access Policies**](https://docs.rilldata.com/build/metrics-view/security) — Per-user, per-group data access control
 - [**Local Dashboards**](https://docs.rilldata.com/build/dashboards) — Preview and explore dashboards locally
 
-### Rill Cloud
+### Deployment
 
-- [**Deploy**](https://docs.rilldata.com/deploy/deploy-dashboard/) — Git-backed, versioned deployments — push with `rill deploy` or connect a repo for automatic CI/CD
-- [**Explore & Canvas Dashboards**](https://docs.rilldata.com/build/dashboards) — Interactive dashboards, embeddable in your product
-- [**Conversational BI**](https://docs.rilldata.com/explore/ai-chat) — Ask questions in natural language
-- [**MCP Server**](https://docs.rilldata.com/explore/mcp) — Connect Claude, ChatGPT, or any AI agent to your metrics
-- [**Custom APIs & Embedding**](https://docs.rilldata.com/build/custom-apis/) — Expose metrics via REST or embed dashboards
-- [**Alerts & Reports**](https://docs.rilldata.com/developers/build/alerts) — Threshold alerting, code-defined or UI-defined
+- **Docker Compose** — One-click private deployment
+- **OIDC Authentication** — Enterprise SSO (OIDC/LDAP)
+- **Conversational BI** — Ask questions in natural language (Chinese supported)
+- **MCP Server** — Connect AI agents to your semantic layer
+- **Custom APIs & Embedding** — Expose metrics via REST or embed dashboards
+- **Alerts & Reports** — Threshold alerting, code-defined or UI-defined
 
 ## How It Works
 
@@ -146,30 +134,15 @@ measures: "*"
 **4. Deploy**
 
 ```bash
-rill deploy                      # push to Rill Cloud
+stardata start my-project        # run locally
 ```
 
-Your metrics view is immediately queryable on Rill Cloud — add YAML files to configure dashboards, alerts, and custom APIs.
+Your metrics view is immediately queryable — add YAML files to configure dashboards, alerts, and custom APIs.
 
 ## Learn More
 
-[Getting Started with Rill Developer](https://www.youtube.com/watch?v=oQSok8Dy-D0) • [Exploring Data with Rill](https://www.youtube.com/watch?v=wTP46eOzoCk&list=PL_ZoDsg2yFKgi7ud_fOOD33AH8ONWQS7I&index=1)
-• [Data Talks on the Rocks](https://www.youtube.com/playlist?list=PL_ZoDsg2yFKgr_YEc4XOY0wlRLqzyR07q) • [Agentic Analytics with Claude Code and Rill](https://www.youtube.com/watch?v=k6Lbu2cVH4g&t=2s)
-
-## Examples
-
-| Example              | Description                                         | Links                                                                                                                                            |
-| -------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **Programmatic Ads** | Bidstream data for pricing and campaign performance | [GitHub](https://github.com/rilldata/rill-examples/tree/main/rill-openrtb-prog-ads) · [Demo](https://ui.rilldata.com/demo/rill-openrtb-prog-ads) |
-| **Cost Monitoring**  | Cloud infra merged with customer data               | [GitHub](https://github.com/rilldata/rill-examples/tree/main/rill-cost-monitoring) · [Demo](https://ui.rilldata.com/demo/rill-cost-monitoring)   |
-| **GitHub Analytics** | Contributor activity and commit patterns            | [GitHub](https://github.com/rilldata/rill-examples/tree/main/rill-github-analytics) · [Demo](https://ui.rilldata.com/demo/rill-github-analytics) |
-
-Or explore a [live embedded dashboard](https://rill-embedding-example.netlify.app/).
-
-## Community
-
-[![Discord](https://img.shields.io/badge/Discord-Join%20Chat-7289da?logo=discord&logoColor=white)](https://discord.gg/2ubRfjC7Rh) [![Twitter](https://img.shields.io/badge/Twitter-Follow-1da1f2?logo=twitter&logoColor=white)](https://twitter.com/RillData) [![GitHub Discussions](https://img.shields.io/badge/GitHub-Discussions-181717?logo=github&logoColor=white)](https://github.com/rilldata/rill/discussions)
+- [Rill Documentation](https://docs.rilldata.com/) — upstream project docs
 
 ## Contributing
 
-We welcome contributions! See our [Contributing Guide](CONTRIBUTING.md) to get started.
+See our [Contributing Guide](CONTRIBUTING.md) to get started.

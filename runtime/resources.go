@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/parser"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/parser"
 	"google.golang.org/protobuf/proto"
 )
 

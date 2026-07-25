@@ -7,11 +7,11 @@ import (
 	"time"
 
 	jsonvalue "github.com/Andrew-M-C/go.jsonvalue"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/pbutil"
-	"github.com/rilldata/rill/runtime/server/auth"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/pbutil"
+	"github.com/fridencao/stardata/runtime/server/auth"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/protobuf/types/known/structpb"
 )

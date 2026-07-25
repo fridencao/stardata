@@ -7,7 +7,7 @@
     NamedRange,
     ISODurationString,
   } from "../../new-time-controls";
-  import { RILL_TO_LABEL, ALL_TIME_RANGE_ALIAS } from "../../new-time-controls";
+  import { STAR_TO_LABEL, ALL_TIME_RANGE_ALIAS } from "../../new-time-controls";
 
   export let ranges: RangeBuckets;
   export let selected: NamedRange | ISODurationString;
@@ -39,13 +39,13 @@
   <DropdownMenu.Separator />
 {/if}
 
-{#each ranges.latest as rillTime, i (i)}
+{#each ranges.latest as stardataTime, i (i)}
   <DropdownMenu.Item
-    data-range={rillTime.interval.toString()}
+    data-range={stardataTime.interval.toString()}
     onclick={handleClick}
   >
-    <span class:font-bold={selected === rillTime.interval.toString()}>
-      {rillTime.getLabel()}
+    <span class:font-bold={selected === stardataTime.interval.toString()}>
+      {stardataTime.getLabel()}
     </span>
   </DropdownMenu.Item>
 {/each}
@@ -54,13 +54,13 @@
   <DropdownMenu.Separator />
 {/if}
 
-{#each ranges.periodToDate as rillTime, i (i)}
+{#each ranges.periodToDate as stardataTime, i (i)}
   <DropdownMenu.Item
-    data-range={rillTime.interval.toString()}
+    data-range={stardataTime.interval.toString()}
     onclick={handleClick}
   >
-    <span class:font-bold={selected === rillTime.interval.toString()}>
-      {rillTime.getLabel()}
+    <span class:font-bold={selected === stardataTime.interval.toString()}>
+      {stardataTime.getLabel()}
     </span>
   </DropdownMenu.Item>
 {/each}
@@ -69,13 +69,13 @@
   <DropdownMenu.Separator />
 {/if}
 
-{#each ranges.previous as rillTime, i (i)}
+{#each ranges.previous as stardataTime, i (i)}
   <DropdownMenu.Item
-    data-range={rillTime.interval.toString()}
+    data-range={stardataTime.interval.toString()}
     onclick={handleClick}
   >
-    <span class:font-bold={selected === rillTime.interval.toString()}>
-      {rillTime.getLabel()}
+    <span class:font-bold={selected === stardataTime.interval.toString()}>
+      {stardataTime.getLabel()}
     </span>
   </DropdownMenu.Item>
 {/each}
@@ -84,7 +84,7 @@
   <DropdownMenu.Separator />
   <DropdownMenu.Item onclick={handleClick} data-range={ALL_TIME_RANGE_ALIAS}>
     <span class:font-bold={selected === ALL_TIME_RANGE_ALIAS}>
-      {RILL_TO_LABEL[ALL_TIME_RANGE_ALIAS]}
+      {STAR_TO_LABEL[ALL_TIME_RANGE_ALIAS]}
     </span>
   </DropdownMenu.Item>
 {/if}

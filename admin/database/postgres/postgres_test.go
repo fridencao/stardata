@@ -10,8 +10,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rilldata/rill/admin/database"
-	"github.com/rilldata/rill/admin/pkg/pgtestcontainer"
+	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/admin/pkg/pgtestcontainer"
 	"github.com/stretchr/testify/require"
 )
 
@@ -601,14 +601,14 @@ func testManagedGitRepos(t *testing.T, db database.DB) {
 	// insert some repos
 	m1, err := db.InsertManagedGitRepo(context.Background(), &database.InsertManagedGitRepoOptions{
 		OrgID:   org1.ID,
-		Remote:  "https://github.com/rilldata/rill.git",
+		Remote:  "https://github.com/fridencao/stardata.git",
 		OwnerID: user.ID,
 	})
 	require.NoError(t, err)
 
 	m2, err := db.InsertManagedGitRepo(context.Background(), &database.InsertManagedGitRepoOptions{
 		OrgID:   org2.ID,
-		Remote:  "https://github.com/rilldata/rill2.git",
+		Remote:  "https://github.com/fridencao/stardata2.git",
 		OwnerID: user.ID,
 	})
 	require.NoError(t, err)
@@ -620,7 +620,7 @@ func testManagedGitRepos(t *testing.T, db database.DB) {
 
 	m3, err := db.InsertManagedGitRepo(context.Background(), &database.InsertManagedGitRepoOptions{
 		OrgID:   org3.ID,
-		Remote:  "https://github.com/rilldata/rill3.git",
+		Remote:  "https://github.com/fridencao/stardata3.git",
 		OwnerID: user.ID,
 	})
 	require.NoError(t, err)
@@ -656,7 +656,7 @@ func testManagedGitRepos(t *testing.T, db database.DB) {
 	require.NoError(t, db.DeleteOrganization(context.Background(), org3.Name))
 
 	// the mgd repo still exists but org_id is set to null
-	repo, err := db.FindManagedGitRepo(context.Background(), "https://github.com/rilldata/rill3.git")
+	repo, err := db.FindManagedGitRepo(context.Background(), "https://github.com/fridencao/stardata3.git")
 	require.NoError(t, err)
 	var res *string = nil
 	require.Equal(t, repo.OrgID, res)

@@ -49,7 +49,7 @@
   <Popover.Content align="start" class="w-[420px] flex flex-col gap-y-2">
     <div class="text-base font-medium">Update</div>
     <div class="text-sm text-fg-secondary">
-      Push local changes to Rill Cloud?
+      Push local changes to StarData?
     </div>
 
     {#if matchingProjects.length === 1 && selectedProject}

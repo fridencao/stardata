@@ -10,7 +10,7 @@ import (
 	"sync"
 
 	"github.com/jmoiron/sqlx"
-	"github.com/rilldata/rill/cli/pkg/dotrill"
+	"github.com/fridencao/stardata/cli/pkg/dotrill"
 	"go.opentelemetry.io/otel/sdk/trace"
 	"gopkg.in/natefinch/lumberjack.v2"
 )

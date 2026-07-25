@@ -7,7 +7,7 @@
 package uiv1
 
 import (
-	v1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
+	v1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"

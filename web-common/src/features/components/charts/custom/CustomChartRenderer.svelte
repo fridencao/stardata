@@ -2,7 +2,7 @@
   import type { PartialMessage, Struct } from "@bufbuild/protobuf";
   import FieldSwitcher from "@rilldata/web-common/components/forms/FieldSwitcher.svelte";
   import PreviewTable from "@rilldata/web-common/components/preview-table/PreviewTable.svelte";
-  import { getRillTheme } from "@rilldata/web-common/components/vega/vega-config";
+  import { getStarDataTheme } from "@rilldata/web-common/components/vega/vega-config";
   import VegaLiteRenderer from "@rilldata/web-common/components/vega/VegaLiteRenderer.svelte";
   import type { VirtualizedTableColumns } from "@rilldata/web-common/components/virtualized-table/types";
   import ComponentError from "@rilldata/web-common/features/components/ComponentError.svelte";
@@ -162,7 +162,7 @@
             {renderer}
             spec={parsedSpec}
             canvasDashboard
-            config={getRillTheme(true)}
+            config={getStarDataTheme(true)}
             data={vegaData}
             bind:viewVL
           />

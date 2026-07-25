@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/rilldata/rill/admin/client"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
+	"github.com/fridencao/stardata/admin/client"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
 	"github.com/spf13/cobra"
 )
 

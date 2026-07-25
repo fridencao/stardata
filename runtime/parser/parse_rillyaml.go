@@ -8,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/iancoleman/strcase"
-	"github.com/rilldata/rill/runtime/pkg/env"
+	"github.com/fridencao/stardata/runtime/pkg/env"
 	"gopkg.in/yaml.v3"
 )
 

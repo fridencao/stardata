@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/canvas"
-	"github.com/rilldata/rill/runtime/drivers"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/canvas"
+	"github.com/fridencao/stardata/runtime/drivers"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 

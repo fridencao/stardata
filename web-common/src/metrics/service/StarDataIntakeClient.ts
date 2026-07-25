@@ -1,13 +1,13 @@
 import type { MetricsEvent } from "./MetricsTypes";
 
-const RillIntakeUser = import.meta.env.RILL_UI_PUBLIC_INTAKE_USER;
-const RillIntakePassword = import.meta.env.RILL_UI_PUBLIC_INTAKE_PASSWORD;
+const StarDataIntakeUser = import.meta.env.STARDATA_UI_PUBLIC_INTAKE_USER;
+const StarDataIntakePassword = import.meta.env.STARDATA_UI_PUBLIC_INTAKE_PASSWORD;
 
 export interface TelemetryClient {
   fireEvent(event: MetricsEvent): Promise<void>;
 }
 
-export class RillIntakeClient implements TelemetryClient {
+export class StarDataIntakeClient implements TelemetryClient {
   private readonly authHeader: string;
   private readonly host: string;
 
@@ -15,11 +15,11 @@ export class RillIntakeClient implements TelemetryClient {
     this.host = host;
     // this is the format rill-intake expects.
     this.authHeader =
-      "Basic " + btoa(`${RillIntakeUser}:${RillIntakePassword}`);
+      "Basic " + btoa(`${StarDataIntakeUser}:${StarDataIntakePassword}`);
   }
 
   public async fireEvent(event: MetricsEvent) {
-    if (!RillIntakeUser || !RillIntakePassword) return;
+    if (!StarDataIntakeUser || !StarDataIntakePassword) return;
 
     try {
       const resp = await fetch(`${this.host}/local/track`, {

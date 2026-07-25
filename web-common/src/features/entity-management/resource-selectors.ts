@@ -169,7 +169,7 @@ export function useResource<T = V1Resource>(
   );
 }
 
-// FIXME: To remove this duplicate of `useResource` https://github.com/rilldata/rill/pull/5531#discussion_r1733027626
+// FIXME: To remove this duplicate of `useResource` https://github.com/fridencao/stardata/pull/5531#discussion_r1733027626
 /**
  * `useResourceV2` is a more flexible version of `useResource` that accepts
  *  any `queryOptions`, not just `select` and `queryClient`.

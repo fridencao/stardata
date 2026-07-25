@@ -3,10 +3,10 @@ package runtime_test
 import (
 	"testing"
 
-	"github.com/rilldata/rill/runtime/testruntime"
+	"github.com/fridencao/stardata/runtime/testruntime"
 	"github.com/stretchr/testify/require"
 
-	_ "github.com/rilldata/rill/runtime/resolvers"
+	_ "github.com/fridencao/stardata/runtime/resolvers"
 )
 
 func TestHealth(t *testing.T) {

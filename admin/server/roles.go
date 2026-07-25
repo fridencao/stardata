@@ -3,9 +3,9 @@ package server
 import (
 	"context"
 
-	"github.com/rilldata/rill/admin"
-	"github.com/rilldata/rill/admin/database"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
+	"github.com/fridencao/stardata/admin"
+	"github.com/fridencao/stardata/admin/database"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
 )
 
 func (s *Server) ListRoles(ctx context.Context, req *adminv1.ListRolesRequest) (*adminv1.ListRolesResponse, error) {

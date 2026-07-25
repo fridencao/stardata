@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers"
 )
 
 const _defaultConcurrentInserts = 1

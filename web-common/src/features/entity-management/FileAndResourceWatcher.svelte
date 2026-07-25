@@ -11,8 +11,8 @@
   import { WATCHER_CONTEXT_KEY } from "./watcher-context";
   import { RuntimeFileIO } from "@rilldata/web-common/features/entity-management/file-io.ts";
 
-  export let errorBody = "Try restarting the Rill via the CLI";
-  /** Idle lifecycle strategy. "aggressive" is right for Rill Developer
+  export let errorBody = "Try restarting StarData via the CLI";
+  /** Idle lifecycle strategy. "aggressive" is right for local StarData (browsers' HTTP-connection limit bites); "none" keeps the connection
    *  (browser HTTP-connection limit bites); "none" keeps the connection
    *  open and is right for consumers that need long-lived streams. */
   export let lifecycle: "aggressive" | "none";

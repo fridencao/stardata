@@ -151,7 +151,7 @@ test.describe("Deploy journey", () => {
       await rillDevPage.getByRole("button", { name: "Deploy" }).click();
 
       await expect(
-        rillDevPage.getByText("Push local changes to Rill Cloud?"),
+        rillDevPage.getByText("Push local changes to StarData?"),
       ).toBeVisible();
 
       // Select the 1st org's project

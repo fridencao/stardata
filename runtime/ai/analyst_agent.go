@@ -9,11 +9,11 @@ import (
 
 	"github.com/google/jsonschema-go/jsonschema"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	aiv1 "github.com/rilldata/rill/proto/gen/rill/ai/v1"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/ai/instructions"
-	"github.com/rilldata/rill/runtime/metricsview"
+	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/ai/instructions"
+	"github.com/fridencao/stardata/runtime/metricsview"
 )
 
 const AnalystAgentName = "analyst_agent"
@@ -92,7 +92,7 @@ func (t *AnalystAgent) CheckAccess(ctx context.Context) (bool, error) {
 	}
 
 	// Only allow for rill user agents since it's not useful in MCP contexts.
-	if !strings.HasPrefix(s.CatalogSession().UserAgent, "rill") {
+	if !strings.HasPrefix(s.CatalogSession().UserAgent, "stardata") {
 		return false, nil
 	}
 

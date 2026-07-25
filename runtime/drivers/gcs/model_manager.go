@@ -10,9 +10,9 @@ import (
 	"cloud.google.com/go/storage"
 	"github.com/bmatcuk/doublestar/v4"
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/gcputil"
-	"github.com/rilldata/rill/runtime/pkg/pathutil"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/gcputil"
+	"github.com/fridencao/stardata/runtime/pkg/pathutil"
 	"google.golang.org/api/iterator"
 	"google.golang.org/api/option"
 )

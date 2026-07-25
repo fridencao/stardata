@@ -8,7 +8,7 @@ import (
 	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
-	v1 "github.com/rilldata/rill/proto/gen/rill/local/v1"
+	v1 "github.com/fridencao/stardata/proto/gen/rill/local/v1"
 	http "net/http"
 	strings "strings"
 )

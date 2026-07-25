@@ -6,9 +6,9 @@ import (
 	"strings"
 
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/drivers/https"
-	"github.com/rilldata/rill/runtime/pkg/fileutil"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers/https"
+	"github.com/fridencao/stardata/runtime/pkg/fileutil"
 )
 
 type httpsToSelfExecutor struct {

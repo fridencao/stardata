@@ -4,13 +4,13 @@ import (
 	"context"
 	"testing"
 
-	"github.com/rilldata/rill/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/stretchr/testify/require"
 
-	_ "github.com/rilldata/rill/runtime/drivers/druid"
-	_ "github.com/rilldata/rill/runtime/drivers/duckdb"
-	_ "github.com/rilldata/rill/runtime/drivers/gcs"
-	_ "github.com/rilldata/rill/runtime/drivers/s3"
+	_ "github.com/fridencao/stardata/runtime/drivers/druid"
+	_ "github.com/fridencao/stardata/runtime/drivers/duckdb"
+	_ "github.com/fridencao/stardata/runtime/drivers/gcs"
+	_ "github.com/fridencao/stardata/runtime/drivers/s3"
 )
 
 func TestAnalyzeConnectors(t *testing.T) {

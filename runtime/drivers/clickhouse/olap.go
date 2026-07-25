@@ -10,10 +10,10 @@ import (
 
 	"github.com/ClickHouse/clickhouse-go/v2"
 	"github.com/jmoiron/sqlx"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/observability"
-	"github.com/rilldata/rill/runtime/pkg/sqlstring"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/observability"
+	"github.com/fridencao/stardata/runtime/pkg/sqlstring"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/metric"
@@ -23,8 +23,8 @@ import (
 
 // Create instruments
 var (
-	tracer                = otel.Tracer("github.com/rilldata/rill/runtime/drivers/clickhouse")
-	meter                 = otel.Meter("github.com/rilldata/rill/runtime/drivers/clickhouse")
+	tracer                = otel.Tracer("github.com/fridencao/stardata/runtime/drivers/clickhouse")
+	meter                 = otel.Meter("github.com/fridencao/stardata/runtime/drivers/clickhouse")
 	queriesCounter        = observability.Must(meter.Int64Counter("queries"))
 	queueLatencyHistogram = observability.Must(meter.Int64Histogram("queue_latency", metric.WithUnit("ms")))
 	queryLatencyHistogram = observability.Must(meter.Int64Histogram("query_latency", metric.WithUnit("ms")))

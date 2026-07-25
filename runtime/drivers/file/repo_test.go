@@ -10,10 +10,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rilldata/rill/cli/pkg/dotrill"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/filewatcher"
-	rtgitutil "github.com/rilldata/rill/runtime/pkg/gitutil"
+	"github.com/fridencao/stardata/cli/pkg/dotrill"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/filewatcher"
+	rtgitutil "github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
 )

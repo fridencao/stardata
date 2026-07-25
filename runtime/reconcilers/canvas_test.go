@@ -4,12 +4,12 @@ import (
 	"testing"
 	"time"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/testruntime"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/testruntime"
 	"github.com/stretchr/testify/require"
 
-	_ "github.com/rilldata/rill/runtime/resolvers"
+	_ "github.com/fridencao/stardata/runtime/resolvers"
 )
 
 func TestCanvasValidState(t *testing.T) {

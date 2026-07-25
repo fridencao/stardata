@@ -72,7 +72,7 @@
         .optional()
         .matches(
           /^[a-zA-Z_][a-zA-Z0-9_.]*$/,
-          // See: https://github.com/rilldata/rill/pull/6121/files#diff-04140a6ac071a4bac716371f8b66a56c89c9d52cfbf2b05ea1e14ee8d4e301e7R12
+          // See: https://github.com/fridencao/stardata/pull/6121/files#diff-04140a6ac071a4bac716371f8b66a56c89c9d52cfbf2b05ea1e14ee8d4e301e7R12
           "Key must start with a letter or underscore and can only contain letters, digits, underscores, and dots",
         ),
       value: string().optional(),

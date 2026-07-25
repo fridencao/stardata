@@ -4,7 +4,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/rilldata/rill/runtime/pkg/timeutil"
+	"github.com/fridencao/stardata/runtime/pkg/timeutil"
 	"github.com/stretchr/testify/require"
 )
 

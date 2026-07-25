@@ -94,7 +94,7 @@ function showAdminNetworkBanner(queryClient: QueryRefetcher): void {
       type: "warning",
       iconType: "alert",
       message:
-        "Connection to Rill Cloud was interrupted. Showing cached data while we reconnect.",
+        "Connection to StarData Server was interrupted. Showing cached data while we reconnect.",
       cta: {
         type: "button",
         text: "Retry now",

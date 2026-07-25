@@ -17,7 +17,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/rilldata/rill/runtime/pkg/retrier"
+	"github.com/fridencao/stardata/runtime/pkg/retrier"
 	"github.com/startreedata/pinot-client-go/pinot"
 )
 

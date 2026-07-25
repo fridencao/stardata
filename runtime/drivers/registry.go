@@ -8,7 +8,7 @@ import (
 
 	"github.com/c2h5oh/datasize"
 	"github.com/mitchellh/mapstructure"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
 )
 
 // RegistryStore is implemented by drivers capable of storing and looking up instances and repos.

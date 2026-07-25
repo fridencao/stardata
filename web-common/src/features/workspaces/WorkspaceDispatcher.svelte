@@ -85,7 +85,7 @@
 </script>
 
 <svelte:head>
-  <title>Rill Developer | {fileName}</title>
+  <title>StarData | {fileName}</title>
 </svelte:head>
 
 <div class="flex h-full overflow-hidden">

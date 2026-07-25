@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/rilldata/rill/cli/cmd/service/token"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/cli/cmd/service/token"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
 	"github.com/spf13/cobra"
 )
 

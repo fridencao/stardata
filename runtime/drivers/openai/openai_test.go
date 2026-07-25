@@ -4,14 +4,14 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/ai"
-	"github.com/rilldata/rill/runtime/pkg/activity"
-	"github.com/rilldata/rill/runtime/testruntime"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/ai"
+	"github.com/fridencao/stardata/runtime/pkg/activity"
+	"github.com/fridencao/stardata/runtime/testruntime"
 	"github.com/stretchr/testify/require"
 
-	_ "github.com/rilldata/rill/runtime/drivers/openai"
-	_ "github.com/rilldata/rill/runtime/resolvers"
+	_ "github.com/fridencao/stardata/runtime/drivers/openai"
+	_ "github.com/fridencao/stardata/runtime/resolvers"
 )
 
 func TestCompletion(t *testing.T) {

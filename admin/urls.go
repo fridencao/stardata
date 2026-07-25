@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rilldata/rill/admin/pkg/urlutil"
+	"github.com/fridencao/stardata/admin/pkg/urlutil"
 )
 
 // URLs centralizes parsing and formatting of URLs for the admin service.

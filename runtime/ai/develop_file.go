@@ -7,10 +7,10 @@ import (
 	"strings"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	aiv1 "github.com/rilldata/rill/proto/gen/rill/ai/v1"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/ai/instructions"
+	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/ai/instructions"
 )
 
 const DevelopFileName = "develop_file"

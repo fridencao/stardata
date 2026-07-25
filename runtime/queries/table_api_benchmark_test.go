@@ -4,9 +4,9 @@ import (
 	"context"
 	"testing"
 
-	_ "github.com/rilldata/rill/runtime/drivers/duckdb"
-	"github.com/rilldata/rill/runtime/queries"
-	"github.com/rilldata/rill/runtime/testruntime"
+	_ "github.com/fridencao/stardata/runtime/drivers/duckdb"
+	"github.com/fridencao/stardata/runtime/queries"
+	"github.com/fridencao/stardata/runtime/testruntime"
 	"github.com/stretchr/testify/require"
 )
 

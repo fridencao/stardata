@@ -13,9 +13,9 @@ import (
 	"unicode/utf8"
 
 	"github.com/lensesio/tableprinter"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/metricsview"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/metricsview"
 )
 
 func (p *Printer) PrintOrgs(orgs []*adminv1.Organization, defaultOrg string) {

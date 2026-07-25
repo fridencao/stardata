@@ -1,29 +1,29 @@
-import type { RillTime } from "@rilldata/web-common/features/dashboards/url-state/time-ranges/RillTime";
-import grammar from "./rill-time.js";
+import type { StardataTime } from "@rilldata/web-common/features/dashboards/url-state/time-ranges/StardataTime";
+import grammar from "./stardata-time.js";
 import nearley from "nearley";
 
 const compiledGrammar = nearley.Grammar.fromCompiled(grammar);
-export function parseRillTime(rillTimeRange: string): RillTime {
+export function parseStardataTime(stardataTimeRange: string): StardataTime {
   const parser = new nearley.Parser(compiledGrammar);
-  parser.feed(rillTimeRange);
-  const rt = parser.results[0] as RillTime;
-  if (!rt) throw new Error("Unknown error");
-  return rt;
+  parser.feed(stardataTimeRange);
+  const st = parser.results[0] as StardataTime;
+  if (!st) throw new Error("Unknown error");
+  return st;
 }
 
-export function isNewRillTimeFormat(rillTime: string): boolean {
+export function isNewStardataTimeFormat(stardataTime: string): boolean {
   try {
-    const parser = parseRillTime(rillTime);
-    return !parser.isOldFormat;
+    const st = parseStardataTime(stardataTime);
+    return !st.isOldFormat;
   } catch {
     return false;
   }
 }
 
-export function validateRillTime(rillTime: string): Error | undefined {
+export function validateStardataTime(stardataTime: string): Error | undefined {
   try {
-    const parser = parseRillTime(rillTime);
-    if (!parser) return new Error("Unknown error");
+    const st = parseStardataTime(stardataTime);
+    if (!st) return new Error("Unknown error");
   } catch (err) {
     return err;
   }
@@ -31,25 +31,25 @@ export function validateRillTime(rillTime: string): Error | undefined {
 }
 
 /**
- * Convenience method to parse and rill time and return its label.
+ * Convenience method to parse a stardata time and return its label.
  */
-export function getRillTimeLabel(rillTime: string): string {
+export function getStardataTimeLabel(stardataTime: string): string {
   try {
-    const rt = parseRillTime(rillTime);
-    return rt.getLabel();
+    const st = parseStardataTime(stardataTime);
+    return st.getLabel();
   } catch {
-    return rillTime;
+    return stardataTime;
   }
 }
 
 /**
- * Overrides the ref part of a rill time range.
- * @param rt RillTime instance to override
+ * Overrides the ref part of a stardata time range.
+ * @param st StardataTime instance to override
  * @param refOverride Ref to override with, should be in the format of `watermark` or `watermark/Y` or `watermark/Y+1Y` etc
  */
-export function overrideRillTimeRef(rt: RillTime, refOverride: string) {
-  const overriddenRillTime = parseRillTime(`7D as of ${refOverride}`);
-  const overriddenPoint = overriddenRillTime.anchorOverrides[0];
+export function overrideStardataTimeRef(st: StardataTime, refOverride: string) {
+  const overriddenStardataTime = parseStardataTime(`7D as of ${refOverride}`);
+  const overriddenPoint = overriddenStardataTime.anchorOverrides[0];
   if (!overriddenPoint) throw new Error("No anchor overrides found");
-  rt.overrideRef(overriddenPoint);
+  st.overrideRef(overriddenPoint);
 }

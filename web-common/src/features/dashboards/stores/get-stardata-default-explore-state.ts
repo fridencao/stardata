@@ -33,10 +33,10 @@ import {
   V1TimeGrainToAlias,
   V1TimeGrainToOrder,
 } from "@rilldata/web-common/lib/time/new-grains";
-import { getAggregationGrain } from "@rilldata/web-common/lib/time/rill-time-grains";
-import { parseRillTime } from "../url-state/time-ranges/parser";
+import { getAggregationGrain } from "@rilldata/web-common/lib/time/stardata-time-grains";
+import { parseStardataTime } from "../url-state/time-ranges/parser";
 
-export function getRillDefaultExploreState(
+export function getStarDataDefaultExploreState(
   metricsViewSpec: V1MetricsViewSpec,
   exploreSpec: V1ExploreSpec,
   timeRangeSummary: V1TimeRangeSummary | undefined,
@@ -50,25 +50,25 @@ export function getRillDefaultExploreState(
     dimensionFilterExcludeMode: new Map(),
     temporaryFilterName: null,
 
-    ...getRillDefaultExploreTimeState(
+    ...getStarDataDefaultExploreTimeState(
       metricsViewSpec,
       exploreSpec,
       timeRangeSummary,
     ),
 
-    ...getRillDefaultExploreViewState(exploreSpec),
+    ...getStarDataDefaultExploreViewState(exploreSpec),
 
     selectedComparisonDimension: "",
 
-    ...getRillDefaultTDDViewState(),
+    ...getStarDataDefaultTDDViewState(),
 
-    ...getRillDefaultPivotViewState(),
+    ...getStarDataDefaultPivotViewState(),
 
     contextColumnWidths: { ...contextColWidthDefaults },
   };
 }
 
-function getRillDefaultExploreTimeState(
+function getStarDataDefaultExploreTimeState(
   metricsViewSpec: V1MetricsViewSpec,
   exploreSpec: V1ExploreSpec,
   timeRangeSummary: V1TimeRangeSummary | undefined,
@@ -112,7 +112,7 @@ function getRillDefaultExploreTimeState(
   };
 }
 
-function getRillDefaultExploreViewState(
+function getStarDataDefaultExploreViewState(
   exploreSpec: V1ExploreSpec,
 ): Partial<ExploreState> {
   const defaultMeasure = exploreSpec.measures?.[0];
@@ -227,7 +227,7 @@ export function getGrainForRange(
   if (!timeRangeName) return undefined;
 
   try {
-    const parsed = parseRillTime(timeRangeName);
+    const parsed = parseStardataTime(timeRangeName);
     const grain = getAggregationGrain(parsed);
 
     return grain;
@@ -265,7 +265,7 @@ export function getDefaultTimeZone(explore: V1ExploreSpec) {
   }
 }
 
-function getRillDefaultTDDViewState() {
+function getStarDataDefaultTDDViewState() {
   return <Partial<ExploreState>>{
     tdd: {
       expandedMeasureName: "",
@@ -275,7 +275,7 @@ function getRillDefaultTDDViewState() {
   };
 }
 
-function getRillDefaultPivotViewState() {
+function getStarDataDefaultPivotViewState() {
   return <Partial<ExploreState>>{
     pivot: {
       active: false,

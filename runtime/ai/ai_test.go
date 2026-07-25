@@ -10,15 +10,15 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
-	aiv1 "github.com/rilldata/rill/proto/gen/rill/ai/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/ai"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/activity"
+	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/ai"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/activity"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
-	_ "github.com/rilldata/rill/runtime/resolvers"
+	_ "github.com/fridencao/stardata/runtime/resolvers"
 )
 
 // newSession sets up a new AI session for testing.

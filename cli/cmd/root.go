@@ -7,34 +7,34 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rilldata/rill/cli/cmd/admin"
-	"github.com/rilldata/rill/cli/cmd/auth"
-	"github.com/rilldata/rill/cli/cmd/billing"
-	"github.com/rilldata/rill/cli/cmd/chat"
-	"github.com/rilldata/rill/cli/cmd/deploy"
-	"github.com/rilldata/rill/cli/cmd/devtool"
-	"github.com/rilldata/rill/cli/cmd/docs"
-	"github.com/rilldata/rill/cli/cmd/env"
-	"github.com/rilldata/rill/cli/cmd/initialize"
-	"github.com/rilldata/rill/cli/cmd/org"
-	"github.com/rilldata/rill/cli/cmd/project"
-	"github.com/rilldata/rill/cli/cmd/publicurl"
-	"github.com/rilldata/rill/cli/cmd/query"
-	"github.com/rilldata/rill/cli/cmd/runtime"
-	"github.com/rilldata/rill/cli/cmd/service"
-	"github.com/rilldata/rill/cli/cmd/start"
-	"github.com/rilldata/rill/cli/cmd/sudo"
-	sudouser "github.com/rilldata/rill/cli/cmd/sudo/user"
-	"github.com/rilldata/rill/cli/cmd/token"
-	"github.com/rilldata/rill/cli/cmd/uninstall"
-	"github.com/rilldata/rill/cli/cmd/upgrade"
-	"github.com/rilldata/rill/cli/cmd/user"
-	"github.com/rilldata/rill/cli/cmd/usergroup"
-	"github.com/rilldata/rill/cli/cmd/validate"
-	versioncmd "github.com/rilldata/rill/cli/cmd/version"
-	"github.com/rilldata/rill/cli/cmd/whoami"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	"github.com/rilldata/rill/cli/pkg/version"
+	"github.com/fridencao/stardata/cli/cmd/admin"
+	"github.com/fridencao/stardata/cli/cmd/auth"
+	"github.com/fridencao/stardata/cli/cmd/billing"
+	"github.com/fridencao/stardata/cli/cmd/chat"
+	"github.com/fridencao/stardata/cli/cmd/deploy"
+	"github.com/fridencao/stardata/cli/cmd/devtool"
+	"github.com/fridencao/stardata/cli/cmd/docs"
+	"github.com/fridencao/stardata/cli/cmd/env"
+	"github.com/fridencao/stardata/cli/cmd/initialize"
+	"github.com/fridencao/stardata/cli/cmd/org"
+	"github.com/fridencao/stardata/cli/cmd/project"
+	"github.com/fridencao/stardata/cli/cmd/publicurl"
+	"github.com/fridencao/stardata/cli/cmd/query"
+	"github.com/fridencao/stardata/cli/cmd/runtime"
+	"github.com/fridencao/stardata/cli/cmd/service"
+	"github.com/fridencao/stardata/cli/cmd/start"
+	"github.com/fridencao/stardata/cli/cmd/sudo"
+	sudouser "github.com/fridencao/stardata/cli/cmd/sudo/user"
+	"github.com/fridencao/stardata/cli/cmd/token"
+	"github.com/fridencao/stardata/cli/cmd/uninstall"
+	"github.com/fridencao/stardata/cli/cmd/upgrade"
+	"github.com/fridencao/stardata/cli/cmd/user"
+	"github.com/fridencao/stardata/cli/cmd/usergroup"
+	"github.com/fridencao/stardata/cli/cmd/validate"
+	versioncmd "github.com/fridencao/stardata/cli/cmd/version"
+	"github.com/fridencao/stardata/cli/cmd/whoami"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/cli/pkg/version"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc/status"
 )
@@ -42,10 +42,10 @@ import (
 // Instructions for agents that we add to the root help command in non-interactive environments.
 const agentInstructions = `
 For Agents:
-If you are administrating a Rill Cloud project, the CLI help menus speak for themselves (e.g. "rill project -h" or "rill user -h").
+If you are administrating a Rill Cloud project, the CLI help menus speak for themselves (e.g. "stardata project -h" or "stardata user -h").
 But if you are developing a Rill project, it is imperative that you initialize and load the Rill agent instructions in the project directory.
-If you are creating a new project, use "rill init <path>" to set up a project with instructions.
-If you are working with an existing project, use "rill init <path> --agent claude" to add agent instructions to the project if it doesn't already have them.
+If you are creating a new project, use "stardata init <path>" to set up a project with instructions.
+If you are working with an existing project, use "stardata init <path> --agent claude" to add agent instructions to the project if it doesn't already have them.
 Make sure you load the instruction files after they are initialized. If necessary, cd into the project directory to discover them.
 `
 
@@ -63,7 +63,7 @@ func Run(ctx context.Context, ver version.Version) {
 		os.Exit(1)
 	}
 
-	// Crude check to detect if we may be running as Rill Cloud, namely if the command is `rill admin ...` or `rill runtime ...`.
+	// Crude check to detect if we may be running as Rill Cloud, namely if the command is `stardata admin ...` or `stardata runtime ...`.
 	isCloud := len(os.Args) >= 2 && (os.Args[1] == "admin" || os.Args[1] == "runtime")
 
 	// Check version (if not running as a cloud service).
@@ -113,7 +113,7 @@ func RootCmd(ch *cmdutil.Helper) *cobra.Command {
 
 	// Root command
 	rootCmd := &cobra.Command{
-		Use:   "rill <command> [flags]",
+		Use:   "stardata <command> [flags]",
 		Short: "A CLI for Rill",
 		Long:  long,
 	}
@@ -132,7 +132,7 @@ func RootCmd(ch *cmdutil.Helper) *cobra.Command {
 		}
 	}
 	rootCmd.PersistentFlags().StringVar(&ch.AdminTokenOverride, "api-token", "", "Token for authenticating with the cloud API")
-	rootCmd.Flags().BoolP("version", "v", false, "Show rill version") // Adds option to get version by passing --version or -v
+	rootCmd.Flags().BoolP("version", "v", false, "Show stardata version") // Adds option to get version by passing --version or -v
 
 	// Command Groups
 
@@ -198,13 +198,13 @@ func HandleExecuteError(ch *cmdutil.Helper, err error) int {
 
 	errMsg := err.Error()
 	if strings.Contains(errMsg, "org not found") {
-		ch.Println("Org not found. Run `rill org list` to see the orgs. Run `rill org switch` to default org.")
+		ch.Println("Org not found. Run `stardata org list` to see the orgs. Run `stardata org switch` to default org.")
 	} else if strings.Contains(errMsg, "project not found") {
-		ch.Println("Project not found. Run `rill project list` to check the list of projects.")
+		ch.Println("Project not found. Run `stardata project list` to check the list of projects.")
 	} else if strings.Contains(errMsg, "auth token not found") {
-		ch.Println("Auth token is invalid/expired. Login again with `rill login`.")
+		ch.Println("Auth token is invalid/expired. Login again with `stardata login`.")
 	} else if strings.Contains(errMsg, "not authenticated as a user") {
-		ch.Println("Please log in or sign up for Rill with `rill login`.")
+		ch.Println("Please log in or sign up for Rill with `stardata login`.")
 	} else {
 		if s, ok := status.FromError(err); ok {
 			// rpc error

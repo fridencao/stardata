@@ -7,7 +7,7 @@ const data = [
   { input: undefined, output: undefined },
   { input: "wonderful things!", output: "WT" },
   { input: "growth and usage", output: "GU" },
-  { input: "Rill KPI Dashboards", output: "RK" },
+  { input: "StarData KPI Dashboards", output: "SK" },
 ];
 
 describe("shorthand-title", () => {

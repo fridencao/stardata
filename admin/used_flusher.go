@@ -5,8 +5,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/rilldata/rill/admin/database"
-	"github.com/rilldata/rill/runtime/pkg/observability"
+	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.uber.org/zap"
 )
 

@@ -5,9 +5,9 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/rilldata/rill/admin/pkg/urlutil"
-	"github.com/rilldata/rill/cli/pkg/browser"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/admin/pkg/urlutil"
+	"github.com/fridencao/stardata/cli/pkg/browser"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
 	"github.com/spf13/cobra"
 )
 

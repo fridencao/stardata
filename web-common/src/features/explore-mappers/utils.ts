@@ -1,6 +1,6 @@
 import type { ExploreState } from "@rilldata/web-common/features/dashboards/stores/explore-state";
 import { createInExpression } from "@rilldata/web-common/features/dashboards/stores/filter-utils";
-import { resolveTimeRanges } from "@rilldata/web-common/features/dashboards/time-controls/rill-time-ranges.ts";
+import { resolveTimeRanges } from "@rilldata/web-common/features/dashboards/time-controls/stardata-time-ranges.ts";
 import { getTimeControlState } from "@rilldata/web-common/features/dashboards/time-controls/time-control-store";
 import {
   mapV1TimeRangeToSelectedComparisonTimeRange,

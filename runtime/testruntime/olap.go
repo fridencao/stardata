@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/drivers"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/stretchr/testify/require"
 )
 

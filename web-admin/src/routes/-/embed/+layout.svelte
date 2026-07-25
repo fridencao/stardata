@@ -124,9 +124,9 @@
 
 <svelte:head>
   {#if activeResource}
-    <title>{activeResource.name} - Rill</title>
+    <title>{activeResource.name} - StarData</title>
   {:else}
-    <title>Rill</title>
+    <title>StarData</title>
   {/if}
 </svelte:head>
 

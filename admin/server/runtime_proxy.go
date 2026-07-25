@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rilldata/rill/admin/database"
-	"github.com/rilldata/rill/admin/server/auth"
-	"github.com/rilldata/rill/runtime/pkg/httputil"
+	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/admin/server/auth"
+	"github.com/fridencao/stardata/runtime/pkg/httputil"
 )
 
 // runtimeProxyAccessTokenTTL is the TTL for tokens minted by the runtime proxy.

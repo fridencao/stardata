@@ -8,10 +8,10 @@ import (
 	"strings"
 
 	"github.com/joho/godotenv"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	"github.com/rilldata/rill/cli/pkg/envdetect"
-	"github.com/rilldata/rill/cli/pkg/local"
-	"github.com/rilldata/rill/runtime/pkg/gitutil"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/cli/pkg/envdetect"
+	"github.com/fridencao/stardata/cli/pkg/local"
+	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"github.com/spf13/cobra"
 )
 

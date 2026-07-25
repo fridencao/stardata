@@ -93,7 +93,7 @@
 </script>
 
 <svelte:head>
-  <title>Rill Developer | {exploreName}</title>
+  <title>StarData | {exploreName}</title>
 </svelte:head>
 
 {#if $exploreResource.isPending && !$exploreResource.data}

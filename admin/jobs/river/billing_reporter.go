@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/rilldata/rill/admin"
-	"github.com/rilldata/rill/admin/billing"
+	"github.com/fridencao/stardata/admin"
+	"github.com/fridencao/stardata/admin/billing"
 	"github.com/riverqueue/river"
 	"go.uber.org/zap"
 )

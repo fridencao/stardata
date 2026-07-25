@@ -700,7 +700,7 @@ export const TIME_COMPARISON: Record<
     description: string;
     comparisonType: TimeComparisonOption;
     offsetIso: string;
-    rillTimeOffset?: string;
+    stardataTimeOffset?: string;
   }
 > = {
   [TimeComparisonOption.CONTIGUOUS]: {
@@ -711,7 +711,7 @@ export const TIME_COMPARISON: Record<
     description: "Compare the current time range to the previous time range",
     comparisonType: TimeComparisonOption.CONTIGUOUS,
     offsetIso: "",
-    rillTimeOffset: "-1P",
+    stardataTimeOffset: "-1P",
   },
   [TimeComparisonOption.CUSTOM]: {
     get label() {
@@ -731,7 +731,7 @@ export const TIME_COMPARISON: Record<
       "Compare the current time range to the same time range the day before",
     comparisonType: TimeComparisonOption.DAY,
     offsetIso: "P1D",
-    rillTimeOffset: "-1D",
+    stardataTimeOffset: "-1D",
   },
   [TimeComparisonOption.WEEK]: {
     get label() {
@@ -742,7 +742,7 @@ export const TIME_COMPARISON: Record<
       "Compare the current time range to the same time range the week before",
     comparisonType: TimeComparisonOption.WEEK,
     offsetIso: "P1W",
-    rillTimeOffset: "-1W",
+    stardataTimeOffset: "-1W",
   },
   [TimeComparisonOption.MONTH]: {
     get label() {
@@ -754,7 +754,7 @@ export const TIME_COMPARISON: Record<
     comparisonType: TimeComparisonOption.MONTH,
     // Setting this to P1M prevents month over month comparisons for 31-day months
     offsetIso: "P31D",
-    rillTimeOffset: "-1M",
+    stardataTimeOffset: "-1M",
   },
   [TimeComparisonOption.QUARTER]: {
     get label() {
@@ -765,7 +765,7 @@ export const TIME_COMPARISON: Record<
       "Compare the current time range to the same time range the quarter before",
     comparisonType: TimeComparisonOption.QUARTER,
     offsetIso: "P3M",
-    rillTimeOffset: "-1Q",
+    stardataTimeOffset: "-1Q",
   },
 
   [TimeComparisonOption.YEAR]: {
@@ -777,7 +777,7 @@ export const TIME_COMPARISON: Record<
       "Compare the current time range to the same time range the year before",
     comparisonType: TimeComparisonOption.YEAR,
     offsetIso: "P1Y",
-    rillTimeOffset: "-1Y",
+    stardataTimeOffset: "-1Y",
   },
 };
 

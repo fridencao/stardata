@@ -51,7 +51,7 @@
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
-  const { rillTime } = featureFlags;
+  const { stardataTime } = featureFlags;
 
   export let readOnly = false;
   export let timeRanges: V1ExploreTimeRange[];
@@ -398,12 +398,12 @@
     metricsExplorerStore.setTimeZone($exploreName, timeZone);
   }
 
-  $: usingRillTime =
+  $: usingStarDataTime =
     !selectedRangeAlias?.startsWith("P") &&
     !selectedRangeAlias?.startsWith("rill-");
 
   function onTimeGrainSelect(timeGrain: V1TimeGrain) {
-    if (usingRillTime && selectedRangeAlias) {
+    if (usingStarDataTime && selectedRangeAlias) {
       metricsExplorerStore.setTimeGrain($exploreName, timeGrain);
     } else if (baseTimeRange) {
       makeTimeSeriesTimeRangeAndUpdateAppState(
@@ -489,7 +489,7 @@
         />
       {/if}
 
-      {#if !$rillTime && allTimeRangeInterval?.end?.isValid}
+      {#if !$stardataTime && allTimeRangeInterval?.end?.isValid}
         <Tooltip.Root delayDuration={0}>
           <Tooltip.Trigger>
             <span class="text-fg-secondary italic">

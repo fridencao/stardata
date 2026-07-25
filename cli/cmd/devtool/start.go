@@ -20,10 +20,10 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/joho/godotenv"
 	"github.com/redis/go-redis/v9"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	"github.com/rilldata/rill/runtime/pkg/gitutil"
-	"github.com/rilldata/rill/runtime/pkg/graceful"
-	"github.com/rilldata/rill/runtime/pkg/observability"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/runtime/pkg/gitutil"
+	"github.com/fridencao/stardata/runtime/pkg/graceful"
+	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"github.com/spf13/cobra"
 	"golang.org/x/sync/errgroup"
 )
@@ -33,7 +33,7 @@ const (
 	minGoVersion   = "1.25"
 	minNodeVersion = "18"
 	stateDirLocal  = "dev-project"
-	rillGitRemote  = "https://github.com/rilldata/rill.git"
+	rillGitRemote  = "https://github.com/fridencao/stardata.git"
 )
 
 var (

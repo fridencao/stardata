@@ -1,9 +1,9 @@
 package billing
 
 import (
-	"github.com/rilldata/rill/cli/cmd/billing/plan"
-	"github.com/rilldata/rill/cli/cmd/billing/subscription"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/cli/cmd/billing/plan"
+	"github.com/fridencao/stardata/cli/cmd/billing/subscription"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
 	"github.com/spf13/cobra"
 )
 

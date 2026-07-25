@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"strings"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/parser"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/parser"
 )
 
 var ErrAINotConfigured = fmt.Errorf("an AI service is not configured for this instance")

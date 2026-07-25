@@ -3,10 +3,10 @@ package deploy
 import (
 	"fmt"
 
-	"github.com/rilldata/rill/cli/cmd/auth"
-	"github.com/rilldata/rill/cli/cmd/project"
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	"github.com/rilldata/rill/cli/pkg/local"
+	"github.com/fridencao/stardata/cli/cmd/auth"
+	"github.com/fridencao/stardata/cli/cmd/project"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/cli/pkg/local"
 	"github.com/spf13/cobra"
 )
 

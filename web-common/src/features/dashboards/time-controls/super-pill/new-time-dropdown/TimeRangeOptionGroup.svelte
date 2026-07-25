@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { RillTime } from "../../../url-state/time-ranges/RillTime";
+  import type { StardataTime } from "../../../url-state/time-ranges/StardataTime";
   import TimeRangeMenuItem from "../components/TimeRangeMenuItem.svelte";
 
   export let filter = "";
-  export let options: RillTime[];
+  export let options: StardataTime[];
   export let timeString: string | undefined = undefined;
   export let hideDivider = false;
 
@@ -23,7 +23,7 @@
       <div class="h-px w-full bg-border my-1"></div>
     {/if}
     {#each filtered as option, i (i)}
-      <TimeRangeMenuItem rillTime={option} {timeString} {onClick} />
+      <TimeRangeMenuItem stardataTime={option} {timeString} {onClick} />
     {/each}
 
     {#if !hideDivider}

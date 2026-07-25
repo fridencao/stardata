@@ -9,12 +9,12 @@ import {
   deriveInterval,
 } from "../../dashboards/time-controls/new-time-controls";
 import type { CanvasEntity, SearchParamsStore } from "./canvas-entity";
-import { parseRillTime } from "../../dashboards/url-state/time-ranges/parser";
+import { parseStardataTime } from "../../dashboards/url-state/time-ranges/parser";
 import {
-  RillLegacyDaxInterval,
-  RillPeriodToGrainInterval,
-  RillTime,
-} from "../../dashboards/url-state/time-ranges/RillTime";
+  StardataLegacyDaxInterval,
+  StardataPeriodToGrainInterval,
+  StardataTime,
+} from "../../dashboards/url-state/time-ranges/StardataTime";
 import {
   DateTimeUnitToV1TimeGrain,
   minTimeGrainToDefaultTimeRange,
@@ -41,7 +41,7 @@ export class TimeState {
   grainStore: Readable<V1TimeGrain | undefined>;
   timeZoneStore: Readable<string>;
 
-  private parsedRange: Readable<RillTime | undefined>;
+  private parsedRange: Readable<StardataTime | undefined>;
 
   comparisonRangeStore = writable<string>("rill-PP");
   comparisonIntervalStore: Readable<Interval<true> | undefined>;
@@ -111,7 +111,7 @@ export class TimeState {
       if (!range) return undefined;
 
       try {
-        const parsed = parseRillTime(range);
+        const parsed = parseStardataTime(range);
         return parsed;
       } catch {
         return undefined;
@@ -392,7 +392,7 @@ export function getComparisonTypeFromRangeString(
     return TimeComparisonOption.CONTIGUOUS;
   }
   try {
-    const { interval, rangeGrain } = parseRillTime(range);
+    const { interval, rangeGrain } = parseStardataTime(range);
 
     if (
       interval instanceof RillLegacyDaxInterval ||

@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"

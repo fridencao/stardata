@@ -10,9 +10,9 @@ import (
 
 	"github.com/google/jsonschema-go/jsonschema"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	aiv1 "github.com/rilldata/rill/proto/gen/rill/ai/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/metricsview"
+	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/metricsview"
 )
 
 const RouterAgentName = "router_agent"
@@ -68,7 +68,7 @@ func (t *RouterAgent) CheckAccess(ctx context.Context) (bool, error) {
 	}
 
 	// Only allow for rill user agents since it's not useful in MCP contexts.
-	if !strings.HasPrefix(s.CatalogSession().UserAgent, "rill") {
+	if !strings.HasPrefix(s.CatalogSession().UserAgent, "stardata") {
 		return false, nil
 	}
 	return true, nil

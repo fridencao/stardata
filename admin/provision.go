@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	"github.com/rilldata/rill/admin/database"
-	"github.com/rilldata/rill/admin/provisioner"
+	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/admin/provisioner"
 )
 
 type ProvisionOptions struct {

@@ -7,9 +7,9 @@ import (
 	"fmt"
 
 	"github.com/mitchellh/mapstructure"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/metricsview"
-	"github.com/rilldata/rill/runtime/pkg/jsonschemautil"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/pkg/jsonschemautil"
 )
 
 func init() {

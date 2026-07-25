@@ -5,7 +5,7 @@ import (
 	"io"
 	"time"
 
-	"github.com/rilldata/rill/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers"
 )
 
 func (r *Runtime) ListFiles(ctx context.Context, instanceID, glob string) ([]drivers.DirEntry, error) {

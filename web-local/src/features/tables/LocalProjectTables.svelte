@@ -310,7 +310,7 @@
               No models
             </span>
             <span class="text-fg-muted text-sm">
-              Models are created in Rill Developer.
+              Models are created in StarData.
               <a
                 href="https://docs.rilldata.com/build/models/"
                 target="_blank"

@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	"github.com/rilldata/rill/runtime"
+	"github.com/fridencao/stardata/runtime"
 )
 
 const NavigateName = "navigate"
@@ -48,7 +48,7 @@ func (t *Navigate) CheckAccess(ctx context.Context) (bool, error) {
 	}
 
 	// Only allow for rill user agents since it's not functional in MCP contexts.
-	if !strings.HasPrefix(s.CatalogSession().UserAgent, "rill") {
+	if !strings.HasPrefix(s.CatalogSession().UserAgent, "stardata") {
 		return false, nil
 	}
 	return true, nil

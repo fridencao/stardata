@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/pagination"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/pagination"
 )
 
 type Table struct {

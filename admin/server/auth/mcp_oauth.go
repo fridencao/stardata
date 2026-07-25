@@ -8,7 +8,7 @@ import (
 	"net/url"
 	"strings"
 
-	"github.com/rilldata/rill/admin/pkg/oauth"
+	"github.com/fridencao/stardata/admin/pkg/oauth"
 	"go.uber.org/zap"
 )
 

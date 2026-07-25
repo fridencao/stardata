@@ -3,9 +3,9 @@ package server_test
 import (
 	"testing"
 
-	"github.com/rilldata/rill/admin/database"
-	"github.com/rilldata/rill/admin/testadmin"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
+	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/admin/testadmin"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
 	"github.com/stretchr/testify/require"
 )
 

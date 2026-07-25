@@ -3,7 +3,7 @@ package runtime
 import (
 	"testing"
 
-	"github.com/rilldata/rill/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/stretchr/testify/require"
 )
 
@@ -31,7 +31,7 @@ func Test_ResolveFeatureFlags(t *testing.T) {
 				"cloudDataViewer":                 false,
 				"dimensionSearch":                 true,
 				"twoTieredNavigation":             false,
-				"rillTime":                        true,
+				"stardataTime":                        true,
 				"hidePublicUrl":                   false,
 				"exportHeader":                    false,
 				"alerts":                          true,
@@ -59,7 +59,7 @@ func Test_ResolveFeatureFlags(t *testing.T) {
 				"cloudDataViewer":                 false,
 				"dimensionSearch":                 false,
 				"twoTieredNavigation":             false,
-				"rillTime":                        true,
+				"stardataTime":                        true,
 				"hidePublicUrl":                   false,
 				"exportHeader":                    false,
 				"alerts":                          false,
@@ -87,7 +87,7 @@ func Test_ResolveFeatureFlags(t *testing.T) {
 				"cloudDataViewer":                 false,
 				"dimensionSearch":                 false,
 				"twoTieredNavigation":             false,
-				"rillTime":                        true,
+				"stardataTime":                        true,
 				"hidePublicUrl":                   false,
 				"exportHeader":                    false,
 				"alerts":                          false,
@@ -115,7 +115,7 @@ func Test_ResolveFeatureFlags(t *testing.T) {
 				"cloudDataViewer":                 false,
 				"dimensionSearch":                 false,
 				"twoTieredNavigation":             false,
-				"rillTime":                        true,
+				"stardataTime":                        true,
 				"hidePublicUrl":                   true,
 				"exportHeader":                    false,
 				"alerts":                          false,

@@ -3,7 +3,7 @@ package file
 import (
 	"fmt"
 
-	"github.com/rilldata/rill/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers"
 )
 
 type ModelOutputProperties struct {

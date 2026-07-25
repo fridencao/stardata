@@ -12,7 +12,7 @@ import type { MetricsEventFactory } from "./MetricsEventFactory";
 import type { ErrorEventFactory } from "./ErrorEventFactory";
 import type { CommonFields, MetricsEvent } from "./MetricsTypes";
 import type { ProductHealthEventFactory } from "./ProductHealthEventFactory";
-import type { TelemetryClient } from "./RillIntakeClient";
+import type { TelemetryClient } from "./StarDataIntakeClient";
 
 export const ClientIDStorageKey = "client_id";
 

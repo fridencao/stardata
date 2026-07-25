@@ -7,10 +7,10 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/rilldata/rill/runtime/drivers"
-	_ "github.com/rilldata/rill/runtime/drivers/duckdb"
-	"github.com/rilldata/rill/runtime/pkg/activity"
-	"github.com/rilldata/rill/runtime/storage"
+	"github.com/fridencao/stardata/runtime/drivers"
+	_ "github.com/fridencao/stardata/runtime/drivers/duckdb"
+	"github.com/fridencao/stardata/runtime/pkg/activity"
+	"github.com/fridencao/stardata/runtime/storage"
 	"github.com/stretchr/testify/require"
 	"go.uber.org/zap"
 )

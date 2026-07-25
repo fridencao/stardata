@@ -23,7 +23,7 @@
 
   // DuckDB resolves relative paths against its own working directory, not the
   // project root, so we must read the file by its absolute path. The project's
-  // local root is the `dsn` of the repo connector (only present in Rill
+  // local root is the `dsn` of the repo connector (only present in StarData
   // Developer, where the project lives on the local filesystem).
   let repoRoot = $derived.by(() => {
     const instance = $instanceQuery.data?.instance;
@@ -83,7 +83,7 @@
 </script>
 
 <svelte:head>
-  <title>Rill Developer | {fileName}</title>
+  <title>StarData | {fileName}</title>
 </svelte:head>
 
 <WorkspaceContainer inspector={false}>

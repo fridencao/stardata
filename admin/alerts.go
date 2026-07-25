@@ -3,9 +3,9 @@ package admin
 import (
 	"context"
 
-	"github.com/rilldata/rill/admin/database"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
+	"github.com/fridencao/stardata/admin/database"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
 )
 
 // LookupAlert fetches a alert's spec from a runtime deployment.

@@ -41,7 +41,7 @@ export function useProjectTitle(client: RuntimeClient) {
             projectData?.display_name ||
               projectData?.title ||
               projectData?.name ||
-              "Untitled Rill Project",
+              "Untitled Project",
           );
         },
       },

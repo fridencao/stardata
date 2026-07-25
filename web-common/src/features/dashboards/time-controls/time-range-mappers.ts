@@ -1,6 +1,6 @@
 import {
-  parseRillTime,
-  validateRillTime,
+  parseStardataTime,
+  validateStardataTime,
 } from "@rilldata/web-common/features/dashboards/url-state/time-ranges/parser.ts";
 import { TIME_COMPARISON } from "@rilldata/web-common/lib/time/config.ts";
 import { isoDurationToFullTimeRange } from "@rilldata/web-common/lib/time/ranges/iso-ranges";
@@ -59,7 +59,7 @@ export function mapSelectedTimeRangeToV1TimeRange(
   explore: V1ExploreSpec,
 ): V1TimeRange | undefined {
   if (!selectedTimeRange?.name) return undefined;
-  if (!validateRillTime(selectedTimeRange.name)) {
+  if (!validateStardataTime(selectedTimeRange.name)) {
     return {
       expression: selectedTimeRange.name,
       timeZone,
@@ -111,15 +111,15 @@ export function mapSelectedComparisonTimeRangeToV1TimeRange(
 
   if (
     timeRange.expression &&
-    TIME_COMPARISON[selectedComparisonTimeRange.name]?.rillTimeOffset
+    TIME_COMPARISON[selectedComparisonTimeRange.name]?.stardataTimeOffset
   ) {
-    const rt = parseRillTime(timeRange.expression);
+    const rt = parseStardataTime(timeRange.expression);
     if (!rt.isOldFormat) {
       return {
         expression:
           rt.toString() +
           " offset " +
-          TIME_COMPARISON[selectedComparisonTimeRange.name]?.rillTimeOffset,
+          TIME_COMPARISON[selectedComparisonTimeRange.name]?.stardataTimeOffset,
       };
     } else {
       // Handle old syntax differently until we have the backend parser updated.
@@ -168,7 +168,7 @@ export function mapV1TimeRangeToSelectedTimeRange(
     };
   } else if (timeRange.expression) {
     try {
-      const rt = parseRillTime(timeRange.expression);
+      const rt = parseStardataTime(timeRange.expression);
       selectedTimeRange = {
         name: rt.toString(),
         interval: rt.byGrain ?? rt.rangeGrain,

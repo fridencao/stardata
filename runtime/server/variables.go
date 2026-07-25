@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"strings"
 
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/parser"
-	"github.com/rilldata/rill/runtime/server/auth"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/parser"
+	"github.com/fridencao/stardata/runtime/server/auth"
 )
 
 func (s *Server) AnalyzeVariables(ctx context.Context, req *runtimev1.AnalyzeVariablesRequest) (*runtimev1.AnalyzeVariablesResponse, error) {

@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/rilldata/rill/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers"
 	"gopkg.in/yaml.v3"
 )
 
@@ -92,8 +92,8 @@ func convertToClaudeFile(path string, inst *Instruction) (outputPath, content st
 const mcpServerName = "rill-developer"
 
 // writeMCPConfig reads an existing MCP config file (if any), adds or updates
-// the "rill" server entry, and writes the result back. If force is false and
-// the "rill" entry already exists, it is left unchanged.
+// the "stardata" server entry, and writes the result back. If force is false and
+// the "stardata" entry already exists, it is left unchanged.
 func writeMCPConfig(ctx context.Context, repo drivers.RepoStore, force bool, path string, serverConfig map[string]any) error {
 	// Try to read and parse the existing config
 	var cfg struct {

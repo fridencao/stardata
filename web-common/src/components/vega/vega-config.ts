@@ -25,7 +25,7 @@ const colors = {
   },
 };
 
-export const getRillTheme: (
+export const getStarDataTheme: (
   isDarkMode?: boolean,
   theme?: Record<string, string>,
 ) => Config = (isDarkMode = false, theme) => {

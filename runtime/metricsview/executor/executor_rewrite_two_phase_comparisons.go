@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/metricsview"
 )
 
 // rewriteTwoPhaseComparisons rewrites the query to query base time range first and then use the results to query the comparison time range.

@@ -16,7 +16,7 @@
 </script>
 
 <svelte:head>
-  <title>{project} overview - Rill</title>
+  <title>{project} overview - StarData</title>
 </svelte:head>
 
 <ContentContainer

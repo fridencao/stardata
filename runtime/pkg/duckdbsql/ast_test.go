@@ -3,7 +3,7 @@ package duckdbsql
 import (
 	"testing"
 
-	"github.com/rilldata/rill/runtime/pkg/fileutil"
+	"github.com/fridencao/stardata/runtime/pkg/fileutil"
 	"github.com/stretchr/testify/require"
 )
 

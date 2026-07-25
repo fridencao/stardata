@@ -1,4 +1,4 @@
-import { validateRillTime } from "@rilldata/web-common/features/dashboards/url-state/time-ranges/parser";
+import { validateStardataTime } from "@rilldata/web-common/features/dashboards/url-state/time-ranges/parser";
 import type { DashboardTimeControls } from "@rilldata/web-common/lib/time/types";
 import {
   getQueryServiceMetricsViewTimeRangesQueryKey,
@@ -16,8 +16,8 @@ export async function resolveTimeRanges(
   executionTime: string | undefined = undefined,
   timeDimension: string | undefined = undefined,
 ) {
-  const rillTimes: string[] = [];
-  const rillTimeToTimeRange = new Map<number, number>();
+  const stardataTimes: string[] = [];
+  const stardataTimeToTimeRange = new Map<number, number>();
   const timeRangesToReturn = new Array<DashboardTimeControls | undefined>(
     timeRanges.length,
   );
@@ -30,15 +30,15 @@ export async function resolveTimeRanges(
       // already resolved
       tr.start ||
       tr.end ||
-      !!validateRillTime(tr.name)
+      !!validateStardataTime(tr.name)
     )
       return;
 
-    rillTimeToTimeRange.set(rillTimes.length, i);
-    rillTimes.push(tr.name);
+    stardataTimeToTimeRange.set(stardataTimes.length, i);
+    stardataTimes.push(tr.name);
   });
 
-  if (rillTimes.length === 0) return timeRangesToReturn;
+  if (stardataTimes.length === 0) return timeRangesToReturn;
 
   const metricsViewName = exploreSpec.metricsView!;
 
@@ -46,14 +46,14 @@ export async function resolveTimeRanges(
     const timeRangesResp = await fetchTimeRanges({
       client,
       metricsViewName,
-      rillTimes,
+      stardataTimes,
       timeZone,
       timeDimension,
       executionTime,
     });
 
     timeRangesResp.resolvedTimeRanges?.forEach((tr, index) => {
-      const mappedIndex = rillTimeToTimeRange.get(index);
+      const mappedIndex = stardataTimeToTimeRange.get(index);
       if (mappedIndex === undefined || !timeRangesToReturn[mappedIndex]) return;
       timeRangesToReturn[mappedIndex].start = new Date(tr.start!);
       timeRangesToReturn[mappedIndex].end = new Date(tr.end!);
@@ -72,7 +72,7 @@ export async function resolveTimeRanges(
 export async function fetchTimeRanges({
   client,
   metricsViewName,
-  rillTimes,
+  stardataTimes,
   timeZone,
   timeDimension,
   executionTime,
@@ -80,7 +80,7 @@ export async function fetchTimeRanges({
 }: {
   client: RuntimeClient;
   metricsViewName: string;
-  rillTimes: string[];
+  stardataTimes: string[];
   timeDimension?: string | undefined;
   timeZone: string | undefined;
   executionTime?: string;
@@ -88,7 +88,7 @@ export async function fetchTimeRanges({
 }) {
   const requestBody = {
     metricsViewName,
-    expressions: rillTimes,
+    expressions: stardataTimes,
     timeZone,
     executionTime: executionTime as any,
     timeDimension,

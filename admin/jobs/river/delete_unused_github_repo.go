@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/rilldata/rill/admin"
-	"github.com/rilldata/rill/runtime/pkg/gitutil"
+	"github.com/fridencao/stardata/admin"
+	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"github.com/riverqueue/river"
 	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"

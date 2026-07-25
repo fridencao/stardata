@@ -14,7 +14,7 @@ import {
   TimeOffsetType,
   TimeRangePreset,
 } from "../types";
-import { isNewRillTimeFormat } from "@rilldata/web-common/features/dashboards/url-state/time-ranges/parser.ts";
+import { isNewStardataTimeFormat } from "@rilldata/web-common/features/dashboards/url-state/time-ranges/parser.ts";
 
 export function getComparisonTransform(
   start: Date,
@@ -322,7 +322,7 @@ export function getComparisonInterval(
   comparisonRange: string | undefined,
   activeTimeZone: string,
 ): Interval<true> | undefined {
-  if (!interval || !comparisonRange || isNewRillTimeFormat(comparisonRange))
+  if (!interval || !comparisonRange || isNewStardataTimeFormat(comparisonRange))
     return undefined;
 
   let comparisonInterval: Interval | undefined = undefined;

@@ -14,7 +14,7 @@
 
   $: user = createLocalServiceGetCurrentUser({
     query: {
-      // refetch in case user does a login/logout from outside of rill developer UI
+      // refetch in case user does a login/logout from outside of the StarData UI
       refetchOnWindowFocus: true,
     },
   });
@@ -92,7 +92,7 @@
 
       {#if loggedIn}
         <DropdownMenu.Item onclick={handlePylon}>
-          Contact Rill support
+          Contact StarData support
         </DropdownMenu.Item>
         <DropdownMenu.Separator />
         <DropdownMenu.Item href={logoutUrl} rel="external">

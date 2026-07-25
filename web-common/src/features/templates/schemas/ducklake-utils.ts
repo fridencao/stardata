@@ -373,7 +373,7 @@ const DUCKLAKE_KNOWN_CATALOG_SCHEMES = new Set([
 
 /**
  * Strip the optional `ATTACH [OR REPLACE] [IF NOT EXISTS]` prefix and a
- * trailing `;` from a user-pasted ATTACH statement. Rill emits the keyword
+ * trailing `;` from a user-pasted ATTACH statement. StarData emits the keyword
  * itself, so the stored form value should be just the clause body. The
  * textarea shows whatever the user typed; the wrapper is removed only when
  * the value flows into YAML, preview, or validation.

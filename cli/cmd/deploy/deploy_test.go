@@ -13,13 +13,13 @@ import (
 
 	"github.com/google/go-github/v71/github"
 	"github.com/google/uuid"
-	"github.com/rilldata/rill/admin/client"
-	"github.com/rilldata/rill/admin/database"
-	"github.com/rilldata/rill/admin/testadmin"
-	"github.com/rilldata/rill/cli/testcli"
-	adminv1 "github.com/rilldata/rill/proto/gen/rill/admin/v1"
-	"github.com/rilldata/rill/runtime/pkg/gitutil"
-	"github.com/rilldata/rill/runtime/testruntime/testmode"
+	"github.com/fridencao/stardata/admin/client"
+	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/admin/testadmin"
+	"github.com/fridencao/stardata/cli/testcli"
+	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	"github.com/fridencao/stardata/runtime/pkg/gitutil"
+	"github.com/fridencao/stardata/runtime/testruntime/testmode"
 	"github.com/stretchr/testify/require"
 )
 
@@ -437,7 +437,7 @@ func putFiles(t *testing.T, baseDir string, files map[string]string) {
 func initRillProject(t *testing.T) string {
 	tempDir := t.TempDir()
 	putFiles(t, tempDir, map[string]string{"rill.yaml": `compiler: rillv1
-display_name: Untitled Rill Project
+display_name: Untitled StarData Project
 olap_connector: duckdb`,
 	})
 	return tempDir

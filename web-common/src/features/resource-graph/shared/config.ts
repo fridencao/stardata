@@ -270,7 +270,7 @@ export const DEBUG_CONFIG = {
 /**
  * Cache namespace for localStorage.
  *
- * Uses `rill:` prefix for namespacing since Rill Developer runs on localhost:9009,
+ * Uses `rill:` prefix for namespacing since local StarData runs on localhost:9009,
  * which may be shared with other applications. This follows the pattern established
  * by `rill:theme` for consistency.
  *

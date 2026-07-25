@@ -9,11 +9,11 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/metricsview"
-	"github.com/rilldata/rill/runtime/metricsview/metricssql"
-	"github.com/rilldata/rill/runtime/pkg/rilltime"
-	"github.com/rilldata/rill/runtime/pkg/urlutils"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/metricsview"
+	"github.com/fridencao/stardata/runtime/metricsview/metricssql"
+	"github.com/fridencao/stardata/runtime/pkg/rilltime"
+	"github.com/fridencao/stardata/runtime/pkg/urlutils"
 	"golang.org/x/exp/maps"
 	"gopkg.in/yaml.v3"
 )

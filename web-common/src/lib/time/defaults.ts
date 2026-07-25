@@ -1,6 +1,6 @@
 import { V1TimeGrain } from "@rilldata/web-common/runtime-client/gen/index.schemas";
 import { V1TimeGrainToAlias } from "@rilldata/web-common/lib/time/new-grains";
-import { parseRillTime } from "@rilldata/web-common/features/dashboards/url-state/time-ranges/parser";
+import { parseStardataTime } from "@rilldata/web-common/features/dashboards/url-state/time-ranges/parser";
 import type { RangeBuckets } from "@rilldata/web-common/features/dashboards/time-controls/new-time-controls";
 
 const defaultLastNValues: Record<V1TimeGrain, number[]> = {
@@ -41,7 +41,7 @@ export function getDefaultRangeBuckets(
       const timeRange = `${v}${primaryGrainAlias}`;
 
       try {
-        const parsed = parseRillTime(timeRange);
+        const parsed = parseStardataTime(timeRange);
         rangeBuckets.latest.push(parsed);
       } catch {
         // no-op
@@ -51,7 +51,7 @@ export function getDefaultRangeBuckets(
     const timeRange = `-1${primaryGrainAlias}/${primaryGrainAlias} to ref/${primaryGrainAlias}`;
 
     try {
-      const parsed = parseRillTime(timeRange);
+      const parsed = parseStardataTime(timeRange);
       rangeBuckets.previous.push(parsed);
     } catch {
       // no-op
@@ -61,7 +61,7 @@ export function getDefaultRangeBuckets(
       return;
     }
 
-    const periodToDate = parseRillTime(`${primaryGrainAlias}TD`);
+    const periodToDate = parseStardataTime(`${primaryGrainAlias}TD`);
 
     rangeBuckets.periodToDate.push(periodToDate);
   });

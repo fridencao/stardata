@@ -19,7 +19,7 @@
     SELF_SERVE_PLANS,
     SELF_SERVE_PLANS_BY_NAME,
   } from "@rilldata/web-admin/features/billing/plans/plan-details";
-  import { triggerWelcomeToRillDialog } from "@rilldata/web-admin/features/billing/plans/utils";
+  import { triggerWelcomeToStarDataDialog } from "@rilldata/web-admin/features/billing/plans/utils";
   import CtaContentContainer from "@rilldata/web-common/components/calls-to-action/CTAContentContainer.svelte";
   import CtaHeader from "@rilldata/web-common/components/calls-to-action/CTAHeader.svelte";
   import CtaLayoutContainer from "@rilldata/web-common/components/calls-to-action/CTALayoutContainer.svelte";
@@ -90,7 +90,7 @@
         // if redirect is set then this page won't be active.
         // so this will lead to pop-in of the modal before navigating away
         if (!redirect) {
-          triggerWelcomeToRillDialog(planName);
+          triggerWelcomeToStarDataDialog(planName);
         }
       }
       void invalidateBillingInfo(organization);
@@ -98,7 +98,7 @@
       // TODO
     }
     if (redirect) {
-      // redirect param could be on a different domain like the rill developer instance
+      // redirect param could be on a different domain like the StarData instance
       // so using goto won't work
       window.open(redirect, "_self");
     } else {

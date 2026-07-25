@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Rill from "@rilldata/web-common/components/icons/Rill.svelte";
+  import StarDataLogo from "@rilldata/web-common/components/icons/StarDataLogo.svelte";
 
   export let href: string = "/";
   export let logoUrl: string | undefined = undefined;
@@ -12,6 +12,6 @@
   {#if logoUrl}
     <img src={logoUrl} alt="logo" class="h-7" />
   {:else}
-    <Rill />
+    <StarDataLogo />
   {/if}
 </a>

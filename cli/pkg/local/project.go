@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	"github.com/rilldata/rill/runtime/parser"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/runtime/parser"
 )
 
 func ParseDotenv(ctx context.Context, projectPath string) (map[string]string, error) {

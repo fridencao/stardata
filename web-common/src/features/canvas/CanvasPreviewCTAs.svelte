@@ -10,7 +10,7 @@
   import ViewAsButton from "../dashboards/granular-access-policies/ViewAsButton.svelte";
   import {
     useDashboardPolicyCheck,
-    useRillYamlPolicyCheck,
+    useStarDataYamlPolicyCheck,
   } from "../dashboards/granular-access-policies/useSecurityPolicyCheck";
   import CanvasEditButton from "@rilldata/web-common/features/canvas/CanvasEditButton.svelte";
 
@@ -22,7 +22,7 @@
   $: canvasFilePath = $canvasQuery.data?.filePath ?? "";
 
   $: canvasPolicyCheck = useDashboardPolicyCheck(client, canvasFilePath);
-  $: rillYamlPolicyCheck = useRillYamlPolicyCheck(client);
+  $: starDataYamlPolicyCheck = useStarDataYamlPolicyCheck(client);
 
   // Check if any metrics view referenced by this canvas has security rules
   $: referencedMetricsViewsHavePolicy = Object.values(
@@ -31,7 +31,7 @@
 
   $: hasSecurityPolicy =
     $canvasPolicyCheck.data ||
-    $rillYamlPolicyCheck.data ||
+    $starDataYamlPolicyCheck.data ||
     referencedMetricsViewsHavePolicy;
 
   const { dashboardChat, readOnly } = featureFlags;

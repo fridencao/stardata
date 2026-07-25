@@ -7,10 +7,10 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/pkg/blob"
-	"github.com/rilldata/rill/runtime/pkg/globutil"
-	"github.com/rilldata/rill/runtime/pkg/pagination"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/pkg/blob"
+	"github.com/fridencao/stardata/runtime/pkg/globutil"
+	"github.com/fridencao/stardata/runtime/pkg/pagination"
 	"gocloud.dev/blob/s3blob"
 )
 

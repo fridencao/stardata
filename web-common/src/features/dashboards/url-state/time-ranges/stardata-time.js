@@ -5,22 +5,22 @@ function id(x) {
 }
 
 import {
-  RillTime,
-  RillShorthandInterval,
-  RillPeriodToGrainInterval,
-  RillTimeStartEndInterval,
-  RillTimeOrdinalInterval,
-  RillIsoInterval,
-  RillLegacyIsoInterval,
-  RillLegacyDaxInterval,
-  RillAllTimeInterval,
-  RillPointInTime,
-  RillPointInTimeWithSnap,
-  RillLabelledPointInTime,
-  RillGrainPointInTime,
-  RillGrainPointInTimePart,
-  RillAbsoluteTime,
-} from "./RillTime.ts";
+  StardataTime,
+  StardataShorthandInterval,
+  StardataPeriodToGrainInterval,
+  StardataTimeStartEndInterval,
+  StardataTimeOrdinalInterval,
+  StardataIsoInterval,
+  StardataLegacyIsoInterval,
+  StardataLegacyDaxInterval,
+  StardataAllTimeInterval,
+  StardataPointInTime,
+  StardataPointInTimeWithSnap,
+  StardataLabelledPointInTime,
+  StardataGrainPointInTime,
+  StardataGrainPointInTimePart,
+  StardataAbsoluteTime,
+} from "./StardataTime.ts";
 let Lexer = undefined;
 let ParserRules = [
   { name: "_$ebnf$1", symbols: [] },
@@ -199,7 +199,7 @@ let ParserRules = [
     name: "interval_with_anchor_override",
     symbols: ["interval", "interval_with_anchor_override$ebnf$1"],
     postprocess: ([interval, anchorOverrides]) =>
-      new RillTime(interval).withAnchorOverrides(anchorOverrides),
+      new StardataTime(interval).withAnchorOverrides(anchorOverrides),
   },
   {
     name: "anchor_override$subexpression$1",
@@ -242,17 +242,17 @@ let ParserRules = [
   {
     name: "interval",
     symbols: ["interval$subexpression$1"],
-    postprocess: () => new RillAllTimeInterval(),
+    postprocess: () => new StardataAllTimeInterval(),
   },
   {
     name: "shorthand_interval",
     symbols: ["grain_duration"],
-    postprocess: ([parts]) => new RillShorthandInterval(parts),
+    postprocess: ([parts]) => new StardataShorthandInterval(parts),
   },
   {
     name: "period_to_grain_interval",
     symbols: ["period_to_grain"],
-    postprocess: ([grain]) => new RillPeriodToGrainInterval(grain),
+    postprocess: ([grain]) => new StardataPeriodToGrainInterval(grain),
   },
   { name: "ordinal_interval$ebnf$1", symbols: [] },
   {
@@ -285,7 +285,7 @@ let ParserRules = [
     name: "ordinal_interval",
     symbols: ["ordinal", "ordinal_interval$ebnf$1"],
     postprocess: ([part, rest]) =>
-      new RillTimeOrdinalInterval([part, ...rest.map(([, , , p]) => p)]),
+      new StardataTimeOrdinalInterval([part, ...rest.map(([, , , p]) => p)]),
   },
   {
     name: "start_end_interval$subexpression$1",
@@ -304,7 +304,7 @@ let ParserRules = [
       "point_in_time",
     ],
     postprocess: ([start, , , , end]) =>
-      new RillTimeStartEndInterval(start, end),
+      new StardataTimeStartEndInterval(start, end),
   },
   {
     name: "iso_interval$subexpression$1",
@@ -316,22 +316,22 @@ let ParserRules = [
   {
     name: "iso_interval",
     symbols: ["abs_time", "_", "iso_interval$subexpression$1", "_", "abs_time"],
-    postprocess: ([start, , , , end]) => new RillIsoInterval(start, end),
+    postprocess: ([start, , , , end]) => new StardataIsoInterval(start, end),
   },
   {
     name: "iso_interval",
     symbols: ["abs_time", "_", { literal: "/" }, "_", "abs_time"],
-    postprocess: ([start, , , , end]) => new RillIsoInterval(start, end),
+    postprocess: ([start, , , , end]) => new StardataIsoInterval(start, end),
   },
   {
     name: "iso_interval",
     symbols: ["abs_time", "_", { literal: "," }, "_", "abs_time"],
-    postprocess: ([start, , , , end]) => new RillIsoInterval(start, end),
+    postprocess: ([start, , , , end]) => new StardataIsoInterval(start, end),
   },
   {
     name: "iso_interval",
     symbols: ["abs_time"],
-    postprocess: ([start]) => new RillIsoInterval(start, undefined),
+    postprocess: ([start]) => new StardataIsoInterval(start, undefined),
   },
   { name: "point_in_time$ebnf$1", symbols: [] },
   {
@@ -344,12 +344,12 @@ let ParserRules = [
   {
     name: "point_in_time",
     symbols: ["point_in_time$ebnf$1", "point_in_time_without_snap"],
-    postprocess: ([points, last]) => new RillPointInTime([...points, last]),
+    postprocess: ([points, last]) => new StardataPointInTime([...points, last]),
   },
   {
     name: "point_in_time",
     symbols: ["point_in_time_with_snap"],
-    postprocess: ([point]) => new RillPointInTime([point]),
+    postprocess: ([point]) => new StardataPointInTime([point]),
   },
   {
     name: "point_in_time_with_snap",
@@ -365,18 +365,18 @@ let ParserRules = [
       "grain",
     ],
     postprocess: ([point, , , , firstGrain, , , , secondGrain]) =>
-      new RillPointInTimeWithSnap(point, [firstGrain, secondGrain]),
+      new StardataPointInTimeWithSnap(point, [firstGrain, secondGrain]),
   },
   {
     name: "point_in_time_with_snap",
     symbols: ["point_in_time_variants", "_", { literal: "/" }, "_", "grain"],
     postprocess: ([point, , , , grain]) =>
-      new RillPointInTimeWithSnap(point, [grain]),
+      new StardataPointInTimeWithSnap(point, [grain]),
   },
   {
     name: "point_in_time_without_snap",
     symbols: ["point_in_time_variants"],
-    postprocess: ([point]) => new RillPointInTimeWithSnap(point, []),
+    postprocess: ([point]) => new StardataPointInTimeWithSnap(point, []),
   },
   {
     name: "point_in_time_variants",
@@ -400,13 +400,13 @@ let ParserRules = [
   {
     name: "grain_point_in_time",
     symbols: ["grain_point_in_time$ebnf$1"],
-    postprocess: ([parts]) => new RillGrainPointInTime([...parts]),
+    postprocess: ([parts]) => new StardataGrainPointInTime([...parts]),
   },
   {
     name: "grain_point_in_time_part",
     symbols: ["prefix", "_", "grain_duration"],
     postprocess: ([prefix, _, grains]) =>
-      new RillGrainPointInTimePart(prefix, grains),
+      new StardataGrainPointInTimePart(prefix, grains),
   },
   {
     name: "labeled_point_in_time$subexpression$1",
@@ -418,7 +418,7 @@ let ParserRules = [
   {
     name: "labeled_point_in_time",
     symbols: ["labeled_point_in_time$subexpression$1"],
-    postprocess: RillLabelledPointInTime.postProcessor,
+    postprocess: StardataLabelledPointInTime.postProcessor,
   },
   {
     name: "labeled_point_in_time$subexpression$2",
@@ -430,7 +430,7 @@ let ParserRules = [
   {
     name: "labeled_point_in_time",
     symbols: ["labeled_point_in_time$subexpression$2"],
-    postprocess: RillLabelledPointInTime.postProcessor,
+    postprocess: StardataLabelledPointInTime.postProcessor,
   },
   {
     name: "labeled_point_in_time$subexpression$3",
@@ -442,7 +442,7 @@ let ParserRules = [
   {
     name: "labeled_point_in_time",
     symbols: ["labeled_point_in_time$subexpression$3"],
-    postprocess: RillLabelledPointInTime.postProcessor,
+    postprocess: StardataLabelledPointInTime.postProcessor,
   },
   {
     name: "labeled_point_in_time$subexpression$4",
@@ -464,7 +464,7 @@ let ParserRules = [
   {
     name: "labeled_point_in_time",
     symbols: ["labeled_point_in_time$subexpression$4"],
-    postprocess: RillLabelledPointInTime.postProcessor,
+    postprocess: StardataLabelledPointInTime.postProcessor,
   },
   {
     name: "labeled_point_in_time$subexpression$5",
@@ -476,7 +476,7 @@ let ParserRules = [
   {
     name: "labeled_point_in_time",
     symbols: ["labeled_point_in_time$subexpression$5"],
-    postprocess: RillLabelledPointInTime.postProcessor,
+    postprocess: StardataLabelledPointInTime.postProcessor,
   },
   {
     name: "ordinal",
@@ -547,7 +547,7 @@ let ParserRules = [
       "abs_time$ebnf$1",
       { literal: "Z" },
     ],
-    postprocess: RillAbsoluteTime.postProcessor,
+    postprocess: StardataAbsoluteTime.postProcessor,
   },
   {
     name: "abs_time",
@@ -573,7 +573,7 @@ let ParserRules = [
       /[\d]/,
       { literal: "Z" },
     ],
-    postprocess: RillAbsoluteTime.postProcessor,
+    postprocess: StardataAbsoluteTime.postProcessor,
   },
   {
     name: "abs_time",
@@ -595,7 +595,7 @@ let ParserRules = [
       /[\d]/,
       /[\d]/,
     ],
-    postprocess: RillAbsoluteTime.postProcessor,
+    postprocess: StardataAbsoluteTime.postProcessor,
   },
   {
     name: "abs_time",
@@ -614,7 +614,7 @@ let ParserRules = [
       /[\d]/,
       /[\d]/,
     ],
-    postprocess: RillAbsoluteTime.postProcessor,
+    postprocess: StardataAbsoluteTime.postProcessor,
   },
   {
     name: "abs_time",
@@ -630,17 +630,17 @@ let ParserRules = [
       /[\d]/,
       /[\d]/,
     ],
-    postprocess: RillAbsoluteTime.postProcessor,
+    postprocess: StardataAbsoluteTime.postProcessor,
   },
   {
     name: "abs_time",
     symbols: [/[\d]/, /[\d]/, /[\d]/, /[\d]/, /[\-]/, /[\d]/, /[\d]/],
-    postprocess: RillAbsoluteTime.postProcessor,
+    postprocess: StardataAbsoluteTime.postProcessor,
   },
   {
     name: "abs_time",
     symbols: [/[\d]/, /[\d]/, /[\d]/, /[\d]/],
-    postprocess: RillAbsoluteTime.postProcessor,
+    postprocess: StardataAbsoluteTime.postProcessor,
   },
   { name: "timezone_modifier$ebnf$1", symbols: [/[0-9a-zA-Z/+\-_]/] },
   {
@@ -658,13 +658,13 @@ let ParserRules = [
   {
     name: "old_rill_time",
     symbols: ["iso_time"],
-    postprocess: ([legacyIso]) => new RillTime(legacyIso),
+    postprocess: ([legacyIso]) => new StardataTime(legacyIso),
   },
   {
     name: "old_rill_time",
     symbols: ["dax_time"],
     postprocess: ([legacyDax]) =>
-      new RillTime(new RillLegacyDaxInterval(legacyDax)),
+      new StardataTime(new StardataLegacyDaxInterval(legacyDax)),
   },
   { name: "iso_time$ebnf$1", symbols: ["iso_date_part"] },
   {
@@ -691,7 +691,7 @@ let ParserRules = [
       "iso_time$ebnf$2",
     ],
     postprocess: ([, dateGrains, , timeGrains]) =>
-      new RillLegacyIsoInterval(dateGrains, timeGrains),
+      new StardataLegacyIsoInterval(dateGrains, timeGrains),
   },
   { name: "iso_time$ebnf$3", symbols: ["iso_date_part"] },
   {
@@ -704,7 +704,7 @@ let ParserRules = [
   {
     name: "iso_time",
     symbols: [{ literal: "P" }, "iso_time$ebnf$3"],
-    postprocess: ([, dateGrains]) => new RillLegacyIsoInterval(dateGrains, []),
+    postprocess: ([, dateGrains]) => new StardataLegacyIsoInterval(dateGrains, []),
   },
   {
     name: "iso_time$string$1",
@@ -724,7 +724,7 @@ let ParserRules = [
   {
     name: "iso_time",
     symbols: ["iso_time$string$1", "iso_time$ebnf$4"],
-    postprocess: ([, timeGrains]) => new RillLegacyIsoInterval([], timeGrains),
+    postprocess: ([, timeGrains]) => new StardataLegacyIsoInterval([], timeGrains),
   },
   {
     name: "iso_date_part",

@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime/drivers"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/stretchr/testify/require"
 )
 

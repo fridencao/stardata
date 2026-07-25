@@ -51,7 +51,7 @@
 </script>
 
 <svelte:head>
-  <title>{projectDisplayName} - Rill</title>
+  <title>{projectDisplayName} - StarData</title>
 </svelte:head>
 
 <ContentContainer maxWidth={900}>

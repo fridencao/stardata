@@ -24,7 +24,7 @@
 <div class="flex flex-col gap-y-2">
   <div class="text-xl">Which project would you like to update?</div>
   <div class="text-sm text-fg-secondary">
-    These all have matching project name with your Rill Developer project.
+    These all have matching project name with your local project.
   </div>
   <div class="w-[500px]">
     <ProjectSelector

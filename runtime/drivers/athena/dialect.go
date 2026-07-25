@@ -1,7 +1,7 @@
 package athena
 
 import (
-	"github.com/rilldata/rill/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/drivers"
 )
 
 type dialect struct {

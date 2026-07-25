@@ -5,8 +5,8 @@ import (
 	"slices"
 
 	"github.com/golang-jwt/jwt/v4"
-	runtimev1 "github.com/rilldata/rill/proto/gen/rill/runtime/v1"
-	"github.com/rilldata/rill/runtime"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/runtime"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 

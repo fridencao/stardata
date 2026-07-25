@@ -1,5 +1,5 @@
 <script>
-  import RillLogoSquareNegative from "@rilldata/web-common/components/icons/RillLogoSquareNegative.svelte";
+  import StarDataLogoSquareNegative from "@rilldata/web-common/components/icons/StarDataLogoSquareNegative.svelte";
   import CtaContentContainer from "@rilldata/web-common/components/calls-to-action/CTAContentContainer.svelte";
   import CtaHeader from "@rilldata/web-common/components/calls-to-action/CTAHeader.svelte";
   import CtaLayoutContainer from "@rilldata/web-common/components/calls-to-action/CTALayoutContainer.svelte";
@@ -13,7 +13,7 @@
 
 <CtaLayoutContainer>
   <CtaContentContainer>
-    <RillLogoSquareNegative size="84px" />
+    <StarDataLogoSquareNegative size="84px" />
     <CtaHeader>{m.auth_cli_success_title()}</CtaHeader>
     <CtaMessage>{m.auth_cli_success_message()}</CtaMessage>
   </CtaContentContainer>

@@ -9,12 +9,12 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/rilldata/rill/cli/pkg/cmdutil"
-	"github.com/rilldata/rill/runtime/ai/instructions"
-	"github.com/rilldata/rill/runtime/drivers"
-	"github.com/rilldata/rill/runtime/parser"
-	"github.com/rilldata/rill/runtime/pkg/examples"
-	"github.com/rilldata/rill/runtime/pkg/fileutil"
+	"github.com/fridencao/stardata/cli/pkg/cmdutil"
+	"github.com/fridencao/stardata/runtime/ai/instructions"
+	"github.com/fridencao/stardata/runtime/drivers"
+	"github.com/fridencao/stardata/runtime/parser"
+	"github.com/fridencao/stardata/runtime/pkg/examples"
+	"github.com/fridencao/stardata/runtime/pkg/fileutil"
 	"github.com/spf13/cobra"
 )
 
@@ -26,7 +26,7 @@ func InitCmd(ch *cmdutil.Helper) *cobra.Command {
 	exampleOptions, _ := examples.List()
 
 	var long strings.Builder
-	long.WriteString("Initialize a new Rill project. Use flags to customize the project or run interactively to be prompted for each option.")
+	long.WriteString("Initialize a new StarData project. Use flags to customize the project or run interactively to be prompted for each option.")
 	if len(exampleOptions) > 0 {
 		long.WriteString("\n\nAvailable example projects:\n")
 		for _, ex := range exampleOptions {
@@ -36,16 +36,16 @@ func InitCmd(ch *cmdutil.Helper) *cobra.Command {
 
 	initCmd := &cobra.Command{
 		Use:   "init [<path>]",
-		Short: "Initialize a new Rill project",
+		Short: "Initialize a new StarData project",
 		Long:  long.String(),
 		Example: `  # Interactive initialization (prompts for all options)
-  rill init
+  stardata init
 
   # Create an empty DuckDB project with Claude agent instructions
-  rill init my-project --olap duckdb --agent claude
+  stardata init my-project --olap duckdb --agent claude
 
-  # Add Claude agent instructions to an existing Rill project
-  rill init ./existing-project --agent claude`,
+  # Add Claude agent instructions to an existing StarData project
+  stardata init ./existing-project --agent claude`,
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Assess what flags were set
 			numFlags := 0

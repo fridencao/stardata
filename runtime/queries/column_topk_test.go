@@ -5,11 +5,11 @@ import (
 	"os"
 	"testing"
 
-	"github.com/rilldata/rill/runtime"
-	"github.com/rilldata/rill/runtime/drivers/clickhouse/testclickhouse"
-	"github.com/rilldata/rill/runtime/queries"
-	"github.com/rilldata/rill/runtime/testruntime"
-	"github.com/rilldata/rill/runtime/testruntime/testmode"
+	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/drivers/clickhouse/testclickhouse"
+	"github.com/fridencao/stardata/runtime/queries"
+	"github.com/fridencao/stardata/runtime/testruntime"
+	"github.com/fridencao/stardata/runtime/testruntime/testmode"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/protobuf/types/known/structpb"
 )

@@ -20,10 +20,10 @@
   // So we need this to add a redirect to welcome page.
   $effect(() => {
     if (!$filesQuery.isSuccess) return;
-    const hasRillYaml = $filesQuery.data?.files?.some(
+    const hasStarDataYaml = $filesQuery.data?.files?.some(
       (file) => file.path === "/rill.yaml",
     );
-    if (!hasRillYaml) {
+    if (!hasStarDataYaml) {
       projectWelcomeStatus.setProjectWelcomeStep(project, true);
       void goto(
         injectBranchIntoPath(

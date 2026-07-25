@@ -14,7 +14,7 @@
 </script>
 
 <svelte:head>
-  <title>Home - Rill</title>
+  <title>Home - StarData</title>
 </svelte:head>
 
 <OrganizationRedirect>
