@@ -201,6 +201,7 @@ func (r *Runtime) UpdateInstanceWithRillYAML(ctx context.Context, instanceID str
 	inst.PublicPaths = rillYAML.PublicPaths
 	inst.AIInstructions = rillYAML.AIInstructions
 	inst.ProjectAIConnector = rillYAML.AIConnector
+	inst.ProjectAILocale = rillYAML.AILocale
 	inst.Theme = rillYAML.Theme
 
 	return r.EditInstance(ctx, inst, restartController)

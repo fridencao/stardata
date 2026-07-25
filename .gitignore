@@ -113,3 +113,12 @@ vite.config.ts.timestamp-*
 # StarData CLI binary
 stardata
 
+# WorkBuddy session / agent data (do not commit)
+.workbuddy/
+
+# Local tooling artifacts
+.cache/
+.codegraph/
+.cursor/
+.omo/run-continuation/
+

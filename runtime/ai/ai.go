@@ -192,6 +192,7 @@ func (r *Runner) Session(ctx context.Context, opts *SessionOptions) (res *Sessio
 		activity:            activityClient,
 		projectInstructions: instance.AIInstructions,
 		managedAI:           instance.ResolveAIConnector() == instance.AdminConnector,
+		locale:              instance.ResolveAILocale(),
 		acquireLLM: func(ctx context.Context) (drivers.AIService, func(), error) {
 			return r.Runtime.AI(ctx, opts.InstanceID)
 		},
@@ -511,6 +512,7 @@ type BaseSession struct {
 	id         string
 	instanceID string
 	claims     *runtime.SecurityClaims
+	locale     string
 
 	runner              *Runner
 	logger              *zap.Logger
@@ -603,6 +605,11 @@ func (s *BaseSession) ID() string {
 
 func (s *BaseSession) InstanceID() string {
 	return s.instanceID
+}
+
+// Locale returns the configured language locale for AI responses (e.g. "zh", "en").
+func (s *BaseSession) Locale() string {
+	return s.locale
 }
 
 func (s *BaseSession) CatalogSession() *drivers.AISession {

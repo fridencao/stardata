@@ -48,6 +48,32 @@ func Load(path string, opts Options) (*Instruction, error) {
 	return parseInstruction(path, content, opts)
 }
 
+// LoadLocalized loads a base instruction file plus an optional locale overlay.
+// The overlay file is named "<base>.<locale>.md" (e.g. "analysis.zh.md").
+// If locale is empty or "en", only the base (English) kernel is returned.
+// If the overlay file does not exist, it falls back to the base kernel.
+func LoadLocalized(basePath string, locale string, opts Options) (*Instruction, error) {
+	base, err := Load(basePath, opts)
+	if err != nil {
+		return nil, err
+	}
+	if locale == "" || locale == "en" {
+		return base, nil
+	}
+	ext := filepath.Ext(basePath)
+	overlayPath := strings.TrimSuffix(basePath, ext) + "." + locale + ext
+	overlay, err := Load(overlayPath, opts)
+	if err != nil {
+		// No overlay for this locale -> use the base kernel only.
+		return base, nil
+	}
+	return &Instruction{
+		Name:        base.Name,
+		Description: base.Description,
+		Body:        base.Body + "\n\n" + overlay.Body,
+	}, nil
+}
+
 // LoadAll loads all instruction files from the data directory recursively.
 // Returns a map of file paths (relative to data directory) to their parsed instructions.
 func LoadAll(opts Options) (map[string]*Instruction, error) {

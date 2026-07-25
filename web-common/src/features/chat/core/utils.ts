@@ -33,18 +33,64 @@ export function getOptimisticMessageId(): string {
 // =============================================================================
 
 /**
+ * Parsed form of the analyst agent's structured JSON answer.
+ * The analyst stores its final answer as a JSON document inside the
+ * router_agent result's `response` string field.
+ */
+interface StructuredAnswer {
+  summary?: string;
+  body?: string;
+  insights?: string[];
+  follow_ups?: string[];
+}
+
+/**
+ * Attempts to parse the router_agent result as a structured analyst answer.
+ * Returns null if the message is not a router_agent JSON result, or if the
+ * `response` field is not a structured JSON document (e.g. plain text).
+ */
+function parseStructuredAnswer(message: V1Message): StructuredAnswer | null {
+  if (
+    message.contentType !== MessageContentType.JSON ||
+    message.tool !== ToolName.ROUTER_AGENT
+  ) {
+    return null;
+  }
+  try {
+    const parsed = JSON.parse(message.contentData || "");
+    const resp = parsed?.response;
+    if (typeof resp !== "string") return null;
+    const structured = JSON.parse(resp);
+    if (structured && typeof structured === "object") {
+      return structured as StructuredAnswer;
+    }
+  } catch {
+    // response is plain text or not JSON — not a structured answer
+  }
+  return null;
+}
+
+/**
  * Extract text content from a message based on content type
  *
  * Handles all three content types (text, json, error) with special parsing
- * for router_agent JSON messages to extract prompt/response fields.
+ * for router_agent JSON messages to extract the `body` field from the
+ * structured analyst answer (falling back to the raw response for
+ * non-structured / legacy answers).
  */
 export function extractMessageText(message: V1Message): string {
   const rawContent = message.contentData || "";
 
   switch (message.contentType) {
     case MessageContentType.JSON:
-      // For router_agent, parse JSON and extract prompt/response field
+      // For router_agent, extract the structured answer's `body` field.
       if (message.tool === ToolName.ROUTER_AGENT) {
+        const structured = parseStructuredAnswer(message);
+        if (structured) {
+          // Structured answer — never leak raw JSON to the user.
+          return structured.body || structured.summary || "";
+        }
+        // Non-structured (legacy / plain-text) response.
         try {
           const parsed = JSON.parse(rawContent);
           return parsed.prompt || parsed.response || rawContent;
@@ -65,6 +111,18 @@ export function extractMessageText(message: V1Message): string {
     default:
       return rawContent;
   }
+}
+
+/**
+ * Extract follow-up suggestion questions from a structured analyst answer.
+ * Returns an empty array if the message has no follow-ups.
+ */
+export function extractFollowUps(message: V1Message): string[] {
+  const structured = parseStructuredAnswer(message);
+  if (!Array.isArray(structured?.follow_ups)) return [];
+  return structured.follow_ups.filter(
+    (q): q is string => typeof q === "string" && q.trim() !== "",
+  );
 }
 
 export function invalidateConversationsList(instanceId: string) {

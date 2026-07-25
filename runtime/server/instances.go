@@ -165,6 +165,8 @@ func (s *Server) EditInstance(ctx context.Context, req *runtimev1.EditInstanceRe
 		RepoConnector:        valOrDefault(req.RepoConnector, oldInst.RepoConnector),
 		AdminConnector:       valOrDefault(req.AdminConnector, oldInst.AdminConnector),
 		AIConnector:          valOrDefault(req.AiConnector, oldInst.AIConnector),
+		AILocale:             oldInst.AILocale,
+		ProjectAILocale:      oldInst.ProjectAILocale,
 		Connectors:           connectors,
 		ProjectConnectors:    oldInst.ProjectConnectors,
 		ProjectVariables:     oldInst.ProjectVariables,

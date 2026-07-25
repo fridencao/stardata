@@ -23,6 +23,7 @@ type RillYAML struct {
 	AIInstructions string
 	OLAPConnector  string
 	AIConnector    string
+	AILocale       string
 	Theme          string
 	Connectors     []*ConnectorDef
 	Variables      []*VariableDef
@@ -62,6 +63,8 @@ type rillYAML struct {
 	AIInstructions string `yaml:"ai_instructions"`
 	// Connector to use for the AI service
 	AIConnector string `yaml:"ai_connector"`
+	// Locale to use for AI responses (e.g. "zh", "en"). Defaults to "zh".
+	AILocale string `yaml:"ai_locale"`
 	// Theme resource name to use for AI-generated charts
 	Theme string `yaml:"theme"`
 	// The project's default OLAP connector to use (can be overridden in the individual resources)
@@ -306,6 +309,7 @@ func (p *Parser) parseRillYAML(ctx context.Context, path string) error {
 		Description:    tmp.Description,
 		AIInstructions: tmp.AIInstructions,
 		AIConnector:    tmp.AIConnector,
+		AILocale:       tmp.AILocale,
 		Theme:          tmp.Theme,
 		OLAPConnector:  tmp.OLAPConnector,
 		Connectors:     make([]*ConnectorDef, len(tmp.Connectors)),

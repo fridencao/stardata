@@ -2,6 +2,7 @@ package ai
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"strings"
@@ -61,6 +62,104 @@ func (r *AnalystAgentResult) ToLLM() *aiv1.ContentBlock {
 			Text: r.Response,
 		},
 	}
+}
+
+// AnalystAnswer is the structured form of the analyst agent's final answer.
+// It is serialized to JSON and stored in AnalystAgentResult.Response. The field
+// stays a string (backward compatible with the router, chat server and SSE
+// pipeline); only its content changes from free text to a JSON document.
+type AnalystAnswer struct {
+	Summary   string             `json:"summary,omitempty"`
+	Body      string             `json:"body"`
+	Insights  []string          `json:"insights,omitempty"`
+	FollowUps []string          `json:"follow_ups,omitempty"`
+	Charts    []AnalystChartRef `json:"charts,omitempty"`
+}
+
+// AnalystChartRef references a chart created during the analysis (via the
+// create_chart tool). It is injected programmatically (not by the LLM) so the
+// answer can be traced to the exact visualizations that were produced.
+type AnalystChartRef struct {
+	ChartType string         `json:"chart_type"`
+	Title     string         `json:"title,omitempty"`
+	Spec      map[string]any `json:"spec,omitempty"`
+}
+
+// parseAnalystAnswer robustly converts the LLM's raw output into a structured
+// AnalystAnswer. It tolerates: pure JSON, ```json fenced JSON, JSON embedded
+// in prose, and plain text (which falls back to a single body field).
+func parseAnalystAnswer(raw string) *AnalystAnswer {
+	raw = strings.TrimSpace(raw)
+
+	candidates := []string{raw}
+
+	// Strip a leading/trailing ```json (or ```) fence if present.
+	if strings.HasPrefix(raw, "```") {
+		rest := raw[3:]
+		rest = strings.TrimPrefix(rest, "json")
+		rest = strings.TrimSpace(rest)
+		if end := strings.LastIndex(rest, "```"); end >= 0 {
+			rest = rest[:end]
+		}
+		candidates = append(candidates, strings.TrimSpace(rest))
+	}
+
+	// Fall back to the substring between the first '{' and the last '}'.
+	if i := strings.Index(raw, "{"); i >= 0 {
+		if j := strings.LastIndex(raw, "}"); j > i {
+			candidates = append(candidates, raw[i:j+1])
+		}
+	}
+
+	for _, c := range candidates {
+		if c == "" {
+			continue
+		}
+		var ans AnalystAnswer
+		if err := json.Unmarshal([]byte(c), &ans); err == nil {
+			if ans.Body != "" || ans.Summary != "" || len(ans.Insights) > 0 || len(ans.FollowUps) > 0 {
+				return &ans
+			}
+		}
+	}
+
+	// Could not parse a structured answer; treat the raw text as the narrative body.
+	return &AnalystAnswer{Body: raw}
+}
+
+// collectCharts gathers the charts created during the analyst loop from the
+// session messages (the create_chart tool results) and returns them as references.
+func (t *AnalystAgent) collectCharts(ctx context.Context) []AnalystChartRef {
+	s := GetSession(ctx)
+	msgs := s.MessagesWithChildren(FilterByTool(CreateChartName), FilterByType(MessageTypeResult))
+	refs := make([]AnalystChartRef, 0, len(msgs))
+	for _, m := range msgs {
+		res, err := s.UnmarshalMessageContent(m)
+		if err != nil {
+			continue
+		}
+		ccr, ok := res.(*CreateChartResult)
+		if !ok || ccr == nil {
+			continue
+		}
+		refs = append(refs, AnalystChartRef{
+			ChartType: ccr.ChartType,
+			Title:     chartTitleFromSpec(ccr.Spec),
+			Spec:      ccr.Spec,
+		})
+	}
+	return refs
+}
+
+// chartTitleFromSpec extracts a human-readable title from a chart spec, if present.
+func chartTitleFromSpec(spec map[string]any) string {
+	if spec == nil {
+		return ""
+	}
+	if title, ok := spec["title"].(string); ok {
+		return title
+	}
+	return ""
 }
 
 func (t *AnalystAgent) Spec() *mcp.Tool {
@@ -171,7 +270,7 @@ func (t *AnalystAgent) Handler(ctx context.Context, args *AnalystAgentArgs) (*An
 	}
 
 	// Build completion messages
-	systemPrompt, err := t.systemPrompt()
+	systemPrompt, err := t.systemPrompt(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -201,11 +300,26 @@ func (t *AnalystAgent) Handler(ctx context.Context, args *AnalystAgentArgs) (*An
 		return nil, err
 	}
 
-	return &AnalystAgentResult{Response: response}, nil
+	// Parse the free-form LLM answer into a structured form, then inject the
+	// charts that were actually created during the loop (for traceability).
+	answer := parseAnalystAnswer(response)
+	if charts := t.collectCharts(ctx); len(charts) > 0 {
+		answer.Charts = charts
+	}
+	answerJSON, err := json.Marshal(answer)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal structured analyst answer: %w", err)
+	}
+
+	return &AnalystAgentResult{Response: string(answerJSON)}, nil
 }
 
-func (t *AnalystAgent) systemPrompt() (string, error) {
-	instr, err := instructions.Load("analysis.md", instructions.Options{})
+func (t *AnalystAgent) systemPrompt(ctx context.Context) (string, error) {
+	locale := "zh"
+	if s := GetSession(ctx); s != nil {
+		locale = s.Locale()
+	}
+	instr, err := instructions.LoadLocalized("analysis.md", locale, instructions.Options{})
 	if err != nil {
 		return "", fmt.Errorf("failed to load analyst agent system prompt: %w", err)
 	}
@@ -289,6 +403,8 @@ func (t *AnalystAgent) userPrompt(ctx context.Context, metricsViewNames []string
 	// Generate the user prompt.
 	// It carries all the per-invocation context: the current date, dashboard/report context, applied query settings, forked-session caveats, and finally the user's actual prompt.
 	return executeTemplate(`Today's date is {{ .now.Format "Monday, January 2, 2006" }} ({{ .now.Format "2006-01-02" }}).
+
+If the user's question is in Chinese, follow the "语言与本地化要求 (Language & Localization)" section in the system prompt: translate Chinese temporal expressions (e.g. "上个月", "同比", "环比", "近30天", "本季度") into precise ISO 8601 time ranges / comparison_time_ranges, and write all user-facing text (insights, chart titles, axis labels) in Chinese.
 
 {{ if .is_report }}
 You are operating in an automated scheduled insight report mode where you will come up with insights on your own without additional user input.

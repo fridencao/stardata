@@ -1,6 +1,7 @@
 package ai_test
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"testing"
@@ -56,7 +57,7 @@ measures:
 	})
 	require.NoError(t, err)
 	require.Equal(t, ai.AnalystAgentName, res.Agent)
-	require.Equal(t, "United States", res.Response)
+	require.Contains(t, analystResponseBody(t, res.Response), "United States")
 
 	// Analyst agent question that references the previous response
 	_, err = s.CallTool(t.Context(), ai.RoleUser, ai.RouterAgentName, &res, ai.RouterAgentArgs{
@@ -64,7 +65,7 @@ measures:
 	})
 	require.NoError(t, err)
 	require.Equal(t, ai.AnalystAgentName, res.Agent)
-	require.Equal(t, "United States", res.Response)
+	require.Contains(t, analystResponseBody(t, res.Response), "United States")
 }
 
 func TestAnalystOpenRTB(t *testing.T) {
@@ -166,7 +167,7 @@ func TestAnalystOpenRTB(t *testing.T) {
 		err = mapstructureutil.WeakDecode(rawRes, &agentRes)
 		require.NoError(t, err)
 		expectedCitationUrl := fmt.Sprintf(`https://ui.rilldata.com/-/dashboards/bids_metrics/-/ai/%s/message/%s/-/open`, s.ID(), calls[2].ID)
-		require.Contains(t, agentRes.Response, expectedCitationUrl)
+		require.Contains(t, analystResponseBody(t, agentRes.Response), expectedCitationUrl)
 	})
 
 	t.Run("CanvasContext", func(t *testing.T) {
@@ -388,4 +389,19 @@ func parseTestTime(tst *testing.T, t string) time.Time {
 	ts, err := time.Parse(time.RFC3339, t)
 	require.NoError(tst, err)
 	return ts
+}
+
+// analystResponseBody extracts the human-readable narrative from an analyst
+// agent result. Since the answer is now a structured JSON document stored as
+// a string in Response, this decodes it and returns the `body` field,
+// falling back to the raw string if it isn't structured JSON.
+func analystResponseBody(t *testing.T, response string) string {
+	t.Helper()
+	var ans struct {
+		Body string `json:"body"`
+	}
+	if err := json.Unmarshal([]byte(response), &ans); err == nil && ans.Body != "" {
+		return ans.Body
+	}
+	return response
 }

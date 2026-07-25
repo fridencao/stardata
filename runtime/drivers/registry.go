@@ -42,6 +42,10 @@ type Instance struct {
 	AIConnector string
 	// ProjectAIConnector is an override of AIConnector that may be set in rill.yaml.
 	ProjectAIConnector string
+	// Locale to use for AI responses (e.g. "zh", "en").
+	AILocale string
+	// ProjectAILocale is an override of AILocale that may be set in rill.yaml.
+	ProjectAILocale string
 	// Driver name for catalog
 	CatalogConnector string
 	// CreatedOn is when the instance was created
@@ -166,6 +170,18 @@ func (i *Instance) ResolveAIConnector() string {
 		return i.ProjectAIConnector
 	}
 	return i.AIConnector
+}
+
+// ResolveAILocale returns the locale to use for AI responses.
+// It falls back in order: rill.yaml override, instance config, then "zh".
+func (i *Instance) ResolveAILocale() string {
+	if i.ProjectAILocale != "" {
+		return i.ProjectAILocale
+	}
+	if i.AILocale != "" {
+		return i.AILocale
+	}
+	return "zh"
 }
 
 // ResolveVariables returns the final resolved variables

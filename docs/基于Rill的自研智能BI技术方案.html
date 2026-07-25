@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>基于 Rill 架构的自研智能 BI 技术方案</title>
+<style>
+  :root{
+    --bg:#ffffff; --panel:#f7f9fc; --ink:#1f2733; --muted:#5b6776;
+    --line:#e3e8f0; --brand:#2f6df0; --brand2:#0ea5a4; --warn:#d97706;
+    --chip:#eef3fb; --chip2:#e7f6f4; --chip3:#fdf2e9; --ok:#15803d;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    color:var(--ink);background:var(--bg);line-height:1.65;font-size:15px}
+  .wrap{max-width:980px;margin:0 auto;padding:32px 28px 80px}
+  header.hero{background:linear-gradient(120deg,#1d4ed8 0%,#0ea5a4 100%);color:#fff;border-radius:16px;padding:30px 34px;margin-bottom:28px}
+  header.hero h1{margin:0 0 8px;font-size:25px;letter-spacing:.3px}
+  header.hero p{margin:0;opacity:.94;font-size:14.5px}
+  .tag{display:inline-block;background:rgba(255,255,255,.18);border:1px solid rgba(255,255,255,.35);
+    padding:2px 10px;border-radius:999px;font-size:12.5px;margin:10px 8px 0 0}
+  h2{font-size:20px;margin:40px 0 12px;padding-bottom:8px;border-bottom:2px solid var(--line)}
+  h2 .n{color:var(--brand);font-weight:800;margin-right:8px}
+  h3{font-size:16px;margin:22px 0 8px;color:var(--ink)}
+  p{margin:10px 0}
+  .muted{color:var(--muted)}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:14px 0}
+  .hl{background:linear-gradient(transparent 60%, #fff3c4 60%);padding:0 2px;font-weight:600}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+  th,td{border:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top}
+  th{background:#eef3fb;font-weight:700}
+  tr:nth-child(even) td{background:#fafcff}
+  .pill{display:inline-block;font-size:12px;padding:1px 8px;border-radius:999px;font-weight:600}
+  .p-own{background:#e7f6f4;color:#0f766e}
+  .p-rill{background:#eef3fb;color:#1e40af}
+  .p-mix{background:#fdf2e9;color:#b45309}
+  .ok{color:var(--ok);font-weight:700}
+  .warn{color:var(--warn);font-weight:700}
+  ol.steps{counter-reset:s;list-style:none;padding:0;margin:14px 0}
+  ol.steps>li{counter-increment:s;position:relative;padding:12px 14px 12px 52px;margin:10px 0;
+    background:var(--panel);border:1px solid var(--line);border-radius:10px}
+  ol.steps>li::before{content:counter(s);position:absolute;left:14px;top:12px;width:26px;height:26px;border-radius:50%;
+    background:var(--brand);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:12px 0}
+  .flow .box{background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 12px;font-size:13.5px}
+  .flow .arr{color:var(--brand);font-weight:800}
+  .note{border-left:4px solid var(--brand);background:#f3f7ff;padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0;font-size:14px}
+  .warnbox{border-left:4px solid var(--warn);background:#fff8ec;padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr}.wrap{padding:20px 14px}}
+  svg{width:100%;height:auto;display:block}
+  code{background:#eef1f6;padding:1px 6px;border-radius:5px;font-size:13px}
+  footer{margin-top:48px;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <h1>基于 Rill 开源架构的自研「智能问数 + 智能 BI」技术方案</h1>
+    <p>保留 Rill 的语义层 / BI-as-Code / Agent-native 新架构，在 UI 与操作上做企业化优化，并自研增值的"智能问数"大模型层。</p>
+    <div>
+      <span class="tag">基础：Rill（Apache-2.0 开源）</span>
+      <span class="tag">POC 基座：StarData 项目（已本地跑通）</span>
+      <span class="tag">文档版本：v1.0 · 2026-07-25</span>
+    </div>
+  </header>
+
+  <!-- 0 结论 -->
+  <h2><span class="n">0</span>结论先行（给评审看）</h2>
+  <div class="card">
+    <p><b>能做，而且推荐做。</b>Rill 是 Apache-2.0，允许修改、再分发、闭源商用。其"语义层 + 声明式建模 + Agent-native"架构，恰好是"智能问数"最稳的底座——<span class="hl">让自然语言映射到指标维度，而不是裸写 SQL</span>，从源头规避幻觉与口径不一致。</p>
+    <p><b>推荐路线：</b>以 Rill 开源核心作"数据 / 语义层引擎"，<b>自研两层</b>——① 智能问数 Agent（接你们自己的大模型）；② 企业化 UI（更简单的问数入口、移动端、嵌入与分享/审批）。两层通过 <b>Rill 的 API / MCP</b> 打通。这样架构最干净、IP 最清晰、增值点全在你手里。</p>
+    <p class="muted">唯一要在自研里补齐的：Rill Cloud 的托管式 AI 不在开源仓，<b>问数 Agent 的 LLM 编排需自行实现</b>（这恰是你们最值钱的部分）。</p>
+  </div>
+
+  <!-- 1 许可 -->
+  <h2><span class="n">1</span>许可与合规边界（必须先把账算清）</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin-top:0">✅ 可以做的事（Apache-2.0）</h3>
+      <ul style="margin:6px 0">
+        <li>修改源码、再分发、闭源、商用；</li>
+        <li>将 Rill 作为你们产品的底层引擎；</li>
+        <li>Apache-2.0 自带<b>专利授权</b>，对自研产品有利；</li>
+        <li>自由实现同样的"语义层 / Agent"架构思想。</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="margin-top:0">⚠️ 必须履行 / 注意</h3>
+      <ul style="margin:6px 0">
+        <li>保留 <code>LICENSE</code> 与 <code>NOTICE</code> 文件；</li>
+        <li>标注你们做了哪些<b>重大修改</b>；</li>
+        <li>产品<b>不得使用 "Rill" 商标名</b>（自起品牌）；</li>
+        <li><b>核实边界：</b>Rill Cloud 的托管 AI / 多租户为商业闭源，<b>不在开源仓</b>。</li>
+      </ul>
+    </div>
+  </div>
+  <div class="warnbox">
+    <b>关键判断：</b>Rill 开源仓（<code>rilldata/rill</code>）包含——OLAP 引擎、语义层、连接器、SvelteKit UI、<b>MCP Server 与 Agent 指令</b>（即 Agent-native 那套）。但"智能问数"背后的 LLM 编排（如 Rill 自带的 AI Chat 后端）若依赖云端，则需你们自己用自有大模型替换。本方案正是把这一层交还给你们。
+  </div>
+
+  <!-- 2 总体架构 -->
+  <h2><span class="n">2</span>总体架构</h2>
+  <p class="muted">五层：数据源 → 引擎与语义层（Rill 开源核心）→ 问数 Agent（自研）→ 应用 UI（自研）→ 集成与治理（横贯）。用户请求自上而下，结果与图表自下而上返回。</p>
+
+  <svg viewBox="0 0 680 470" role="img" aria-label="总体架构图">
+    <defs>
+      <marker id="arw" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9 z" fill="#2f6df0"/>
+      </marker>
+      <marker id="arwG" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto">
+        <path d="M0,0 L9,4.5 L0,9 z" fill="#0ea5a4"/>
+      </marker>
+    </defs>
+
+    <!-- request up -->
+    <line x1="34" y1="430" x2="34" y2="78" stroke="#2f6df0" stroke-width="2.5" marker-end="url(#arw)"/>
+    <text x="44" y="250" fill="#2f6df0" font-size="12" transform="rotate(-90 44 250)" font-weight="700">调用 / 查询请求</text>
+    <!-- response down -->
+    <line x1="58" y1="78" x2="58" y2="430" stroke="#0ea5a4" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#arwG)"/>
+    <text x="66" y="250" fill="#0ea5a4" font-size="12" transform="rotate(-90 66 250)" font-weight="700">结果 / 图表</text>
+
+    <!-- L1 数据源 -->
+    <rect x="90" y="60" width="580" height="56" rx="11" fill="#eef3fb" stroke="#c3d4f5"/>
+    <text x="104" y="82" font-size="13.5" font-weight="800" fill="#1e40af">① 数据源层</text>
+    <g font-size="12" fill="#33415c">
+      <rect x="104" y="90" width="120" height="20" rx="6" fill="#fff" stroke="#c3d4f5"/><text x="114" y="104">数仓 / 数据湖</text>
+      <rect x="236" y="90" width="96" height="20" rx="6" fill="#fff" stroke="#c3d4f5"/><text x="246" y="104">业务库</text>
+      <rect x="344" y="90" width="86" height="20" rx="6" fill="#fff" stroke="#c3d4f5"/><text x="354" y="104">CSV / 文件</text>
+      <rect x="442" y="90" width="106" height="20" rx="6" fill="#fff" stroke="#c3d4f5"/><text x="452" y="104">API / 流</text>
+      <rect x="560" y="90" width="96" height="20" rx="6" fill="#fff" stroke="#c3d4f5"/><text x="570" y="104">司内指标平台</text>
+    </g>
+
+    <!-- L2 引擎与语义层 -->
+    <rect x="90" y="128" width="580" height="74" rx="11" fill="#e9f1ff" stroke="#9cc0f7"/>
+    <text x="104" y="150" font-size="13.5" font-weight="800" fill="#1e40af">② 引擎与语义层（Rill 开源核心 · 复用）</text>
+    <g font-size="12" fill="#243b53">
+      <rect x="104" y="158" width="150" height="22" rx="6" fill="#fff" stroke="#9cc0f7"/><text x="114" y="173">DuckDB / ClickHouse 引擎</text>
+      <rect x="266" y="158" width="120" height="22" rx="6" fill="#fff" stroke="#9cc0f7"/><text x="276" y="173">连接器（20+）</text>
+      <rect x="398" y="158" width="150" height="22" rx="6" fill="#fff" stroke="#1d4ed8" stroke-width="1.6"/><text x="408" y="173">★ 语义层 metrics</text>
+      <rect x="560" y="158" width="96" height="22" rx="6" fill="#fff" stroke="#9cc0f7"/><text x="570" y="173">行级权限</text>
+    </g>
+    <text x="104" y="196" font-size="11" fill="#5b6776">★ = 皇冠明珠：声明式指标即代码，人与 Agent 共用同一套口径</text>
+
+    <!-- L3 问数 Agent -->
+    <rect x="90" y="214" width="580" height="74" rx="11" fill="#e7f6f4" stroke="#7fd9d2"/>
+    <text x="104" y="236" font-size="13.5" font-weight="800" fill="#0f766e">③ 智能问数 Agent 层（自研 · 增值）</text>
+    <g font-size="12" fill="#134e4a">
+      <rect x="104" y="244" width="110" height="22" rx="6" fill="#fff" stroke="#7fd9d2"/><text x="114" y="259">NL 理解</text>
+      <rect x="226" y="244" width="110" height="22" rx="6" fill="#fff" stroke="#7fd9d2"/><text x="236" y="259">意图 / 实体链接</text>
+      <rect x="348" y="244" width="130" height="22" rx="6" fill="#fff" stroke="#0d9488" stroke-width="1.6"/><text x="358" y="259">→ 映射语义层</text>
+      <rect x="490" y="244" width="80" height="22" rx="6" fill="#fff" stroke="#7fd9d2"/><text x="500" y="259">多轮对话</text>
+      <rect x="582" y="244" width="74" height="22" rx="6" fill="#fff" stroke="#7fd9d2"/><text x="592" y="259">接自有LLM</text>
+    </g>
+    <text x="104" y="284" font-size="11" fill="#5b6776">核心产出"受约束查询"：只选维度/度量，不裸写 SQL → 准确、可解释、可审计</text>
+
+    <!-- L4 应用 UI -->
+    <rect x="90" y="300" width="580" height="64" rx="11" fill="#fdf2e9" stroke="#f3c98a"/>
+    <text x="104" y="320" font-size="13.5" font-weight="800" fill="#b45309">④ 应用与 UI 层（自研 · 企业化）</text>
+    <g font-size="12" fill="#7c2d12">
+      <rect x="104" y="328" width="150" height="22" rx="6" fill="#fff" stroke="#f3c98a"/><text x="114" y="343">智能问数入口</text>
+      <rect x="266" y="328" width="130" height="22" rx="6" fill="#fff" stroke="#f3c98a"/><text x="276" y="343">仪表盘 / Canvas</text>
+      <rect x="408" y="328" width="86" height="22" rx="6" fill="#fff" stroke="#f3c98a"/><text x="418" y="343">移动端</text>
+      <rect x="506" y="328" width="150" height="22" rx="6" fill="#fff" stroke="#f3c98a"/><text x="516" y="343">嵌入 / 分享 / 审批</text>
+    </g>
+
+    <!-- L5 集成治理 -->
+    <rect x="90" y="376" width="580" height="62" rx="11" fill="#eef1f6" stroke="#cdd5e2"/>
+    <text x="104" y="396" font-size="13.5" font-weight="800" fill="#334155">⑤ 集成与治理（横贯各层）</text>
+    <g font-size="12" fill="#334155">
+      <rect x="104" y="404" width="150" height="22" rx="6" fill="#fff" stroke="#94a3b8"/><text x="114" y="419">Rill API / MCP（接缝）</text>
+      <rect x="266" y="404" width="140" height="22" rx="6" fill="#fff" stroke="#94a3b8"/><text x="276" y="419">司内鉴权 / SSO</text>
+      <rect x="418" y="404" width="90" height="22" rx="6" fill="#fff" stroke="#94a3b8"/><text x="428" y="419">Git 版本化</text>
+      <rect x="520" y="404" width="136" height="22" rx="6" fill="#fff" stroke="#94a3b8"/><text x="530" y="419">审计日志 / 指标目录</text>
+    </g>
+  </svg>
+
+  <!-- 3 模块划分 -->
+  <h2><span class="n">3</span>模块划分与"自研 / 复用"边界</h2>
+  <table>
+    <thead><tr><th>模块</th><th>核心职责</th><th>来源</th><th>说明</th></tr></thead>
+    <tbody>
+      <tr><td>数据接入 / 连接器</td><td>对接数仓、湖、业务库、文件、API</td><td><span class="pill p-rill">复�� Rill</span></td><td>20+ 连接器，增量摄取，开箱即用</td></tr>
+      <tr><td>计算引擎</td><td>亚秒级 OLAP 查询</td><td><span class="pill p-rill">复用 Rill</span></td><td>本地 DuckDB；规模化切 ClickHouse 直连</td></tr>
+      <tr><td><b>语义层</b></td><td>维度 / 度量 / 时间粒度定义，指标即代码</td><td><span class="pill p-rill">复用 Rill</span></td><td>★ 架构皇冠；可与司内指标平台双向同步</td></tr>
+      <tr><td>行级权限</td><td>数据行级访问控制</td><td><span class="pill p-rill">复用 Rill</span></td><td>语义层贯通，Agent 与 UI 同口径</td></tr>
+      <tr><td><b>问数 Agent</b></td><td>NL→意图→语义层映射→受约束查询→图表</td><td><span class="pill p-own">自研</span></td><td>★ 增值核心；接你们自有大模型</td></tr>
+      <tr><td>领域词典 / 同义</td><td>中文业务术语、指标别名归一</td><td><span class="pill p-own">自研</span></td><td>提升中文问数准确率</td></tr>
+      <tr><td>企业化 UI</td><td>问数入口、仪表盘、移动端、嵌入/分享/审批</td><td><span class="pill p-own">自研</span></td><td>★ 体验差异化；可 fork SvelteKit 改，或全新前端调 API</td></tr>
+      <tr><td>集成与治理</td><td>API/MCP 接缝、SSO、Git、审计</td><td><span class="pill p-mix">混合</span></td><td>MCP 复用 Rill；鉴权/审计自研接入司内体系</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 4 语义层设计 -->
+  <h2><span class="n">4</span>语义层设计（架构皇冠，先把它立住）</h2>
+  <p>语义层用声明式 YAML 定义"维度 / 度量 / 时间粒度"，Git 版本化。它是<span class="hl">人和 Agent 的唯一口径源</span>。StarData 项目里已有一份可直接复用的范例：</p>
+  <div class="card">
+    <p class="muted" style="margin-top:0">metrics/account_mart_metrics.yaml（节选）</p>
+    <pre style="margin:0;font-size:13px;overflow:auto"><code>version: 1
+type: metrics_view
+display_name: 客户经营概览
+model: account_mart          # 星型模型（事实+维度 JOIN）
+timeseries: date
+smallest_time_grain: "day"
+
+dimensions:                  # 维度
+  - name: region        expression: region
+  - name: product_category  expression: product_category
+  - name: risk_level   expression: risk_level
+measures:                    # 度量（受约束的计算）
+  - name: sum_txn_amount  expression: "sum(txn_amount)"   # 交易金额(万元)
+  - name: txn_count       expression: "count(*)"
+  - name: active_customers expression: "count(distinct customer_id)"
+  - name: new_customers   expression: "count(*) filter (where is_new = 1)"</code></pre>
+  </div>
+  <div class="note">
+    <b>为什么它是"护栏"：</b>问数 Agent 不直接生成裸 SQL，而是<b>只从这份语义层里挑维度与度量</b>。即便 LLM 出错，也只会"选错指标"，而不会"删表 / 越权 / 口径漂移"。这比传统 NL2SQL 稳一个数量级，也是 Rill 研究的结论之一。
+  </div>
+  <p><b>进阶：</b>语义层可向上与<b>司内指标平台</b>双向同步（指标定义一处维护、处处一致），向下约束引擎与 Agent——形成你们的数据治理中枢。</p>
+
+  <!-- 5 问数 Agent 流程 -->
+  <h2><span class="n">5</span>智能问数 Agent 流程（你们的增值核心）</h2>
+  <div class="flow">
+    <span class="box">① 用户中文提问</span><span class="arr">→</span>
+    <span class="box">② NL 理解 + 意图识别</span><span class="arr">→</span>
+    <span class="box">③ 实体链接：术语/同义词归一</span><span class="arr">→</span>
+    <span class="box">④ 映射到语义层维度&amp;度量</span><span class="arr">→</span>
+    <span class="box">⑤ 生成受约束查询</span><span class="arr">→</span>
+    <span class="box">⑥ 取数 + 自动选图</span><span class="arr">→</span>
+    <span class="box">⑦ 回答 + 图表 + 引用</span>
+  </div>
+  <ol class="steps">
+    <li><b>NL 理解：</b>用你们自有大模型（如司内大模型 / Qwen / 混元等）做语义解析，输出结构化"意图 + 约束"。</li>
+    <li><b>实体链接：</b>用领域词典把"存款""对公客户"等业务黑话映射到语义层标准名，解决中文同义问题。</li>
+    <li><b>语义层映射：</b>仅允许从 metrics 的维度/度量集合中取值，拒绝任何语义层外的字段——这是护栏生效的关键一步。</li>
+    <li><b>受约束查询：</b>生成的是对语义层（或 Rill API / MCP）的调用，而非裸 SQL；必要时回退到带权限的受限 SQL。</li>
+    <li><b>取数 + 自动选图：</b>经 Rill 引擎取数，按数据类型自动选柱状/趋势/占比图，并附"用了哪些指标"的可点击引用。</li>
+    <li><b>多轮与追问：</b>基于上下文做下钻、同比环比、归因（可接 Rill 的 Explain 式异常归因思想）。</li>
+    <li><b>权限贯通：</b>问数与取数全程继承语义层的行级权限，确保"不同人问同一句话，看到的数不同"。</li>
+  </ol>
+  <div class="note"><b>与 Rill 开源的关系：</b>Rill 自带 MCP Server 与 Agent 指令（StarData 已生成 <code>.mcp.json</code> + <code>.claude/</code>），可作为你们 Agent 与数据之间的"标准接缝"。你们在此之上叠加中文优化、领域词典、多轮、私有 LLM 与司内治理即可。</div>
+
+  <!-- 6 UI 优化 -->
+  <h2><span class="n">6</span>UI / 操作优化点（相对 Rill 默认）</h2>
+  <table>
+    <thead><tr><th>Rill 默认（偏开发者/分析师）</th><th>企业化优化方向</th></tr></thead>
+    <tbody>
+      <tr><td>Explore 探索式，门槛偏高</td><td>首页即"对话问数"入口，零学习成本</td></tr>
+      <tr><td>桌面端为主</td><td>移动端适配，管理层随时问数</td></tr>
+      <tr><td>结果分享弱</td><td>图表/结论一键分享、可评论、可审批流</td></tr>
+      <tr><td>独立产品</td><td>可嵌入 OA / 飞书 / 企微 / 现有系统</td></tr>
+      <tr><td>英文为主</td><td>全中文术语、业务口径对齐司内称呼</td></tr>
+      <tr><td>主题单一</td><td>品牌化主题、深色模式、无障碍</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">实现方式二选一：在 Rill 开源的 SvelteKit UI 上 fork 重做主题/组件；或自研前端（React/Vue）直连 Rill API。前者快、后者自由度高。</p>
+
+  <!-- 7 路线 -->
+  <h2><span class="n">7</span>落地路线：A（Fork）vs B（Rill 作引擎 + 自研）</h2>
+  <div class="grid2">
+    <div class="card">
+      <h3 style="margin-top:0">A. Fork 开源核心，改 UI + 加 Agent</h3>
+      <p class="ok" style="margin:0 0 6px">✅ 上手最快，直接站在源码肩上进</p>
+      <ul style="margin:6px 0">
+        <li>❌ 需长期维护 fork、跟随快速迭代的上游（v0.88 刚发）</li>
+        <li>❌ 与上游差异越大，合并越痛</li>
+        <li>❌ 品牌/合规需剥离 Rill 痕迹</li>
+      </ul>
+    </div>
+    <div class="card" style="border-color:#0d9488">
+      <h3 style="margin-top:0">B. Rill 作引擎 + 自研 UI/Agent <span class="pill p-own">推荐</span></h3>
+      <p class="ok" style="margin:0 0 6px">✅ 架构最干净、IP 最清晰</p>
+      <ul style="margin:6px 0">
+        <li>✅ 增值点（问数 Agent、企业 UI）全在你们掌控</li>
+        <li>✅ 通过 API / MCP 解耦，Rill 可随版本平滑升级</li>
+        <li>⚠️ 需定义清晰的接口契约（语义层 Schema、查询 API）</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note"><b>建议：</b>以 <b>路线 B 为默认</b>，但 POC 阶段可直接 fork 跑通以加速验证；接口稳定后再收敛到"Rill 引擎 + 自研前后端"。两者在"语义层"上完全兼容，切换成本低。</div>
+
+  <!-- 8 里程碑 -->
+  <h2><span class="n">8</span>实施里程碑（以 StarData 为 POC 基座）</h2>
+  <table>
+    <thead><tr><th>阶段</th><th>目标</th><th>关键交付</th></tr></thead>
+    <tbody>
+      <tr><td>P0 · 可行性</td><td>跑通"中文问数 → 图表"最小闭环</td><td>基于 StarData，接你们 LLM，经语义层取数并出图</td></tr>
+      <tr><td>P1 · 语义层</td><td>沉淀指标资产</td><td>把核心业务指标落成 metrics YAML，接司内指标平台</td></tr>
+      <tr><td>P2 · 问数 Agent</td><td>中文与多轮能力</td><td>领域词典、意图识别、下钻/归因、权限贯通</td></tr>
+      <tr><td>P3 · 企业 UI</td><td>业务人员可用</td><td>问数入口、移动端、嵌入/分享/审批</td></tr>
+      <tr><td>P4 · 集成治理</td><td>进生产</td><td>SSO、审计、Git 流水线、监控告警</td></tr>
+    </tbody>
+  </table>
+
+  <!-- 9 风险 -->
+  <h2><span class="n">9</span>风险与对策</h2>
+  <table>
+    <thead><tr><th>风险</th><th>对策</th></tr></thead>
+    <tbody>
+      <tr><td>开源仓不全（云端 AI 缺失）</td><td>问数 Agent 自研，Rill 仅作引擎；MCP 作标准接缝</td></tr>
+      <tr><td>Fork 与上游分裂</td><td>默认走路线 B，API/MCP 解耦；必要时仅 fork UI</td></tr>
+      <tr><td>NL 问数口径错</td><td>语义层护栏 + 领域词典 + 答案附指标引用可追溯</td></tr>
+      <tr><td>权限越界</td><td>问数继承语义层行级权限；取数走受限查询</td></tr>
+      <tr><td>合规/商标</td><td>保留 LICENSE/NOTICE、标注修改、独立品牌名</td></tr>
+    </tbody>
+  </table>
+
+  <footer>
+    参考：Rill 开源仓库 <code>rilldata/rill</code>（Apache-2.0）· 本方案 POC 基座为本地已跑通的 <code>StarData</code> 项目（金融客户经营星型模型）· 文档 v1.0 / 2026-07-25。<br/>
+    下一步建议：先落地 P0（在 StarData 上接你们自有大模型跑通中文问数），用最小成本验证架构可行性。
+  </footer>
+
+</div>
+</body>
+</html>

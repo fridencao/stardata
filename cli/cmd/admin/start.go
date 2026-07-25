@@ -44,6 +44,7 @@ import (
 	_ "github.com/fridencao/stardata/runtime/drivers/gemini"
 	_ "github.com/fridencao/stardata/runtime/drivers/mock/ai"
 	_ "github.com/fridencao/stardata/runtime/drivers/openai"
+	_ "github.com/fridencao/stardata/runtime/drivers/deepseek"
 )
 
 // Config describes admin server config derived from environment variables.

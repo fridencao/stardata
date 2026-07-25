@@ -47,6 +47,7 @@ import (
 	_ "github.com/fridencao/stardata/runtime/drivers/mock/ai"
 	_ "github.com/fridencao/stardata/runtime/drivers/mysql"
 	_ "github.com/fridencao/stardata/runtime/drivers/openai"
+	_ "github.com/fridencao/stardata/runtime/drivers/deepseek"
 	_ "github.com/fridencao/stardata/runtime/drivers/pinot"
 	_ "github.com/fridencao/stardata/runtime/drivers/postgres"
 	_ "github.com/fridencao/stardata/runtime/drivers/redshift"

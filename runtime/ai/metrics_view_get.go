@@ -8,7 +8,9 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
+	parser "github.com/fridencao/stardata/runtime/parser"
 	"google.golang.org/protobuf/encoding/protojson"
+	"gopkg.in/yaml.v3"
 )
 
 const GetMetricsViewName = "get_metrics_view"
@@ -83,6 +85,32 @@ func (t *GetMetricsView) Handler(ctx context.Context, args *GetMetricsViewArgs) 
 	err = json.Unmarshal(specJSON, &specMap)
 	if err != nil {
 		return nil, err
+	}
+
+	// Inject Chinese field aliases (label_cn) into the spec the LLM sees, without
+	// modifying the proto. The proto MetricsViewSpec has no label_cn field, and the
+	// parsed spec drops it, so we re-read the metrics view's raw YAML from the repo.
+	if repo, rel, rerr := t.Runtime.Repo(ctx, session.InstanceID()); rerr == nil {
+		defer rel()
+		if yamlBytes, gerr := repo.Get(ctx, "/metrics_views/"+args.MetricsView+".yaml"); gerr == nil {
+			var mv parser.MetricsViewYAML
+			if yaml.Unmarshal([]byte(yamlBytes), &mv) == nil {
+				labels := map[string]string{}
+				for _, d := range mv.Dimensions {
+					if d.LabelCn != "" {
+						labels[d.Name] = d.LabelCn
+					}
+				}
+				for _, m := range mv.Measures {
+					if m.LabelCn != "" {
+						labels[m.Name] = m.LabelCn
+					}
+				}
+				if len(labels) > 0 {
+					specMap["chinese_labels"] = labels
+				}
+			}
+		}
 	}
 
 	return &GetMetricsViewResult{

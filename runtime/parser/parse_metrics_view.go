@@ -40,6 +40,7 @@ type MetricsViewYAML struct {
 		Name                    string
 		DisplayName             string `yaml:"display_name"`
 		Label                   string // Deprecated: use display_name
+		LabelCn                string `yaml:"label_cn"`
 		Description             string
 		Type                    string
 		Column                  string
@@ -59,6 +60,7 @@ type MetricsViewYAML struct {
 		Name                string
 		DisplayName         string `yaml:"display_name"`
 		Label               string // Deprecated: use display_name
+		LabelCn            string `yaml:"label_cn"`
 		Description         string
 		Type                string
 		Expression          string
