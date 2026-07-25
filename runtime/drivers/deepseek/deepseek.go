@@ -45,7 +45,7 @@ var spec = drivers.Spec{
 			Type:        drivers.StringPropertyType,
 			Required:    false,
 			DisplayName: "Model",
-			Description: "The DeepSeek model to use (e.g., 'deepseek-chat' or 'deepseek-reasoner').",
+			Description: "The DeepSeek model to use (e.g., 'deepseek-v4-flash' or 'deepseek-v4-pro').",
 			Placeholder: "",
 		},
 		{
@@ -167,7 +167,7 @@ func (c *configProperties) getModel() string {
 	if c.Model != "" {
 		return c.Model
 	}
-	return "deepseek-chat"
+	return "deepseek-v4-flash"
 }
 
 func (c *configProperties) getMaxOutputTokens() int64 {
@@ -329,20 +329,23 @@ func (o *openaiHandle) Complete(ctx context.Context, opts *drivers.CompleteOptio
 		params.ReasoningEffort = shared.ReasoningEffort(o.config.ReasoningEffort)
 	}
 
-	// Set response format based on output schema
-	if opts.OutputSchema != nil {
-		params.ResponseFormat = openai.ChatCompletionNewParamsResponseFormatUnion{
-			OfJSONSchema: &openai.ResponseFormatJSONSchemaParam{
-				JSONSchema: openai.ResponseFormatJSONSchemaJSONSchemaParam{
-					Name:   "llm_completion_result",
-					Schema: opts.OutputSchema,
-				},
-			},
-		}
-	}
+	// NOTE: DeepSeek does not support response_format=json_schema (returns 400).
+	// The LLM is instructed via the system prompt to produce JSON, and the
+	// framework's Complete() call parses the text response accordingly.
+	// if opts.OutputSchema != nil {
+	// 	params.ResponseFormat = openai.ChatCompletionNewParamsResponseFormatUnion{
+	// 		OfJSONSchema: &openai.ResponseFormatJSONSchemaParam{
+	// 			JSONSchema: openai.ResponseFormatJSONSchemaJSONSchemaParam{
+	// 				Name:   "llm_completion_result",
+	// 				Schema: opts.OutputSchema,
+	// 			},
+	// 		},
+	// 	}
+	// }
 
-	// Send request to OpenAI
-	res, err := o.client.Chat.Completions.New(ctx, params)
+	// Send request to DeepSeek (disable thinking mode — it breaks multi-turn tool calling
+	// because the framework cannot pass reasoning_content back in subsequent messages)
+	res, err := o.client.Chat.Completions.New(ctx, params, option.WithJSONSet("thinking", map[string]string{"type": "disabled"}))
 	if err != nil {
 		return nil, err
 	}

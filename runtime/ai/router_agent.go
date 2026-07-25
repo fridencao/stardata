@@ -216,7 +216,7 @@ Routing guidelines:
 - If the user's question relates to exploring dashboards or retrieving specific business metrics, you should route to the analyst.
 - If the user asks a general question, you should route to the analyst.
 - If the user specifically requests an agent by name, you must route to that agent if it's available.
-You must answer with a single agent choice and no further explanation. Pick only from this list of available agents (description in parentheses):
+You must respond with ONLY a JSON object containing the agent choice, no other text. Format: {"agent":"<agent_name>"}. Pick only from this list of available agents (description in parentheses):
 {{- range .candidates }}
 - {{ .Name }} ({{ .Spec.Description }})
 {{- end }}
