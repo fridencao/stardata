@@ -163,7 +163,7 @@ func (s *Server) ForkConversation(ctx context.Context, req *runtimev1.ForkConver
 	if version == "" {
 		version = "unknown"
 	}
-	userAgent := fmt.Sprintf("rill/%s", version)
+	userAgent := fmt.Sprintf("stardata/%s", version)
 
 	// Open the existing AI session, this will only contain messages the user has access to
 	id, err := s.ai.ForkSession(ctx, &ai.SessionOptions{
@@ -232,7 +232,7 @@ func (s *Server) Complete(ctx context.Context, req *runtimev1.CompleteRequest) (
 	if version == "" {
 		version = "unknown"
 	}
-	userAgent := fmt.Sprintf("rill/%s", version)
+	userAgent := fmt.Sprintf("stardata/%s", version)
 
 	// Open the AI session
 	session, err := s.ai.Session(ctx, &ai.SessionOptions{
@@ -351,7 +351,7 @@ func (s *Server) CompleteStreaming(req *runtimev1.CompleteStreamingRequest, stre
 	if version == "" {
 		version = "unknown"
 	}
-	userAgent := fmt.Sprintf("rill/%s", version)
+	userAgent := fmt.Sprintf("stardata/%s", version)
 
 	// Open the AI session
 	session, err := s.ai.Session(ctx, &ai.SessionOptions{

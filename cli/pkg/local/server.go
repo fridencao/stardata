@@ -69,9 +69,11 @@ func (s *Server) RegisterHandlers(mux *http.ServeMux, httpPort int, secure, enab
 	}
 
 	// Register auth endpoints (starts and OAuth flow that leads to a token being set in ~/.rill)
+	// NOTE: /auth/logout is registered by the runtime server's self-hosted auth handler
+	// (runtime/server/server.go) when an Auth config is present. Registering it here too
+	// causes a duplicate-pattern panic, so it is intentionally omitted.
 	mux.Handle("/auth", s.authHandler(httpPort, secure))
 	mux.Handle("/auth/callback", s.authCallbackHandler())
-	mux.Handle("/auth/logout", s.logoutHandler())
 
 	// Register telemetry proxy endpoint
 	mux.Handle("/local/track", s.trackingHandler())
