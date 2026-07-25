@@ -9,6 +9,10 @@
     createLocalServiceGetCurrentUser,
     createLocalServiceGetMetadata,
   } from "@rilldata/web-common/runtime-client/local-service";
+  import {
+    getStardataToken,
+    clearStardataToken,
+  } from "../../runtime-client/auth-token";
   import Spinner from "@rilldata/web-common/features/entity-management/Spinner.svelte";
   import ThemeToggle from "@rilldata/web-common/features/themes/ThemeToggle.svelte";
 
@@ -44,6 +48,17 @@
   }
   function handlePylon() {
     window.Pylon("show");
+  }
+
+  // Self-hosted auth: when a StarData JWT is present, logout is a client-side
+  // concern — clear the token and return to /login. For the legacy cloud
+  // flow (no token) we let the default /auth/logout link proceed.
+  function handleLogout(e: MouseEvent) {
+    if (getStardataToken() !== null) {
+      e.preventDefault();
+      clearStardataToken();
+      window.location.href = "/login";
+    }
   }
 
   let photoUrlErrored = false;
@@ -95,7 +110,7 @@
           Contact StarData support
         </DropdownMenu.Item>
         <DropdownMenu.Separator />
-        <DropdownMenu.Item href={logoutUrl} rel="external">
+        <DropdownMenu.Item href={logoutUrl} onclick={handleLogout} rel="external">
           Logout
         </DropdownMenu.Item>
       {:else}

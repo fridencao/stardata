@@ -70,7 +70,7 @@ export interface FileAndResourceWatcherOptions {
 /**
  * Thin watcher that wires SSE transport → typed subscriber → pure invalidators.
  *
- * One instance per mount: Rill Cloud's editor switches between projects and
+ * One instance per mount: StarData's editor switches between projects and
  * branches, each backed by a distinct runtime, so the old singleton no
  * longer matches the semantics of the frontend.
  */

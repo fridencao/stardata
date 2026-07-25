@@ -1,29 +1,30 @@
 <script lang="ts">
   import { dev } from "$app/environment";
   import { page } from "$app/stores";
-  import BannerCenter from "@stardata/web-common/components/banner/BannerCenter.svelte";
-  import NotificationCenter from "@stardata/web-common/components/notifications/NotificationCenter.svelte";
-  import RepresentingUserBanner from "@stardata/web-common/features/authentication/RepresentingUserBanner.svelte";
-  import FileAndResourceWatcher from "@stardata/web-common/features/entity-management/FileAndResourceWatcher.svelte";
-  import { featureFlags } from "@stardata/web-common/features/feature-flags";
-  import { initPylonWidget } from "@stardata/web-common/features/help/initPylonWidget";
-  import RemoteProjectManager from "@stardata/web-common/features/project/RemoteProjectManager.svelte";
-  import ApplicationHeader from "@stardata/web-common/layout/ApplicationHeader.svelte";
-  import BlockingOverlayContainer from "@stardata/web-common/layout/BlockingOverlayContainer.svelte";
-  import { overlay } from "@stardata/web-common/layout/overlay-store";
-  import { queryClient } from "@stardata/web-common/lib/svelte-query/globalQueryClient";
+  import BannerCenter from "@rilldata/web-common/components/banner/BannerCenter.svelte";
+  import NotificationCenter from "@rilldata/web-common/components/notifications/NotificationCenter.svelte";
+  import RepresentingUserBanner from "@rilldata/web-common/features/authentication/RepresentingUserBanner.svelte";
+  import FileAndResourceWatcher from "@rilldata/web-common/features/entity-management/FileAndResourceWatcher.svelte";
+  import { featureFlags } from "@rilldata/web-common/features/feature-flags";
+  import { initPylonWidget } from "@rilldata/web-common/features/help/initPylonWidget";
+  import RemoteProjectManager from "@rilldata/web-common/features/project/RemoteProjectManager.svelte";
+  import ApplicationHeader from "@rilldata/web-common/layout/ApplicationHeader.svelte";
+  import BlockingOverlayContainer from "@rilldata/web-common/layout/BlockingOverlayContainer.svelte";
+  import { overlay } from "@rilldata/web-common/layout/overlay-store";
+  import { queryClient } from "@rilldata/web-common/lib/svelte-query/globalQueryClient";
   import {
     errorEventHandler,
     initMetrics,
-  } from "@stardata/web-common/metrics/initMetrics";
-  import { isDeployPage } from "@stardata/web-common/layout/navigation/route-utils";
-  import { previewModeStore } from "@stardata/web-common/layout/preview-mode-store";
+  } from "@rilldata/web-common/metrics/initMetrics";
+  import { isDeployPage } from "@rilldata/web-common/layout/navigation/route-utils";
+  import { previewModeStore } from "@rilldata/web-common/layout/preview-mode-store";
   import { LOCAL_HOST, LOCAL_INSTANCE_ID } from "../lib/runtime-client";
-  import RuntimeProvider from "@stardata/web-common/runtime-client/v2/RuntimeProvider.svelte";
+  import { getStardataToken } from "@rilldata/web-common/runtime-client/auth-token";
+  import RuntimeProvider from "@rilldata/web-common/runtime-client/v2/RuntimeProvider.svelte";
   import type { Query } from "@tanstack/query-core";
   import { QueryClientProvider } from "@tanstack/svelte-query";
   import { onMount } from "svelte";
-  import * as Tooltip from "@stardata/web-common/components/tooltip-v2";
+  import * as Tooltip from "@rilldata/web-common/components/tooltip-v2";
   import type { LayoutData } from "./$types";
   import PreviewModeNav from "../features/preview/PreviewModeNav.svelte";
   import {
@@ -31,7 +32,7 @@
     isDeveloperRoute,
     showPreviewNav,
   } from "./route-constants";
-  import "@stardata/web-common/app.css";
+  import "@rilldata/web-common/app.css";
 
   export let data: LayoutData;
 
@@ -85,6 +86,10 @@
   const host = LOCAL_HOST;
   const instanceId = LOCAL_INSTANCE_ID;
 
+  // Self-hosted auth: pass any stored StarData JWT to the runtime client
+  // so it can attach `Authorization: Bearer <token>` on API calls.
+  const authToken = getStardataToken() ?? undefined;
+
   $: ({ route } = $page);
   $: onDeployPage = isDeployPage($page);
   $: isPreviewMode = $previewModeStore;
@@ -99,7 +104,7 @@
 
 <Tooltip.Provider>
   <QueryClientProvider client={queryClient}>
-    <RuntimeProvider {host} {instanceId}>
+    <RuntimeProvider {host} {instanceId} jwt={authToken}>
       <FileAndResourceWatcher lifecycle="aggressive">
         <div
           class="body h-screen w-screen overflow-hidden absolute flex flex-col"

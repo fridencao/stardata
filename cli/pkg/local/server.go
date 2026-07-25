@@ -17,7 +17,6 @@ import (
 
 	"connectrpc.com/connect"
 	"github.com/eapache/go-resiliency/retrier"
-	"github.com/google/go-github/v71/github"
 	"github.com/fridencao/stardata/admin/database"
 	"github.com/fridencao/stardata/admin/pkg/urlutil"
 	"github.com/fridencao/stardata/cli/cmd/auth"
@@ -29,6 +28,8 @@ import (
 	"github.com/fridencao/stardata/proto/gen/rill/local/v1/localv1connect"
 	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"github.com/fridencao/stardata/runtime/pkg/observability"
+	authn "github.com/fridencao/stardata/runtime/server/auth"
+	"github.com/google/go-github/v71/github"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -42,6 +43,13 @@ type Server struct {
 	logger   *zap.Logger
 	app      *App
 	metadata *localMetadata
+
+	// auth is the self-hosted auth config (nil when using the legacy Rill Cloud flow).
+	auth *authn.AuthConfig
+	// externalURL is the public base URL used in issued tokens and login redirects.
+	externalURL string
+	// tokenValidator verifies StarData-issued JWTs (self-hosted mode).
+	tokenValidator authn.TokenValidator
 }
 
 var _ localv1connect.LocalServiceHandler = (*Server)(nil)
@@ -105,10 +113,24 @@ func (s *Server) GetMetadata(ctx context.Context, r *connect.Request[localv1.Get
 		AnalyticsEnabled: s.metadata.AnalyticsEnabled,
 		Readonly:         s.metadata.Readonly,
 		GrpcPort:         int32(s.metadata.GRPCPort),
-		LoginUrl:         s.app.localURL + "/auth",
+		LoginUrl:         s.loginURL(),
 		AdminUrl:         s.app.ch.AdminURL(),
 		PreviewMode:      s.metadata.PreviewMode,
 	}), nil
+}
+
+// loginURL returns the URL the UI should send users to authenticate.
+// When self-hosted auth is enabled it points at StarData's own login
+// (the /login page for local/jwt, the OIDC redirect for oidc).
+// Otherwise it falls back to the legacy Rill Cloud OAuth flow.
+func (s *Server) loginURL() string {
+	if s.auth == nil {
+		return s.app.localURL + "/auth"
+	}
+	if s.auth.Provider == "oidc" {
+		return s.externalURL + "/auth/oidc/login"
+	}
+	return s.externalURL + "/login"
 }
 
 // GetVersion implements localv1connect.LocalServiceHandler.
@@ -589,6 +611,11 @@ func (s *Server) RedeployProject(ctx context.Context, r *connect.Request[localv1
 
 // GetCurrentUser implements localv1connect.LocalServiceHandler.
 func (s *Server) GetCurrentUser(ctx context.Context, r *connect.Request[localv1.GetCurrentUserRequest]) (*connect.Response[localv1.GetCurrentUserResponse], error) {
+	// Self-hosted auth: resolve the user from a StarData-issued JWT.
+	if s.auth != nil {
+		return s.selfHostedCurrentUser(ctx, r)
+	}
+
 	if !s.app.ch.IsAuthenticated() {
 		return connect.NewResponse(&localv1.GetCurrentUserResponse{
 			User: nil,
@@ -635,6 +662,42 @@ func (s *Server) GetCurrentUser(ctx context.Context, r *connect.Request[localv1.
 		RillUserOrgs:       userOrgs,
 		IsRepresentingUser: isRepresentingUser,
 	}), nil
+}
+
+// selfHostedCurrentUser resolves the current user from a StarData-issued JWT
+// presented in the Authorization: Bearer header (self-hosted auth mode).
+func (s *Server) selfHostedCurrentUser(ctx context.Context, r *connect.Request[localv1.GetCurrentUserRequest]) (*connect.Response[localv1.GetCurrentUserResponse], error) {
+	if s.tokenValidator == nil {
+		return connect.NewResponse(&localv1.GetCurrentUserResponse{User: nil}), nil
+	}
+	raw := r.Header().Get("Authorization")
+	tok := strings.TrimSpace(strings.TrimPrefix(raw, "Bearer "))
+	if tok == "" {
+		return connect.NewResponse(&localv1.GetCurrentUserResponse{User: nil}), nil
+	}
+	cp, err := s.tokenValidator.ParseAndValidate(tok)
+	if err != nil {
+		return connect.NewResponse(&localv1.GetCurrentUserResponse{User: nil}), nil
+	}
+	claims := cp.Claims(s.app.Instance.ID)
+	return connect.NewResponse(&localv1.GetCurrentUserResponse{
+		User: &adminv1.User{
+			Id:          claims.UserID,
+			Email:       attrStr(claims.UserAttributes, "email"),
+			DisplayName: attrStr(claims.UserAttributes, "name"),
+		},
+	}), nil
+}
+
+// attrStr reads a string attribute from a claims attribute map.
+func attrStr(m map[string]any, key string) string {
+	if m == nil {
+		return ""
+	}
+	if v, ok := m[key].(string); ok {
+		return v
+	}
+	return ""
 }
 
 // GetCurrentProject implements localv1connect.LocalServiceHandler.

@@ -27,6 +27,7 @@ import (
 	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"github.com/fridencao/stardata/runtime/pkg/ratelimit"
 	runtimeserver "github.com/fridencao/stardata/runtime/server"
+	"github.com/fridencao/stardata/runtime/server/auth"
 	"github.com/fridencao/stardata/runtime/storage"
 	"go.opentelemetry.io/otel/attribute"
 	"go.uber.org/zap"
@@ -392,6 +393,11 @@ type ServeOptions struct {
 	UserID      string
 	TLSCertPath string
 	TLSKeyPath  string
+
+	// Auth is the self-hosted authentication configuration (nil = legacy Rill Cloud flow).
+	Auth *auth.AuthConfig
+	// ExternalURL is the public base URL used in issued tokens and login redirects.
+	ExternalURL string
 }
 
 func (a *App) Serve(opts ServeOptions) error {
@@ -417,11 +423,32 @@ func (a *App) Serve(opts ServeOptions) error {
 		PreviewMode:      opts.PreviewMode,
 	}
 
+	// Compute the external URL used in issued tokens and login redirects.
+	externalURL := opts.ExternalURL
+	if externalURL == "" {
+		externalURL = a.localURL
+	}
+
+	// If self-hosted auth is configured, build a validator to verify our own JWTs.
+	// It is shared with the runtime server via opts.Auth (which creates its own
+	// authenticator internally).
+	var tokenValidator auth.TokenValidator
+	if opts.Auth != nil {
+		authn, aerr := auth.NewAuthenticator(a.Context, a.BaseLogger, opts.Auth, externalURL)
+		if aerr != nil {
+			return aerr
+		}
+		tokenValidator = authn.Audience()
+	}
+
 	// Create the local server handler
 	localServer := &Server{
-		logger:   a.BaseLogger,
-		app:      a,
-		metadata: metadata,
+		logger:         a.BaseLogger,
+		app:            a,
+		metadata:       metadata,
+		auth:           opts.Auth,
+		externalURL:    externalURL,
+		tokenValidator: tokenValidator,
 	}
 
 	// Prepare errgroup and context with graceful shutdown
@@ -443,6 +470,8 @@ func (a *App) Serve(opts ServeOptions) error {
 		TLSKeyPath:      opts.TLSKeyPath,
 		AllowedOrigins:  a.allowedOrigins,
 		ServePrometheus: true,
+		Auth:            opts.Auth,
+		ExternalURL:     externalURL,
 	}
 	runtimeServer, err := runtimeserver.NewServer(ctx, runtimeOpts, a.Runtime, runtimeServerLogger, ratelimit.NewNoop(), a.ch.Telemetry(ctx))
 	if err != nil {

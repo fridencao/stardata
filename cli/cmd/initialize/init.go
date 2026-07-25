@@ -76,7 +76,7 @@ func InitCmd(ch *cmdutil.Helper) *cobra.Command {
 				if !ch.Interactive {
 					return fmt.Errorf("project path argument is required when not running interactively")
 				}
-				name, err := cmdutil.InputPrompt("Project name", "my-rill-project")
+				name, err := cmdutil.InputPrompt("Project name", "my-stardata-project")
 				if err != nil {
 					return err
 				}
@@ -99,7 +99,7 @@ func InitCmd(ch *cmdutil.Helper) *cobra.Command {
 			// If a project already exists, we allow adding agent files via --agent, but no other changes.
 			if cmdutil.HasRillProject(projectPath) {
 				if !explicitAgent || numFlags > 1 {
-					return fmt.Errorf("init failed because a Rill project already exists at %q (hint: only the --agent flag is supported for updating an existing project)", projectPath)
+					return fmt.Errorf("init failed because a StarData project already exists at %q (hint: only the --agent flag is supported for updating an existing project)", projectPath)
 				}
 				repo, _, err := cmdutil.RepoForProjectPath(projectPath)
 				if err != nil {
@@ -186,7 +186,7 @@ func InitCmd(ch *cmdutil.Helper) *cobra.Command {
 			if err := parser.InitEmpty(cmd.Context(), repo, instanceID, projectName, olap); err != nil {
 				return fmt.Errorf("failed to create empty project: %w", err)
 			}
-			ch.Printf("Created a new Rill project at %s\n", projectPath)
+			ch.Printf("Created a new StarData project at %s\n", projectPath)
 
 			// Unpack example files
 			if example != "" {
@@ -231,10 +231,10 @@ func InitCmd(ch *cmdutil.Helper) *cobra.Command {
 			escaped := fileutil.ShellEscape(projectPathRelative)
 			if ch.Interactive {
 				ch.Printf("\nSuccess! Run the following command to start the project:\n\n")
-				ch.Printf("  rill start %s\n\n", escaped)
-				ch.Printf("Tip: Use `rill start --preview` to launch in preview mode for a dashboard-only experience.\n\n")
+				ch.Printf("  stardata start %s\n\n", escaped)
+				ch.Printf("Tip: Use `stardata start --preview` to launch in preview mode for a dashboard-only experience.\n\n")
 			} else {
-				ch.Printf("Run `rill validate %s` to build and validate the project, or `rill start %s` to build and serve the project on localhost\n", escaped, escaped)
+				ch.Printf("Run `stardata validate %s` to build and validate the project, or `stardata start %s` to build and serve the project on localhost\n", escaped, escaped)
 			}
 
 			return nil

@@ -11,7 +11,6 @@ import (
 	"github.com/fridencao/stardata/cli/cmd/auth"
 	"github.com/fridencao/stardata/cli/cmd/billing"
 	"github.com/fridencao/stardata/cli/cmd/chat"
-	"github.com/fridencao/stardata/cli/cmd/deploy"
 	"github.com/fridencao/stardata/cli/cmd/devtool"
 	"github.com/fridencao/stardata/cli/cmd/docs"
 	"github.com/fridencao/stardata/cli/cmd/env"
@@ -141,7 +140,6 @@ func RootCmd(ch *cmdutil.Helper) *cobra.Command {
 		start.StartCmd(ch),
 		validate.ValidateCmd(ch),
 		initialize.InitCmd(ch),
-		deploy.DeployCmd(ch),
 		project.ProjectCmd(ch),
 		chat.ChatCmd(ch),
 		query.QueryCmd(ch),

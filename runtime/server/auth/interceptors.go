@@ -51,7 +51,7 @@ func withClaimsProvider(ctx context.Context, cp ClaimsProvider) context.Context 
 // - When aud is nil, auth is considered disabled. We set a Claims that allows all actions (openClaims).
 // - When aud is not nil, we set a Claims based on a JWT set as a bearer token in the authorization header (jwtClaims).
 // - When aud is not nil and no authorization header is passed, we set a Claims that denies any action (anonClaims).
-func UnaryServerInterceptor(aud *Audience) grpc.UnaryServerInterceptor {
+func UnaryServerInterceptor(aud TokenValidator) grpc.UnaryServerInterceptor {
 	return func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 		authHeader := metautils.ExtractIncoming(ctx).Get("authorization")
 		newCtx, err := parseClaims(ctx, aud, authHeader)
@@ -64,7 +64,7 @@ func UnaryServerInterceptor(aud *Audience) grpc.UnaryServerInterceptor {
 }
 
 // StreamServerInterceptor is the streaming variant of UnaryServerInterceptor.
-func StreamServerInterceptor(aud *Audience) grpc.StreamServerInterceptor {
+func StreamServerInterceptor(aud TokenValidator) grpc.StreamServerInterceptor {
 	return func(srv interface{}, ss grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
 		authHeader := metautils.ExtractIncoming(ss.Context()).Get("authorization")
 		newCtx, err := parseClaims(ss.Context(), aud, authHeader)
@@ -81,7 +81,7 @@ func StreamServerInterceptor(aud *Audience) grpc.StreamServerInterceptor {
 
 // GatewayMiddleware is a gRPC-gateway middleware variant of UnaryServerInterceptor.
 // It should be used for non-gRPC HTTP endpoints mounted directly on the gRPC-gateway mux.
-func GatewayMiddleware(aud *Audience, next gateway.HandlerFunc) gateway.HandlerFunc {
+func GatewayMiddleware(aud TokenValidator, next gateway.HandlerFunc) gateway.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
 		authHeader := r.Header.Get("Authorization")
 		newCtx, err := parseClaims(r.Context(), aud, authHeader)
@@ -96,7 +96,7 @@ func GatewayMiddleware(aud *Audience, next gateway.HandlerFunc) gateway.HandlerF
 
 // HTTPMiddleware is a HTTP middleware variant of UnaryServerInterceptor.
 // It should be used for non-gRPC HTTP endpoints.
-func HTTPMiddleware(aud *Audience, next http.Handler) http.Handler {
+func HTTPMiddleware(aud TokenValidator, next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
 		newCtx, err := parseClaims(r.Context(), aud, authHeader)
@@ -109,7 +109,7 @@ func HTTPMiddleware(aud *Audience, next http.Handler) http.Handler {
 	})
 }
 
-func parseClaims(ctx context.Context, aud *Audience, authorizationHeader string) (context.Context, error) {
+func parseClaims(ctx context.Context, aud TokenValidator, authorizationHeader string) (context.Context, error) {
 	// When aud == nil, it means auth is disabled.
 	if aud == nil {
 		// If there's no authorization header, we set open claims since auth is disabled.

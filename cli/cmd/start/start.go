@@ -7,12 +7,15 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/joho/godotenv"
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
 	"github.com/fridencao/stardata/cli/pkg/envdetect"
 	"github.com/fridencao/stardata/cli/pkg/local"
 	"github.com/fridencao/stardata/runtime/pkg/gitutil"
+	"github.com/fridencao/stardata/runtime/server/auth"
+	"github.com/joho/godotenv"
+	"github.com/kelseyhightower/envconfig"
 	"github.com/spf13/cobra"
+	"gopkg.in/yaml.v3"
 )
 
 // StartCmd represents the start command
@@ -126,6 +129,26 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 
 			allowedOrigins = append(allowedOrigins, localURL)
 
+			// Load self-hosted auth / external URL configuration.
+			// Mirrors `stardata runtime start`: RILL_RUNTIME_* environment variables
+			// are applied first, then overlaid by the STARDATA_CONFIG YAML file (if set).
+			var conf struct {
+				Auth        *auth.AuthConfig `yaml:"auth"`
+				ExternalURL string           `yaml:"external_url" split_words:"true"`
+			}
+			if err := envconfig.Process("rill_runtime", &conf); err != nil {
+				return fmt.Errorf("failed to load config: %w", err)
+			}
+			if cfgPath := os.Getenv("STARDATA_CONFIG"); cfgPath != "" {
+				if data, rerr := os.ReadFile(cfgPath); rerr == nil {
+					if yerr := yaml.Unmarshal(data, &conf); yerr != nil {
+						fmt.Printf("warning: could not parse STARDATA_CONFIG=%s: %s\n", cfgPath, yerr.Error())
+					}
+				} else {
+					fmt.Printf("warning: could not read STARDATA_CONFIG=%s: %s\n", cfgPath, rerr.Error())
+				}
+			}
+
 			ch.Interactive = false // Disable interactive mode for the app server
 			app, err := local.NewApp(cmd.Context(), &local.AppOptions{
 				Ch:             ch,
@@ -158,6 +181,8 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 				UserID:      userID,
 				TLSCertPath: tlsCertPath,
 				TLSKeyPath:  tlsKeyPath,
+				Auth:        conf.Auth,
+				ExternalURL: conf.ExternalURL,
 			})
 			if err != nil {
 				return fmt.Errorf("serve: %w", err)

@@ -47,6 +47,13 @@ type Options struct {
 	AuthEnable      bool
 	AuthIssuerURL   string
 	AuthAudienceURL string
+	// ExternalURL is the public base URL of this server (e.g. https://star-data.company.com).
+	// It is used as the JWT audience claim and as the OIDC redirect base.
+	ExternalURL string
+	// Auth is the self-hosted authentication configuration. When set, the server
+	// issues and validates its own JWTs (local / oidc / jwt providers) instead of
+	// relying on an external admin server.
+	Auth *auth.AuthConfig
 	TLSCertPath     string
 	TLSKeyPath      string
 }
@@ -58,7 +65,8 @@ type Server struct {
 	runtime  *runtime.Runtime
 	opts     *Options
 	logger   *zap.Logger
-	aud      *auth.Audience
+	aud      auth.TokenValidator
+	authn    *auth.Authenticator
 	codec    *securetoken.Codec
 	limiter  ratelimit.Limiter
 	activity *activity.Client
@@ -99,6 +107,13 @@ func NewServer(ctx context.Context, opts *Options, rt *runtime.Runtime, logger *
 			return nil, err
 		}
 		srv.aud = aud
+	} else if opts.Auth != nil {
+		authn, err := auth.NewAuthenticator(ctx, logger, opts.Auth, opts.ExternalURL)
+		if err != nil {
+			return nil, err
+		}
+		srv.authn = authn
+		srv.aud = authn.Audience()
 	}
 
 	return srv, nil
@@ -108,8 +123,8 @@ func NewServer(ctx context.Context, opts *Options, rt *runtime.Runtime, logger *
 func (s *Server) Close() error {
 	// TODO: This should probably trigger a server shutdown
 
-	if s.aud != nil {
-		s.aud.Close()
+	if aud, ok := s.aud.(*auth.Audience); ok && aud != nil {
+		aud.Close()
 	}
 
 	return nil
@@ -225,6 +240,20 @@ func (s *Server) HTTPHandler(ctx context.Context, registerAdditionalHandlers fun
 	observability.MuxHandle(httpMux, "/mcp/message", mcpHandler)                            // Backwards compatibility
 	observability.MuxHandle(httpMux, "/v1/instances/{instance_id}/mcp/sse", mcpHandler)     // Backwards compatibility
 	observability.MuxHandle(httpMux, "/v1/instances/{instance_id}/mcp/message", mcpHandler) // Backwards compatibility
+
+	// Self-hosted auth endpoints. These are intentionally NOT wrapped by auth.HTTPMiddleware
+	// (they issue / validate tokens). They are only registered when an Auth config is present.
+	if s.authn != nil {
+		authMW := func(h http.Handler) http.Handler {
+			return observability.Middleware("runtime", s.logger, h)
+		}
+		observability.MuxHandle(httpMux, "/auth/login", authMW(s.authn.LoginHandler()))
+		observability.MuxHandle(httpMux, "/auth/logout", authMW(s.authn.LogoutHandler()))
+		observability.MuxHandle(httpMux, "/auth/refresh", authMW(s.authn.RefreshHandler()))
+		// OIDC handlers self-guard to 404 when provider!=oidc.
+		observability.MuxHandle(httpMux, "/auth/oidc/login", authMW(s.authn.OIDCLoginHandler()))
+		observability.MuxHandle(httpMux, "/auth/oidc/callback", authMW(s.authn.OIDCCallbackHandler()))
+	}
 
 	// Build CORS options for runtime server
 

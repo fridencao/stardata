@@ -2,6 +2,7 @@ import type { PartialMessage } from "@bufbuild/protobuf";
 import { type ConnectError, createPromiseClient } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-web";
 import { LocalService } from "@rilldata/web-common/proto/gen/rill/local/v1/api_connect";
+import { getStardataToken } from "./auth-token";
 import {
   DeployProjectRequest,
   GetCurrentProjectRequest,
@@ -51,6 +52,13 @@ function getClient(host?: string) {
 
   const transport = createConnectTransport({
     baseUrl: h,
+    requestMiddleware: (next) => async (req) => {
+      const token = getStardataToken();
+      if (token) {
+        req.header.set("Authorization", `Bearer ${token}`);
+      }
+      return next(req);
+    },
   });
   const client = createPromiseClient(LocalService, transport);
   clients.set(h, client);

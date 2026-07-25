@@ -21,12 +21,14 @@ import (
 	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"github.com/fridencao/stardata/runtime/pkg/ratelimit"
 	"github.com/fridencao/stardata/runtime/server"
+	"github.com/fridencao/stardata/runtime/server/auth"
 	"github.com/fridencao/stardata/runtime/storage"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"golang.org/x/sync/errgroup"
 	"google.golang.org/protobuf/types/known/structpb"
+	"gopkg.in/yaml.v3"
 
 	// Load connectors and reconcilers for runtime
 	_ "github.com/fridencao/stardata/runtime/drivers/admin"
@@ -92,6 +94,11 @@ type Config struct {
 	// AllowHostAccess controls whether instance can use host credentials and
 	// local_file sources can access directory outside repo
 	AllowHostAccess bool `default:"false" split_words:"true"`
+	// ExternalURL is the public base URL of this server. Used as the JWT audience claim
+	// and the OIDC redirect base. Falls back to http://localhost:<http_port> when empty.
+	ExternalURL string `split_words:"true" yaml:"external_url"`
+	// Auth is the self-hosted authentication configuration (see config.example.yaml `auth:`).
+	Auth *auth.AuthConfig `yaml:"auth"`
 	// DataDir stores data for all instances like duckdb file, temporary downloaded file etc.
 	// The data for each instance is stored in a child directory named instance_id
 	DataDir string `split_words:"true"`
@@ -121,6 +128,31 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 			if err != nil {
 				fmt.Printf("failed to load config: %s\n", err.Error())
 				os.Exit(1)
+			}
+
+			// Overlay YAML config file (STARDATA_CONFIG) when present.
+			// Environment variables take precedence: only fill values that were not already set via env.
+			if cfgPath := os.Getenv("STARDATA_CONFIG"); cfgPath != "" {
+				if data, rerr := os.ReadFile(cfgPath); rerr == nil {
+					var yc struct {
+						Server struct {
+							ExternalURL string `yaml:"external_url"`
+						} `yaml:"server"`
+						Auth *auth.AuthConfig `yaml:"auth"`
+					}
+					if yerr := yaml.Unmarshal(data, &yc); yerr != nil {
+						fmt.Printf("failed to parse %s: %s\n", cfgPath, yerr.Error())
+						os.Exit(1)
+					}
+					if conf.ExternalURL == "" && yc.Server.ExternalURL != "" {
+						conf.ExternalURL = yc.Server.ExternalURL
+					}
+					if conf.Auth == nil && yc.Auth != nil {
+						conf.Auth = yc.Auth
+					}
+				} else {
+					fmt.Printf("warning: could not read STARDATA_CONFIG=%s: %s\n", cfgPath, rerr.Error())
+				}
 			}
 
 			// Init logger
@@ -271,6 +303,10 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 			}
 
 			// Init server
+			externalURL := conf.ExternalURL
+			if externalURL == "" {
+				externalURL = fmt.Sprintf("http://localhost:%d", conf.HTTPPort)
+			}
 			srvOpts := &server.Options{
 				HTTPPort:        conf.HTTPPort,
 				GRPCPort:        conf.GRPCPort,
@@ -280,6 +316,8 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 				AuthEnable:      conf.AuthEnable,
 				AuthIssuerURL:   conf.AuthIssuerURL,
 				AuthAudienceURL: conf.AuthAudienceURL,
+				ExternalURL:     externalURL,
+				Auth:            conf.Auth,
 			}
 			s, err := server.NewServer(ctx, srvOpts, rt, logger, limiter, activityClient)
 			if err != nil {
