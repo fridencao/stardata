@@ -29,6 +29,9 @@ const (
 var ignorePathPrefixes = []string{
 	"/.rillcloud/",
 	"/.github/",
+	// StarData: portal config files managed via Studio; listed in the UI but not parsed as resources.
+	"/publish.yaml",
+	"/requests.yaml",
 }
 
 // Resource parsed from code files.
