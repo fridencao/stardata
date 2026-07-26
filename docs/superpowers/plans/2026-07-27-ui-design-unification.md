@@ -2,11 +2,11 @@
 
 > **For agentic workers:** REQUIRED: Use superpowers:subagent-driven-development. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Unify Portal, Studio, and Chat frontend UIs under a single enterprise BI dashboard aesthetic — eliminating the dark sidebar Studio layout, consolidating navigation into PortalNav + StudioTabs, adding design token utility classes, shared components (SectionHeader, StatusBadge), and manual dark mode toggle.
+**Goal:** Unify Portal, Studio, and Chat frontend UIs under a single enterprise BI dashboard aesthetic — eliminating the dark sidebar Studio layout, consolidating navigation into PortalNav + StudioTabs, adding design token utility classes, shared components (SectionHeader, StatusBadge), manual dark mode toggle, and replacing all emoji icons with Lucide professional icons.
 
-**Architecture:** Replace `StudioSidebar` with `StudioTabs` (horizontal top tabs under PortalNav). All Studio pages flow through a unified `<main>` container layout. Add utility CSS classes in app.css for surface/text/border/card patterns. Create SectionHeader + StatusBadge as reusable Svelte components. Wire up existing `themeControl` store into PortalNav.
+**Architecture:** Replace `StudioSidebar` with `StudioTabs` (horizontal top tabs under PortalNav). All Studio pages flow through a unified `<main>` container layout. Add utility CSS classes in app.css for surface/text/border/card patterns. Create SectionHeader + StatusBadge as reusable Svelte components. Wire up existing `themeControl` store into PortalNav. Replace all emoji icons with `lucide-svelte` components throughout all affected files.
 
-**Tech Stack:** Svelte 5, Tailwind v3 (PostCSS), `web-common` preset chain, CSS custom properties.
+**Tech Stack:** Svelte 5, Tailwind v3 (PostCSS), `web-common` preset chain, CSS custom properties, **Lucide Svelte** (already installed as `lucide-svelte ^0.298.0`).
 
 ---
 
@@ -175,12 +175,32 @@ Replace lines 64-71 with:
 {#if showStudioLink}
   <a
     href="/studio"
-    class="rounded-lg px-3 py-1.5 text-sm font-semibold text-primary-700 bg-primary-50 no-underline"
+    class="rounded-lg px-3 py-1.5 text-sm font-semibold text-primary-700 bg-primary-50 no-underline flex items-center gap-1.5"
   >
-    技术工作台
+    <Wrench class="size-4" /> 技术工作台
   </a>
 {/if}
 ```
+
+**Icon mapping for PortalNav and Studio pages:**
+
+| Location | Old | → Lucide |
+|----------|-----|----------|
+| PortalNav logo ✦ | *(brand symbol)* | Keep as-is or use `Sparkles` |
+| PortalNav "技术工作台" button | 🔧 | `Wrench` |
+| PortalHome search input | 🔍 | `Search` + ➤ submit `ArrowRight` |
+| PortalHome card "继续对话" | 💬 | `MessageSquare` |
+| PortalHome card "我的看板" | 📌 | `LayoutGrid` |
+| Boards empty state | 📌 | `LayoutGrid` |
+| Boards board item | 📊 | `BarChart3` |
+| Info banner 💡 (studio/overview, publish) | 💡 | `Info` |
+| Back arrow ← (semantics detail) | text | `ChevronLeft` |
+| StudioTabs overview | 📊 | `LayoutDashboard` |
+| StudioTabs data source | 🗄️ | `Database` |
+| StudioTabs semantics | 📐 | `Network` |
+| StudioTabs publish | 🚀 | `Rocket` |
+
+Note: All Lucide icons use the pattern `<IconName class="size-4" />` inside the component. Size is controlled via Tailwind's `size-4` utility (16px). Color inherits from parent text color classes.
 
 Import `isStudioRoute`:
 ```ts
@@ -221,12 +241,13 @@ A horizontal tab bar matching PortalNav style, rendered under PortalNav within S
 ```svelte
 <script lang="ts">
   import { page } from "$app/stores";
+  import { LayoutDashboard, Database, Network, Rocket } from "lucide-svelte";
 
   const tabs = [
-    { label: "概览", href: "/studio" },
-    { label: "数据源", href: "/studio/sources" },
-    { label: "语义层", href: "/studio/semantics" },
-    { label: "发布", href: "/studio/publish" },
+    { label: "概览", href: "/studio", icon: LayoutDashboard },
+    { label: "数据源", href: "/studio/sources", icon: Database },
+    { label: "语义层", href: "/studio/semantics", icon: Network },
+    { label: "发布", href: "/studio/publish", icon: Rocket },
   ];
 
   $: pathname = $page.url.pathname;
@@ -241,10 +262,11 @@ A horizontal tab bar matching PortalNav style, rendered under PortalNav within S
   {#each tabs as tab (tab.href)}
     <a
       href={tab.href}
-      class="relative px-3.5 py-2 text-sm no-underline transition-colors {isActive(tab.href, pathname)
+      class="relative flex items-center gap-2 px-3.5 py-2 text-sm no-underline transition-colors {isActive(tab.href, pathname)
           ? 'font-bold text-primary-700'
           : 'text-gray-600 hover:text-gray-900'}"
     >
+      <svelte:component this={tab.icon} class="size-4" />
       {tab.label}
       {#if isActive(tab.href, pathname)}
         <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-primary-600" />
@@ -454,6 +476,10 @@ Replacements:
 <div class="card-basic px-4 py-4">
 ```
 
+Replace the info banner emoji: `💡 M3/4 已上线…` → `<Info class="size-4 inline mr-1" /> M3/4 已上线…` (import `Info` from lucide-svelte).
+
+The 4th stat card ("近7天提问命中率") is display-only — remove the `<a>` wrapper and keep as static cell.
+
 - [ ] **Step 1: Edit studio/+page.svelte**
 
 Apply SectionHeader and `.card-basic` to all cards.
@@ -504,11 +530,12 @@ git commit -m "refactor(ui): unify sources page with SectionHeader and card-basi
 
 **semantics/index:**
 1. Header → `<SectionHeader title="语义层" description="指标/维度定义 · 中文别名(label_cn) · 无代码编辑" />`
-2. Table wrapper: `mt-5 overflow-hidden rounded-xl border border-gray-200 bg-white` → `mt-5 card-basic overflow-hidden`
-3. Inline badges (`bg-green-50 ...` etc.) → `<StatusBadge variant="success">有效</StatusBadge>`
+2. Table wrapper → `mt-5 card-basic overflow-hidden`
+3. Inline badges → `<StatusBadge variant="success">有效</StatusBadge>` etc.
 
 **semantics/[name]:**
 1. Back-link + heading → `<SectionHeader title={name} description="编辑自动保存" />`
+   - Replace "← 返回语义层" text link with `<ChevronLeft class="size-4 inline mr-1" />` from lucide-svelte
 2. Editor wrapper → `card-basic min-h-0 flex-1 overflow-hidden`
 3. Error state → `card-hero`
 
@@ -534,7 +561,7 @@ git commit -m "refactor(ui): unify semantics pages with SectionHeader, card-basi
 
 Replacements:
 1. Header → `<SectionHeader title="发布" description="控制哪些指标集对业务门户(推荐问题 + Chat AI)可见" />`
-2. Info banner: keep as-is (semantic difference from card-basic)
+2. Info banner: replace `💡` emoji with `<Info class="size-4 inline mr-1 text-blue-600" />` from lucide-svelte, keep blue styling as-is
 3. Table wrapper: `mt-4 overflow-hidden rounded-xl border border-gray-200 bg-white` → `mt-4 card-basic overflow-hidden`
 4. Row badges → `<StatusBadge variant="success">已发布</StatusBadge>` etc.
 5. Also fix pre-existing bug: duplicate import of `runtimeServiceGetFile` (lines 8-9 are identical)
@@ -554,7 +581,58 @@ git commit -m "refactor(ui): unify publish page with SectionHeader, card-basic, 
 
 ## Chunk 5: Cleanup + Verification
 
-### Task 12: Delete StudioSidebar and verify
+### Task 12: Replace emoji icons in PortalHome and Boards pages
+
+**Files:**
+- Modify: `web-local/src/routes/(portal)/+page.svelte`
+- Modify: `web-local/src/routes/(portal)/boards/+page.svelte`
+
+Replace all emoji icons with Lucide components:
+
+**PortalHome (`(portal)/+page.svelte`):**
+```svelte
+<script>
+  import { Search, ArrowRight, MessageSquare, LayoutGrid } from "lucide-svelte";
+</script>
+```
+
+| Old code | → New |
+|----------|-------|
+| `<span class="text-lg">🔍</span>` | `<Search class="size-5 text-gray-400" />` |
+| `<span>➤</span>` (submit button) | `<ArrowRight class="size-5 text-white" />` |
+| `<div class="text-2xl">💬</div>` (继续对话 card) | `<MessageSquare class="size-6 text-gray-900" />` |
+| `<div class="text-2xl">📌</div>` (我的看板 card) | `<LayoutGrid class="size-6 text-gray-900" />` |
+
+The submit arrow button changes from a colored `<span>` to a Lucide icon inside the existing `grid size-9 place-items-center rounded-xl bg-primary-600` wrapper.
+
+**Boards (`boards/+page.svelte`):**
+```svelte
+<script>
+  import { LayoutGrid, BarChart3 } from "lucide-svelte";
+</script>
+```
+
+| Old code | → New |
+|----------|-------|
+| `<div class="text-3xl">📌</div>` (empty state) | `<LayoutGrid class="size-8 text-gray-400" />` |
+| `<div class="text-2xl">📊</div>` (board item) | `<BarChart3 class="size-5 text-gray-900" />` |
+
+- [ ] **Step 1: Edit both portal pages with Lucide icons**
+
+Apply all replacements. Verify no emoji icons remain.
+
+- [ ] **Step 2: Commit**
+
+```bash
+git add "web-local/src/routes/(portal)/+page.svelte" "web-local/src/routes/(portal)/boards/+page.svelte"
+git commit -m "refactor(ui): replace emoji icons with Lucide professional icons in PortalHome and Boards"
+```
+
+---
+
+## Chunk 5: Cleanup + Verification
+
+### Task 13: Delete StudioSidebar and verify
 
 **Files:**
 - DELETE: `web-local/src/features/studio/StudioSidebar.svelte`
@@ -654,5 +732,7 @@ git commit -m "ci(ui): run frontend quality checks after UI unification refactor
 | `web-local/src/routes/studio/semantics/+page.svelte` | Modify | SectionHeader + StatusBadge | 4 |
 | `web-local/src/routes/studio/semantics/[name]/+page.svelte` | Modify | SectionHeader | 4 |
 | `web-local/src/routes/studio/publish/+page.svelte` | Modify + dedupe import | 4 |
+| `web-local/src/routes/(portal)/+page.svelte` | Modify | Lucide icons in PortalHome | 5 |
+| `web-local/src/routes/(portal)/boards/+page.svelte` | Modify | Lucide icons in Boards | 5 |
 
-Total files changed: **12** (10 modifications, 3 creations, 1 deletion)
+Total files changed: **14** (12 modifications, 3 creations, 1 deletion)
