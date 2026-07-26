@@ -12,6 +12,11 @@ import {
 import { fileArtifacts } from "@rilldata/web-common/features/entity-management/file-artifacts.js";
 import { handleUninitializedProject } from "@rilldata/web-common/features/welcome/is-project-initialized.js";
 import { localServiceGetMetadata } from "@rilldata/web-common/runtime-client/local-service";
+import {
+  getStardataToken,
+  clearStardataToken,
+} from "@rilldata/web-common/runtime-client/auth-token";
+import { ConnectError, Code } from "@connectrpc/connect";
 import { eventBus } from "@rilldata/web-common/lib/event-bus/event-bus";
 import { getLocalRuntimeClient } from "../lib/runtime-client";
 import {
@@ -27,6 +32,14 @@ Settings.defaultLocale = "en";
 let cachedMetadata: Awaited<ReturnType<typeof localServiceGetMetadata>> | null =
   null;
 
+/** Builds the login URL, preserving the originally requested page. */
+function loginURL(url: URL): string {
+  const target = url.pathname + url.search;
+  return target === "/"
+    ? "/login"
+    : `/login?redirect=${encodeURIComponent(target)}`;
+}
+
 export async function load({ url, depends, untrack, route }) {
   depends("app:init");
 
@@ -36,6 +49,20 @@ export async function load({ url, depends, untrack, route }) {
   }
   const metadata = cachedMetadata;
   const previewMode = metadata.previewMode ?? false;
+
+  // Self-hosted auth: the login page must render without any authenticated
+  // API calls and must bypass the mode-based route locking below.
+  if (untrack(() => url.pathname.startsWith("/login"))) {
+    return { initialized: false, previewMode, metadata };
+  }
+
+  // Not signed in yet? Send the user to the login page.
+  if (!getStardataToken()) {
+    throw redirect(
+      303,
+      untrack(() => loginURL(url)),
+    );
+  }
 
   // Enforce mode-based route locking.
   // Wrapped in untrack() so SvelteKit does not register url.pathname as a
@@ -75,12 +102,28 @@ export async function load({ url, depends, untrack, route }) {
   // (e.g., files/[...file]/+page.ts) can access it before components render.
   fileArtifacts.setClient(client, new RuntimeFileIO());
 
-  const files = await queryClient.fetchQuery<V1ListFilesResponse>({
-    queryKey: getRuntimeServiceListFilesQueryKey(client.instanceId, {}),
-    queryFn: ({ signal }) => {
-      return runtimeServiceListFiles(client, {}, { signal });
-    },
-  });
+  const files = await queryClient
+    .fetchQuery<V1ListFilesResponse>({
+      queryKey: getRuntimeServiceListFilesQueryKey(client.instanceId, {}),
+      queryFn: ({ signal }) => {
+        return runtimeServiceListFiles(client, {}, { signal });
+      },
+    })
+    .catch((e) => {
+      const ce = ConnectError.from(e);
+      if (
+        ce.code === Code.Unauthenticated ||
+        ce.code === Code.PermissionDenied
+      ) {
+        // Stale or invalid token: clear it and restart the login flow
+        clearStardataToken();
+        throw redirect(
+          303,
+          untrack(() => loginURL(url)),
+        );
+      }
+      throw e;
+    });
 
   const firstDashboardFile = files.files?.find((file) =>
     file.path?.startsWith("/dashboards/"),

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import { LOCAL_HOST } from "../../../lib/runtime-client";
   import {
     getStardataToken,
     setStardataToken,
@@ -25,7 +26,7 @@
     }
     loading = true;
     try {
-      const resp = await fetch("/auth/login", {
+      const resp = await fetch(`${LOCAL_HOST}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -55,16 +56,16 @@
 </svelte:head>
 
 <div class="flex h-screen w-screen items-center justify-center bg-gray-50">
-  <div class="w-full max-w-sm rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
+  <div
+    class="w-full max-w-sm rounded-xl border border-gray-200 bg-white p-8 shadow-sm"
+  >
     <div class="mb-6 text-center">
       <h1 class="text-2xl font-semibold text-gray-900">StarData</h1>
       <p class="mt-1 text-sm text-gray-500">登录以继续使用</p>
     </div>
 
     {#if error}
-      <div
-        class="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700"
-      >
+      <div class="mb-4 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
         {error}
       </div>
     {/if}

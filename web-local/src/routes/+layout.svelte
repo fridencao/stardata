@@ -100,32 +100,41 @@
     isPreviewMode && showPreviewNav($page.url.pathname) && !onDeployPage;
 
   $: onWelcomePage = route.id?.startsWith("/(misc)/welcome");
+
+  // The login page must render without RuntimeProvider/FileAndResourceWatcher:
+  // unauthenticated watcher requests would 403 and replace the page with the
+  // "Error connecting to runtime" screen.
+  $: onLoginPage = route.id?.startsWith("/(misc)/login");
 </script>
 
 <Tooltip.Provider>
-  <QueryClientProvider client={queryClient}>
-    <RuntimeProvider {host} {instanceId} jwt={authToken}>
-      <FileAndResourceWatcher lifecycle="aggressive">
-        <div
-          class="body h-screen w-screen overflow-hidden absolute flex flex-col"
-        >
-          {#if data.initialized && !onWelcomePage}
-            <BannerCenter />
-            <RepresentingUserBanner />
-            <ApplicationHeader {mode} />
-            {#if shouldShowPreviewNav}
-              <PreviewModeNav />
+  {#if onLoginPage}
+    <slot />
+  {:else}
+    <QueryClientProvider client={queryClient}>
+      <RuntimeProvider {host} {instanceId} jwt={authToken}>
+        <FileAndResourceWatcher lifecycle="aggressive">
+          <div
+            class="body h-screen w-screen overflow-hidden absolute flex flex-col"
+          >
+            {#if data.initialized && !onWelcomePage}
+              <BannerCenter />
+              <RepresentingUserBanner />
+              <ApplicationHeader {mode} />
+              {#if shouldShowPreviewNav}
+                <PreviewModeNav />
+              {/if}
+              {#if $deploy}
+                <RemoteProjectManager />
+              {/if}
             {/if}
-            {#if $deploy}
-              <RemoteProjectManager />
-            {/if}
-          {/if}
 
-          <slot />
-        </div>
-      </FileAndResourceWatcher>
-    </RuntimeProvider>
-  </QueryClientProvider>
+            <slot />
+          </div>
+        </FileAndResourceWatcher>
+      </RuntimeProvider>
+    </QueryClientProvider>
+  {/if}
 
   {#if $overlay !== null}
     <BlockingOverlayContainer
