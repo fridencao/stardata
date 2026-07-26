@@ -80,7 +80,7 @@
   $: mockUserHasNoAccess =
     $selectedMockUserStore && isNotFoundError($exploreResource.error);
 
-  $: homeHref = $previewModeStore ? "/dashboards" : "/";
+  $: homeHref = $previewModeStore ? "/boards" : "/files";
 
   onNavigate(({ from, to }) => {
     const changedDashboard =

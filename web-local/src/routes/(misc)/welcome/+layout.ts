@@ -7,6 +7,6 @@ export async function load({ parent }) {
   // Project can get initialized during welcome steps.
   // We should only block this route by redirecting to home if all welcome steps are complete.
   if (initialized && !get(WelcomeStatus)) {
-    throw redirect(303, previewMode ? "/dashboards" : "/");
+    throw redirect(303, previewMode ? "/" : "/files");
   }
 }

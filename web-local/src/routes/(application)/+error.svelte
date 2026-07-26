@@ -5,7 +5,7 @@
 
   $: statusCode = $page.status;
   $: header = ($page.error && $page.error.message) || "An error occurred";
-  $: href = $previewModeStore ? "/dashboards" : "/";
+  $: href = $previewModeStore ? "/" : "/files";
 </script>
 
 <ErrorPage {statusCode} {header} {href} />

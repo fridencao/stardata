@@ -1,8 +1,1 @@
-<script lang="ts">
-  import ContentContainer from "@rilldata/web-common/components/layout/ContentContainer.svelte";
-  import DashboardList from "../../features/dashboards/DashboardList.svelte";
-</script>
-
-<ContentContainer title="Dashboards" maxWidth={1100}>
-  <DashboardList showSearch />
-</ContentContainer>
+<!-- 重定向桩:实际跳转在 +page.ts 的 load 中完成 -->

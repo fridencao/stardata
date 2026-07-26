@@ -84,7 +84,7 @@
     label: projectTitle,
     section: "project",
     depth: -1,
-    href: mode === "Preview" ? "/dashboards" : "/",
+    href: mode === "Preview" ? "/" : "/files",
   };
 
   $: pathParts = [
@@ -115,13 +115,13 @@
   }
 
   function gotoAI() {
-    void goto("/ai");
+    void goto("/chat");
   }
 </script>
 
 <Header borderBottom={!onDeployPage && mode !== "Preview"}>
   {#if !onDeployPage}
-    <HeaderLogo href={mode === "Preview" ? "/dashboards" : "/"} />
+    <HeaderLogo href={mode === "Preview" ? "/" : "/files"} />
 
     <Tag text={mode} color="gray"></Tag>
 

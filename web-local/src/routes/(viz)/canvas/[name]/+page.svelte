@@ -34,7 +34,7 @@
     $canvasQuery.isError &&
     isNotFoundError($canvasQuery.error);
 
-  $: homeHref = $previewModeStore ? "/dashboards" : "/";
+  $: homeHref = $previewModeStore ? "/boards" : "/files";
 </script>
 
 {#key `${runtimeClient.instanceId}::${canvasName}`}
