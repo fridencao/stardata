@@ -6,7 +6,7 @@
 
 **Architecture:** Replace `StudioSidebar` with `StudioTabs` (horizontal top tabs under PortalNav). All Studio pages flow through a unified `<main>` container layout. Add utility CSS classes in app.css for surface/text/border/card patterns. Create SectionHeader + StatusBadge as reusable Svelte components. Wire up existing `themeControl` store into PortalNav.
 
-**Tech Stack:** Svelte 5, Tailwind v4 (via `@tailwindcss/vite`), `web-common` preset chain, CSS custom properties.
+**Tech Stack:** Svelte 5, Tailwind v3 (PostCSS), `web-common` preset chain, CSS custom properties.
 
 ---
 
@@ -19,31 +19,41 @@
 
 The app.css already defines semantic CSS variables (`--surface-base`, `--fg-primary`, etc.). We need `@layer utilities` classes that map them to semantic Tailwind class names so pages can use `bg-app-surface` instead of `bg-gray-50`.
 
-Add the following after the existing `@layer utilities` block (around line 6):
+Add the following INSIDE the existing `@layer utilities` block (around line 6), using valid Tailwind v3 CSS syntax:
 
 ```css
-@layer utilities {
-  /* ... existing .ui-copy-number, .ui-measure-bar-* rules ... */
+/* Inside @layer utilities { ... } */
 
-  /* App-wide design token classes */
-  .bg-app-surface   @apply bg-surface-subtle;
-  .bg-app-card      @apply bg-surface-card;
-  .border-app       @apply border-border;
+/* App-wide design token classes */
+.bg-app-surface {
+  @apply bg-surface-subtle;
+}
+.bg-app-card {
+  @apply bg-surface-card;
+}
+.border-app {
+  @apply border-border;
+}
 
-  /* Card base pattern */
-  .card-basic @apply rounded-xl border-app bg-app-card shadow-sm hover:shadow-md transition-shadow duration-150;
-  .card-hero  @apply rounded-2xl border-app bg-app-card shadow-sm hover:shadow-md transition-shadow duration-150;
+/* Card base pattern */
+.card-basic {
+  @apply rounded-xl border-app bg-app-card shadow-sm hover:shadow-md transition-shadow duration-150;
+}
+.card-hero {
+  @apply rounded-2xl border-app bg-app-card shadow-sm hover:shadow-md transition-shadow duration-150;
+}
 
-  /* Dark-mode aware strong border */
-  .border-app-strong @apply border-gray-300 dark:border-gray-600;
+/* Dark-mode aware strong border */
+.border-app-strong {
+  @apply border-gray-300 dark:border-gray-600;
 }
 ```
 
 "`★ Insight ─────────────────────────────────────`
-We map to Tailwind's existing `bg-surface-subtle`, `bg-surface-card`, `border-border` etc. rather than creating a second layer of CSS variable references. This keeps the utility chain one level deep and lets Tailwind's JIT generate the right classes in both light/dark modes automatically.
+We use `@layer utilities { .class { @apply ...; } }` (v3 syntax) rather than `.class @apply ...;` (v4 shorthand). This is invalid CSS under PostCSS and will fail compilation. The `dark:` prefix works because web-common's tailwind.config.ts has `darkMode: "class"`.
 `─────────────────────────────────────────────────`"
 
-Also update Typography overrides at the end of the `@layer base` block (after h1-h4 and body rules). Append:
+Also update Typography overrides at the end of the `@layer base` block (after h1-h4 and body rules). These overrides are already present from a previous session — verify they exist and are correct:
 
 ```css
 /* Compact enterprise typography scale — all sizes relative to 11px base */
@@ -62,17 +72,33 @@ h1, .text-3xl { font-size: 16px; line-height: 1.3; }
 .text-[9.5px] { font-size: 8.5px; }
 ```
 
-- [ ] **Step 1: Edit web-common/src/app.css — add design token utilities**
+And body font-family should read:
+```css
+body {
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "PingFang SC",
+    "SF Pro SC",
+    "SF Pro Text",
+    "Helvetica Neue",
+    sans-serif;
+  font-size: 11px;
+  line-height: 1.5;
+}
+```
 
-Verify the existing `@layer utilities` block around line 6, then append our new classes after it. Verify the `body` section still reads correctly with PingFang SC font-family and 11px base size (already done in previous session).
+- [ ] **Step 1: Edit web-common/src/app.css — add design token utilities inside @layer utilities**
 
-- [ ] **Step 2: Edit web-common/src/app.css — append typography overrides**
+Read app.css to confirm the existing `@layer utilities` block. Append our new `.bg-app-*` / `.card-*` rules using v3 `{ @apply ...; }` syntax.
 
-Append the compact typography scale after the existing h3/h4 rules.
+- [ ] **Step 2: Verify typography overrides exist**
+
+Confirm the compact typography scale is present after the `@layer base` h3/h4 section (already written in prior session). Verify body reads 11px font-size with PingFang SC.
 
 - [ ] **Step 3: Verify CSS compiles**
 
-Run: `npm run dev -w web-common 2>&1 | head -20` or simply start `npm run dev` at root and check for Svelte compilation errors.
+Run: `npm run dev 2>&1 | head -30` and check no PostCSS or Svelte compile errors appear.
 
 - [ ] **Step 4: Commit**
 
@@ -81,53 +107,46 @@ git add web-common/src/app.css
 git commit -m "refactor(ui): add design token utility classes and compact typography scale"
 ```
 
-### Task 2: Wire existing themeControl into PortalNav
+### Task 2: Wire existing ThemeToggle component into PortalNav
 
 **Files:**
 - Modify: `web-local/src/features/portal/PortalNav.svelte`
 
-`theme-control.ts` already exists with a complete implementation: `themeControl` manages light/dark/system preferences in localStorage, applies `html.dark` class, and exposes `.current` writable store. We just need a simple UI trigger.
+The repo already has:
+- `theme-control.ts` — full light/dark/system preference management in localStorage
+- `ThemeToggle.svelte` — dropdown-based theme selector in web-common
 
-Replace the role switcher div in PortalNav (line 46-63) with an expanded control group:
+Use the existing `ThemeToggle.svelte` dropdown directly in PortalNav rather than re-implementing a light toggle button.
+
+Import at top of PortalNav.svelte:
+```ts
+import ThemeToggle from "@rilldata/web-common/features/themes/ThemeToggle.svelte";
+```
+
+Add it into the nav bar controls section, right after the role switcher div (line ~63):
 
 ```svelte
-<div class="flex items-center gap-2 ml-auto">
-  <!-- Theme toggle -->
-  <button
-    class="rounded-lg p-1.5 text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors"
-    on:click={() => {
-      const current = $themeControl.current;
-      $themeControl.set(current === 'dark' ? 'light' : 'dark');
-    }}
-    title={$themeControl.current === 'dark' ? '切换浅色模式' : '切换深色模式'}
-  >
-    {$themeControl.current === 'dark' ? '☀️' : '🌙'}
-  </button>
-  <!-- Role switcher -->
-  <div class="flex rounded-lg bg-gray-100 p-0.5 text-xs">
-    ...
-  </div>
+<!-- After the role switcher div -->
+<div class="flex items-center gap-3">
+  <ThemeToggle />
 </div>
 ```
 
-Import `themeControl` at top:
-```ts
-import { themeControl } from "@rilldata/web-common/features/themes/theme-control";
-```
+This gives users three options: Light, Dark, System — consistent with the rest of the product's theme management.
 
-- [ ] **Step 1: Edit PortalNav.svelte — import themeControl and add toggle button**
+- [ ] **Step 1: Edit PortalNav.svelte — import and render ThemeToggle**
 
-Add import after existing imports. Then find the role switcher `<div>` (line 46) and insert a theme toggle button before it inside the existing `ml-auto flex items-center gap-3` wrapper.
+Add the import after the last existing import. Insert the `<ThemeToggle />` wrapper after the role switcher's closing `</div>`.
 
-- [ ] **Step 2: Verify PortalNav renders**
+- [ ] **Step 2: Verify**
 
-Start dev server and navigate to `/` — confirm theme toggle appears next to role switcher, clicking it changes icon between ☀️/🌙.
+Navigate to `/`. Confirm ThemeToggle dropdown appears next to role switcher with light/dark/system options.
 
 - [ ] **Step 3: Commit**
 
 ```bash
 git add web-local/src/features/portal/PortalNav.svelte
-git commit -m "feat(ui): add theme toggle button to PortalNav wired to themeControl"
+git commit -m "feat(ui): integrate existing ThemeToggle into PortalNav"
 ```
 
 ### Task 3: Refactor PortalNav — remove manual studio button, auto-highlight Studio routes
@@ -135,78 +154,53 @@ git commit -m "feat(ui): add theme toggle button to PortalNav wired to themeCont
 **Files:**
 - Modify: `web-local/src/features/portal/PortalNav.svelte`
 
-The "技术工作台" button should no longer be manually managed. Instead:
-1. Remove the standalone `<a href="/studio">🔧 技术工作台</a>` (lines 64-71)
-2. When on a Studio route (`/studio/*`), auto-show a "Studio" link in the nav bar with active highlight
-3. The role switcher ("业务视角"/"技术视角") remains as-is
+The "技术工作台" button should no longer be conditionally shown based on `$portalRole === "tech"`. Instead:
 
-Update `links` array conditionally:
+1. Always show when on Studio routes (`/studio/*`)
+2. Hide otherwise (since StudioTabs + layout handle Studio UX now)
+3. Keep role switcher unchanged
 
-```ts
-const baseLinks = [
-  { label: "首页", href: "/" },
-  { label: "对话", href: "/chat" },
-  { label: "看板", href: "/boards" },
-];
-
-// Dynamically include Studio link when on Studio routes
-$: links = isStudioMode
-  ? [{ label: "Studio", href: "/studio" }, ...baseLinks]
-  : baseLinks;
-
-$: isStudioMode = PORTAL_ROUTE_PREFIXES.some(p => p === "/" && pathname !== "/") 
-                   || STUDIO_ROUTE_PREFIXES.some(prefix => pathname.startsWith(prefix));
+Change the conditional from:
+```svelte
+{#if $portalRole === "tech"}
 ```
-
-Actually simpler — since we have `isStudioRoute` already in `route-constants.ts`, use it directly:
-
-```ts
-import { isStudioRoute } from "$lib/routes/route-constants"; // adjust path alias
-```
-
-Wait — `route-constants.ts` is inside `src/routes/`. Let me check how other files import it:
-
-From `+layout.svelte` line 28: `import { isPortalRoute, isStudioRoute } from "./route-constants";`
-
-So PortalNav should import from relative path `../../routes/route-constants` — actually PortalNav lives in `features/portal/` so relative is `../routes/route-constants` or use `$lib/...` if aliased. Let me check the path alias setup:
-
-- [ ] **Step 1: Check path alias for routes directory**
-
-Run: `grep -A5 "alias" /Users/xinjian/Work/Project/RD/StarData/web-local/svelte.config.js 2>/dev/null || grep vite /Users/xinjian/Work/Project/RD/StarData/web-local/vite.config.ts | head -10`
-
-If no alias, import via relative path: `import { isStudioRoute } from "../../routes/route-constants";`
-
-- [ ] **Step 2: Update PortalNav.svelte**
-
-Import `isStudioRoute`. Add conditional `studioLink`:
-
+To:
 ```ts
 $: showStudioLink = isStudioRoute(pathname);
 ```
 
-Replace the hardcoded `{#if $portalRole === "tech"} <a href="/studio">...</a> {/if}` block (lines 64-71) with:
+Replace lines 64-71 with:
 
 ```svelte
 {#if showStudioLink}
   <a
     href="/studio"
-    class="rounded-lg px-3 py-1.5 text-sm font-semibold text-primary-700 bg-primary-50"
+    class="rounded-lg px-3 py-1.5 text-sm font-semibold text-primary-700 bg-primary-50 no-underline"
   >
     技术工作台
   </a>
 {/if}
 ```
 
-Keep the old button only when NOT on Studio route AND role is tech.
+Import `isStudioRoute`:
+```ts
+import { isStudioRoute } from "../../routes/route-constants";
+```
 
-- [ ] **Step 3: Test**
+PortalNav lives at `features/portal/PortalNav.svelte`, route-constants is at `src/routes/route-constants.ts`, so relative path `../../routes/route-constants`.
 
-Navigate to `/`, `/chat`, `/studio` — confirm:
-- On `/` and `/chat`: Studio link hidden (unless role is tech)
-- On `/studio/*`: "技术工作台" tab shows highlighted in nav
-- Role switcher still works
+- [ ] **Step 1: Edit PortalNav.svelte — add isStudioRoute import and conditional**
 
-- [ ] **Step 4: Commit**
+Add import. Replace the `{#if $portalRole === "tech"}` block.
+
+- [ ] **Step 2: Verify**
+
+Navigate to `/`, `/chat`, `/studio/*` — confirm:
+- On portal routes: Studio link hidden
+- On Studio routes: "技术工作台" tab shows highlighted
+- Role switcher still functional
+
+- [ ] **Step 3: Commit**
 
 ```bash
 git add web-local/src/features/portal/PortalNav.svelte
@@ -265,6 +259,7 @@ Key decisions:
 - 2px primary underline indicator for active state
 - Matches PortalNav's white bg + gray-200 border
 - Active tab gets bold text + primary color
+- `px-8` matches the main content area padding in the layout
 
 - [ ] **Step 1: Create StudioTabs.svelte**
 
@@ -272,11 +267,7 @@ Create the file at `web-local/src/features/studio/StudioTabs.svelte` with the co
 
 - [ ] **Step 2: Verify compilation**
 
-```bash
-cd web-local && npx svelte-check -- compilerOptions { "baseUrl": ".", "paths": { "@rilldata/web-common": ["../web-common/src"] } } 2>&1 | head -20
-```
-
-Or simply run `npm run dev` and check browser console for Svelte compile errors.
+Run `npm run dev` and navigate to `/studio`. No console errors.
 
 - [ ] **Step 3: Commit**
 
@@ -305,9 +296,11 @@ git commit -m "feat(ui): add StudioTabs horizontal tab component for studio navi
 </div>
 ```
 
-Usage in pages replaces duplicated `h2 + p` blocks:
+Note: Uses Tailwind native classes `text-fg-primary` and `text-fg-muted` (already defined in tailwind.config.ts via the `fg.*` color namespace). Also does NOT use `.text-app-primary` (which was proposed in spec but not yet implemented in app.css), keeping this simple and self-contained.
+
+Usage replaces 6 instances of duplicated `h2 + p`:
 ```svelte
-<!-- Before (per page) -->
+<!-- Before -->
 <h2 class="text-lg font-bold text-gray-900">概览 · 配置健康度</h2>
 <p class="mt-0.5 text-[13px] text-gray-400">一屏了解:业务现在能问什么,还缺什么</p>
 
@@ -329,9 +322,9 @@ git commit -m "feat(ui): add SectionHeader component for unified page titles in 
 ### Task 6: Create StatusBadge component
 
 **Files:**
-- Create: `web-common/src/components/StatusBadge.svelte`
+- Create: `web-common/src/components/status-badge/StatusBadge.svelte`
 
-Reusable badge replacing 4+ inline badge implementations across Studio pages.
+Directory-per-component convention used elsewhere in web-common (e.g., `searchable-filter-menu/`, `date-picker/`).
 
 ```svelte
 <script lang="ts">
@@ -340,8 +333,7 @@ Reusable badge replacing 4+ inline badge implementations across Studio pages.
 </script>
 
 <span
-  class="inline-flex items-center rounded-md font-semibold no-underline {sizeClass} {variantClass}"
-  class:rounded-md
+  class="inline-flex items-center rounded-md font-semibold no-underline {variantClass} {sizeClass}"
 >
   <slot />
 </span>
@@ -357,26 +349,36 @@ Reusable badge replacing 4+ inline badge implementations across Studio pages.
   /* Size styles */
   .size-sm { @apply px-1.5 py-0.5 text-[10.5px]; }
   .size-md { @apply px-2 py-0.5 text-[11px]; }
-</style>
-```
 
-Handles `dark:` variants by relying on Tailwind's `dark:` selector prefix:
-
-```css
+  /* Dark mode variants */
   :global(.dark) .variant-success { @apply bg-green-900/30 text-green-300; }
   :global(.dark) .variant-error   { @apply bg-red-900/30 text-red-300; }
   :global(.dark) .variant-neutral { @apply bg-gray-700/50 text-gray-400; }
   :global(.dark) .variant-info    { @apply bg-primary-900/30 text-primary-300; }
+</style>
 ```
 
-- [ ] **Step 1: Create StatusBadge.svelte**
+Note: Removed redundant `class:rounded-md` since it's already in the static class string. Removed `sizeClass` conditional class binding and use direct class interpolation instead (`.size-sm` / `.size-md` map to inline classes, cleaner for Svelte v5).
 
-Create at `web-common/src/components/StatusBadge.svelte`.
+Usage:
+```svelte
+<StatusBadge variant="success">有效</StatusBadge>
+<StatusBadge variant="error">解析错误</StatusBadge>
+<StatusBadge variant="info" size="sm">OLAP</StatusBadge>
+```
+
+- [ ] **Step 1: Create status-badge directory and StatusBadge.svelte**
+
+```bash
+mkdir -p web-common/src/components/status-badge
+```
+
+Then write the component.
 
 - [ ] **Step 2: Commit**
 
 ```bash
-git add web-common/src/components/StatusBadge.svelte
+git add web-common/src/components/status-badge/StatusBadge.svelte
 git commit -m "feat(ui): add StatusBadge component for consistent status labels across Studio pages"
 ```
 
@@ -389,7 +391,7 @@ git commit -m "feat(ui): add StatusBadge component for consistent status labels 
 **Files:**
 - Modify: `web-local/src/routes/studio/+layout.svelte`
 
-Replace the entire content with the unified layout:
+Replace the entire file with the unified layout:
 
 ```svelte
 <script lang="ts">
@@ -409,11 +411,13 @@ Changes from current:
 - Remove outer `flex` + `bg-gray-100` wrapper
 - Add `StudioTabs` horizontal nav bar (defined at 52px height in component)
 - Single `<main>` with `p-8` padding and `xl:max-w-6xl xl:mx-auto` max-width constraint
-- Uses `bg-app-surface` utility class (maps to `bg-surface-subtle`)
+- Uses `.bg-app-surface` utility class (maps to `bg-surface-subtle`)
+
+Warning about `max-w-6xl` (1100px): the `sources` page contains `ConnectorExplorer` which renders wide schema trees. If it overflows the container, revert `max-w-6xl` to no max-width and apply it only to pages that benefit from constrained reading width (overview, semantics, publish).
 
 - [ ] **Step 1: Rewrite studio/+layout.svelte**
 
-Read the current file first, then write the new content. The change is near-total replacement — just keep the `<script>` structure and swap the template.
+Read the current file first, then overwrite. The change is near-total replacement — delete existing content, write new.
 
 - [ ] **Step 2: Verify rendering**
 
@@ -422,6 +426,8 @@ Navigate to `/studio` — confirm:
 - StudioTabs renders with 4 tabs
 - Page content flows properly in the `<main>` area
 - Scroll works within `<main>`
+
+Also check `/studio/sources` — verify ConnectorExplorer table doesn't get clipped by `max-w-6xl`.
 
 - [ ] **Step 3: Commit**
 
@@ -436,12 +442,12 @@ git commit -m "refactor(ui): replace dark sidebar with StudioTabs and unified ma
 - Modify: `web-local/src/routes/studio/+page.svelte`
 
 Replacements:
-1. Replace raw `<h2>...</h2><p>...</p>` with `<SectionHeader title="概览" description="一屏了解:业务现在能问什么,还缺什么" />`
-2. Replace the stats grid cards styling — each card currently uses `rounded-xl border border-gray-200 bg-white`. Change to use `.card-basic` utility class
-3. Fix the "近7天提问命中率" card which has no `<a>` wrapper — make it display-only or link to the planned M5 feature
+1. Replace raw `<h2>...</h2><p>...</p>` → `<SectionHeader title="概览" description="一屏了解:业务现在能问什么,还缺什么" />`
+2. Replace each stat card wrapper: `rounded-xl border border-gray-200 bg-white px-4 py-4 hover:border-gray-300 transition-colors` → `card-basic px-4 py-4`
+3. Fix the "近7天提问命中率" card — it's display-only. Change styling to match others but remove the `<a>` wrapper (or keep it as a placeholder for M5 feature)
 
 ```svelte
-<!-- Replace each stat card wrapper -->
+<!-- Each stat card -->
 <!-- Before -->
 <div class="rounded-xl border border-gray-200 bg-white px-4 py-4 hover:border-gray-300 transition-colors">
 <!-- After -->
@@ -450,11 +456,11 @@ Replacements:
 
 - [ ] **Step 1: Edit studio/+page.svelte**
 
-Use SectionHeader, apply `.card-basic` to all 4 stat cards, remove `hover:border-gray-300 transition-colors` (shadow transition is now in .card-basic).
+Apply SectionHeader and `.card-basic` to all cards.
 
 - [ ] **Step 2: Verify**
 
-Navigate to `/studio` — confirm visual parity with the design spec.
+Navigate to `/studio`.
 
 - [ ] **Step 3: Commit**
 
@@ -473,15 +479,15 @@ git commit -m "refactor(ui): unify overview page with SectionHeader and card-bas
 - Modify: `web-local/src/routes/studio/sources/+page.svelte`
 
 Replacements:
-1. Replace header: `<SectionHeader title="数据源" description="已接入连接器 · 向导式新增 · 表结构浏览" />`
-2. Connector cards: change `rounded-xl border-gray-200 bg-white` → `.card-basic`
-3. Empty state card: use `.card-hero` instead of inline dashed border
-4. Table explorer wrapper: use `.card-basic` for the border/shadow around ConnectorExplorer
-5. Replace "OLAP" inline badge → `<StatusBadge variant="info" size="sm">OLAP</StatusBadge>`
+1. Header → `<SectionHeader title="数据源" description="已接入连接器 · 向导式新增 · 表结构浏览" />`
+2. Connector cards: `rounded-xl border-gray-200 bg-white px-4 py-4` → `card-basic px-4 py-4`
+3. Empty state: `rounded-xl border border-dashed border-gray-300 bg-white py-10` → `card-hero py-10` (remove bg-white — card-hero handles it)
+4. Explorer wrapper: `overflow-hidden rounded-xl border border-gray-200 bg-white` → `card-basic overflow-hidden`
+5. "OLAP" badge → `<StatusBadge variant="info" size="sm">OLAP</StatusBadge>`
 
 - [ ] **Step 1: Edit sources/+page.svelte**
 
-Apply all replacements. The `<AddDataModal>` component stays unchanged.
+Apply all replacements. The `<AddDataModal>` stays unchanged.
 
 - [ ] **Step 2: Commit**
 
@@ -496,20 +502,19 @@ git commit -m "refactor(ui): unify sources page with SectionHeader and card-basi
 - Modify: `web-local/src/routes/studio/semantics/+page.svelte`
 - Modify: `web-local/src/routes/studio/semantics/[name]/+page.svelte`
 
-**semantics/index page:**
-1. Replace header → `<SectionHeader title="语义层" description="指标/维度定义 · 中文别名(label_cn) · 无代码编辑" />`
-2. Replace table wrapper border: `rounded-xl border border-gray-200 bg-white` → `.card-basic`
-3. Inline status badges (`bg-green-50 ...`, `bg-red-50 ...`) → `<StatusBadge variant="success">有效</StatusBadge>`
+**semantics/index:**
+1. Header → `<SectionHeader title="语义层" description="指标/维度定义 · 中文别名(label_cn) · 无代码编辑" />`
+2. Table wrapper: `mt-5 overflow-hidden rounded-xl border border-gray-200 bg-white` → `mt-5 card-basic overflow-hidden`
+3. Inline badges (`bg-green-50 ...` etc.) → `<StatusBadge variant="success">有效</StatusBadge>`
 
-**semantics/[name] page:**
-1. Replace back-link + heading row → `<SectionHeader title={name} description="编辑自动保存" />`
-2. Replace table wrapper → `.card-basic`
-3. Replace empty state border → `.card-hero`
-4. Replace "返回列表" link color → `text-accent-primary-action`
+**semantics/[name]:**
+1. Back-link + heading → `<SectionHeader title={name} description="编辑自动保存" />`
+2. Editor wrapper → `card-basic min-h-0 flex-1 overflow-hidden`
+3. Error state → `card-hero`
 
 - [ ] **Step 1: Edit semantics/+page.svelte**
 
-Apply SectionHeader, .card-basic, and StatusBadge.
+Apply SectionHeader, .card-basic, StatusBadge.
 
 - [ ] **Step 2: Edit semantics/[name]/+page.svelte**
 
@@ -518,7 +523,7 @@ Apply SectionHeader and .card-basic.
 - [ ] **Step 3: Commit**
 
 ```bash
-git add web-local/src/routes/studio/semantics/+page.svelte web-local/src/routes/studio/semantics/\[name\]/+page.svelte
+git add web-local/src/routes/studio/semantics/+page.svelte "web-local/src/routes/studio/semantics/[name]/+page.svelte"
 git commit -m "refactor(ui): unify semantics pages with SectionHeader, card-basic, StatusBadge"
 ```
 
@@ -528,21 +533,21 @@ git commit -m "refactor(ui): unify semantics pages with SectionHeader, card-basi
 - Modify: `web-local/src/routes/studio/publish/+page.svelte`
 
 Replacements:
-1. Replace header → `<SectionHeader title="发布" description="控制哪些指标集对业务门户(推荐问题 + Chat AI)可见" />`
-2. Info banner (blue box): keep as-is, it serves a different purpose
-3. Table wrapper → `.card-basic`
+1. Header → `<SectionHeader title="发布" description="控制哪些指标集对业务门户(推荐问题 + Chat AI)可见" />`
+2. Info banner: keep as-is (semantic difference from card-basic)
+3. Table wrapper: `mt-4 overflow-hidden rounded-xl border border-gray-200 bg-white` → `mt-4 card-basic overflow-hidden`
 4. Row badges → `<StatusBadge variant="success">已发布</StatusBadge>` etc.
-5. Inline checkbox row styling consistent with card-basic pattern
+5. Also fix pre-existing bug: duplicate import of `runtimeServiceGetFile` (lines 8-9 are identical)
 
 - [ ] **Step 1: Edit publish/+page.svelte**
 
-Apply SectionHeader, .card-basic, and StatusBadge. Keep `RequestsTodo` component as-is (it's not a visual concern here).
+Apply changes. Remove duplicate import while you're here.
 
 - [ ] **Step 2: Commit**
 
 ```bash
 git add web-local/src/routes/studio/publish/+page.svelte
-git commit -m "refactor(ui): unify publish page with SectionHeader, card-basic, StatusBadge"
+git commit -m "refactor(ui): unify publish page with SectionHeader, card-basic, StatusBadge + deduplicate import"
 ```
 
 ---
@@ -553,53 +558,52 @@ git commit -m "refactor(ui): unify publish page with SectionHeader, card-basic, 
 
 **Files:**
 - DELETE: `web-local/src/features/studio/StudioSidebar.svelte`
-- No other references to it remain after layout rewrite
 
-Before deleting, verify no remaining references:
+Before deleting, verify zero remaining references:
 
 ```bash
 grep -rn "StudioSidebar" /Users/xinjian/Work/Project/RD/StarData/web-local/src/ --include="*.svelte" --include="*.ts"
 ```
 
-Expected output: only the import in the OLD `studio/+layout.svelte` (which we already rewrote).
+Expected: no results (the old layout file no longer imports it since we rewrote it in Task 7).
 
-- [ ] **Step 1: Confirm no remaining references**
+- [ ] **Step 1: Verify no remaining references**
 
-Run the grep above. If any other file imports StudioSidebar, remove that import.
+Run grep. If any file still imports it, remove the import.
 
-- [ ] **Step 2: Delete StudioSidebar.svelte**
+- [ ] **Step 2: Delete**
 
 ```bash
 rm web-local/src/features/studio/StudioSidebar.svelte
 ```
 
-- [ ] **Step 3: Full build verification**
+- [ ] **Step 3: Full route verification via dev server**
 
 ```bash
-npm run dev  # starts both runtime and web dev server
+npm run dev
 ```
 
-Navigate through ALL routes and verify:
-- `/` (portal home) — renders with PortalNav
-- `/chat` (full-page chat) — full screen, no nav
-- `/chat?new=true&q=...` — auto-send still works
-- `/boards` — PortalNav + card grid
-- `/boards/[name]` — canvas + dashboard chat
-- `/studio` — StudioTabs + overview card grid
-- `/studio/sources` — StudioTabs + source cards
-- `/studio/semantics` — StudioTabs + table with StatusBadges
-- `/studio/semantics/[name]` — StudioTabs + VisualMetrics editor
-- `/studio/publish` — StudioTabs + publish table
-- `/files` — legacy IDE, should still work with legacy header
+Check all these routes visually:
+| Route | Expected |
+|-------|----------|
+| `/` | PortalNav, SectionHeader, card-hero entrance |
+| `/chat` | Full-page chat, unchanged |
+| `/boards` | PortalNav, card grid |
+| `/boards/[name]` | Canvas + DashboardChat, unchanged |
+| `/studio` | StudioTabs + SectionHeader + card-basic grid |
+| `/studio/sources` | StudioTabs + source cards + explorer |
+| `/studio/semantics` | StudioTabs + table with StatusBadges |
+| `/studio/semantics/[name]` | StudioTabs + VisualMetrics editor |
+| `/studio/publish` | StudioTabs + publish table + StatusBadges |
+| `/files` | Legacy IDE header, still works |
 
-- [ ] **Step 4: Verify dark mode toggle**
+- [ ] **Step 4: Verify ThemeToggle**
 
-Click ☀️/🌙 in PortalNav. Navigate between portal and studio. Dark class should persist across all routes via `document.documentElement.classList`.
+Click ThemeToggle → switch to dark. Navigate between portal and studio. Dark class persists.
 
-- [ ] **Step 5: Clean commit**
+- [ ] **Step 5: Commit cleanup**
 
 ```bash
-git add -A web-local/src/features/studio/StudioSidebar.svelte
 git rm web-local/src/features/studio/StudioSidebar.svelte
 git commit -m "chore(ui): remove StudioSidebar, replaced by StudioTabs"
 ```
@@ -612,7 +616,7 @@ git commit -m "chore(ui): remove StudioSidebar, replaced by StudioTabs"
 npx svelte-check --threshold warning 2>&1 | tail -30
 ```
 
-Fix any type errors introduced by the refactoring.
+Fix any type errors.
 
 - [ ] **Step 2: Lint**
 
@@ -636,19 +640,19 @@ git commit -m "ci(ui): run frontend quality checks after UI unification refactor
 
 ## File Change Summary
 
-| File | Action | Phase |
-|------|--------|-------|
-| `web-common/src/app.css` | Modify: add utility classes & typography overrides | 1 |
-| `web-common/src/components/StatusBadge.svelte` | Create | 2 |
-| `web-local/src/features/portal/PortalNav.svelte` | Modify: theme toggle + auto-detect Studio | 1, 3 |
-| `web-local/src/features/studio/StudioTabs.svelte` | Create | 2 |
-| `web-local/src/features/studio/SectionHeader.svelte` | Create | 2 |
-| `web-local/src/features/studio/StudioSidebar.svelte` | Delete | 5 |
-| `web-local/src/routes/studio/+layout.svelte` | Rewrite | 3 |
-| `web-local/src/routes/studio/+page.svelte` | Modify: SectionHeader + card-basic | 3 |
-| `web-local/src/routes/studio/sources/+page.svelte` | Modify: SectionHeader + card-basic + StatusBadge | 4 |
-| `web-local/src/routes/studio/semantics/+page.svelte` | Modify: SectionHeader + card-basic + StatusBadge | 4 |
-| `web-local/src/routes/studio/semantics/[name]/+page.svelte` | Modify: SectionHeader + card-basic | 4 |
-| `web-local/src/routes/studio/publish/+page.svelte` | Modify: SectionHeader + card-basic + StatusBadge | 4 |
+| File | Action | Phase | Chunk |
+|------|--------|-------|-------|
+| `web-common/src/app.css` | Modify | design tokens + typography | 1 |
+| `web-common/src/components/status-badge/StatusBadge.svelte` | Create | StatusBadge | 2 |
+| `web-local/src/features/portal/PortalNav.svelte` | Modify | theme toggle + Studio auto-detect | 1, 2 |
+| `web-local/src/features/studio/StudioTabs.svelte` | Create | Horizontal tabs | 2 |
+| `web-local/src/features/studio/SectionHeader.svelte` | Create | Page header | 2 |
+| `web-local/src/features/studio/StudioSidebar.svelte` | Delete | cleanup | 5 |
+| `web-local/src/routes/studio/+layout.svelte` | Rewrite | new layout shell | 3 |
+| `web-local/src/routes/studio/+page.svelte` | Modify | SectionHeader + card-basic | 3 |
+| `web-local/src/routes/studio/sources/+page.svelte` | Modify | SectionHeader + StatusBadge | 4 |
+| `web-local/src/routes/studio/semantics/+page.svelte` | Modify | SectionHeader + StatusBadge | 4 |
+| `web-local/src/routes/studio/semantics/[name]/+page.svelte` | Modify | SectionHeader | 4 |
+| `web-local/src/routes/studio/publish/+page.svelte` | Modify + dedupe import | 4 |
 
 Total files changed: **12** (10 modifications, 3 creations, 1 deletion)
