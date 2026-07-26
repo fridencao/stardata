@@ -2,6 +2,8 @@
   import * as Dialog from "@rilldata/web-common/components/dialog";
   import ConnectorExplorer from "@rilldata/web-common/features/connectors/explorer/ConnectorExplorer.svelte";
   import { connectorExplorerStore } from "@rilldata/web-common/features/connectors/explorer/connector-explorer-store";
+  import StatusBadge from "@rilldata/web-common/components/status-badge/StatusBadge.svelte";
+  import SectionHeader from "../../features/studio/SectionHeader.svelte";
   import {
     ResourceKind,
     useFilteredResources,
@@ -75,12 +77,7 @@
 </svelte:head>
 
 <div class="flex items-start justify-between">
-  <div>
-    <h2 class="text-lg font-bold text-gray-900">语义层</h2>
-    <p class="mt-0.5 text-[13px] text-gray-400">
-      指标/维度定义 · 中文别名(label_cn) · 无代码编辑
-    </p>
-  </div>
+  <SectionHeader title="语义层" description="指标/维度定义 · 中文别名(label_cn) · 无代码编辑" />
   <button
     class="rounded-lg bg-primary-600 px-4 py-2 text-[13px] font-semibold text-white hover:bg-primary-700 disabled:opacity-50"
     disabled={creating}
@@ -90,7 +87,7 @@
   </button>
 </div>
 
-<div class="mt-5 overflow-hidden rounded-xl border border-gray-200 bg-white">
+<div class="mt-5 card-basic overflow-hidden">
   <table class="w-full text-left text-[13px]">
     <thead class="border-b border-gray-200 bg-gray-50 text-xs text-gray-500">
       <tr>
@@ -122,9 +119,9 @@
           </td>
           <td class="px-4 py-3">
             {#if row.valid}
-              <span class="rounded-md bg-green-50 px-2 py-0.5 text-[11px] font-semibold text-green-700">有效</span>
+              <StatusBadge variant="success">有效</StatusBadge>
             {:else}
-              <span class="rounded-md bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-600">解析错误</span>
+              <StatusBadge variant="error">解析错误</StatusBadge>
             {/if}
           </td>
         </tr>

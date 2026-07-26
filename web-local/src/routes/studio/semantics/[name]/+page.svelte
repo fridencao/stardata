@@ -1,6 +1,8 @@
 <script lang="ts">
+  import { ChevronLeft } from "lucide-svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
+  import SectionHeader from "../../../features/studio/SectionHeader.svelte";
   import { fileArtifacts } from "@rilldata/web-common/features/entity-management/file-artifacts";
   import {
     ResourceKind,
@@ -24,16 +26,10 @@
 </svelte:head>
 
 <div class="flex h-full min-h-0 flex-col">
-  <div class="flex items-center gap-3 pb-3">
-    <a href="/studio/semantics" class="text-[13px] text-gray-500 no-underline hover:text-gray-800">
-      ← 返回语义层
-    </a>
-    <h2 class="text-base font-bold text-gray-900">{name}</h2>
-    <span class="text-[11px] text-gray-400">编辑自动保存</span>
-  </div>
+  <SectionHeader title={name} description="编辑自动保存" />
 
   {#if fileArtifact}
-    <div class="min-h-0 flex-1 overflow-hidden rounded-xl border border-gray-200 bg-white">
+    <div class="min-h-0 flex-1 overflow-hidden card-basic">
       {#key fileArtifact}
         <VisualMetrics
           {fileArtifact}
@@ -44,9 +40,9 @@
       {/key}
     </div>
   {:else if $resourceQuery.isError}
-    <div class="rounded-xl border border-dashed border-gray-300 bg-white py-14 text-center text-sm text-gray-500">
+    <div class="card-hero py-14 text-center text-sm text-gray-500">
       找不到指标集「{name}」。
-      <a href="/studio/semantics" class="font-semibold text-primary-600 no-underline">返回列表</a>
+      <a href="/studio/semantics" class="ml-1 font-semibold text-accent-primary-action no-underline">返回列表</a>
     </div>
   {:else}
     <p class="text-sm text-gray-400">加载中…</p>
