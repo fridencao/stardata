@@ -96,8 +96,8 @@
   }
 
   $: hideTruncationSelector =
-    parsedTime?.interval instanceof RillIsoInterval ||
-    parsedTime?.interval instanceof RillAllTimeInterval;
+    parsedTime?.interval instanceof StardataIsoInterval ||
+    parsedTime?.interval instanceof StardataAllTimeInterval;
 
   $: usingLegacyTime = parsedTime?.isOldFormat;
 
@@ -132,7 +132,7 @@
       const parsed = parseStardataTime(range);
 
       const isPeriodToDate =
-        parsed.interval instanceof RillPeriodToGrainInterval;
+        parsed.interval instanceof StardataPeriodToGrainInterval;
 
       const rangeGrainOrder =
         getGrainOrder(parsed.rangeGrain) - (isPeriodToDate ? 1 : 0);
@@ -140,7 +140,7 @@
       const asOfGrainOrder = getGrainOrder(truncationGrain);
 
       const shouldAppendAsOfString =
-        !parsed.asOfLabel && !(parsed.interval instanceof RillIsoInterval);
+        !parsed.asOfLabel && !(parsed.interval instanceof StardataIsoInterval);
 
       if (asOfGrainOrder > rangeGrainOrder && parsed.rangeGrain) {
         truncationGrain = parsed.rangeGrain;
@@ -550,7 +550,7 @@
     {dateTimeAnchor}
     grain={truncationGrain}
     rangeGrain={parsedTime?.rangeGrain ?? truncationGrain}
-    isPeriodToDate={parsedTime?.interval instanceof RillPeriodToGrainInterval}
+    isPeriodToDate={parsedTime?.interval instanceof StardataPeriodToGrainInterval}
     {watermark}
     latest={maxDate}
     {smallestTimeGrain}

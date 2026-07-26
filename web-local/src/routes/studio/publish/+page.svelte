@@ -6,7 +6,6 @@
   } from "@rilldata/web-common/features/entity-management/resource-selectors";
   import type { V1Resource } from "@rilldata/web-common/runtime-client";
   import { runtimeServiceGetFile } from "@rilldata/web-common/runtime-client";
-  import { runtimeServiceGetFile } from "@rilldata/web-common/runtime-client";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import {
     countLabelCnCoverage,
