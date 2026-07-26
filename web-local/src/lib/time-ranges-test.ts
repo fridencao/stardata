@@ -201,7 +201,7 @@ function lastNPeriodToNow(metadata: TimeMetadata, upTo: number = 100) {
   return tests;
 }
 
-function getHigherOrderGrain(grain: RillGrain): RillGrain | undefined {
+function getHigherOrderGrain(grain: StarDataGrain): StarDataGrain | undefined {
   const index = GRAINS.indexOf(grain);
 
   const higherOrderGrain = GRAINS[index - 1];

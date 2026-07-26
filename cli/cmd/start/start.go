@@ -49,7 +49,7 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 				if err != nil {
 					return err
 				}
-			} else if !cmdutil.HasRillProject(".") {
+			} else if !cmdutil.HasStardataProject(".") {
 				if !ch.Interactive {
 					return fmt.Errorf("required arg <path> missing")
 				}

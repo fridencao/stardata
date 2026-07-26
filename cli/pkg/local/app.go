@@ -375,7 +375,7 @@ func (a *App) Close() error {
 	if err != nil {
 		a.Logger.Error("Graceful shutdown failed", zap.Error(err))
 	} else {
-		a.Logger.Info("Rill shutdown gracefully")
+		a.Logger.Info("StarData shutdown gracefully")
 	}
 
 	a.loggerCleanUp()

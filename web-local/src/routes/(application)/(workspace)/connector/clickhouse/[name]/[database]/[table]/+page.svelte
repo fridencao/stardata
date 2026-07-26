@@ -10,7 +10,7 @@
   $: name = $page.params.name;
   $: database = $page.params.database;
   // ClickHouse does not have a database "schema" concept
-  // Rill considers the ClickHouse "database" as the "database schema"
+  // StarData considers the ClickHouse "database" as the "database schema"
   $: table = $page.params.table;
 
   onMount(() => {

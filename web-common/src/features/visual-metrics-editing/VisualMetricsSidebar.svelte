@@ -106,6 +106,18 @@
         selected: 0,
       },
       {
+        optional: true,
+        label: "中文别名",
+        fields: [
+          {
+            key: "label_cn",
+            hint: "业务人员在 Chat 中使用的中文字段名 (label_cn)",
+            label: "中文别名",
+          },
+        ],
+        selected: 0,
+      },
+      {
         label: "Format",
         fields: [
           {
@@ -202,6 +214,18 @@
             hint: "Used on dashboards and charts. Inferred from name when not provided",
 
             label: "Display name",
+          },
+        ],
+        selected: 0,
+      },
+      {
+        optional: true,
+        label: "中文别名",
+        fields: [
+          {
+            key: "label_cn",
+            hint: "业务人员在 Chat 中使用的中文字段名 (label_cn)",
+            label: "中文别名",
           },
         ],
         selected: 0,
@@ -387,6 +411,13 @@
       newItem.set("tags", parsedDocument.createNode(editingClone.tags));
     } else {
       newItem.delete("tags");
+    }
+
+    // Clear label_cn when empty, avoid stale dirty value
+    if (!editingClone.label_cn) {
+      newItem.delete("label_cn");
+    } else {
+      newItem.set("label_cn", parsedDocument.createNode(editingClone.label_cn));
     }
 
     if (editing) {

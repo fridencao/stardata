@@ -225,6 +225,8 @@ message MetricsViewSpec {
     TimeGrain smallest_time_grain = 13;
     // The data type of the dimension. Only populated in ValidSpec.
     Type data_type = 12;
+    // Chinese label for the dimension. Used by AI agents to present Chinese field names in narrative text.
+    string label_cn = 18;
   }
   enum DimensionType {
     DIMENSION_TYPE_UNSPECIFIED = 0;
@@ -275,6 +277,8 @@ message MetricsViewSpec {
     Type data_type = 15;
     // When true, decreases in this measure are favorable (e.g. bounce rate, latency, error count). UI surfaces that render comparison deltas (KPIs, big numbers, leaderboards, pivot tables, time-series tooltips) swap their positive/negative coloring accordingly.
     bool lower_is_better = 17;
+    // Chinese label for the measure. Used by AI agents to present Chinese field names in narrative text.
+    string label_cn = 18;
   }
   // name of parent metrics view, if this is a derived metrics view. If this is set then certain fields like table, connector, database*, model, dimensions, and measures will only be set in `state.valid_spec`.
   string parent = 30;

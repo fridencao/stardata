@@ -40,7 +40,7 @@
   let row: HTMLTableRowElement;
   let hovered = false;
 
-  $: ({ name, display_name, expression, description } = item);
+  $: ({ name, display_name, expression, description, label_cn } = item);
 
   $: id = name || display_name || "";
 
@@ -104,8 +104,11 @@
         type={type === "dimensions" ? "dimension" : "measure"}
         label={display_name || name}
       >
-        <div slot="body" class="font-bold">
+        <div slot="body" class="font-bold flex items-center gap-x-1.5">
           {display_name || name}
+          {#if label_cn}
+            <span class="text-[11px] text-gray-400">{label_cn}</span>
+          {/if}
         </div>
       </Chip>
     </div>

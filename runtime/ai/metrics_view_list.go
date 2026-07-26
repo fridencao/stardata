@@ -9,6 +9,8 @@ import (
 	"github.com/modelcontextprotocol/go-sdk/mcp"
 	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
+	"github.com/fridencao/stardata/runtime/parser"
+	"gopkg.in/yaml.v3"
 )
 
 const ListMetricsViewsName = "list_metrics_views"
@@ -117,15 +119,54 @@ func (t *ListMetricsViews) Handler(ctx context.Context, args *ListMetricsViewsAr
 			continue
 		}
 
-		metricsViews = append(metricsViews, map[string]any{
-			"name":         r.Meta.Name.Name,
+		mvName := r.Meta.Name.Name
+		entry := map[string]any{
+			"name":         mvName,
 			"display_name": mv.State.ValidSpec.DisplayName,
 			"description":  mv.State.ValidSpec.Description,
-		})
+		}
+		labelMap := chineseLabelsForMV(ctx, t.Runtime, session.InstanceID(), r.Meta.Name.Name, mv.State.ValidSpec)
+		if len(labelMap) > 0 {
+			entry["chinese_labels"] = labelMap
+		}
+		metricsViews = append(metricsViews, entry)
 	}
 	res["metrics_views"] = metricsViews
 
 	return &ListMetricsViewsResult{
 		MetricsViews: metricsViews,
 	}, nil
+}
+
+// chineseLabelsForMV reads the raw YAML of a metrics view from the repo and
+// extracts {field_name -> Chinese_label} maps for dimensions and measures.
+// Mirrors the same pattern used in metrics_view_get.go to keep the AI context bilingual.
+func chineseLabelsForMV(ctx context.Context, rt *runtime.Runtime, instanceID, mvName string, spec *runtimev1.MetricsViewSpec) map[string]string {
+	labels := make(map[string]string)
+	if spec == nil || mvName == "" {
+		return labels
+	}
+	repo, release, err := rt.Repo(ctx, instanceID)
+	if err != nil || repo == nil {
+		return labels
+	}
+	defer release()
+	yamlBytes, err := repo.Get(ctx, "/metrics_views/"+mvName+".yaml")
+	if err != nil {
+		return labels
+	}
+	var mv parser.MetricsViewYAML
+	if yaml.Unmarshal([]byte(yamlBytes), &mv) == nil {
+		for _, d := range mv.Dimensions {
+			if d.LabelCn != "" {
+				labels[d.Name] = d.LabelCn
+			}
+		}
+		for _, m := range mv.Measures {
+			if m.LabelCn != "" {
+				labels[m.Name] = m.LabelCn
+			}
+		}
+	}
+	return labels
 }

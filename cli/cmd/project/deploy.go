@@ -328,7 +328,7 @@ func ValidateLocalProject(ch *cmdutil.Helper, localGitPath, subPath string) (str
 	}
 
 	// Verify that localProjectPath contains a Rill project.
-	if cmdutil.HasRillProject(localProjectPath) {
+	if cmdutil.HasStardataProject(localProjectPath) {
 		return localGitPath, localProjectPath, nil
 	}
 

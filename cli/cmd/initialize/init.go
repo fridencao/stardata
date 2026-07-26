@@ -65,12 +65,12 @@ func InitCmd(ch *cmdutil.Helper) *cobra.Command {
 
 			// Resolve project path:
 			// - If a path arg is provided, use it directly.
-			// - If cwd contains rill.yaml, default to cwd.
+			// - If cwd contains stardata.yaml (or legacy rill.yaml), default to cwd.
 			// - Otherwise prompt interactively.
 			var projectPath string
 			if len(args) > 0 {
 				projectPath = args[0]
-			} else if cmdutil.HasRillProject(".") {
+			} else if cmdutil.HasStardataProject(".") {
 				projectPath = "."
 			} else {
 				if !ch.Interactive {
@@ -97,7 +97,7 @@ func InitCmd(ch *cmdutil.Helper) *cobra.Command {
 			projectName := filepath.Base(projectPath)
 
 			// If a project already exists, we allow adding agent files via --agent, but no other changes.
-			if cmdutil.HasRillProject(projectPath) {
+			if cmdutil.HasStardataProject(projectPath) {
 				if !explicitAgent || numFlags > 1 {
 					return fmt.Errorf("init failed because a StarData project already exists at %q (hint: only the --agent flag is supported for updating an existing project)", projectPath)
 				}
