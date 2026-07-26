@@ -54,6 +54,30 @@
     stroke-width: 4px;
     paint-order: stroke;
   }
+
+  /* App-wide design token classes */
+  .bg-app-surface {
+    @apply bg-surface-subtle;
+  }
+  .bg-app-card {
+    @apply bg-surface-card;
+  }
+  .border-app {
+    @apply border-border;
+  }
+
+  /* Card base patterns */
+  .card-basic {
+    @apply rounded-xl border-app bg-app-card shadow-sm hover:shadow-md transition-shadow duration-150;
+  }
+  .card-hero {
+    @apply rounded-2xl border-app bg-app-card shadow-sm hover:shadow-md transition-shadow duration-150;
+  }
+
+  /* Dark-mode aware strong border */
+  .border-app-strong {
+    @apply border-gray-300 dark:border-gray-600;
+  }
 }
 
 @layer base {
