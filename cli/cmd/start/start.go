@@ -148,6 +148,11 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 					fmt.Printf("warning: could not read STARDATA_CONFIG=%s: %s\n", cfgPath, rerr.Error())
 				}
 			}
+			// envconfig allocates conf.Auth even when no auth env vars are set;
+			// treat an all-zero config as "auth disabled".
+			if !conf.Auth.IsConfigured() {
+				conf.Auth = nil
+			}
 
 			ch.Interactive = false // Disable interactive mode for the app server
 			app, err := local.NewApp(cmd.Context(), &local.AppOptions{

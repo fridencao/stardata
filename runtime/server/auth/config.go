@@ -66,6 +66,26 @@ func (c *AuthConfig) Normalize() Provider {
 	return p
 }
 
+// IsConfigured reports whether any auth setting was actually provided.
+// envconfig unconditionally allocates nil struct pointers while processing,
+// so an all-zero AuthConfig means auth was never configured and must be
+// treated as disabled (otherwise `stardata start` without any auth config
+// would fail with "jwt secret must not be empty").
+func (c *AuthConfig) IsConfigured() bool {
+	if c == nil {
+		return false
+	}
+	return c.Provider != "" || c.JWTSecret != "" || c.OIDC.isConfigured() || len(c.LocalUsers) > 0
+}
+
+// isConfigured reports whether any OIDC field was actually provided.
+func (c *OIDCConfig) isConfigured() bool {
+	if c == nil {
+		return false
+	}
+	return c.IssuerURL != "" || c.ClientID != "" || c.ClientSecret != "" || c.Scopes != ""
+}
+
 // rolePermissions maps a role to the runtime permissions it grants.
 // admin gets ManageInstances, which (per jwtClaims.Claims) flips SkipChecks=true → full access.
 func rolePermissions(role string) []runtime.Permission {

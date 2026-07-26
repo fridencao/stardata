@@ -51,7 +51,7 @@ export const rillDev = base.extend<MyFixtures>({
     // For tests that involve a local cloud this will point to it.
     // Otherwise, when running in a dev's machine, it will avoid pointing to prod cloud and bombard prod.
     await spawnAndMatch(
-      "../rill",
+      "../stardata",
       "devtool switch-env dev".split(" "),
       /Set default env to "dev"/,
       {
@@ -82,7 +82,7 @@ export const rillDev = base.extend<MyFixtures>({
 
     const cmd = `start --no-open --port ${TEST_PORT} --port-grpc ${TEST_GRPC_PORT} ${TEST_PROJECT_DIRECTORY}`;
 
-    const childProcess = spawn("../rill", cmd.split(" "), {
+    const childProcess = spawn("../stardata", cmd.split(" "), {
       stdio: "inherit",
       shell: true,
       env: {
@@ -114,7 +114,9 @@ export const rillDev = base.extend<MyFixtures>({
     });
     const page = await context.newPage();
 
-    await page.goto(`http://localhost:${TEST_PORT}`);
+    // Dual-portal: "/" is now the business portal home; IDE tests need the
+    // file tree, which lives at /files.
+    await page.goto(`http://localhost:${TEST_PORT}/files`);
 
     // Give the runtime time to reconcile initial resources. Tests that
     // navigate directly to explore URLs (via page.goto) need the explore

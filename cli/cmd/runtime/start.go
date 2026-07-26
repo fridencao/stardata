@@ -131,6 +131,13 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 				os.Exit(1)
 			}
 
+			// envconfig allocates conf.Auth even when no auth env vars are set;
+			// treat an all-zero config as "not set" so the YAML overlay (and the
+			// auth-disabled default) work as intended.
+			if !conf.Auth.IsConfigured() {
+				conf.Auth = nil
+			}
+
 			// Overlay YAML config file (STARDATA_CONFIG) when present.
 			// Environment variables take precedence: only fill values that were not already set via env.
 			if cfgPath := os.Getenv("STARDATA_CONFIG"); cfgPath != "" {
