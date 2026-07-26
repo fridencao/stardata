@@ -97,7 +97,7 @@
               <ConnectorCard
                 {connector}
                 testing={testingConnector === connector.name}
-                testResult={testResults[connector.name] ?? null}
+                testResult={testResults[connector.name ?? ""] ?? null}
                 onTest={() => handleTestConnection(connector.name!)}
               />
             {/each}
