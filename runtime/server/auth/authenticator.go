@@ -203,11 +203,31 @@ func (a *Authenticator) LoginHandler() http.HandlerFunc {
 }
 
 // LogoutHandler handles POST /auth/logout.
-// StarData uses stateless bearer tokens, so logout is a client-side concern;
-// the endpoint exists for API completeness and future token revocation.
+// For stateless JWTs it clears the session cookie and returns the IdP logout URL
+// (so the frontend can follow it) or a simple OK for local login.
 func (a *Authenticator) LogoutHandler() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		writeJSON(w, http.StatusOK, map[string]string{"status": "ok"})
+		// Clear the token cookie if set.
+		http.SetCookie(w, &http.Cookie{
+			Name:     "token",
+			Value:    "",
+			Path:     "/",
+			HttpOnly: true,
+			MaxAge:   -1,
+		})
+		switch {
+		case a == nil, a.provider != ProviderOIDC:
+			writeJSON(w, http.StatusOK, map[string]string{"status": "ok"})
+		default:
+			// Redirect to IdP logout, then back to StarData login page.
+			logoutURL := a.externalURL + "/login"
+			if a.cfg.OIDC != nil && a.cfg.OIDC.IssuerURL != "" {
+				logoutURL = strings.TrimRight(a.cfg.OIDC.IssuerURL, "/") +
+					"/protocol/openid-connect/logout?post_logout_redirect_uri=" +
+					url.QueryEscape(a.externalURL + "/login")
+			}
+			http.Redirect(w, r, logoutURL, http.StatusFound)
+		}
 	}
 }
 
@@ -318,12 +338,13 @@ func (a *Authenticator) OIDCCallbackHandler() http.HandlerFunc {
 			http.Error(w, "failed to issue token", http.StatusInternalServerError)
 			return
 		}
-		// Hand the token back to the SPA via a redirect carrying ?token=.
-		target, _ := url.Parse(a.externalURL)
-		q := target.Query()
+		// Hand the token back to the SPA via redirect to login page (cleans up URL).
+		baseURL, _ := url.Parse(a.externalURL)
+		loginURL := baseURL.ResolveReference(&url.URL{Path: "/login"})
+		q := loginURL.Query()
 		q.Set("token", token)
-		target.RawQuery = q.Encode()
-		http.Redirect(w, r, target.String(), http.StatusFound)
+		loginURL.RawQuery = q.Encode()
+		http.Redirect(w, r, loginURL.String(), http.StatusFound)
 	}
 }
 

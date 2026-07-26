@@ -5,17 +5,31 @@
     getStardataToken,
     setStardataToken,
   } from "@rilldata/web-common/runtime-client/auth-token";
+  import { onMount } from "svelte";
 
   let username = "";
   let password = "";
   let error = "";
   let loading = false;
+  let oidcError = "";
 
   // Already authenticated? Bounce straight to the app (or the requested redirect).
   if (getStardataToken()) {
     const redirect = $page.url.searchParams.get("redirect");
     window.location.href = redirect || "/";
   }
+
+  // Extract token from OIDC callback ?token= and store it.
+  onMount(() => {
+    const tokenParam = $page.url.searchParams.get("token");
+    if (tokenParam) {
+      setStardataToken(tokenParam);
+      const url = new URL(window.location.href);
+      url.searchParams.delete("token");
+      window.history.replaceState({}, "", url.pathname);
+      window.location.href = "/";
+    }
+  });
 
   async function handleSubmit(e: Event) {
     e.preventDefault();
@@ -71,6 +85,11 @@
     {/if}
 
     <form on:submit={handleSubmit} class="flex flex-col gap-4">
+      {#if oidcError}
+        <div class="mb-2 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
+          {oidcError}
+        </div>
+      {/if}
       <label class="flex flex-col gap-1 text-sm font-medium text-gray-700">
         用户名
         <input
@@ -100,8 +119,16 @@
       </button>
     </form>
 
-    <p class="mt-6 text-center text-xs text-gray-400">
-      企业用户请使用单点登录（SSO）。
-    </p>
+    <div class="my-6 flex items-center gap-3">
+      <span class="h-px flex-1 bg-gray-200"></span>
+      <span class="text-xs text-gray-400">或</span>
+      <span class="h-px flex-1 bg-gray-200"></span>
+    </div>
+    <a
+      href="/auth/oidc/login"
+      class="flex w-full justify-center rounded-md border border-blue-500 bg-blue-50 px-3 py-2 text-sm font-medium text-blue-700 hover:bg-blue-100"
+    >
+      企业单点登录 (SSO)
+    </a>
   </div>
 </div>

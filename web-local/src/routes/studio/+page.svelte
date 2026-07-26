@@ -1,3 +1,30 @@
+<script lang="ts">
+  import {
+    ResourceKind,
+    useFilteredResources,
+  } from "@rilldata/web-common/features/entity-management/resource-selectors";
+  import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
+  import {
+    UNGATED,
+    parsePublishYaml,
+    usePublishFile,
+  } from "../../features/portal/publish/publish-store";
+
+  const client = useRuntimeClient();
+  const publishFile = usePublishFile(client);
+  const metricsViews = useFilteredResources(client, ResourceKind.MetricsView);
+
+  $: gate = $publishFile.isSuccess
+    ? parsePublishYaml(String($publishFile.data?.blob ?? ""))
+    : UNGATED;
+
+  $: publishedCount = ($metricsViews.data ?? []).filter(
+    (r) =>
+      !!r.metricsView?.state?.validSpec &&
+      (!gate.gated || gate.published.has(r.meta?.name?.name ?? "")),
+  ).length;
+</script>
+
 <svelte:head>
   <title>StarData Studio · 概览</title>
 </svelte:head>
@@ -8,13 +35,26 @@
 </p>
 
 <div class="mt-5 grid grid-cols-4 gap-3">
-  {#each [{ k: "已接入数据源", hint: "在「数据源」中管理" }, { k: "已发布指标集", hint: "M2 接入发布门控" }, { k: "近 7 天提问命中率", hint: "M2 接入统计" }, { k: "待处理需求", hint: "M4 接入需求回流" }] as card (card.k)}
-    <div class="rounded-xl border border-gray-200 bg-white px-4 py-4">
-      <div class="text-xs text-gray-500">{card.k}</div>
-      <div class="mt-1 text-2xl font-bold text-gray-300">—</div>
-      <div class="mt-1 text-[11px] text-gray-400">{card.hint}</div>
-    </div>
-  {/each}
+  <div class="rounded-xl border border-gray-200 bg-white px-4 py-4">
+    <div class="text-xs text-gray-500">已接入数据源</div>
+    <div class="mt-1 text-2xl font-bold text-gray-300">—</div>
+    <div class="mt-1 text-[11px] text-gray-400">在「数据源」中管理</div>
+  </div>
+  <div class="rounded-xl border border-gray-200 bg-white px-4 py-4">
+    <div class="text-xs text-gray-500">已发布指标集</div>
+    <div class="mt-1 text-2xl font-bold text-gray-900">{publishedCount}</div>
+    <div class="mt-1 text-[11px] text-gray-400">在「发布」中管理</div>
+  </div>
+  <div class="rounded-xl border border-gray-200 bg-white px-4 py-4">
+    <div class="text-xs text-gray-500">近 7 天提问命中率</div>
+    <div class="mt-1 text-2xl font-bold text-gray-300">—</div>
+    <div class="mt-1 text-[11px] text-gray-400">M3 接入统计</div>
+  </div>
+  <div class="rounded-xl border border-gray-200 bg-white px-4 py-4">
+    <div class="text-xs text-gray-500">待处理需求</div>
+    <div class="mt-1 text-2xl font-bold text-gray-300">—</div>
+    <div class="mt-1 text-[11px] text-gray-400">M4 接入需求回流</div>
+  </div>
 </div>
 
 <div
