@@ -2,9 +2,12 @@
 <script lang="ts">
   import { enhanceCitationLinks } from "@rilldata/web-common/features/chat/core/messages/text/enhance-citation-links.ts";
   import { eventBus } from "@rilldata/web-common/lib/event-bus/event-bus.ts";
+  import { page } from "$app/stores";
+  import type { V1Message } from "@rilldata/web-common/runtime-client";
   import Markdown from "../../../../../components/markdown/Markdown.svelte";
   import type { Conversation } from "../../conversation";
   import FeedbackButtons from "../../feedback/FeedbackButtons.svelte";
+  import RequestDialog from "../../../requests/RequestDialog.svelte";
   import { extractFollowUps, extractMessageText } from "../../utils";
   import type { TextBlock } from "./text-block";
 
@@ -23,6 +26,29 @@
 
   // Follow-up suggestion questions from the structured analyst answer.
   $: followUps = extractFollowUps(message);
+
+  // Pre-fill: most recent user question before this AI message
+  let requestOpen = false;
+  $: convQuery = conversation.getConversationQuery();
+  $: defaultQuestion = findPrecedingUserQuestion(
+    $convQuery.data?.messages ?? [],
+    messageId,
+  );
+
+  // Only show in local (web-local), not cloud (organization param present)
+  $: canRequest = !$page.params.organization;
+
+  function findPrecedingUserQuestion(
+    messages: V1Message[],
+    assistantId: string,
+  ): string {
+    let idx = messages.findIndex((m) => m.id === assistantId);
+    if (idx < 0) idx = messages.length;
+    for (let i = idx - 1; i >= 0; i--) {
+      if (messages[i].role === "user") return extractMessageText(messages[i]);
+    }
+    return "";
+  }
 
   function askFollowUp(question: string) {
     eventBus.emit("start-chat", question);
@@ -47,13 +73,23 @@
       {/each}
     </div>
   {/if}
-  <div class="chat-message-actions">
+  <div class="chat-message-actions flex items-center gap-2">
     <FeedbackButtons
       {messageId}
       {conversation}
       feedback={block.feedback}
       {onDownvote}
     />
+    {#if canRequest}
+      <button
+        type="button"
+        class="follow-up-chip"
+        onclick={() => (requestOpen = true)}
+      >
+        ✋ 提需求
+      </button>
+      <RequestDialog bind:open={requestOpen} {defaultQuestion} />
+    {/if}
   </div>
 </div>
 

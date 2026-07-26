@@ -6,6 +6,11 @@
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import { getAnalyzedConnectors } from "@rilldata/web-common/features/connectors/selectors";
   import {
+    parseRequestsYaml,
+    REQUESTS_PATH,
+  } from "@rilldata/web-common/features/chat/requests/requests-file";
+  import { createRuntimeServiceGetFile } from "@rilldata/web-common/runtime-client";
+  import {
     UNGATED,
     parsePublishYaml,
     usePublishFile,
@@ -15,6 +20,16 @@
   const publishFile = usePublishFile(client);
   const metricsViews = useFilteredResources(client, ResourceKind.MetricsView);
   const connectors = getAnalyzedConnectors(client, false);
+  const requestsFileQuery = createRuntimeServiceGetFile(
+    client,
+    { path: REQUESTS_PATH },
+    { query: { retry: false } },
+  );
+  $: openRequestCount = $requestsFileQuery.isError
+    ? 0
+    : parseRequestsYaml($requestsFileQuery.data?.blob).filter(
+        (it) => it.status === "open",
+      ).length;
 
   $: gate = $publishFile.isSuccess
     ? parsePublishYaml(String($publishFile.data?.blob ?? ""))
@@ -58,13 +73,13 @@
   </div>
   <div class="rounded-xl border border-gray-200 bg-white px-4 py-4">
     <div class="text-xs text-gray-500">待处理需求</div>
-    <div class="mt-1 text-2xl font-bold text-gray-300">—</div>
-    <div class="mt-1 text-[11px] text-gray-400">M4 接入需求回流</div>
+    <div class="mt-1 text-2xl font-bold text-gray-900">{openRequestCount}</div>
+    <div class="mt-1 text-[11px] text-gray-400">在「发布」页处理</div>
   </div>
 </div>
 
 <div
-  class="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-2.5 text-[12.5px] text-amber-800"
+  class="mt-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-[12.5px] text-blue-800"
 >
-  💡 M1 骨架版:健康度数据、发布状态与需求回流将在后续里程碑接入。日常配置请从左侧「数据源 / 语义层」进入,完整 IDE 在「高级」。
+  💡 M3/4 已上线数据源管理、语义层向导、看板与钉图能力。近 7 天提问命中率仍在规划中，完整版功能可在「高级模式(IDE)」继续配置。
 </div>
