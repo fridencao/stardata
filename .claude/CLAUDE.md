@@ -1,97 +1,197 @@
-## What is Rill
+# CLAUDE.md
 
-Rill is a business intelligence platform built around the following principles:
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-- Code-first: configure projects using versioned and reproducible source code in the form of YAML and SQL files.
-- Full stack: go from raw data sources to user-friendly dashboards powered by clean data with a single tool.
-- Declarative: describe your business logic and Rill automatically runs the infrastructure, migrations and services necessary to make it real.
-- OLAP databases: you can easily provision a fast analytical database and load data into it to build dashboards that stay interactive at scale.
+## What is StarData
 
-## Architecture
+StarData is an intelligent BI platform for Chinese-speaking users, forked from [rilldata/rill](https://github.com/rilldata/rill) (Apache-2.0). It adds AI-powered conversational analytics, semantic layer definitions, and private deployment capabilities.
 
-Users define projects as YAML and SQL files that describe _resources_ — connectors, models, metrics views, dashboards, and more — organized in a DAG. The runtime **parses** project files into resources and **reconciles** each resource to its desired state (e.g., materializing a model into DuckDB, validating a metrics view's dimensions and measures). On the frontend, metrics views power two dashboard types: **explore dashboards** (drill-down, slice-and-dice) and **canvas dashboards** (free-form charts and tables). The platform also supports alerts, scheduled reports, custom APIs, and a built-in AI assistant.
+Core principles inherited from Rill:
+
+- **Code-first**: Projects are configured with versioned YAML and SQL files — connectors, models, metrics views, dashboards, alerts, reports.
+- **Parser → Resolver → Reconciler pipeline**: Project files are parsed into resources, resolved against dependencies, then reconciled to desired state (materialized into DuckDB/ClickHouse, etc.).
+- **Declarative dashboarding**: Metrics views define dimensions and measures that power two dashboard types — **explore** (drill-down, slice-and-dice) and **canvas** (free-form charts and tables).
 
 Two deployment modes share the same codebase:
 
-- **Rill Developer** — local application for data engineers. A single Go binary that embeds the CLI, runtime, and `web-local` frontend. Code-first, version-controlled workflow.
-- **Rill Cloud** — hosted platform for teams. Runs the `admin` service, runtime(s), and `web-admin` frontend as separate services. Adds auth, billing, multi-tenancy, and collaboration.
+- **Rill Developer** (local) — single Go binary with embedded CLI, runtime, and `web-local` frontend. Code-first workflow for data engineers.
+- **Rill Cloud** (hosted) — separate `admin` service, runtime(s), and `web-admin` frontend with auth, billing, multi-tenancy, and collaboration.
 
 ### Key Directories
 
-- `runtime/` — data plane: orchestration, queries, connectors, access policies, reconcilers
-- `admin/` — cloud control plane: auth, billing, provisioning, project management
-- `cli/` — CLI and local application server
-- `web-common/` — shared frontend library consumed by both `web-local` and `web-admin`
-- `web-local/` — local frontend (Rill Developer)
-- `web-admin/` — cloud frontend (Rill Cloud)
-- `proto/` — gRPC/protobuf API definitions (source of truth for all APIs)
+| Directory | Purpose |
+|---|---|
+| `runtime/` | Data plane: parser, resolvers, reconcilers, connector drivers, query engine, AI integration |
+| `admin/` | Cloud control plane: auth, billing, provisioning, project management, jobs |
+| `cli/` | CLI commands and local application server (embeds runtime + frontend) |
+| `proto/` | gRPC/protobuf API definitions — source of truth for all APIs |
+| `web-common/` | Shared frontend library (components, utilities, runtime client) consumed by both web apps |
+| `web-local/` | Local frontend (Rill Developer) — SvelteKit app on port 3001 |
+| `web-admin/` | Cloud frontend (Rill Cloud) — admin console |
+| `docs/` | Documentation site |
+
+### StarData-Specific Modifications
+
+- **Portal feature**: Role-based portal experience (`web-local/src/features/portal/`) with publish gate support (`publish.yaml`, `requests.yaml`)
+- **AI metrics**: AI-powered query generation and recommended questions from metrics views
+- **DuckDB extension**: Custom DuckDB build with StarData extensions (via `scripts/embed_duckdb_ext/`)
+- **Examples**: Cloned from `fridencao/stardata-examples` (subset: rill-openrtb-prog-ads, rill-github-analytics, rill-cost-monitoring)
 
 ## Development
 
-### Common Commands
+### Build & Run
 
-- **Build CLI**: `make cli` (Go binary + embedded frontend)
-- **Build CLI only**: `make cli-only` (skip frontend, faster)
-- **Local dev**: `rill devtool start local`
-- **Cloud dev**: `rill devtool start cloud`
-- **Test Go**: `go test ./...`
-- **Test frontend (unit, web-common)**: `npm run test -w web-common` (fast, use for tight feedback loops)
-- **Test frontend (unit, web-admin)**: `cd web-admin && npx vitest run src/path/to/spec.ts` (must run from `web-admin/` so vitest picks up the `@rilldata/web-admin` alias)
-- **Test frontend (e2e)**: `npm run test -w web-local` or `npm run test -w web-admin` (Playwright, slow)
-- **Lint/format frontend**: `npm run quality`
-- **Regenerate docs**: `make docs.generate` (run after changes to `proto/`, `cli/` or `runtime/parser`)
-- **Regenerate API bindings:** `make proto.generate` (run after changes to `proto/`)
+```bash
+# Full build (Go + embed frontend examples + npm build + link dist)
+make cli
 
-### Adding or Changing APIs
+# Go binary only (skip frontend build)
+make cli-only
 
-APIs are defined in `.proto` files and mapped to REST via gRPC-Gateway. See `proto/README.md` for conventions.
+# Build just CLI (assumes frontend already built in cli/pkg/web/embed/dist/)
+go build -o stardata cli/main.go
 
-1. Define endpoint in the relevant `.proto` file under `proto/rill/`
-2. Run `make proto.generate`
-3. Implement handler in `runtime/server/` (or `admin/server/`)
+# Run the built binary against a project
+./stardata start my-project
 
-See `runtime/README.md` for details.
+# Local development (runtime + web dev server in parallel)
+npm run dev
+# or
+npm run dev-runtime &    # Go backend on default port
+npm run dev-web -- --port 3001   # Frontend on 3001
+```
 
-Frontend API clients are auto-generated from proto definitions using **Orval**. Do not hand-edit files under `web-common/src/runtime-client/` — regenerate them instead.
+### Tests
+
+```bash
+# All Go tests
+go test ./...
+
+# Go tests with coverage
+make coverage.go
+
+# Frontend unit tests (web-common, fast)
+npm run test -w web-common
+
+# Frontend unit tests (web-admin)
+cd web-admin && npx vitest run
+
+# Frontend E2E tests (Playwright, slow)
+npm run test -w web-local
+npm run test -w web-admin
+
+# Single Playwright test
+cd web-local && npx playwright test --headed --project=e2e-chrome -g "test name"
+```
+
+### Code Generation
+
+```bash
+# Regenerate API bindings from .proto files (OpenAPI, gRPC, frontend clients)
+make proto.generate
+
+# Regenerate CLI/docs from code
+make docs.generate
+
+# Generate i18n messages (Paraglide)
+npm run build:i18n
+
+# Generate Orval API client for web-common
+npm run generate:runtime-client -w web-common
+
+# Generate Orval client for web-admin
+npm run generate:client -w web-admin
+```
+
+### Quality
+
+```bash
+# Frontend lint + format + type check
+npm run quality          # local
+npm run quality:ci       # CI mode (fails fast)
+
+# Go linting
+golangci-lint run ./path/to/package/
+
+# Auto-format
+npm run format           # frontend
+# Go: golangci-lint run --fix
+```
+
+### Clean & Setup
+
+```bash
+# Remove built dev-project
+npm run clean
+
+# Reinstall everything
+npm install && npm run build
+
+# Sync SvelteKit typegen
+npm run generate:sveltekit -w web-common
+```
+
+## Architecture Deep Dive
+
+### Backend Pipeline (Parse → Resolve → Reconcile)
+
+1. **Parser** (`runtime/parser/parser.go`): Reads YAML/SQL project files, produces `Resource` objects with specs matching `proto/rill/runtime/v1/*.proto` definitions. Each resource has a `ResourceKind` (source, model, metrics_view, explore, connector, canvas, alert, report, theme, component, api).
+2. **Resolver** (`runtime/resolver/`): Resolves cross-resource references (e.g., a model references a connector). Builds a DAG.
+3. **Reconciler** (`runtime/reconciler/`): Drives each resource to its desired state — e.g., materializing a SQL model into the OLAP engine, validating a metrics view's schema, creating a connector connection.
+4. **Drivers** (`runtime/drivers/`): Abstract OLAP engines (DuckDB, ClickHouse), connectors (file, S3, GCS, databases), and AI providers (Claude, DeepSeek). Each driver implements a standard interface.
+
+### Runtime Server
+
+The runtime exposes a gRPC server (`runtime/server/`) mapped to REST via Connect RPC. Key services include query execution, resource management, metrics view operations, and AI chat.
+
+### Frontend Architecture
+
+- **SvelteKit** apps with path aliases `@rilldata/web-*` pointing to each workspace.
+- **TanStack Query** (`@tanstack/svelte-query`) for server state fetching via auto-generated Orval clients (`web-common/src/runtime-client/`).
+- **Svelte 5** migration in progress (Svelte 4 current baseline). Svelte stores for client-side global state.
+- **Shared library** (`web-common/src/lib/`) contains utilities, formatters, i18n (Paraglide), error handling, and domain-agnostic components.
+- **Vega/Vega-Lite** for chart rendering (overridden to v6.x+ in package.json overrides).
+- **CodeMirror 6** for SQL/YAML editors.
+
+### API Definition Flow
+
+`.proto` files → `buf generate` → Connect RPC Go server + OpenAPI JSON + Orval TypeScript client → Svelte Query hooks in frontend. Never hand-edit generated files.
 
 ## Code Conventions
 
-### Go
+### Go (as defined in `.claude/rules/code-review.md` and upstream)
 
-General rules for writing Go code:
+- Uber Go style guide. Use `golangci-lint` after changes.
+- Functions sorted in call order; grouped by receiver; utilities at end.
+- Prefer `errors` from stdlib (not `pkg/errors`). Use `require.NoError` in tests.
+- Import paths use `github.com/fridencao/stardata` (fork module path).
 
-- Write Go code in the style of Uber's Go style guide.
-- Use `golangci-lint` for linting. After making Go changes, run `golangci-lint run ./path/to/package/` on the affected packages to catch issues before committing.
-- Non-trivial directories should have a `README.md`. If a directory has a README, always read it before making changes in that directory.
-- Functions should be sorted roughly in call order; functions should be grouped by receiver; plain utility functions belong towards the end of a file.
-- When adding a field to a struct or interface, don't automatically put at it at the end of the field list, instead put it where it makes the most sense (i.e. grouped with related fields and higher up than less important fields).
-- Prefer colons or semi-colons in code comments instead of hyphens or dashes. This keeps comments shorter, which makes them more readable in a monospace font.
-- Use semantic line breaks in comments: break at the end of a sentence, or after a comma, semicolon, or colon in longer sentences, rather than wrapping at a fixed column. Do not break a line mid-phrase to hit a character limit; a long line that expresses one complete thought reads better on a wide screen than an arbitrary mid-phrase wrap.
-- Before adding a dependency, check for newer major versions. Major versions 2+ require the `/vN` suffix in the import path (e.g., `go get github.com/foo/bar/v3@latest`). Without the suffix, `go get` only fetches v1.x.
-- Avoid short utility functions that are only used once; it is usually more readable to inline these in their parent function.
-- Avoid variables that only serve as aliases unless there's a large readability improvement (i.e. the expression is very long and used several times); for example, instead of `db := table.Database`, just reference `table.Database` directly.
-- Use the standard library `errors` (not `github.com/pkg/errors`).
-- Prefer `require.NoError(...)` instead of `panic` in tests.
+### Frontend (as defined in `.cursor/rules/`)
 
-Rules for contributing backend features in Rill:
+- **Svelte**: Callback props over `createDispatchEvent`. Component events handled via prop callbacks.
+- **Naming**: PascalCase Svelte components, kebab-case TS/JS files and directories.
+- **Tailwind v4**: Inline classes only — no `<style>` blocks in `.svelte` files.
+- **State**: Svelte stores for client state, TanStack Query for server state.
+- **i18n**: Paraglide-JS for internationalization. Build with `npm run build:i18n`.
 
-- See `CONTRIBUTING.md` for an overview of the various services.
-- Key concepts such as user management and provisioners are implemented in the `admin` package.
-- Key concepts such as connector drivers, reconcilers, and resolvers are implemented in the `runtime` package.
-- APIs used by the `cli/` package require long-term backwards compatibility.
+### Cursor Rules (auto-applied)
 
-### Frontend
-
-**Tech stack**: Svelte 4 (migrating to Svelte 5), TypeScript, TanStack Query, Tailwind CSS, Orval (API client generation)
-
-Frontend conventions are being formalized in `.claude/rules/frontend.md` (coming soon).
+Rules in `.cursor/rules/` are automatically loaded:
+- `codegraph.mdc` — CodeGraph MCP tool selection (always applied)
+- `svelte.mdc` — Svelte best practices for `.svelte` files
+- `naming-conventions.mdc` — File/component naming standards
+- `tailwind-v4.mdc` — Tailwind CSS v4 inline class rules
+- `frontend-development.mdc` — Component architecture, state management, API patterns
 
 ## Tool Usage
 
-- **WebFetch and WebSearch lose information.** Both tools use small models to summarize content, and they regularly drop items from long lists, tables, or dense pages. When researching reference documentation (e.g. finding all config settings, API parameters, or CLI flags matching a pattern), download the raw page and search it directly: `curl -sL 'https://...' | sed 's/<[^>]*>//g' | grep -i 'pattern'`. This ensures completeness that summarization cannot guarantee.
+- **WebFetch/WebSearch lose information** on dense pages. For reference docs, download raw and grep directly: `curl -sL 'URL' | sed 's/<[^>]*>//g' | grep -i 'pattern'`.
+- **CodeGraph MCP** (`codegraph_*` tools) provides AST-level symbol queries — prefer over grep for structural questions. See `.cursor/rules/codegraph.mdc` for full usage guide.
 
 ## Tips
 
-- **Monorepo**: Uses npm workspaces (frontend) and Go modules (backend)
-- **Path aliases**: `@rilldata/web-*` imports configured in tsconfig.json
-- **Embedded dashboards**: Explore and Canvas dashboards can be embedded in customer apps via iframe. When changing dashboard components, consider whether the change also affects the embed surface.
+- **Monorepo**: npm workspaces (frontend) + Go modules (backend). Root `package.json` coordinates workspaces: `docs`, `web-admin`, `web-common`, `web-integration`, `web-local`.
+- **Path aliases**: `@rilldata/web-local`, `@rilldata/web-common`, `@rilldata/web-admin` configured in tsconfig/vite.
+- **Dev server ports**: web-local runs on 3001, backend runtime on its own port. Use `npm run dev` to start both.
+- **Embedded dashboards**: Explore and Canvas dashboards can be embedded via iframe. Changes to dashboard components may affect both surfaces.
+- **DuckDB extension**: Custom builds live in `scripts/embed_duckdb_ext/`. Modifying DuckDB requires rebuilding the extension before `make cli`.

@@ -1,6 +1,9 @@
 <script lang="ts">
   import { beforeNavigate } from "$app/navigation";
+  import { page } from "$app/stores";
   import { onMount, tick } from "svelte";
+  import { get } from "svelte/store";
+  import type { RuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import {
     getConversationManager,
@@ -14,6 +17,9 @@
     toggleConversationSidebar,
   } from "@rilldata/web-common/features/chat/layouts/fullpage/fullpage-store";
   import { projectChat } from "@rilldata/web-common/features/project/chat-context";
+  import { eventBus } from "@rilldata/web-common/lib/event-bus/event-bus.ts";
+  import { waitUntil } from "@rilldata/web-common/lib/waitUtils.ts";
+  import { chatMounted } from "@rilldata/web-common/features/chat/layouts/sidebar/sidebar-store";
 
   const runtimeClient = useRuntimeClient();
 
@@ -32,6 +38,16 @@
   onMount(async () => {
     await tick();
     chatInputComponent?.focusInput();
+
+    // StarData: 首页推荐问题经 /chat?new=true&q=... 跳入时自动发送
+    const q = $page.url.searchParams.get("q");
+    if (q) {
+      const url = new URL($page.url);
+      url.searchParams.delete("q");
+      window.history.replaceState(window.history.state, "", url);
+      await waitUntil(() => get(chatMounted));
+      eventBus.emit("start-chat", q);
+    }
   });
 
   // Clean up conversation manager resources when leaving the chat context entirely
