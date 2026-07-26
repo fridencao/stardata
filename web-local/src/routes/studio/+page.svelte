@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { Info } from "lucide-svelte";
+  import SectionHeader from "../../features/studio/SectionHeader.svelte";
   import {
     ResourceKind,
     useFilteredResources,
@@ -46,40 +48,36 @@
   <title>StarData Studio · 概览</title>
 </svelte:head>
 
-<h2 class="text-lg font-bold text-gray-900">概览 · 配置健康度</h2>
-<p class="mt-0.5 text-[13px] text-gray-400">
-  一屏了解:业务现在能问什么,还缺什么
-</p>
+<SectionHeader title="概览" description="一屏了解:业务现在能问什么,还缺什么" />
 
 <div class="mt-5 grid grid-cols-4 gap-3">
-  <div class="rounded-xl border border-gray-200 bg-white px-4 py-4 hover:border-gray-300 transition-colors">
+  <div class="card-basic px-4 py-4">
     <a href="/studio/sources" class="block h-full">
       <div class="text-xs text-gray-500">已接入数据源</div>
       <div class="mt-1 text-2xl font-bold text-gray-900">{$connectors?.data?.connectors?.length ?? "—"}</div>
       <div class="mt-1 text-[11px] text-gray-400">在「数据源」中管理</div>
     </a>
   </div>
-  <div class="rounded-xl border border-gray-200 bg-white px-4 py-4 hover:border-gray-300 transition-colors">
+  <div class="card-basic px-4 py-4">
     <a href="/studio/semantics" class="block h-full">
       <div class="text-xs text-gray-500">语义层指标集</div>
       <div class="mt-1 text-2xl font-bold text-gray-900">{$metricsViews.data?.length ?? "—"}</div>
       <div class="mt-1 text-[11px] text-gray-400">在「语义层」中管理</div>
     </a>
   </div>
-  <div class="rounded-xl border border-gray-200 bg-white px-4 py-4">
+  <div class="card-basic px-4 py-4">
     <div class="text-xs text-gray-500">近 7 天提问命中率</div>
     <div class="mt-1 text-2xl font-bold text-gray-300">—</div>
     <div class="mt-1 text-[11px] text-gray-400">M3 接入统计</div>
   </div>
-  <div class="rounded-xl border border-gray-200 bg-white px-4 py-4">
+  <div class="card-basic px-4 py-4">
     <div class="text-xs text-gray-500">待处理需求</div>
     <div class="mt-1 text-2xl font-bold text-gray-900">{openRequestCount}</div>
     <div class="mt-1 text-[11px] text-gray-400">在「发布」页处理</div>
   </div>
 </div>
 
-<div
-  class="mt-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-[12.5px] text-blue-800"
->
-  💡 M3/4 已上线数据源管理、语义层向导、看板与钉图能力。近 7 天提问命中率仍在规划中，完整版功能可在「高级模式(IDE)」继续配置。
+<div class="mt-4 flex items-center rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-[12.5px] text-blue-800">
+  <Info class="size-4 mr-1.5 flex-shrink-0 text-blue-600" />
+  M3/4 已上线数据源管理、语义层向导、看板与钉图能力。近 7 天提问命中率仍在规划中，完整版功能可在「高级模式(IDE)」继续配置。
 </div>
