@@ -28,7 +28,7 @@
       <svelte:component this={tab.icon} class="size-4" />
       {tab.label}
       {#if isActive(tab.href, pathname)}
-        <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-primary-600" />
+        <span class="absolute bottom-0 left-0 right-0 h-[2px] bg-primary-600"></span>
       {/if}
     </a>
   {/each}

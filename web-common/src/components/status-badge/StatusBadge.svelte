@@ -4,7 +4,7 @@
 </script>
 
 <span
-  class="inline-flex items-center rounded-md font-semibold no-underline {variantClass} {sizeClass}"
+  class="inline-flex items-center rounded-md font-semibold no-underline variant-{variant} size-{size}"
 >
   <slot />
 </span>
