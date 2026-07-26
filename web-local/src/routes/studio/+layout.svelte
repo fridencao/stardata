@@ -1,10 +1,10 @@
 <script lang="ts">
-  import StudioSidebar from "../../features/studio/StudioSidebar.svelte";
+  import StudioTabs from "../../features/studio/StudioTabs.svelte";
 </script>
 
-<div class="flex h-full min-h-0 bg-gray-100">
-  <StudioSidebar />
-  <main class="min-h-0 flex-1 overflow-y-auto px-9 py-7">
+<div class="flex min-h-0 flex-col bg-app-surface">
+  <StudioTabs />
+  <main class="flex-1 overflow-y-auto p-8 xl:max-w-6xl xl:mx-auto">
     <slot />
   </main>
 </div>
