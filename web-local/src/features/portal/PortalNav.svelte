@@ -1,6 +1,9 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import { portalRole } from "./portal-role-store";
+  import { isStudioRoute } from "../../routes/route-constants";
+  import ThemeToggle from "@rilldata/web-common/features/themes/ThemeToggle.svelte";
+  import { Wrench } from "lucide-svelte";
 
   const links = [
     { label: "首页", href: "/" },
@@ -9,6 +12,7 @@
   ];
 
   $: pathname = $page.url.pathname;
+  $: showStudioLink = isStudioRoute(pathname);
 
   function isActive(href: string, path: string) {
     return href === "/" ? path === "/" : path.startsWith(href);
@@ -42,7 +46,15 @@
     {/each}
   </div>
   <div class="ml-auto flex items-center gap-3">
-    <!-- 演示级角色切换器 -->
+    {#if showStudioLink}
+      <a
+        href="/studio"
+        class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-primary-700 bg-primary-50 no-underline"
+      >
+        <Wrench class="size-4" /> 技术工作台
+      </a>
+    {/if}
+    <!-- Role switcher -->
     <div class="flex rounded-lg bg-gray-100 p-0.5 text-xs">
       <button
         class="rounded-md px-2.5 py-1 {$portalRole === 'business'
@@ -61,13 +73,6 @@
         技术视角
       </button>
     </div>
-    {#if $portalRole === "tech"}
-      <a
-        href="/studio"
-        class="flex items-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-1.5 text-[13px] text-gray-600 no-underline hover:border-primary-300"
-      >
-        🔧 技术工作台
-      </a>
-    {/if}
+    <ThemeToggle />
   </div>
 </nav>
