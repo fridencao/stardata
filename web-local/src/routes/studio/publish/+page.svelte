@@ -1,5 +1,8 @@
 <script lang="ts">
+  import { Info } from "lucide-svelte";
   import Switch from "@rilldata/web-common/components/forms/Switch.svelte";
+  import StatusBadge from "@rilldata/web-common/components/status-badge/StatusBadge.svelte";
+  import SectionHeader from "../../../features/studio/SectionHeader.svelte";
   import {
     ResourceKind,
     useFilteredResources,
@@ -80,19 +83,15 @@
   <title>StarData Studio · 发布</title>
 </svelte:head>
 
-<h2 class="text-lg font-bold text-gray-900">发布</h2>
-<p class="mt-0.5 text-[13px] text-gray-400">
-  控制哪些指标集对业务门户(推荐问题 + Chat AI)可见
-</p>
+<SectionHeader title="发布" description="控制哪些指标集对业务门户(推荐问题 + Chat AI)可见" />
 
-<div
-  class="mt-4 rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-[12.5px] text-blue-800"
->
-  💡 门控规则:项目根目录 <code>publish.yaml</code> 列出的指标集才对业务可见;
+<div class="mt-4 flex items-center rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-[12.5px] text-blue-800">
+  <Info class="size-4 mr-1.5 flex-shrink-0 text-blue-600" />
+  门控规则:项目根目录 <code>publish.yaml</code> 列出的指标集才对业务可见;
   文件不存在或名单为空时不门控(全部可见)。
 </div>
 
-<div class="mt-4 overflow-hidden rounded-xl border border-gray-200 bg-white">
+<div class="mt-4 card-basic overflow-hidden">
   <table class="w-full text-left text-[13px]">
     <thead class="border-b border-gray-200 bg-gray-50 text-xs text-gray-500">
       <tr>
@@ -123,11 +122,11 @@
           </td>
           <td class="px-4 py-3">
             {#if !row.valid}
-              <span class="rounded-md bg-red-50 px-2 py-0.5 text-[11px] font-semibold text-red-600">解析错误</span>
+              <StatusBadge variant="error">解析错误</StatusBadge>
             {:else if row.published}
-              <span class="rounded-md bg-green-50 px-2 py-0.5 text-[11px] font-semibold text-green-700">已发布</span>
+              <StatusBadge variant="success">已发布</StatusBadge>
             {:else}
-              <span class="rounded-md bg-gray-100 px-2 py-0.5 text-[11px] font-semibold text-gray-500">未发布</span>
+              <StatusBadge variant="neutral">未发布</StatusBadge>
             {/if}
           </td>
           <td class="px-4 py-3 text-right">
