@@ -78,17 +78,18 @@ export async function writeRequests(
   });
 }
 
-/** Read latest and append one open request. Strips HTML from inputs to prevent XSS. */
+/** Read latest and append one open request. HTML-encodes inputs to prevent stored XSS. */
 export async function appendRequest(
   client: RuntimeClient,
   question: string,
   note?: string,
 ): Promise<void> {
-  const stripTags = (s: string) => s.replace(/<[^>]*>/g, "");
+  const encodeHtml = (s: string) =>
+    s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   const items = await readRequests(client);
   items.push({
-    question: stripTags(question),
-    note: note?.trim() ? stripTags(note.trim()) : undefined,
+    question: encodeHtml(question),
+    note: note?.trim() ? encodeHtml(note.trim()) : undefined,
     created_at: new Date().toISOString(),
     status: "open",
   });

@@ -52,7 +52,9 @@
     return "";
   }
 
-  // Strip HTML tags from extracted user text to prevent XSS in dialog prefill.
+  // Strip HTML tags — belt-and-suspenders defense-in-depth. The value goes into a
+  // Svelte textarea (auto-escaped), but stripping removes the risk if any future
+  // consumer renders it unsafely. Also keeps follow-up-chip `title` attribute clean.
   function sanitize(text: string): string {
     return text.replace(/<[^>]*>/g, "");
   }
