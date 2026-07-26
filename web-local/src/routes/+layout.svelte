@@ -91,6 +91,11 @@
 
   $: onWelcomePage = route.id?.startsWith("/(misc)/welcome");
 
+  // 双门户自带导航壳,隐藏旧 ApplicationHeader
+  $: onPortalRoute = route.id?.startsWith("/(portal)") ?? false;
+  $: onStudioShellRoute = $page.url.pathname.startsWith("/studio");
+  $: hideLegacyHeader = onPortalRoute || onStudioShellRoute;
+
   // The login page must render without RuntimeProvider/FileAndResourceWatcher:
   // unauthenticated watcher requests would 403 and replace the page with the
   // "Error connecting to runtime" screen.
@@ -107,7 +112,7 @@
           <div
             class="body h-screen w-screen overflow-hidden absolute flex flex-col"
           >
-            {#if data.initialized && !onWelcomePage}
+            {#if data.initialized && !onWelcomePage && !hideLegacyHeader}
               <BannerCenter />
               <RepresentingUserBanner />
               <ApplicationHeader {mode} />
