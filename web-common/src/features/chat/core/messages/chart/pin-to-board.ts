@@ -43,7 +43,9 @@ export function chartSpecToCanvasItemProps(
 
   if (chartSpec.where) {
     try {
-      const expr = mapResolverExpressionToV1Expression(chartSpec.where);
+      const expr = mapResolverExpressionToV1Expression(
+        chartSpec.where as Record<string, unknown>,
+      );
       const filter = expr ? convertExpressionToFilterParam(expr) : "";
       if (filter) props.dimension_filters = filter;
     } catch {

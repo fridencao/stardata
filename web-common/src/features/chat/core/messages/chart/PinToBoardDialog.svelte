@@ -55,7 +55,9 @@
         boardName = selectedName;
       } else {
         const existing = boards.map((b) => b.meta?.name?.name ?? "");
-        boardName = getName(newBoardName.trim() || "我的看板", existing);
+        const safeName = (newBoardName.trim() || "我的看板")
+          .replace(/[^a-zA-Z0-9_一-龥]/g, "_");
+        boardName = getName(safeName, existing);
         await runtimeServicePutFile(runtimeClient, {
           path: `dashboards/${boardName}.yaml`,
           blob: newCanvasYaml(boardName, chartType, spec),
