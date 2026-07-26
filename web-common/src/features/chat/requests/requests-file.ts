@@ -78,16 +78,17 @@ export async function writeRequests(
   });
 }
 
-/** Read latest and append one open request */
+/** Read latest and append one open request. Strips HTML from inputs to prevent XSS. */
 export async function appendRequest(
   client: RuntimeClient,
   question: string,
   note?: string,
 ): Promise<void> {
+  const stripTags = (s: string) => s.replace(/<[^>]*>/g, "");
   const items = await readRequests(client);
   items.push({
-    question,
-    note: note?.trim() ? note.trim() : undefined,
+    question: stripTags(question),
+    note: note?.trim() ? stripTags(note.trim()) : undefined,
     created_at: new Date().toISOString(),
     status: "open",
   });

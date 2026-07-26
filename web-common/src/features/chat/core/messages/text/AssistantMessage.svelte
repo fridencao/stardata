@@ -30,9 +30,11 @@
   // Pre-fill: most recent user question before this AI message
   let requestOpen = false;
   $: convQuery = conversation.getConversationQuery();
-  $: defaultQuestion = findPrecedingUserQuestion(
-    $convQuery.data?.messages ?? [],
-    messageId,
+  $: defaultQuestion = sanitize(
+    findPrecedingUserQuestion(
+      $convQuery.data?.messages ?? [],
+      messageId,
+    ),
   );
 
   // Only show in local (web-local), not cloud (organization param present)
@@ -48,6 +50,11 @@
       if (messages[i].role === "user") return extractMessageText(messages[i]);
     }
     return "";
+  }
+
+  // Strip HTML tags from extracted user text to prevent XSS in dialog prefill.
+  function sanitize(text: string): string {
+    return text.replace(/<[^>]*>/g, "");
   }
 
   function askFollowUp(question: string) {
