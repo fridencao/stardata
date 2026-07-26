@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>StarData 产品方案 · 双层角色化智能 BI</title>
+<style>
+  :root{
+    --bg:#FFFFFF; --bg2:#F7F8FA; --bg3:#EEF0F4;
+    --t1:#1A1A1E; --t2:#5A5F66; --t3:#8A9099;
+    --bd:#E2E5EA; --bd2:#D2D6DD;
+    --purple:#534AB7; --purple-bg:#EEEDFE;
+    --teal:#0F6E56; --teal-bg:#E1F5EE;
+    --amber:#854F0B; --amber-bg:#FAEEDA;
+    --green:#3B6D11; --green-bg:#EAF3DE;
+    --radius:12px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg2); color:var(--t1);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+    line-height:1.7; font-size:15px;
+  }
+  .page{max-width:920px; margin:0 auto; padding:48px 32px 96px; background:var(--bg);}
+  header.doc{border-bottom:1px solid var(--bd); padding-bottom:24px; margin-bottom:36px;}
+  h1{font-size:27px; font-weight:650; margin:0 0 8px; letter-spacing:-0.3px;}
+  .sub{color:var(--t2); font-size:15px; margin:0;}
+  .meta{margin-top:14px; font-size:13px; color:var(--t3);}
+  h2{font-size:20px; font-weight:620; margin:44px 0 14px; padding-left:11px; border-left:4px solid var(--purple);}
+  h3{font-size:16px; font-weight:600; margin:26px 0 10px; color:var(--t1);}
+  p{margin:10px 0; color:#2C2E33;}
+  ul,ol{margin:10px 0; padding-left:22px;}
+  li{margin:6px 0;}
+  .lead{font-size:15.5px; color:#33363c;}
+  .diagram{background:var(--bg2); border:1px solid var(--bd); border-radius:var(--radius); padding:18px; margin:22px 0;}
+  .diagram svg{width:100%; height:auto; display:block;}
+  .callout{border:1px solid var(--bd2); background:var(--bg3); border-radius:var(--radius); padding:14px 18px; margin:18px 0; font-size:14px;}
+  .callout.purple{background:var(--purple-bg); border-color:#C9C4F0;}
+  .callout.teal{background:var(--teal-bg); border-color:#9FD9C8;}
+  .callout b{color:var(--t1);}
+  table{width:100%; border-collapse:collapse; margin:18px 0; font-size:14px;}
+  th,td{border:1px solid var(--bd); padding:9px 12px; text-align:left; vertical-align:top;}
+  th{background:var(--bg3); font-weight:600; color:var(--t1);}
+  td .tag{display:inline-block; padding:1px 8px; border-radius:999px; font-size:12px; font-weight:600;}
+  .tag.done{background:var(--green-bg); color:var(--green);}
+  .tag.part{background:var(--amber-bg); color:var(--amber);}
+  .tag.new{background:var(--purple-bg); color:var(--purple);}
+  code{background:var(--bg3); padding:1px 6px; border-radius:5px; font-size:13px; font-family:"SFMono-Regular",Consolas,monospace;}
+  .phase{display:flex; gap:10px; align-items:flex-start; padding:14px 16px; border:1px solid var(--bd); border-radius:var(--radius); margin:12px 0;}
+  .phase .no{flex:none; width:34px; height:34px; border-radius:9px; background:var(--purple); color:#fff; font-weight:700; display:flex; align-items:center; justify-content:center; font-size:15px;}
+  .phase .body{flex:1;}
+  .phase .body h4{margin:0 0 4px; font-size:15px;}
+  .phase .body p{margin:0; font-size:13.5px; color:var(--t2);}
+  .qa{margin:14px 0; padding:0 0 0 0;}
+  .qa .q{font-weight:600; color:var(--t1);}
+  .qa .a{color:var(--t2); font-size:14px; margin-top:3px;}
+  footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--bd); font-size:12.5px; color:var(--t3);}
+  .toc{background:var(--bg3); border-radius:var(--radius); padding:16px 22px; margin:24px 0; font-size:14px;}
+  .toc a{color:var(--purple); text-decoration:none;}
+  .toc a:hover{text-decoration:underline;}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="doc">
+  <h1>StarData 产品方案 · 双层角色化智能 BI</h1>
+  <p class="sub">把"工程师工具"升级为"企业产品"——业务自助问数 + 技术治理配置，由同一份语义层连接</p>
+  <div class="meta">版本 v0.1（评审稿） · 关联技术文档：<code>基于Rill的自研智能BI技术方案.html</code> · 状态：待评审，未实现</div>
+</header>
+
+<div class="toc">
+  <b>目录</b>
+  <ol style="margin:6px 0 0;">
+    <li><a href="#bg">背景与问题</a></li>
+    <li><a href="#pos">产品定位与目标角色</a></li>
+    <li><a href="#model">核心概念模型（含架构图）</a></li>
+    <li><a href="#ia">信息架构（双角色导航树）</a></li>
+    <li><a href="#ux">关键页面与交互设计</a></li>
+    <li><a href="#rbac">角色与权限模型</a></li>
+    <li><a href="#flow">发布流程与数据流</a></li>
+    <li><a href="#map">与现有资产映射</a></li>
+    <li><a href="#road">实施路线图</a></li>
+    <li><a href="#open">待确认问题</a></li>
+  </ol>
+</div>
+
+<h2 id="bg">1. 背景与问题</h2>
+<p class="lead">StarData 的能力底座已经具备：中文 Chat BI 端到端跑通（DeepSeek + 结构化答案 + 图表 + 引用 + 同比环比）、数据源接入与测试连接、指标中文别名（<code>label_cn</code>）、自托管认证。但当前的<b>界面组织仍然偏工程师</b>——配置与使用混在同一套偏技术的界面里（YAML 指标、表名、<code>/-/settings</code> 这类 dev 风格路由），业务人员一进来面对的是空白 chatbox 和一堆技术概念。</p>
+<div class="callout purple">
+  <b>核心判断：</b>问题不在"功能不够"，而在"角色没分层、语义层没产品化"。业务人员不是不能用，而是没有一条<b>为他们设计的、零配置的入口</b>。解法是把"配置"和"使用"拆成两个有清晰契约的表面，并用语义层作为两者之间的契约层。
+</div>
+
+<h2 id="pos">2. 产品定位与目标角色</h2>
+<p><b>一句话定位：</b>面向企业的"业务自助问数 + 技术治理配置"双层智能 BI——技术建好"业务数据字典"，业务对着字典用自然语言聊天。</p>
+<table>
+  <tr><th style="width:18%">角色</th><th style="width:30%">典型用户</th><th>核心诉求</th></tr>
+  <tr><td><b>业务使用者</b><br/><span class="tag done">Business</span></td><td>分析师、运营、业务线负责人、管理层</td><td>不问技术细节，只关心"我想知道什么"，要的是可信任的答案、图表、看板与预警。</td></tr>
+  <tr><td><b>技术治理者</b><br/><span class="tag new">Tech / Admin</span></td><td>数据工程师、平台 admin、IT</td><td>把数据接进来、把口径定义清楚、把指标发布出去、管好权限，让业务"问得出来、问得对"。</td></tr>
+</table>
+<div class="callout teal">
+  <b>设计原则：</b>两个角色共用<strong>同一份语义层</strong>，但看到的是<strong>两套不同的界面与心智模型</strong>。技术侧强调"治理与发布"，业务侧强调"引导与信任"。
+</div>
+
+<h2 id="model">3. 核心概念模型</h2>
+<p>三个贯穿全产品的概念，是这套方案的"骨架"：</p>
+<ul>
+  <li><b>语义层 = 业务词汇表。</b>技术定义的指标/维度，经 <code>label_cn</code> 转成业务能说的人话。这是 Chat BI 的"可用边界"，也是天然的答案护栏（只回答词汇表内的事）。</li>
+  <li><b>发布门控（Publish Gateway）。</b>指标默认是<em>草稿</em>，技术点"发布"后才对业务可见。既避免业务问到半成品，也给了技术清晰的"交付"动作。</li>
+  <li><b>需求回流（Demand Backflow）。</b>业务问了词汇表没覆盖的东西，系统不报冷错，而是"已向管理员发起配置请求"，把需求自动回流成技术的待办。</li>
+</ul>
+
+<div class="diagram">
+<svg viewBox="0 0 680 500" width="100%" role="img">
+  <title>StarData two-layer product model</title>
+  <desc>Two roles share one semantic layer: tech workbench configures and publishes; business asks in natural language.</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+  </defs>
+  <text x="340" y="32" text-anchor="middle" font-size="14" font-weight="500" fill="#2C2C2A" font-family="sans-serif">StarData 双层产品模型</text>
+  <text x="340" y="52" text-anchor="middle" font-size="12" fill="#5F5E5A" font-family="sans-serif">两个角色，一个语义层契约</text>
+  <g>
+    <rect x="44" y="80" width="278" height="256" rx="16" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+    <text x="183" y="108" text-anchor="middle" font-size="14" font-weight="500" fill="#26215C" font-family="sans-serif">技术工作台</text>
+    <text x="183" y="128" text-anchor="middle" font-size="12" fill="#534AB7" font-family="sans-serif">Tech / Admin</text>
+    <circle cx="68" cy="160" r="3" fill="#534AB7"/>
+    <text x="84" y="164" font-size="13" fill="#444441" font-family="sans-serif">数据源接入 (#36 已完成)</text>
+    <circle cx="68" cy="202" r="3" fill="#534AB7"/>
+    <text x="84" y="206" font-size="13" fill="#444441" font-family="sans-serif">语义层定义 (label_cn)</text>
+    <circle cx="68" cy="244" r="3" fill="#534AB7"/>
+    <text x="84" y="248" font-size="13" fill="#444441" font-family="sans-serif">指标发布 · 门控</text>
+    <circle cx="68" cy="286" r="3" fill="#534AB7"/>
+    <text x="84" y="290" font-size="13" fill="#444441" font-family="sans-serif">权限 · 成员 (OIDC)</text>
+  </g>
+  <g>
+    <rect x="358" y="80" width="278" height="256" rx="16" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+    <text x="497" y="108" text-anchor="middle" font-size="14" font-weight="500" fill="#04342C" font-family="sans-serif">业务智能问数</text>
+    <text x="497" y="128" text-anchor="middle" font-size="12" fill="#0F6E56" font-family="sans-serif">Business ask</text>
+    <circle cx="382" cy="160" r="3" fill="#0F6E56"/>
+    <text x="398" y="164" font-size="13" fill="#444441" font-family="sans-serif">进入即 Chat BI</text>
+    <circle cx="382" cy="202" r="3" fill="#0F6E56"/>
+    <text x="398" y="206" font-size="13" fill="#444441" font-family="sans-serif">引导式提问 (推荐)</text>
+    <circle cx="382" cy="244" r="3" fill="#0F6E56"/>
+    <text x="398" y="248" font-size="13" fill="#444441" font-family="sans-serif">自动图表 + 中文解读</text>
+    <circle cx="382" cy="286" r="3" fill="#0F6E56"/>
+    <text x="398" y="290" font-size="13" fill="#444441" font-family="sans-serif">保存 · 共享看板</text>
+  </g>
+  <g>
+    <rect x="44" y="372" width="592" height="96" rx="16" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+    <text x="340" y="400" text-anchor="middle" font-size="14" font-weight="500" fill="#2C2C2A" font-family="sans-serif">语义层 = 业务词汇表（发布门控）</text>
+    <text x="340" y="422" text-anchor="middle" font-size="12" fill="#5F5E5A" font-family="sans-serif">已发布指标集驱动业务提问，草稿仅技术可见</text>
+    <rect x="150" y="440" width="96" height="20" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+    <text x="198" y="453" text-anchor="middle" font-size="11" fill="#27500A" font-family="sans-serif">已发布 可见</text>
+    <rect x="434" y="440" width="96" height="20" rx="6" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+    <text x="482" y="453" text-anchor="middle" font-size="11" fill="#633806" font-family="sans-serif">草稿 内部</text>
+  </g>
+  <path d="M183 336 L183 369" fill="none" stroke="#534AB7" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="194" y="358" font-size="12" fill="#534AB7" font-family="sans-serif">发布</text>
+  <path d="M497 369 L497 336" fill="none" stroke="#0F6E56" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="508" y="358" font-size="12" fill="#0F6E56" font-family="sans-serif">驱动</text>
+  <path d="M354 210 L328 210" fill="none" stroke="#888780" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+  <text x="341" y="200" text-anchor="middle" font-size="11" fill="#5F5E5A" font-family="sans-serif">需求回流</text>
+</svg>
+</div>
+
+<h2 id="ia">4. 信息架构（双角色导航树）</h2>
+<p>建议采用<b>同一应用、按角色切换导航与首页</b>（而非独立 portal），降低基础设施成本，也契合 StarData 当前单应用的形态。登录后按 OIDC group/role 决定默认落地页与可见导航。</p>
+<h3>4.1 技术工作台 <span class="tag new">Tech</span></h3>
+<pre style="background:var(--bg3);border-radius:10px;padding:14px 18px;font-size:13.5px;line-height:1.8;overflow:auto;"><code>工作台 / (默认落地)
+├─ 概览          配置健康度："业务现在能问什么"
+├─ 数据源         连接器列表 · 新增 · 测试连接 (#36 已落地)
+├─ 语义层 / 指标   指标与维度定义（可视化编辑器，替代手写 YAML）
+├─ 发布管理       草稿 → 已发布 · 版本 · 回滚
+└─ 成员与权限      OIDC 用户/组 · 角色分配</code></pre>
+<h3>4.2 业务智能问数 <span class="tag done">Business</span></h3>
+<pre style="background:var(--bg3);border-radius:10px;padding:14px 18px;font-size:13.5px;line-height:1.8;overflow:auto;"><code>智能问数 / (默认落地)
+├─ 首页           推荐问题 · 我的看板 · 团队共享 · 最近
+├─ 对话           Chat BI（结构化答案卡 + 追问 + 下钻）
+├─ 我的看板       保存的问答 / 看板卡片
+└─ 订阅与预警     周期推送 · 阈值告警</code></pre>
+
+<h2 id="ux">5. 关键页面与交互设计</h2>
+
+<h3>5.1 业务首页（零空白页进场）</h3>
+<p>最大的劝退点是空白 chatbox。业务首页分三块：</p>
+<ul>
+  <li><b>为你推荐的问题</b>：从<em>已发布指标</em>反推。例如已发布「销售额 / 订单量」→ 建议"本月销售额同比如何？""各区域订单量排名？"</li>
+  <li><b>我的看板 / 团队共享</b>：同事或自己保存的问答卡片墙，点开即续聊。</li>
+  <li><b>最近与热门</b>：部门内高频问题，降低"从零开始"的焦虑。</li>
+</ul>
+<div class="callout teal"><b>复用：</b>已有的结构化答案（summary/body/insights/followUps/charts）与追问 chips（#25）直接作为对话页核心；首页只是它的"引导外壳"。</div>
+
+<h3>5.2 对话页（Chat BI）</h3>
+<ul>
+  <li>答案卡：结构化 JSON 渲染为「摘要 + 正文 + 洞察 + 图表 + 引用」。</li>
+  <li>追问 chips：点选即续问（已建）。</li>
+  <li>下钻："解释这个数字""为什么下降"→ 触发同语义层内的根因探索。</li>
+  <li>口径透明：每答案附"统计口径说明 + 数据更新时间"，建立信任。</li>
+  <li>未覆盖兜底：词汇表外的提问 → 友好提示 + 自动发起配置请求（见 3 需求回流）。</li>
+</ul>
+
+<h3>5.3 技术概览（配置健康度）</h3>
+<p>一屏告诉技术："现在业务能问什么、还缺什么"。指标包括：已接入数据源数、已发布指标数、近 7 天业务提问命中率、未覆盖提问 Top N（= 需求回流输入）。这是技术与业务之间的"状态面板"。</p>
+
+<h3>5.4 语义层可视化编辑器</h3>
+<p>替代部分手写 YAML，降低非 Rill 专家技术的门槛：选数据源 → 自动探测表/字段 → 勾选要暴露的指标 → 填中文名（<code>label_cn</code>）→ 设口径与单位 → 存为草稿。<b>这里生成的仍是底层 metrics YAML，只是给了一层可视外壳。</b></p>
+
+<h3>5.5 发布管理与需求回流面板</h3>
+<ul>
+  <li><b>发布：</b>草稿 → 已发布，支持版本与回滚；发布后业务词汇表即时更新。</li>
+  <li><b>需求回流：</b>业务问不到的问题在此聚合成待办列表，技术一键"去定义"跳转编辑器，定义完发布即闭环。</li>
+</ul>
+
+<h2 id="rbac">6. 角色与权限模型</h2>
+<table>
+  <tr><th style="width:22%">能力</th><th style="width:30%">业务使用者</th><th>技术治理者</th></tr>
+  <tr><td>问数 / 看板 / 订阅</td><td>✅ 仅基于已发布指标</td><td>✅</td></tr>
+  <tr><td>数据源 / 语义层 / 发布</td><td>🚫 不可见</td><td>✅</td></tr>
+  <tr><td>成员与权限</td><td>🚫</td><td>✅（admin）</td></tr>
+  <tr><td>发起配置请求</td><td>✅（需求回流）</td><td>✅ 接收并处理</td></tr>
+</table>
+<p>同一账号可同时具多角色（按 OIDC group 映射）。Phase 1 已规划 Keycloak/OIDC，本方案直接复用其 group/role 作为角色来源。</p>
+
+<h2 id="flow">7. 发布流程与数据流</h2>
+<pre style="background:var(--bg3);border-radius:10px;padding:14px 18px;font-size:13.5px;line-height:2;overflow:auto;"><code>技术侧：  接入数据源 → 定义指标(草稿) → 测试连接(#36) → 发布 ─┐
+                                                              ↓
+语义层：  业务词汇表（已发布指标集）◀── 发布门控 ◀──────────┘
+                                                              ↓ 驱动
+业务侧：  首页推荐问题 → 对话问数 → 图表/洞察/引用 → 保存看板/订阅
+                                                              ↓ 未覆盖
+需求回流：业务提问未命中 → 自动配置请求 → 技术待办 → 定义并发布 → 闭环</code></pre>
+
+<h2 id="map">8. 与现有资产映射</h2>
+<table>
+  <tr><th style="width:30%">现有能力（已实现）</th><th style="width:14%">状态</th><th>在方案中的落点</th></tr>
+  <tr><td>Chat BI 端到端（DeepSeek）</td><td><span class="tag done">已落地</span></td><td>业务对话页核心引擎</td></tr>
+  <tr><td>结构化答案（JSON + 图表 + 引用 + 环比）</td><td><span class="tag done">已落地</span></td><td>业务答案卡渲染</td></tr>
+  <tr><td>指标中文别名 <code>label_cn</code></td><td><span class="tag done">已落地</span></td><td>语义层 = 业务词汇表的种子</td></tr>
+  <tr><td>数据源接入 + TestConnection</td><td><span class="tag done">已落地</span></td><td>技术工作台「数据源」页</td></tr>
+  <tr><td>自托管认证 / OIDC 规划</td><td><span class="tag part">部分</span></td><td>角色与权限模型基础</td></tr>
+  <tr><td>双角色导航 / 首页引导</td><td><span class="tag new">待建</span></td><td>信息架构切换（同 app 内）</td></tr>
+  <tr><td>发布门控（草稿/已发布）</td><td><span class="tag new">待建</span></td><td>语义层状态 + 发布管理页</td></tr>
+  <tr><td>语义层可视化编辑器</td><td><span class="tag new">待建</span></td><td>替代部分手写 YAML 的外壳</td></tr>
+  <tr><td>需求回流面板</td><td><span class="tag new">待建</span></td><td>业务↔技术闭环</td></tr>
+  <tr><td>看板 / 订阅 / 预警</td><td><span class="tag new">待建</span></td><td>业务侧留存与主动推送</td></tr>
+</table>
+
+<h2 id="road">9. 实施路线图</h2>
+<div class="phase"><div class="no">A</div><div class="body"><h4>信息架构与角色切换（低成本、高感知）</h4><p>同 app 内按角色切换导航与默认落地页；业务默认进「智能问数」，技术默认进「工作台」。复用现有路由，主要是导航壳与首页分流。</p></div></div>
+<div class="phase"><div class="no">B</div><div class="body"><h4>业务首页引导 + 发布门控</h4><p>业务首页三块（推荐/看板/最近）；指标加 draft/published 状态与发布动作；首页推荐问题由已发布指标反推。</p></div></div>
+<div class="phase"><div class="no">C</div><div class="body"><h4>语义层可视化编辑器（接入向导）</h4><p>选数据源 → 探测字段 → 勾选指标 → 填中文名 → 存草稿。可视化外壳生成底层 YAML。</p></div></div>
+<div class="phase"><div class="no">D</div><div class="body"><h4>需求回流 + 看板/订阅/预警</h4><p>未覆盖提问聚合成技术待办；业务可保存看板、订阅周期推送、设阈值告警。</p></div></div>
+
+<h2 id="open">10. 待确认问题</h2>
+<div class="qa">
+  <div class="q">Q1. 两个角色是同一 app 内切换，还是独立 portal？</div>
+  <div class="a">本方案默认"同 app 内角色切换"（低成本），但独立 portal 在重度隔离场景更干净，需定。</div>
+  <div class="q">Q2. 业务侧是否严格限定"仅已发布指标可问"，还是允许试探未发布？</div>
+  <div class="a">建议默认严格限定（护栏 + 需求回流），但可配置为宽松模式。</div>
+  <div class="q">Q3. 看板 / 订阅的存储与权限粒度？</div>
+  <div class="a">个人 vs 团队共享、组织级可见性，影响存储模型，需与 Phase 3 运维方向对齐。</div>
+  <div class="q">Q4. 是否需要多组织 / 多空间（workspace）？</div>
+  <div class="a">若面向多租户企业客户则需，单组织内可暂不。</div>
+</div>
+
+<footer>
+  StarData 产品评审稿 v0.1 · 本文件为方案讨论用，未纳入代码提交。实施前请以本稿第 10 节确认项为准。<br/>
+  关联：<code>基于Rill的自研智能BI技术方案.html</code> · 项目记忆 <code>.workbuddy/memory/</code>
+</footer>
+
+</div>
+</body>
+</html>

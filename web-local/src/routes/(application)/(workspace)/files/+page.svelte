@@ -2,7 +2,7 @@
   import { GeneratingMessage } from "@rilldata/web-common/components/generating-message";
   import { generatingSampleData } from "@rilldata/web-common/features/sample-data/generate-sample-data.ts";
   import OnboardingWorkspace from "@rilldata/web-common/features/onboarding/OnboardingWorkspace.svelte";
-  import type { LayoutData } from "../$types";
+  import type { LayoutData } from "../../$types";
 
   export let data: LayoutData;
 </script>
