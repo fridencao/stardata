@@ -16,7 +16,6 @@
     errorEventHandler,
     initMetrics,
   } from "@rilldata/web-common/metrics/initMetrics";
-  import { isDeployPage } from "@rilldata/web-common/layout/navigation/route-utils";
   import { previewModeStore } from "@rilldata/web-common/layout/preview-mode-store";
   import { LOCAL_HOST, LOCAL_INSTANCE_ID } from "../lib/runtime-client";
   import { getStardataToken } from "@rilldata/web-common/runtime-client/auth-token";
@@ -26,12 +25,7 @@
   import { onMount } from "svelte";
   import * as Tooltip from "@rilldata/web-common/components/tooltip-v2";
   import type { LayoutData } from "./$types";
-  import PreviewModeNav from "../features/preview/PreviewModeNav.svelte";
-  import {
-    isPreviewRoute,
-    isDeveloperRoute,
-    showPreviewNav,
-  } from "./route-constants";
+  import { isPortalRoute, isStudioRoute } from "./route-constants";
   import "@rilldata/web-common/app.css";
 
   export let data: LayoutData;
@@ -44,15 +38,15 @@
 
   // Preview mode store sync:
   // 1. Backend lock: if --preview flag is set, always true
-  // 2. URL-derived: preview routes (/dashboards, /ai, /status) → true,
-  //    developer routes (/, /files) → false
+  // 2. URL-derived: portal routes (/, /chat, /boards) → true,
+  //    studio routes (/studio, /files, ...) → false
   // 3. Preserved: shared routes (/explore, /canvas, /deploy) keep previous value
   $: {
     if (data.previewMode) {
       previewModeStore.set(true);
-    } else if (isPreviewRoute($page.url.pathname)) {
+    } else if (isPortalRoute($page.url.pathname)) {
       previewModeStore.set(true);
-    } else if (isDeveloperRoute($page.url.pathname)) {
+    } else if (isStudioRoute($page.url.pathname)) {
       previewModeStore.set(false);
     }
   }
@@ -91,13 +85,9 @@
   const authToken = getStardataToken() ?? undefined;
 
   $: ({ route } = $page);
-  $: onDeployPage = isDeployPage($page);
   $: isPreviewMode = $previewModeStore;
 
   $: mode = isPreviewMode ? "Preview" : "Developer";
-
-  $: shouldShowPreviewNav =
-    isPreviewMode && showPreviewNav($page.url.pathname) && !onDeployPage;
 
   $: onWelcomePage = route.id?.startsWith("/(misc)/welcome");
 
@@ -121,9 +111,6 @@
               <BannerCenter />
               <RepresentingUserBanner />
               <ApplicationHeader {mode} />
-              {#if shouldShowPreviewNav}
-                <PreviewModeNav />
-              {/if}
               {#if $deploy}
                 <RemoteProjectManager />
               {/if}

@@ -19,10 +19,7 @@ import {
 import { ConnectError, Code } from "@connectrpc/connect";
 import { eventBus } from "@rilldata/web-common/lib/event-bus/event-bus";
 import { getLocalRuntimeClient } from "../lib/runtime-client";
-import {
-  DEVELOPER_ALLOWED_PREFIXES,
-  PREVIEW_ALLOWED_PREFIXES,
-} from "./route-constants";
+import { PORTAL_ALLOWED_PREFIXES } from "./route-constants";
 import { Settings } from "luxon";
 import { RuntimeFileIO } from "@rilldata/web-common/features/entity-management/file-io.ts";
 
@@ -70,26 +67,15 @@ export async function load({ url, depends, untrack, route }) {
   // client-side navigation, causing unnecessary data refetches and UI flicker.
   untrack(() => {
     if (previewMode) {
-      // Preview mode: only allow preview-related and shared routes
-      const isAllowed = PREVIEW_ALLOWED_PREFIXES.some((prefix) =>
-        url.pathname.startsWith(prefix),
-      );
-      if (!isAllowed) {
-        eventBus.emit("notification", {
-          message: "This page is only available in Developer mode",
-        });
-        throw redirect(303, "/dashboards");
-      }
-    } else {
-      // Developer mode: block preview-exclusive routes
+      // --preview 锁定:仅允许业务门户与共享路由
       const isAllowed =
         url.pathname === "/" ||
-        DEVELOPER_ALLOWED_PREFIXES.some((prefix) =>
+        PORTAL_ALLOWED_PREFIXES.some((prefix) =>
           url.pathname.startsWith(prefix),
         );
       if (!isAllowed) {
         eventBus.emit("notification", {
-          message: "This page is only available in Preview mode",
+          message: "此页面在预览模式下不可用",
         });
         throw redirect(303, "/");
       }
@@ -130,16 +116,16 @@ export async function load({ url, depends, untrack, route }) {
   );
   const redirectPath = firstDashboardFile
     ? `/files${firstDashboardFile?.path}`
-    : "/";
+    : "/files";
 
   let initialized = !!files.files?.some(({ path }) => path === "/rill.yaml");
 
   const trackedRedirectPath = untrack(() => {
     if (!url.searchParams.get("redirect")) return false;
 
-    // In preview mode, redirect to /dashboards instead of /files
+    // --preview 锁定模式下登录后落到业务首页
     if (previewMode) {
-      return url.pathname !== "/dashboards" && "/dashboards";
+      return url.pathname !== "/" && "/";
     }
 
     return url.pathname !== redirectPath && redirectPath;
