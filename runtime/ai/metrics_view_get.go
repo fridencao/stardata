@@ -77,6 +77,11 @@ func (t *GetMetricsView) Handler(ctx context.Context, args *GetMetricsViewArgs) 
 		return nil, fmt.Errorf("metrics view %q is invalid", args.MetricsView)
 	}
 
+	// StarData publish gate: block direct access to unpublished metrics views.
+	if pub, gated := publishedMetricsViews(ctx, t.Runtime, session.InstanceID()); gated && !pub[args.MetricsView] {
+		return nil, fmt.Errorf("metrics view %q is not published", args.MetricsView)
+	}
+
 	specJSON, err := protojson.Marshal(r.GetMetricsView().State.ValidSpec)
 	if err != nil {
 		return nil, err

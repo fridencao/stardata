@@ -93,6 +93,9 @@ func (t *ListMetricsViews) Handler(ctx context.Context, args *ListMetricsViewsAr
 
 	res := make(map[string]any)
 
+	// StarData publish gate: when /publish.yaml lists metrics views, only those are exposed to the LLM.
+	published, gated := publishedMetricsViews(ctx, t.Runtime, session.InstanceID())
+
 	// Find instance-wide AI context and add it to the response.
 	// NOTE: These arguably belong in the top-level instructions or other metadata, but that doesn't currently support dynamic values.
 	instance, err := t.Runtime.Instance(ctx, session.InstanceID())
@@ -107,6 +110,10 @@ func (t *ListMetricsViews) Handler(ctx context.Context, args *ListMetricsViewsAr
 	for _, r := range rs {
 		mv := r.GetMetricsView()
 		if mv == nil || mv.State.ValidSpec == nil {
+			continue
+		}
+
+		if gated && !published[r.Meta.Name.Name] {
 			continue
 		}
 
