@@ -10,7 +10,6 @@ import {
 } from "@rilldata/web-admin/client";
 import { eventBus } from "@rilldata/web-common/lib/event-bus/event-bus.ts";
 import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
-import { triggerWelcomeToStarDataDialog } from "@rilldata/web-admin/features/billing/plans/utils.ts";
 import { invalidateBillingInfo } from "@rilldata/web-admin/features/billing/invalidations.ts";
 import { page } from "$app/stores";
 import { get } from "svelte/store";
@@ -49,7 +48,6 @@ export async function upgradeToPlan(
     await adminServiceUpdateBillingSubscription(org, {
       planName,
     });
-    triggerWelcomeToStarDataDialog(planName);
   }
   void invalidateBillingInfo(org);
   if (redirect) {

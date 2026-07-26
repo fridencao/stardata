@@ -1,7 +1,6 @@
 import { formatMemorySize } from "@rilldata/web-common/lib/number-formatting/memory-size";
 import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 import { DateTime } from "luxon";
-import { writable } from "svelte/store";
 import { V1BillingPlanType } from "@rilldata/web-admin/client";
 
 export function formatUsageVsQuota(
@@ -83,16 +82,6 @@ export function getSubscriptionResumedText(endDate: string) {
   return m.billing_on_date({
     date: resumeDate.toLocaleString(DateTime.DATE_MED),
   });
-}
-
-// Since this could be triggered in a route that could be navigated from,
-// we add a global and show it in org route's layout
-export const showWelcomeToStarDataDialog = writable(false);
-export const showWelcomeToStarDataDialogForPlan = writable("");
-
-export function triggerWelcomeToStarDataDialog(planName: string) {
-  showWelcomeToStarDataDialog.set(true);
-  showWelcomeToStarDataDialogForPlan.set(planName);
 }
 
 export function formatCredit(credits: number): string {
