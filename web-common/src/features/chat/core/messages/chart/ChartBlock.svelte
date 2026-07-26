@@ -15,9 +15,11 @@
   import { createRuntimeServiceGetInstance } from "@rilldata/web-common/runtime-client";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import { readable } from "svelte/store";
+  import Button from "@rilldata/web-common/components/button/Button.svelte";
   import type { V1Tool } from "../../../../../runtime-client";
   import ToolCall from "../tools/ToolCall.svelte";
   import type { ChartBlock } from "./chart-block";
+  import PinToBoardDialog from "./PinToBoardDialog.svelte";
 
   export let block: ChartBlock;
   export let tools: V1Tool[] | undefined = undefined;
@@ -27,6 +29,10 @@
   // Page params for chart
   $: organization = $page.params.organization;
   $: project = $page.params.project;
+
+  // Pin-to-board guard: only show in local (web-local), not cloud (organization param present)
+  let pinOpen = false;
+  $: canPin = !organization;
 
   // Cast chartSpec to any for property access (type comes from parsed JSON)
   $: chartSpec = block.chartSpec as any;
@@ -105,6 +111,16 @@
 </script>
 
 <div class="chart-block">
+  {#if canPin}
+    <div class="flex justify-end pb-1">
+      <Button type="tertiary" onClick={() => (pinOpen = true)}>📌 钉到看板</Button>
+    </div>
+    <PinToBoardDialog
+      bind:open={pinOpen}
+      chartType={block.chartType}
+      chartSpec={block.chartSpec}
+    />
+  {/if}
   <ToolCall
     message={block.message}
     resultMessage={block.resultMessage}
