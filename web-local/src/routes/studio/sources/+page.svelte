@@ -3,6 +3,8 @@
   import ConnectorExplorer from "@rilldata/web-common/features/connectors/explorer/ConnectorExplorer.svelte";
   import { ConnectorExplorerStore } from "@rilldata/web-common/features/connectors/explorer/connector-explorer-store";
   import { getAnalyzedConnectors } from "@rilldata/web-common/features/connectors/selectors";
+  import StatusBadge from "@rilldata/web-common/components/status-badge/StatusBadge.svelte";
+  import SectionHeader from "../../../features/studio/SectionHeader.svelte";
   import { BehaviourEventMedium } from "@rilldata/web-common/metrics/service/BehaviourEventTypes";
   import {
     MetricsEventScreenName,
@@ -29,28 +31,25 @@
 </svelte:head>
 
 <div class="flex items-start justify-between">
-  <div>
-    <h2 class="text-lg font-bold text-gray-900">数据源</h2>
-    <p class="mt-0.5 text-[13px] text-gray-400">
-      已接入连接器 · 向导式新增 · 表结构浏览
-    </p>
-  </div>
-  <button
-    class="rounded-lg bg-primary-600 px-4 py-2 text-[13px] font-semibold text-white hover:bg-primary-700"
-    on:click={() => (addDataOpen = true)}
-  >
-    ＋ 新增数据源
-  </button>
+  <SectionHeader title="数据源" description="已接入连接器 · 向导式新增 · 表结构浏览">
+    <button
+      slot="actions"
+      class="rounded-lg bg-primary-600 px-4 py-2 text-[13px] font-semibold text-white hover:bg-primary-700"
+      on:click={() => (addDataOpen = true)}
+    >
+      ＋ 新增数据源
+    </button>
+  </SectionHeader>
 </div>
 
 {#if $connectors.data?.connectors?.length}
   <div class="mt-5 grid grid-cols-3 gap-3">
     {#each $connectors.data.connectors as connector (connector.name)}
-      <div class="rounded-xl border border-gray-200 bg-white px-4 py-4">
+      <div class="card-basic px-4 py-4">
         <div class="flex items-center justify-between">
           <div class="font-semibold text-gray-900">{connector.name}</div>
           {#if connector.driver?.implementsOlap}
-            <span class="rounded-md bg-primary-50 px-1.5 py-0.5 text-[10.5px] font-semibold text-primary-700">OLAP</span>
+            <StatusBadge variant="info" size="sm">OLAP</StatusBadge>
           {/if}
         </div>
         <div class="mt-1 text-[12px] text-gray-500">
@@ -62,13 +61,13 @@
 {:else if $connectors.isLoading}
   <p class="mt-5 text-sm text-gray-400">正在分析连接器…</p>
 {:else}
-  <div class="mt-5 rounded-xl border border-dashed border-gray-300 bg-white py-10 text-center text-sm text-gray-500">
+  <div class="mt-5 card-hero py-10 text-center text-sm text-gray-500">
     还没有接入数据源，点击右上角「新增数据源」开始
   </div>
 {/if}
 
-<h3 class="mt-8 text-sm font-bold text-gray-700">表浏览</h3>
-<div class="mt-2 overflow-hidden rounded-xl border border-gray-200 bg-white">
+<h3 class="mt-8 text-lg font-bold text-fg-primary">表浏览</h3>
+<div class="mt-2 card-basic overflow-hidden">
   <div class="bg-white p-2">
     <ConnectorExplorer store={explorerStore} />
   </div>
