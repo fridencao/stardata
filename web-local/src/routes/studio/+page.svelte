@@ -4,6 +4,7 @@
     useFilteredResources,
   } from "@rilldata/web-common/features/entity-management/resource-selectors";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
+  import { getAnalyzedConnectors } from "@rilldata/web-common/features/connectors/selectors";
   import {
     UNGATED,
     parsePublishYaml,
@@ -13,6 +14,7 @@
   const client = useRuntimeClient();
   const publishFile = usePublishFile(client);
   const metricsViews = useFilteredResources(client, ResourceKind.MetricsView);
+  const connectors = getAnalyzedConnectors(client, false);
 
   $: gate = $publishFile.isSuccess
     ? parsePublishYaml(String($publishFile.data?.blob ?? ""))
@@ -35,15 +37,19 @@
 </p>
 
 <div class="mt-5 grid grid-cols-4 gap-3">
-  <div class="rounded-xl border border-gray-200 bg-white px-4 py-4">
-    <div class="text-xs text-gray-500">已接入数据源</div>
-    <div class="mt-1 text-2xl font-bold text-gray-300">—</div>
-    <div class="mt-1 text-[11px] text-gray-400">在「数据源」中管理</div>
+  <div class="rounded-xl border border-gray-200 bg-white px-4 py-4 hover:border-gray-300 transition-colors">
+    <a href="/studio/sources" class="block h-full">
+      <div class="text-xs text-gray-500">已接入数据源</div>
+      <div class="mt-1 text-2xl font-bold text-gray-900">{$connectors?.data?.connectors?.length ?? "—"}</div>
+      <div class="mt-1 text-[11px] text-gray-400">在「数据源」中管理</div>
+    </a>
   </div>
-  <div class="rounded-xl border border-gray-200 bg-white px-4 py-4">
-    <div class="text-xs text-gray-500">已发布指标集</div>
-    <div class="mt-1 text-2xl font-bold text-gray-900">{publishedCount}</div>
-    <div class="mt-1 text-[11px] text-gray-400">在「发布」中管理</div>
+  <div class="rounded-xl border border-gray-200 bg-white px-4 py-4 hover:border-gray-300 transition-colors">
+    <a href="/studio/semantics" class="block h-full">
+      <div class="text-xs text-gray-500">语义层指标集</div>
+      <div class="mt-1 text-2xl font-bold text-gray-900">{$metricsViews.data?.length ?? "—"}</div>
+      <div class="mt-1 text-[11px] text-gray-400">在「语义层」中管理</div>
+    </a>
   </div>
   <div class="rounded-xl border border-gray-200 bg-white px-4 py-4">
     <div class="text-xs text-gray-500">近 7 天提问命中率</div>
