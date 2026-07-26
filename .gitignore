@@ -121,4 +121,7 @@ stardata
 .codegraph/
 .cursor/
 .omo/run-continuation/
+.superpowers/
+docs/superpowers/
+logs/
 
