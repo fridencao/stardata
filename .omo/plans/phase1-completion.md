@@ -4,7 +4,45 @@
 
 **Goal:** Complete all Phase 1 items to reach "私有化部署就绪" milestone
 
-**Current Status:** Phase 1.2 (部署配置) mostly done, Phase 1.3 (品牌) partial, Phase 1.1 (认证) not started, Phase 1.4 (多租户) deferred
+**Current Status:** Phase 1.2 (部署配置) done, Phase 1.3 (品牌) done, Phase 1.1 (认证) not started in this plan, Phase 1.4 (多租户) deferred
+
+---
+
+## M1 (Dual Portal 双门户骨架) — Completed ✅
+
+> **Plan file**: `docs/superpowers/plans/2026-07-26-dual-portal-m1-skeleton.md`
+> **Branch**: `feature/dual-portal-m1` | **Status**: All 11 tasks done, build green, E2E fixture adapted
+
+### Chunk 1: 路由基座与业务门户
+| Task | Step | Status | Commit |
+|------|------|--------|--------|
+| Task 1: 建分支 | git checkout -b feature/dual-portal-m1 | ✅ | — |
+| Task 2: IDE 首页移至 /files | 创建 files/+page.svelte，删除旧 +page.svelte | ✅ | 6e7831049 |
+| Task 3: 路由常量重定义 | 重写 route-constants.ts，更新 +layout.ts | ✅ | e4b6e9d82 |
+| Task 4: 角色 store + PortalNav | 创建 portal-role-store.ts + PortalNav.svelte | ✅ | e5c54a1c0 |
+| Task 5: 业务门户壳+首页 | 创建 (portal)/+layout.svelte + +page.svelte | ✅ | 9970fb9c7 |
+| Task 6: /ai → /chat 迁移+301 | 移动目录，更新路径引用，创建重定向桩 | ✅ | befac2531 + c04069d50 |
+| Task 7: /boards 页+ /dashboards 301 | 创建 boards/+page.svelte，更新所有路由链接 | ✅ | c3d60c02f |
+
+### Chunk 2: Studio 壳、根布局收口与验证
+| Task | Step | Status | Commit |
+|------|------|--------|--------|
+| Task 8: Studio 壳 | 创建 StudioSidebar + studio/* 占位页 | ✅ | c06ec3b64 |
+| Task 9: 根布局收口 | 隐藏旧 ApplicationHeader，删除 PreviewModeNav | ✅ | 5092781ea |
+| Task 10: 回归验证 | npm run check ✅, npm run build ✅, E2E fixture 适配 (`/files` 入口, `../stardata` 二进制) | ✅ | 51303bd5b |
+| Task 11: 收尾 | 分支待审阅合入 | ⏳ | — |
+
+### Markers
+- ✅ `/` 显示业务门户首页 + 导航
+- ✅ `/files` 显示原 IDE
+- ✅ `/chat` 可用且旧 `/ai` 301
+- ✅ `/boards` 看板页正常且旧 `/dashboards` 301
+- ✅ `/studio` 可访问含侧边栏和占位页
+- ✅ 角色切换器 localStorage 持久化
+- ✅ 旧路由 (`/ai`, `/dashboards`) 均 301 到位
+- ✅ `npm run check -w web-local` → 0 errors
+- ✅ `npm run build -w web-local` → 成功
+- ✅ E2E fixture 已适配 `await page.goto(…/files)` 和 `spawn("../stardata")`
 
 **Tech Stack:** Go + Svelte + TypeScript + Docker Compose
 
