@@ -1,3 +1,42 @@
+<script lang="ts">
+  import { ResourceKind, useFilteredResources } from "@rilldata/web-common/features/entity-management/resource-selectors";
+  import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
+  import { generateRecommendedQuestions } from "../../features/portal/home/recommended-questions";
+  import { portalRole } from "../../features/portal/portal-role-store";
+  import { UNGATED, parsePublishYaml, usePublishFile } from "../../features/portal/publish/publish-store";
+
+  const client = useRuntimeClient();
+  const publishFile = usePublishFile(client);
+  const metricsViews = useFilteredResources(client, ResourceKind.MetricsView);
+
+  $: gate = $publishFile.isSuccess
+    ? parsePublishYaml(String($publishFile.data?.blob ?? ""))
+    : UNGATED;
+
+  // 两个查询都出结果(成功或 404)后才生成,避免加载期误判空态
+  $: ready =
+    ($publishFile.isSuccess || $publishFile.isError) && $metricsViews.isSuccess;
+
+  $: publishedResources = ($metricsViews.data ?? []).filter(
+    (r) => !gate.gated || gate.published.has(r.meta?.name?.name ?? ""),
+  );
+
+  let questions: string[] = [];
+  let questionsLoaded = false;
+  $: if (ready) {
+    void generateRecommendedQuestions(client, publishedResources).then((qs) => {
+      questions = qs;
+      questionsLoaded = true;
+    });
+  }
+
+  $: placeholder = questions[0] ?? '比如："本月销售额怎么样？"';
+
+  function chatHref(q: string) {
+    return `/chat?new=true&q=${encodeURIComponent(q)}`;
+  }
+</script>
+
 <svelte:head>
   <title>StarData · 智能问数</title>
 </svelte:head>
@@ -5,10 +44,10 @@
 <div class="h-full overflow-y-auto">
   <div class="mx-auto max-w-[880px] px-9 pb-20 pt-16">
     <h1 class="text-center text-3xl font-bold text-gray-900">
-      你好,想了解点什么?
+      你好，想了解点什么？
     </h1>
     <p class="mt-2 text-center text-sm text-gray-400">
-      直接用一句话提问,StarData 会基于已发布的业务指标为你解答
+      直接用一句话提问，StarData 会基于已发布的业务指标为你解答
     </p>
 
     <a
@@ -16,9 +55,7 @@
       class="mx-auto mt-7 flex max-w-[680px] items-center gap-3 rounded-2xl border-[1.5px] border-gray-200 bg-white px-5 py-4 no-underline shadow-sm hover:border-primary-300"
     >
       <span class="text-lg">🔍</span>
-      <span class="flex-1 text-[15px] text-gray-400">
-        比如:"本月销售额怎么样?"
-      </span>
+      <span class="flex-1 text-[15px] text-gray-400">{placeholder}</span>
       <span
         class="grid size-9 place-items-center rounded-xl bg-primary-600 text-white"
       >
@@ -26,10 +63,29 @@
       </span>
     </a>
 
-    <!-- M2 接入发布门控后由已发布指标生成;M1 静态占位 -->
-    <p class="mt-5 text-center text-xs text-gray-400">
-      发布指标后,这里会出现为你推荐的问题
-    </p>
+    {#if questionsLoaded && questions.length > 0}
+      <div class="mx-auto mt-5 flex max-w-[680px] flex-wrap justify-center gap-2">
+        {#each questions as q (q)}
+          <a
+            href={chatHref(q)}
+            class="rounded-full border border-gray-200 bg-white px-3.5 py-1.5 text-[13px] text-gray-600 no-underline shadow-sm hover:border-primary-300 hover:text-primary-700"
+          >
+            {q}
+          </a>
+        {/each}
+      </div>
+    {:else if questionsLoaded}
+      <div class="mx-auto mt-5 max-w-[680px] rounded-xl border border-dashed border-gray-300 bg-white px-5 py-4 text-center text-[13px] text-gray-500">
+        尚无已发布的业务指标。请联系管理员在技术工作台完成指标发布。
+        {#if $portalRole === "tech"}
+          <a href="/studio/publish" class="ml-1 font-semibold text-primary-600 no-underline">
+            去发布 →
+          </a>
+        {/if}
+      </div>
+    {:else}
+      <p class="mt-5 text-center text-xs text-gray-400">正在加载推荐问题…</p>
+    {/if}
 
     <div class="mt-14 grid grid-cols-2 gap-4">
       <a
