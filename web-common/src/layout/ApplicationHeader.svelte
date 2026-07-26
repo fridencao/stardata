@@ -27,7 +27,7 @@
   import { isDeployPage } from "@rilldata/web-common/layout/navigation/route-utils";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import { get, readable } from "svelte/store";
-  import { navigate } from "$app/navigation";
+  import { goto } from "$app/navigation";
   import Button from "@rilldata/web-common/components/button/Button.svelte";
   import * as Tooltip from "@rilldata/web-common/components/tooltip-v2";
   import { parseDocument } from "yaml";
@@ -115,7 +115,7 @@
   }
 
   function gotoAI() {
-    navigate("/ai");
+    void goto("/ai");
   }
 </script>
 
@@ -161,19 +161,12 @@
     <Tooltip.Root>
       <Tooltip.Trigger>
         {#snippet child({ props })}
-          <Button
-            {...props}
-            compact
-            type="secondary"
-            onclick={gotoAI}
-          >
+          <Button {...props} compact type="secondary" onclick={gotoAI}>
             智能问数
           </Button>
         {/snippet}
       </Tooltip.Trigger>
-      <Tooltip.Content side="bottom">
-        智能问数 / Ask AI
-      </Tooltip.Content>
+      <Tooltip.Content side="bottom">智能问数 / Ask AI</Tooltip.Content>
     </Tooltip.Root>
     <LocalAvatarButton />
   </div>

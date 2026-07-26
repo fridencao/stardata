@@ -26,6 +26,11 @@
       hasPermission: true,
     },
     {
+      label: m.settings_nav_data_sources(),
+      route: "/connectors",
+      hasPermission: true,
+    },
+    {
       label: m.settings_nav_public_urls(),
       route: "/public-urls",
       hasPermission: true,

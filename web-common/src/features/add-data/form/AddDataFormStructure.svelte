@@ -28,6 +28,8 @@
     AddDataStep,
   } from "@rilldata/web-common/features/add-data/manager/steps/types.ts";
   import { getFormClass } from "@rilldata/web-common/features/add-data/class-utils.ts";
+  import type { TestConnectionResult } from "@rilldata/web-common/features/add-data/test-connection.ts";
+  import { CheckCircle2Icon, XCircleIcon } from "lucide-svelte";
 
   export let connectorDriver: V1ConnectorDriver;
   export let schema: MultiStepFormSchema | null;
@@ -37,6 +39,9 @@
   export let step: AddDataState;
   export let onSave: (() => void) | undefined = undefined;
   export let onBack: () => void | Promise<void>;
+  export let onTestConnection:
+    | (() => Promise<TestConnectionResult>)
+    | undefined = undefined;
 
   $: ({ form, formId, tainted, submit, submitting, errors, enhance } =
     superFormsParams);
@@ -78,6 +83,24 @@
     $form.deployment_type !== "playground";
 
   let runningBackAction = false;
+
+  let testingConnection = false;
+  let testResult: TestConnectionResult | null = null;
+
+  // Clear a stale test result whenever the user edits the form
+  $: if ($form) testResult = null;
+
+  async function handleTestConnection() {
+    if (!onTestConnection || testingConnection) return;
+    testingConnection = true;
+    testResult = null;
+    try {
+      const result = await onTestConnection();
+      testResult = result;
+    } finally {
+      testingConnection = false;
+    }
+  }
 
   function onStringInputChange(e: Event) {
     const target = e.target as HTMLInputElement;
@@ -205,7 +228,38 @@
         Back
       </Button>
 
+      {#if testResult}
+        <div
+          class="flex items-center gap-1.5 min-w-0 flex-1 px-2 text-sm {testResult.ok
+            ? 'text-emerald-600'
+            : 'text-red-600'}"
+        >
+          {#if testResult.ok}
+            <CheckCircle2Icon size="14" class="shrink-0" />
+          {:else}
+            <XCircleIcon size="14" class="shrink-0" />
+          {/if}
+          <span class="truncate" title={testResult.message}>
+            {testResult.message}
+          </span>
+        </div>
+      {/if}
+
       <div class="flex gap-2">
+        {#if onTestConnection}
+          <Button
+            disabled={testingConnection ||
+              isSubmitDisabled ||
+              runningBackAction}
+            loading={testingConnection}
+            loadingCopy="Testing..."
+            type="secondary"
+            onClick={() => void handleTestConnection()}
+          >
+            Test connection
+          </Button>
+        {/if}
+
         {#if onSave && isSaveButtonEnabled}
           <Button
             disabled={isSubmitDisabled || runningBackAction}

@@ -45,7 +45,7 @@ export const ducklakeSchema: MultiStepFormSchema = {
         "Restrict StarData to read-only queries. Disable to let StarData drop, create, and modify tables.",
       default: true,
       "x-display": "toggle",
-      "x-yaml-value": { true: "readonly", false: "readwrite" },
+      "x-yaml-value": { true: "read", false: "readwrite" },
       "x-visible-if": { connection_mode: "parameters" },
       "x-step": "connector",
       "x-advanced": true,

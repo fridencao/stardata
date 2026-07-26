@@ -18,6 +18,10 @@
   import { getConnectorDriverForSchema } from "@rilldata/web-common/features/add-data/manager/steps/utils.ts";
   import type { AddDataStateManager } from "@rilldata/web-common/features/add-data/manager/AddDataStateManager.svelte.ts";
   import { getEnvFileStore } from "@rilldata/web-common/features/env-management/env-file-store.ts";
+  import {
+    buildTestConnectionConfig,
+    testConnection,
+  } from "@rilldata/web-common/features/add-data/test-connection.ts";
 
   export let stateManager: AddDataStateManager;
   export let step: CreateConnectorStep;
@@ -108,6 +112,14 @@
 
     onBack();
   }
+
+  async function handleTestConnection() {
+    return testConnection(
+      runtimeClient,
+      connectorDriver!.name!,
+      buildTestConnectionConfig(schema, $form),
+    );
+  }
 </script>
 
 {#if connectorDriver}
@@ -120,5 +132,6 @@
     {step}
     onSave={saveConnector}
     onBack={cleanupAndBack}
+    onTestConnection={handleTestConnection}
   />
 {/if}
