@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { Search, ArrowRight, MessageSquare, LayoutGrid } from "lucide-svelte";
   import { ResourceKind, useFilteredResources } from "@rilldata/web-common/features/entity-management/resource-selectors";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import { generateRecommendedQuestions } from "../../features/portal/home/recommended-questions";
@@ -54,12 +55,12 @@
       href="/chat?new=true"
       class="mx-auto mt-7 flex max-w-[680px] items-center gap-3 rounded-2xl border-[1.5px] border-gray-200 bg-white px-5 py-4 no-underline shadow-sm hover:border-primary-300"
     >
-      <span class="text-lg">🔍</span>
+      <Search class="size-5 text-gray-400" />
       <span class="flex-1 text-[15px] text-gray-400">{placeholder}</span>
       <span
-        class="grid size-9 place-items-center rounded-xl bg-primary-600 text-white"
+        class="grid size-9 place-items-center rounded-xl bg-primary-600"
       >
-        ➤
+        <ArrowRight class="size-5 text-white" />
       </span>
     </a>
 
@@ -92,7 +93,7 @@
         href="/chat"
         class="rounded-2xl border border-gray-200 bg-white p-6 no-underline shadow-sm hover:border-primary-300"
       >
-        <div class="text-2xl">💬</div>
+        <MessageSquare class="size-6 text-gray-900" />
         <div class="mt-2 font-semibold text-gray-900">继续对话</div>
         <div class="mt-1 text-[13px] text-gray-500">
           查看历史对话,或开启新的提问
@@ -102,7 +103,7 @@
         href="/boards"
         class="rounded-2xl border border-gray-200 bg-white p-6 no-underline shadow-sm hover:border-primary-300"
       >
-        <div class="text-2xl">📌</div>
+        <LayoutGrid class="size-6 text-gray-900" />
         <div class="mt-2 font-semibold text-gray-900">我的看板</div>
         <div class="mt-1 text-[13px] text-gray-500">
           查看已保存的分析结果与共享看板

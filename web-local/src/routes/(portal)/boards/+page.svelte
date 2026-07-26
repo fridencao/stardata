@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { LayoutGrid, BarChart3 } from "lucide-svelte";
   import { useDashboards } from "@rilldata/web-common/features/dashboards/listing/selectors";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
 
@@ -27,7 +28,7 @@
         class="mt-8 grid place-items-center rounded-2xl border border-dashed border-gray-300 bg-white py-16 text-center"
       >
         <div>
-          <div class="text-3xl">📌</div>
+          <LayoutGrid class="size-8 text-gray-400" />
           <p class="mt-3 text-sm text-gray-500">
             还没有看板。去对话里问一个问题，把生成的图表钉过来吧
           </p>
@@ -48,7 +49,7 @@
             href="/boards/{name}"
             class="rounded-2xl border border-gray-200 bg-white p-5 no-underline shadow-sm hover:border-primary-300"
           >
-            <div class="text-2xl">📊</div>
+            <BarChart3 class="size-5 text-gray-900" />
             <div class="mt-2 truncate font-semibold text-gray-900">
               {displayName}
             </div>
