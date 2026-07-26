@@ -11,7 +11,7 @@ export const load = async ({ params, route, url }) => {
   const project = "dev";
 
   switch (route.id) {
-    case "/ai": {
+    case "/(portal)/chat": {
       // If user explicitly wants a new conversation, clear stored ID and skip redirect logic
       const isExplicitNewConversation = url.searchParams.get("new") === "true";
       if (isExplicitNewConversation) {
@@ -22,17 +22,17 @@ export const load = async ({ params, route, url }) => {
       // Try to redirect to the last conversation
       const lastConversationId = getLastConversationId(org, project);
       if (lastConversationId) {
-        throw redirect(307, `/ai/${lastConversationId}`);
+        throw redirect(307, `/chat/${lastConversationId}`);
       }
 
       // No existing conversation found, show new conversation interface
       return;
     }
 
-    case "/ai/[conversationId]": {
+    case "/(portal)/chat/[conversationId]": {
       // If conversation ID is missing or empty, redirect to base chat
       if (!conversationId?.trim()) {
-        throw redirect(307, `/ai`);
+        throw redirect(307, `/chat`);
       }
 
       // Store this conversation ID as the last accessed conversation

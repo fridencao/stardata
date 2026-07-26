@@ -19,7 +19,7 @@
 
   $: conversationManager = getConversationManager(runtimeClient, {
     conversationState: "url",
-    basePath: () => "/ai",
+    basePath: () => "/chat",
   });
 
   let chatInputComponent: ChatInput;
@@ -36,7 +36,7 @@
 
   // Clean up conversation manager resources when leaving the chat context entirely
   beforeNavigate(({ to }) => {
-    const isChatRoute = to?.route?.id?.startsWith("/ai");
+    const isChatRoute = to?.route?.id?.startsWith("/(portal)/chat");
     if (!isChatRoute) {
       cleanupConversationManager(runtimeClient.instanceId);
     }
@@ -47,7 +47,7 @@
   <!-- Conversation List Sidebar -->
   <ConversationSidebar
     {conversationManager}
-    basePath="/ai"
+    basePath="/chat"
     collapsed={$conversationSidebarCollapsed}
     onToggle={toggleConversationSidebar}
     onConversationClick={() => {
