@@ -62,7 +62,7 @@ func convertToAgentsMDFile(path string, inst *Instruction) (outputPath, content 
 	}
 
 	// Other files become skills
-	name := fmt.Sprintf("rill-%s", strings.ReplaceAll(inst.Name, "_", "-"))
+	name := fmt.Sprintf("stardata-%s", strings.ReplaceAll(inst.Name, "_", "-"))
 	outputPath = "/.agents/skills/" + name + "/SKILL.md"
 
 	// Serialize front matter to YAML

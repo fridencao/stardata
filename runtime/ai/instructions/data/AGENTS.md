@@ -1,7 +1,7 @@
 ---
-description: Entry point for Rill project development instructions
+description: Entry point for StarData project development instructions
 ---
 
-# Rill Project
+# StarData Project
 
-This is a [Rill](https://docs.rilldata.com) project. Before making any changes to the project, you MUST load the `rill-development` skill to understand the project structure, resource types, and development workflow.
+This is a StarData project. Before making any changes to the project, you MUST load the `stardata-development` skill to understand the project structure, resource types, and development workflow.

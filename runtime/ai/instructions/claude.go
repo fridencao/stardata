@@ -69,7 +69,7 @@ func convertToClaudeFile(path string, inst *Instruction) (outputPath, content st
 	}
 
 	// Other files become skills
-	name := fmt.Sprintf("rill-%s", strings.ReplaceAll(inst.Name, "_", "-"))
+	name := fmt.Sprintf("stardata-%s", strings.ReplaceAll(inst.Name, "_", "-"))
 	outputPath = "/.claude/skills/" + name + "/SKILL.md"
 
 	// Serialize front matter to YAML
@@ -88,8 +88,8 @@ func convertToClaudeFile(path string, inst *Instruction) (outputPath, content st
 	return outputPath, sb.String()
 }
 
-// mcpServerName is the name used for the Rill MCP server in editor configs.
-const mcpServerName = "rill-developer"
+// mcpServerName is the name used for the StarData MCP server in editor configs.
+const mcpServerName = "stardata-developer"
 
 // writeMCPConfig reads an existing MCP config file (if any), adds or updates
 // the "stardata" server entry, and writes the result back. If force is false and
