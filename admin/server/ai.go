@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/google/jsonschema-go/jsonschema"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
-	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
+	aiv1 "github.com/fridencao/stardata/proto/gen/stardata/ai/v1"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.opentelemetry.io/otel/attribute"

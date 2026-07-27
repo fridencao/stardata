@@ -42,7 +42,7 @@
           target="_blank"
           rel="noopener"
           href="https://docs.rilldata.com/guide/dashboards/explore/pivot"
-          >docs</a
+          >{m.dashboard_docs()}</a
         >.
       </div>
     {/if}
@@ -67,7 +67,7 @@
         <a
           target="_blank"
           href="https://docs.rilldata.com/guide/dashboards/explore/pivot"
-          >docs</a
+          >{m.dashboard_docs()}</a
         >.
       </div>
     {/if}

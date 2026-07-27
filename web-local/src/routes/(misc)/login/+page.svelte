@@ -4,8 +4,11 @@
   import {
     getStardataToken,
     setStardataToken,
+    decodeStardataToken,
   } from "@rilldata/web-common/runtime-client/auth-token";
+  import { defaultHome } from "../../../features/portal/user-spaces";
   import { onMount } from "svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   let username = "";
   let password = "";
@@ -16,7 +19,7 @@
   // Already authenticated? Bounce straight to the app (or the requested redirect).
   if (getStardataToken()) {
     const redirect = $page.url.searchParams.get("redirect");
-    window.location.href = redirect || "/";
+    window.location.href = redirect || defaultHome();
   }
 
   // Extract token from OIDC callback ?token= and store it.
@@ -27,7 +30,8 @@
       const url = new URL(window.location.href);
       url.searchParams.delete("token");
       window.history.replaceState({}, "", url.pathname);
-      window.location.href = "/";
+      const oidcSpaces = decodeStardataToken(tokenParam)?.spaces;
+      window.location.href = defaultHome(oidcSpaces);
     }
   });
 
@@ -35,7 +39,7 @@
     e.preventDefault();
     error = "";
     if (!username || !password) {
-      error = "请输入用户名和密码";
+      error = m.login_error_empty();
       return;
     }
     loading = true;
@@ -46,19 +50,20 @@
         body: JSON.stringify({ username, password }),
       });
       if (!resp.ok) {
-        error = "用户名或密码错误";
+        error = m.login_error_bad_credentials();
         return;
       }
       const data = (await resp.json()) as { token?: string };
       if (!data.token) {
-        error = "登录失败：未返回令牌";
+        error = m.login_error_no_token();
         return;
       }
       setStardataToken(data.token);
       const redirect = $page.url.searchParams.get("redirect");
-      window.location.href = redirect || "/";
+      const loginSpaces = decodeStardataToken(data.token)?.spaces;
+      window.location.href = redirect || defaultHome(loginSpaces);
     } catch {
-      error = "无法连接认证服务，请稍后重试";
+      error = m.login_error_network();
     } finally {
       loading = false;
     }
@@ -66,7 +71,7 @@
 </script>
 
 <svelte:head>
-  <title>登录 · StarData</title>
+  <title>{m.login_page_title()} · StarData</title>
 </svelte:head>
 
 <div class="flex h-screen w-screen items-center justify-center bg-gray-50">
@@ -75,7 +80,7 @@
   >
     <div class="mb-6 text-center">
       <h1 class="text-2xl font-semibold text-gray-900">StarData</h1>
-      <p class="mt-1 text-sm text-gray-500">登录以继续使用</p>
+      <p class="mt-1 text-sm text-gray-500">{m.login_subtitle()}</p>
     </div>
 
     {#if error}
@@ -91,23 +96,23 @@
         </div>
       {/if}
       <label class="flex flex-col gap-1 text-sm font-medium text-gray-700">
-        用户名
+        {m.login_username()}
         <input
           bind:value={username}
           type="text"
           autocomplete="username"
           class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-900"
-          placeholder="用户名"
+          placeholder={m.login_username()}
         />
       </label>
       <label class="flex flex-col gap-1 text-sm font-medium text-gray-700">
-        密码
+        {m.login_password()}
         <input
           bind:value={password}
           type="password"
           autocomplete="current-password"
           class="rounded-md border border-gray-300 px-3 py-2 text-sm outline-none focus:border-gray-900"
-          placeholder="密码"
+          placeholder={m.login_password()}
         />
       </label>
       <button
@@ -115,7 +120,7 @@
         disabled={loading}
         class="mt-2 rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50"
       >
-        {loading ? "登录中…" : "登录"}
+        {loading ? m.login_submitting() : m.login_submit()}
       </button>
     </form>
   </div>

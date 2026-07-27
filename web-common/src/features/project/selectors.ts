@@ -1,5 +1,5 @@
 import { ProjectUserRoles } from "@rilldata/web-common/features/users/roles.ts";
-import type { Project } from "@rilldata/web-common/proto/gen/rill/admin/v1/api_pb.ts";
+import type { Project } from "@rilldata/web-common/proto/gen/stardata/admin/v1/api_pb.ts";
 import {
   createLocalServiceGetProjectRequest,
   getLocalServiceGithubRepoStatusQueryOptions,

@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	"github.com/fridencao/stardata/admin/database"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 )
 
 // OrganizationPermissionsForUser resolves organization permissions for a user.

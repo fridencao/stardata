@@ -17,6 +17,7 @@
     parsePublishYaml,
     usePublishFile,
   } from "../../features/portal/publish/publish-store";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   const client = useRuntimeClient();
   const publishFile = usePublishFile(client);
@@ -45,39 +46,39 @@
 </script>
 
 <svelte:head>
-  <title>StarData Studio · 概览</title>
+  <title>StarData Studio · {m.studio_tabs_overview()}</title>
 </svelte:head>
 
-<SectionHeader title="概览" description="一屏了解:业务现在能问什么,还缺什么" />
+<SectionHeader title={m.studio_tabs_overview()} description={m.studio_overview_desc()} />
 
 <div class="mt-5 grid grid-cols-4 gap-3">
   <div class="card-basic px-4 py-4">
     <a href="/studio/sources" class="block h-full">
-      <div class="text-xs text-gray-500">已接入数据源</div>
+      <div class="text-xs text-gray-500">{m.studio_overview_connected_sources()}</div>
       <div class="mt-1 text-2xl font-bold text-gray-900">{$connectors?.data?.connectors?.length ?? "—"}</div>
-      <div class="mt-1 text-[11px] text-gray-400">在「数据源」中管理</div>
+      <div class="mt-1 text-[11px] text-gray-400">{m.studio_overview_manage_in_sources()}</div>
     </a>
   </div>
   <div class="card-basic px-4 py-4">
     <a href="/studio/semantics" class="block h-full">
-      <div class="text-xs text-gray-500">语义层指标集</div>
+      <div class="text-xs text-gray-500">{m.studio_overview_semantic_views()}</div>
       <div class="mt-1 text-2xl font-bold text-gray-900">{$metricsViews.data?.length ?? "—"}</div>
-      <div class="mt-1 text-[11px] text-gray-400">在「语义层」中管理</div>
+      <div class="mt-1 text-[11px] text-gray-400">{m.studio_overview_manage_in_semantics()}</div>
     </a>
   </div>
   <div class="card-basic px-4 py-4">
-    <div class="text-xs text-gray-500">近 7 天提问命中率</div>
+    <div class="text-xs text-gray-500">{m.studio_overview_hit_rate_7d()}</div>
     <div class="mt-1 text-2xl font-bold text-gray-300">—</div>
-    <div class="mt-1 text-[11px] text-gray-400">M3 接入统计</div>
+    <div class="mt-1 text-[11px] text-gray-400">{m.studio_overview_hit_rate_note()}</div>
   </div>
   <div class="card-basic px-4 py-4">
-    <div class="text-xs text-gray-500">待处理需求</div>
+    <div class="text-xs text-gray-500">{m.studio_overview_pending_requests()}</div>
     <div class="mt-1 text-2xl font-bold text-gray-900">{openRequestCount}</div>
-    <div class="mt-1 text-[11px] text-gray-400">在「发布」页处理</div>
+    <div class="mt-1 text-[11px] text-gray-400">{m.studio_overview_handle_in_publish()}</div>
   </div>
 </div>
 
 <div class="mt-4 flex items-center rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-[12.5px] text-blue-800">
   <Info class="size-4 mr-1.5 flex-shrink-0 text-blue-600" />
-  M3/4 已上线数据源管理、语义层向导、看板与钉图能力。近 7 天提问命中率仍在规划中，完整版功能可在「高级模式(IDE)」继续配置。
+  {m.studio_overview_banner()}
 </div>

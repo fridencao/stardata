@@ -25,7 +25,7 @@ import {
   DashboardState_ActivePage,
   DashboardState_LeaderboardSortDirection,
   DashboardState_LeaderboardSortType,
-} from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+} from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import { createAndExpression } from "./filter-utils";
 import { TDDChart } from "../time-dimension-details/types";
 import {

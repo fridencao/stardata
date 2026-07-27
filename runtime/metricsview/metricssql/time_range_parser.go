@@ -7,7 +7,7 @@ import (
 	"time"
 
 	"github.com/pingcap/tidb/pkg/parser/ast"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime/metricsview"
 	"github.com/fridencao/stardata/runtime/pkg/rilltime"
 	"github.com/fridencao/stardata/runtime/pkg/timeutil"

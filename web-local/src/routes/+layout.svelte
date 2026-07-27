@@ -12,6 +12,7 @@
   import BlockingOverlayContainer from "@rilldata/web-common/layout/BlockingOverlayContainer.svelte";
   import { overlay } from "@rilldata/web-common/layout/overlay-store";
   import { queryClient } from "@rilldata/web-common/lib/svelte-query/globalQueryClient";
+  import { initializeI18n } from "@rilldata/web-common/lib/i18n";
   import {
     errorEventHandler,
     initMetrics,
@@ -23,14 +24,22 @@
   import type { Query } from "@tanstack/query-core";
   import { QueryClientProvider } from "@tanstack/svelte-query";
   import { onMount } from "svelte";
+  import { goto, afterNavigate } from "$app/navigation";
   import * as Tooltip from "@rilldata/web-common/components/tooltip-v2";
   import type { LayoutData } from "./$types";
-  import { isPortalRoute, isStudioRoute } from "./route-constants";
+  import { isIdeRoute, isPortalRoute, isStudioRoute } from "./route-constants";
+  import {
+    defaultHome,
+    canViewBusiness,
+    canViewTech,
+  } from "../features/portal/user-spaces";
   import "@rilldata/web-common/app.css";
 
   export let data: LayoutData;
 
   const { deploy } = featureFlags;
+
+  initializeI18n();
 
   queryClient.getQueryCache().config.onError = (error: unknown, query: Query) =>
     errorEventHandler?.requestErrorEventHandler(error, query);
@@ -91,15 +100,30 @@
 
   $: onWelcomePage = route.id?.startsWith("/(misc)/welcome");
 
-  // 双门户自带导航壳,隐藏旧 ApplicationHeader
+  // 双门户自带导航壳,隐藏旧 ApplicationHeader(高级模式 IDE 也用统一壳)
   $: onPortalRoute = route.id?.startsWith("/(portal)") ?? false;
-  $: onStudioShellRoute = $page.url.pathname.startsWith("/studio");
+  $: onStudioShellRoute =
+    $page.url.pathname.startsWith("/studio") || isIdeRoute($page.url.pathname);
   $: hideLegacyHeader = onPortalRoute || onStudioShellRoute;
 
   // The login page must render without RuntimeProvider/FileAndResourceWatcher:
   // unauthenticated watcher requests would 403 and replace the page with the
   // "Error connecting to runtime" screen.
   $: onLoginPage = route.id?.startsWith("/(misc)/login");
+
+  // Role-based route guard (方案 B): a user may only open routes for the
+  // spaces their role grants. If they deep-link or type a URL for a space
+  // they lack, bounce them to their default landing page. No token (dev
+  // mode) defaults to full visibility, so this never traps developers.
+  afterNavigate(({ to }) => {
+    const path = to?.url?.pathname ?? "";
+    let required: "business" | "tech" | null = null;
+    if (isPortalRoute(path)) required = "business";
+    else if (isStudioRoute(path)) required = "tech";
+    if (!required) return;
+    const allowed = required === "business" ? canViewBusiness() : canViewTech();
+    if (!allowed) goto(defaultHome());
+  });
 </script>
 
 <Tooltip.Provider>

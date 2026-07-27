@@ -26,7 +26,7 @@ import {
   mapQueryToDashboard,
 } from "@rilldata/web-common/features/explore-mappers/map-to-explore.ts";
 import { waitUntil } from "@rilldata/web-common/lib/waitUtils.ts";
-import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb.ts";
+import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb.ts";
 import {
   type V1MetricsViewAggregationRequest,
   V1Operation,

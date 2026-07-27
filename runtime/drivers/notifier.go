@@ -3,7 +3,7 @@ package drivers
 import (
 	"time"
 
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 )
 
 // Notifier sends notifications.

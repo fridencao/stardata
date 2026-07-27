@@ -20,7 +20,7 @@ import {
   type CreateQueryResult,
 } from "@tanstack/svelte-query";
 import { type Readable, type Writable, derived, writable } from "svelte/store";
-import { DashboardState_ActivePage } from "../../../proto/gen/rill/ui/v1/dashboard_pb";
+import { DashboardState_ActivePage } from "../../../proto/gen/stardata/ui/v1/dashboard_pb";
 import { memoizeMetricsStore } from "../state-managers/memoize-metrics-store";
 import {
   type DimensionDataItem,

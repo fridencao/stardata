@@ -101,6 +101,8 @@
   "alerts_empty_message": "You don't have any alerts yet",
   "alerts_link_text": "alerts",
   "alerts_via_code": "via code",
+  "app_header_ask_ai": "Ask AI",
+  "app_header_home": "Home",
   "auth_access_requested": "Access requested",
   "auth_allow_domain_access": "Allow domain access",
   "auth_authenticating_as": "You are authenticating into StarData as {email}.",
@@ -293,10 +295,10 @@
   "bookmark_edit": "Edit bookmark",
   "bookmark_filters": "Filters",
   "bookmark_filters_inherited": "Inherited from underlying dashboard view.",
+  "bookmark_filters_only_label": "Filters only",
   "bookmark_filters_only_tooltip": "Toggling this on will only save the filter set above, not the full dashboard layout and state.",
   "bookmark_go_to_home": "Go to Home",
   "bookmark_home_created": "Home bookmark created",
-  "bookmark_filters_only_label": "Filters only",
   "bookmark_home_description": "This will be everyone’s main view for this dashboard.",
   "bookmark_label": "Label",
   "bookmark_managed_bookmarks": "Managed bookmarks",
@@ -453,8 +455,13 @@
   "canvas_see_less": "See less",
   "canvas_see_more_values": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "See {count} more value",
         "countPlural=other": "See {count} more values"
@@ -528,8 +535,13 @@
   "chat_duration_less_than_second": "less than a second",
   "chat_duration_minutes": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} minute",
         "countPlural=other": "{count} minutes"
@@ -538,8 +550,13 @@
   ],
   "chat_duration_seconds": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} second",
         "countPlural=other": "{count} seconds"
@@ -563,7 +580,29 @@
   "chat_how_can_i_help": "How can I help you today?",
   "chat_new_conversation": "New conversation",
   "chat_no_conversations": "No conversations yet.",
+  "chat_pin_board_file_invalid": "Board file is malformed and cannot be written",
+  "chat_pin_board_file_missing": "Board file not found",
+  "chat_pin_cta": "📌 Pin to board",
+  "chat_pin_default_board_name": "My board",
+  "chat_pin_dialog_title": "Pin to board",
+  "chat_pin_new_board_name": "New board name",
+  "chat_pin_new_board_option": "＋ New board…",
+  "chat_pin_new_board_placeholder": "e.g. Weekly business review",
+  "chat_pin_select_board": "Choose a board",
+  "chat_pin_success": "Pinned to board",
+  "chat_pin_view_board": "View board",
+  "chat_pin_write_failed": "Write failed, please retry",
   "chat_placeholder_analyst": "Type a question, or press @ to insert a metric, dimension, or measure.",
+  "chat_request_cta": "✋ Request data",
+  "chat_request_dialog_desc": "Didn't get the answer you wanted? Send the question to the data team — once it's configured you can ask it directly.",
+  "chat_request_dialog_title": "Request data",
+  "chat_request_error_empty": "Please enter the question you want to ask",
+  "chat_request_failed": "Submission failed, please retry",
+  "chat_request_note_label": "Notes (optional)",
+  "chat_request_note_placeholder": "e.g. needed for the monthly meeting",
+  "chat_request_question_label": "Question you want to ask",
+  "chat_request_submit": "Submit request",
+  "chat_request_submitted": "Request submitted — the data team will handle it in Studio",
   "chat_send_message": "Send message",
   "chat_share_conversation": "Share conversation",
   "chat_share_copied": "Copied!",
@@ -577,6 +616,7 @@
   "chat_unable_to_load": "Unable to load conversation",
   "chat_upvote_aria": "Upvote response",
   "chat_upvote_tooltip": "This response was helpful",
+  "coming_soon": "Coming Soon",
   "common_all": "All",
   "common_allow_domain_access": "Allow domain access",
   "common_allow_domain_join_project": "Allow existing and new StarData users with a {domain} email address to join this project as a {role}.",
@@ -601,8 +641,13 @@
   "common_none": "None",
   "common_other_values_selected": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} other value selected",
         "countPlural=other": "{count} other values selected"
@@ -620,14 +665,22 @@
   "common_type": "Type",
   "common_type_to_confirm": "Type {text} in the box below to confirm:",
   "common_undo": "Undo",
+  "connector_add": "Add Data Source",
+  "connector_empty": "No data sources configured",
+  "connector_status_connected": "Connected",
+  "connector_status_error": "Error",
+  "connector_status_unknown": "Unknown",
+  "connector_test_connection": "Test Connection",
+  "connector_test_failed": "Connection failed",
+  "connector_test_success": "Connection successful",
   "dashboard_add_all_dims_rows": "Add all dimensions in {name} to rows",
   "dashboard_add_all_to_columns": "Add all to columns",
   "dashboard_add_all_to_columns_tag": "Add all in {name} to columns",
   "dashboard_add_all_to_rows": "Add all to rows",
   "dashboard_add_column": "Add Column",
+  "dashboard_add_favourite": "Add to favourites",
   "dashboard_add_filter": "Add filter",
   "dashboard_add_filter_button": "Add filter button",
-  "dashboard_add_favourite": "Add to favourites",
   "dashboard_add_filter_button_aria": "Add filter button",
   "dashboard_add_mock_user": "Add mock user",
   "dashboard_add_row": "Add Row",
@@ -642,12 +695,14 @@
   "dashboard_as_of_ref": "as of",
   "dashboard_auto_arrange": "Auto-arrange",
   "dashboard_auto_arrange_tag": "Auto-arrange {name}: dimensions to rows, measures to columns",
+  "dashboard_browser_time": "Browser Time",
   "dashboard_cancel": "Cancel",
   "dashboard_change_over_comparison": "Change over comparison period",
   "dashboard_clear": "Clear",
   "dashboard_clear_filters": "Clear filters",
   "dashboard_clear_recents": "Clear recents",
   "dashboard_clear_view": "Clear view",
+  "dashboard_click_to_edit_dimension_filters": "Click to edit the filters in this dimension",
   "dashboard_click_to_edit_values": "Click to edit the values",
   "dashboard_cmd_click_replace": "Click to replace",
   "dashboard_collapse_all": "Collapse All",
@@ -656,6 +711,7 @@
   "dashboard_comparison_select_tooltip": "Select a comparison for the dashboard",
   "dashboard_complete_data": "complete data",
   "dashboard_complete_data_description": "Timestamp prior to which data frames are considered complete, also known as the watermark",
+  "dashboard_conditional_formatting": "Conditional formatting",
   "dashboard_connect_sparse_data": "Connect sparse data",
   "dashboard_contains": "Contains",
   "dashboard_copied_error_clipboard": "Copied error to clipboard",
@@ -668,14 +724,21 @@
   "dashboard_currently_flat": "Currently showing flat view",
   "dashboard_currently_pivot": "Currently showing pivot view",
   "dashboard_custom": "Custom",
+  "dashboard_deploy": "Deploy",
+  "dashboard_deploy_tooltip": "Deploy this project to StarData",
   "dashboard_deselect_all": "Deselect all",
   "dashboard_deselect_all_selections": "Deselect all selections",
+  "dashboard_dim_filter_error": "error",
+  "dashboard_dim_filter_list_too_long": "List is too long. Please remove some values.",
+  "dashboard_dim_filter_no_results": "no results",
+  "dashboard_dimension": "dimension",
   "dashboard_dimension_display_aria": "Dimension Display",
   "dashboard_dimension_search_results_aria": "Dimension search results",
   "dashboard_dimension_table_aria": "Dimension table",
   "dashboard_dimensions": "Dimensions",
   "dashboard_dimensions_count": "{count} dimensions",
   "dashboard_dimensions_label": "DIMENSIONS",
+  "dashboard_docs": "docs",
   "dashboard_download_as_png": "Download as PNG",
   "dashboard_download_png": "Download PNG",
   "dashboard_drag_dimensions": "Drag dimensions here",
@@ -704,6 +767,23 @@
   "dashboard_filter_dimension_value": "Filter dimension value",
   "dashboard_filter_required_set_value": "This filter is required. Set a value to load the dashboard.",
   "dashboard_flat": "Flat",
+  "dashboard_format_add_rule": "Add rule",
+  "dashboard_format_and": "and",
+  "dashboard_format_between": "between",
+  "dashboard_format_custom_color": "Custom color",
+  "dashboard_format_mode_data_bar": "Data bar",
+  "dashboard_format_mode_heatmap": "Heatmap",
+  "dashboard_format_mode_none": "None",
+  "dashboard_format_mode_rules": "Rules",
+  "dashboard_format_move_rule_down": "Move rule down",
+  "dashboard_format_move_rule_up": "Move rule up",
+  "dashboard_format_remove_rule": "Remove rule",
+  "dashboard_format_rule_color": "Rule color",
+  "dashboard_format_rule_plural": "rules",
+  "dashboard_format_rule_singular": "rule",
+  "dashboard_format_rule_upper_value": "Rule upper value",
+  "dashboard_format_rule_value": "Rule value",
+  "dashboard_format_style": "Format style",
   "dashboard_generated": "Generated {time}",
   "dashboard_generating": "Generating…",
   "dashboard_grain": "Grain",
@@ -725,6 +805,8 @@
   "dashboard_measures_count": "{count} measures",
   "dashboard_measures_label": "MEASURES",
   "dashboard_menu_all_dimensions": "All Dimensions",
+  "dashboard_model_data": "Model Data",
+  "dashboard_model_data_selected_cell": "Model data for selected cell",
   "dashboard_no_additional_details": "No additional details available.",
   "dashboard_no_available_fields": "No available fields",
   "dashboard_no_comparison_dimension": "No comparison dimension selected",
@@ -733,6 +815,7 @@
   "dashboard_no_matching_tags": "No matching tags",
   "dashboard_no_mock_users": "No mock users",
   "dashboard_no_options_found": "No options found",
+  "dashboard_no_results_to_show": "No results to show",
   "dashboard_no_search_results": "No search results to show",
   "dashboard_no_timezones_configured": "No timezones configured",
   "dashboard_no_valid_grains": "No valid grains available.",
@@ -740,8 +823,13 @@
   "dashboard_open_dimension_details_aria": "Open dimension details",
   "dashboard_others": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "+{count} other",
         "countPlural=other": "+{count} others"
@@ -754,12 +842,14 @@
   "dashboard_percentage_change": "Percentage change over comparison period",
   "dashboard_pivot": "Pivot",
   "dashboard_pivot_add_measure": "Add a measure to complete your table.",
+  "dashboard_pivot_auto": "Auto",
   "dashboard_pivot_building_table": "Hang tight! We're building your table...",
   "dashboard_pivot_give_data": "Give it some data to keep it company.",
   "dashboard_pivot_keep_it_up": "Keep it up!",
   "dashboard_pivot_learn_more": "Learn more about tables in our",
   "dashboard_pivot_need_help_discord": "Need help? Reach out to us on",
   "dashboard_pivot_no_data": "No data to show for the selected filters.",
+  "dashboard_pivot_show_more": "Show more ...",
   "dashboard_pivot_table_lonely": "Your table looks lonely",
   "dashboard_readonly_filter_chips_aria": "Readonly Filter Chips",
   "dashboard_recent": "Recent",
@@ -776,10 +866,12 @@
   "dashboard_replace_rows_cols_tag": "Replace rows and columns with this tag",
   "dashboard_replace_rows_tag": "Replace rows with dimensions in {name}",
   "dashboard_replace_rows_tag_dims": "Replace rows with this tag's dimensions",
+  "dashboard_required_dimension": "required dimension",
   "dashboard_required_measure": "required measure",
   "dashboard_row_limit": "Row limit",
   "dashboard_row_limit_tooltip": "Only up to top N child rows are shown under each dimension",
   "dashboard_rows": "Rows",
+  "dashboard_rows_count": "{filtered} of {total} rows",
   "dashboard_search_dimension": "Search Dimension",
   "dashboard_search_dimensions": "Search dimensions",
   "dashboard_search_results": "Search Results",
@@ -806,6 +898,8 @@
   "dashboard_sort_name": "Name",
   "dashboard_start": "start",
   "dashboard_start_pivot": "Start Pivot",
+  "dashboard_step_time_back": "Step time back",
+  "dashboard_step_time_forward": "Step time forward",
   "dashboard_switch_flat": "Switch to flat view",
   "dashboard_switch_pivot": "Switch to pivot view",
   "dashboard_table_mode": "Table mode",
@@ -843,8 +937,13 @@
   "edit_changes_discard_all": "Discard all",
   "edit_changes_file_count": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} file",
         "countPlural=other": "{count} files"
@@ -853,8 +952,13 @@
   ],
   "edit_changes_files_changed": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} file changed",
         "countPlural=other": "{count} files changed"
@@ -867,8 +971,13 @@
   "edit_changes_revert": "Revert",
   "edit_changes_revert_confirm_body": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "This permanently discards local changes to {count} file and cannot be undone.",
         "countPlural=other": "This permanently discards local changes to {count} files and cannot be undone."
@@ -879,8 +988,13 @@
   "edit_changes_revert_failed": "Failed to revert changes",
   "edit_changes_revert_selected": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Revert {count} file",
         "countPlural=other": "Revert {count} files"
@@ -889,8 +1003,13 @@
   ],
   "edit_changes_reverted": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Reverted {count} file",
         "countPlural=other": "Reverted {count} files"
@@ -951,8 +1070,13 @@
   "env_documentation_link": "documentation",
   "env_duplicate_keys_error": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "This key is duplicated",
         "countPlural=other": "Duplicate keys are not allowed"
@@ -970,8 +1094,13 @@
   "env_key_placeholder": "Key",
   "env_keys_exist_error": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "This key already exists for your target environment(s)",
         "countPlural=other": "These keys already exist for your target environment(s)"
@@ -1227,8 +1356,13 @@
   "groups_table_header_group": "Group",
   "groups_total_count": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} total group",
         "countPlural=other": "{count} total groups"
@@ -1238,11 +1372,11 @@
   "groups_yes_delete": "Yes, delete",
   "home_dashboards_heading": "Dashboards",
   "home_greeting": "Hi {name}!",
+  "home_project_title_label": "Project title",
   "home_subtitle_no_chat": "Explore your dashboards below",
   "home_subtitle_with_chat": "Ask questions about your data, or explore your dashboards below",
   "home_welcome_getting_started": "It looks like you're just starting out! Check out our",
   "home_welcome_quickstart_link": "Quickstart to create your first project",
-  "home_project_title_label": "Project title",
   "home_welcome_to": "Welcome to {projectName}",
   "interval_day": "Day",
   "interval_hour": "Hour",
@@ -1264,6 +1398,16 @@
   "leaderboard_remove_comparison": "Remove comparison",
   "leaderboard_shift_click": "+ Click",
   "leaderboard_toggle_breakdown": "Toggle breakdown for {name} dimension",
+  "login_error_bad_credentials": "Incorrect username or password",
+  "login_error_empty": "Enter your username and password",
+  "login_error_network": "Cannot reach the auth service, please try again later",
+  "login_error_no_token": "Login failed: no token returned",
+  "login_page_title": "Sign in",
+  "login_password": "Password",
+  "login_submit": "Sign in",
+  "login_submitting": "Signing in…",
+  "login_subtitle": "Sign in to continue",
+  "login_username": "Username",
   "mcp_add_to_config": "Add this to your MCP client's configuration file.",
   "mcp_add_url": "Add this URL to your AI client's MCP server settings:",
   "mcp_configuration": "Configuration",
@@ -1316,10 +1460,19 @@
   "org_tab_settings": "Settings",
   "org_tab_users": "Users",
   "organizations_overview_page_title": "{title} overview - StarData",
+  "parquet_preview_no_project_dir": "Could not resolve the project directory for this file.",
+  "parquet_preview_read_error_title": "Unable to read Parquet file",
+  "parquet_preview_requires_duckdb": "Previewing Parquet files requires a DuckDB connector.",
+  "parquet_preview_unknown_error": "Unknown error",
   "pivot_apis_failed": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "One or more APIs failed with the following error:",
         "countPlural=other": "One or more APIs failed with the following errors:"
@@ -1329,8 +1482,13 @@
   "pivot_collapse_row": "Collapse row",
   "pivot_dim_label": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "dim",
         "countPlural=other": "dims"
@@ -1345,8 +1503,13 @@
   "pivot_expand_row": "Expand row",
   "pivot_measure_label": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "measure",
         "countPlural=other": "measures"
@@ -1358,8 +1521,13 @@
   "pivot_time_prefix": "Time",
   "pivot_trace_ids_label": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Trace ID",
         "countPlural=other": "Trace IDs"
@@ -1367,6 +1535,48 @@
     }
   ],
   "pivot_unexpected_query_error": "Sorry, unexpected query error!",
+  "portal_boards_desc": "Pin charts from chat to a board to track them over time",
+  "portal_boards_empty": "No boards yet. Ask a question in chat and pin the chart here.",
+  "portal_boards_not_found": "Board not found",
+  "portal_boards_open_board": "Click to open",
+  "portal_boards_start_asking": "Start asking →",
+  "portal_chat_confirm_delete": "Delete this conversation? This cannot be undone.",
+  "portal_chat_delete_conversation": "Delete conversation",
+  "portal_chat_delete_failed": "Delete failed: {error}",
+  "portal_chat_empty": "No conversations yet — start your first one",
+  "portal_chat_load_failed": "Failed to load conversations",
+  "portal_chat_loading": "Loading conversations…",
+  "portal_chat_new_conversation": "New conversation",
+  "portal_chat_pin": "Pin",
+  "portal_chat_pinned": "Pinned",
+  "portal_chat_unpin": "Unpin",
+  "portal_home_continue_chat": "Continue chatting",
+  "portal_home_continue_chat_desc": "Review past conversations or start a new question",
+  "portal_home_go_publish": "Go publish →",
+  "portal_home_greeting": "Hi, what would you like to know?",
+  "portal_home_loading_questions": "Loading suggested questions…",
+  "portal_home_my_boards": "My Boards",
+  "portal_home_my_boards_desc": "View saved analyses and shared boards",
+  "portal_home_no_published": "No published business metrics yet. Ask an admin to publish metrics in the Tech Workbench.",
+  "portal_home_placeholder_example": "e.g. \"How are sales this month?\"",
+  "portal_home_q_dist": "How is {measure} distributed by {dimension}?",
+  "portal_home_q_month": "What is {measure} this month?",
+  "portal_home_q_trend": "What is the trend of {measure} over the last 30 days?",
+  "portal_home_subtitle": "Ask in one sentence — StarData answers based on your published business metrics",
+  "portal_nav_business_portal": "Business Portal",
+  "portal_nav_close_user_menu": "Close user menu",
+  "portal_nav_logout": "Log out",
+  "portal_nav_role_admin": "Admin",
+  "portal_nav_role_user": "Member",
+  "portal_nav_switch_dark": "Switch to dark mode",
+  "portal_nav_switch_language": "Switch language",
+  "portal_nav_switch_light": "Switch to light mode",
+  "portal_nav_tech_workbench": "Tech Workbench",
+  "portal_nav_user_fallback": "User",
+  "portal_tabs_boards": "Boards",
+  "portal_tabs_chat": "Chat",
+  "portal_tabs_home": "Home",
+  "preview_page_unavailable": "This page is not available in preview mode",
   "project_branch_hibernated": "Branch hibernated",
   "project_branch_is_hibernated": "This branch is hibernated.",
   "project_contact_admin_to_redeploy": "Contact the project's administrator to redeploy the project.",
@@ -1629,14 +1839,6 @@
   "settings_nav_console": "Console",
   "settings_nav_data_sources": "Data Sources",
   "settings_nav_data_sources_desc": "Manage data source connections",
-  "connector_status_connected": "Connected",
-  "connector_status_error": "Error",
-  "connector_status_unknown": "Unknown",
-  "connector_test_connection": "Test Connection",
-  "connector_test_success": "Connection successful",
-  "connector_test_failed": "Connection failed",
-  "connector_add": "Add Data Source",
-  "connector_empty": "No data sources configured",
   "settings_nav_env_vars": "Environment Variables",
   "settings_nav_general": "General",
   "settings_nav_public_urls": "Public URLs",
@@ -1693,8 +1895,13 @@
   "status_complete": "Complete",
   "status_compute_units": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} Compute unit",
         "countPlural=other": "{count} Compute units"
@@ -1747,7 +1954,9 @@
         "input count",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{first}, +{count} other",
         "countPlural=other": "{first}, +{count} others"
@@ -1801,8 +2010,13 @@
   "status_page_title": "Project Status",
   "status_parse_errors": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Parse error",
         "countPlural=other": "Parse errors"
@@ -1816,8 +2030,8 @@
   "status_refresh_all_confirm_tip": "To refresh a single resource, scroll to the source or model, click the '...' button, and select the refresh option.",
   "status_refresh_all_confirm_title": "Refresh all sources and models?",
   "status_refresh_all_sources_models": "Refresh all sources and models",
-  "status_refresh_errored_confirm_body": "This will re-execute all partitions that failed during their last run. The refresh will happen in the background.",
   "status_refresh_description": "Refreshing this resource will update all dependent resources.",
+  "status_refresh_errored_confirm_body": "This will re-execute all partitions that failed during their last run. The refresh will happen in the background.",
   "status_refresh_errored_confirm_title": "Refresh Errored Partitions for {modelName}?",
   "status_refreshing": "Refreshing...",
   "status_resource_reconciling": "Resource is currently being reconciled",
@@ -1825,8 +2039,13 @@
   "status_table": "Table",
   "status_table_label": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Table",
         "countPlural=other": "Tables"
@@ -1840,8 +2059,13 @@
   "status_view_all": "View all",
   "status_view_label": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "View",
         "countPlural=other": "Views"
@@ -1851,6 +2075,58 @@
   "status_view_singular": "View",
   "status_views": "Views",
   "status_yes_refresh": "Yes, refresh",
+  "studio_overview_banner": "Data source management, the semantic layer wizard, boards and chart pinning are live (M3/4). The 7-day question hit rate is still planned; the full feature set remains available in Advanced Mode (IDE).",
+  "studio_overview_connected_sources": "Connected data sources",
+  "studio_overview_desc": "One screen to see what the business can ask today, and what is still missing",
+  "studio_overview_handle_in_publish": "Handle in “Publish”",
+  "studio_overview_hit_rate_7d": "7-day question hit rate",
+  "studio_overview_hit_rate_note": "Coming with M3 analytics",
+  "studio_overview_manage_in_semantics": "Manage in “Semantic Layer”",
+  "studio_overview_manage_in_sources": "Manage in “Data Sources”",
+  "studio_overview_pending_requests": "Pending requests",
+  "studio_overview_semantic_views": "Semantic layer metrics views",
+  "studio_publish_desc": "Control which metrics views are visible to the business portal (suggested questions + Chat AI)",
+  "studio_publish_empty": "No metrics views in this project yet. Create one in “Semantic Layer” or Advanced Mode (IDE).",
+  "studio_publish_gate_after": "are visible to the business; when the file is missing or the list is empty, nothing is gated (everything is visible).",
+  "studio_publish_gate_before": "Gating rule: only metrics views listed in the project-root",
+  "studio_publish_status_published": "Published",
+  "studio_publish_status_unpublished": "Unpublished",
+  "studio_requests_desc": "Data requests raised by business users in chat (from /requests.yaml)",
+  "studio_requests_done_count": "Done ({count})",
+  "studio_requests_empty": "No pending requests",
+  "studio_requests_mark_done": "✓ Mark done",
+  "studio_requests_title": "Request Inbox",
+  "studio_semantics_autosave": "Edits save automatically",
+  "studio_semantics_back_to_list": "Back to list",
+  "studio_semantics_col_label_coverage": "Chinese alias coverage",
+  "studio_semantics_col_measures_dims": "Measures / Dimensions",
+  "studio_semantics_col_metrics_view": "Metrics view",
+  "studio_semantics_col_status": "Status",
+  "studio_semantics_col_table": "Source table",
+  "studio_semantics_desc": "Metric/dimension definitions · Chinese aliases (label_cn) · No-code editing",
+  "studio_semantics_empty": "No metrics views yet. Click “New metrics view from table” in the top right to get started.",
+  "studio_semantics_generating": "Generating…",
+  "studio_semantics_new_from_table": "＋ New metrics view from table",
+  "studio_semantics_not_found": "Metrics view “{name}” not found.",
+  "studio_semantics_pick_table": "Pick a table",
+  "studio_semantics_pick_table_desc": "A draft metrics view will be generated from this table; you can keep editing it afterwards",
+  "studio_semantics_pick_table_desc_ai": "A draft metrics view will be generated from this table by AI; you can keep editing it afterwards",
+  "studio_semantics_status_error": "Parse error",
+  "studio_semantics_status_valid": "Valid",
+  "studio_sources_add": "＋ Add data source",
+  "studio_sources_analyzing": "Analyzing connectors…",
+  "studio_sources_desc": "Connected connectors · Guided setup · Table browsing",
+  "studio_sources_driver": "Driver: {name}",
+  "studio_sources_driver_unknown": "unknown",
+  "studio_sources_empty": "No data sources yet. Click “Add data source” in the top right to get started.",
+  "studio_sources_ide_hint": "Need to edit or delete connectors, or write SQL models?",
+  "studio_sources_ide_link": "Go to Advanced Mode (IDE) →",
+  "studio_sources_table_browser": "Table Browser",
+  "studio_tabs_ide": "Advanced Mode (IDE)",
+  "studio_tabs_overview": "Overview",
+  "studio_tabs_publish": "Publish",
+  "studio_tabs_semantics": "Semantic Layer",
+  "studio_tabs_sources": "Data Sources",
   "theme_beta": "Beta",
   "theme_dark": "Dark",
   "theme_label": "Theme",
@@ -1890,8 +2166,13 @@
   "time_month_to_date": "Month to date",
   "time_n_days_ago": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} day ago",
         "countPlural=other": "{count} days ago"
@@ -1900,8 +2181,13 @@
   ],
   "time_n_hours_ago": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} hour ago",
         "countPlural=other": "{count} hours ago"
@@ -1910,8 +2196,13 @@
   ],
   "time_n_minutes_ago": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} minute ago",
         "countPlural=other": "{count} minutes ago"
@@ -1920,8 +2211,13 @@
   ],
   "time_n_months_ago": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} month ago",
         "countPlural=other": "{count} months ago"
@@ -1930,8 +2226,13 @@
   ],
   "time_n_weeks_ago": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} week ago",
         "countPlural=other": "{count} weeks ago"
@@ -1940,8 +2241,13 @@
   ],
   "time_n_years_ago": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} year ago",
         "countPlural=other": "{count} years ago"
@@ -1991,7 +2297,9 @@
         "input role",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Added {count} group as {role}",
         "countPlural=other": "Added {count} groups as {role}"
@@ -2005,7 +2313,9 @@
         "input count",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{emails} is already a member of this organization",
         "countPlural=other": "{emails} are already members of this organization"
@@ -2040,7 +2350,9 @@
         "input count",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Failed to add group: {groups}",
         "countPlural=other": "Failed to add groups: {groups}"
@@ -2054,7 +2366,9 @@
         "input count",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Failed to invite {emails}",
         "countPlural=other": "Failed to invite: {emails}"
@@ -2068,7 +2382,9 @@
         "input count",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Failed to invite user: {emails}",
         "countPlural=other": "Failed to invite users: {emails}"
@@ -2091,8 +2407,13 @@
   "users_general_access": "General Access",
   "users_group_count": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} Group",
         "countPlural=other": "{count} Groups"
@@ -2108,7 +2429,9 @@
         "input role",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Invited {count} guest as {role}",
         "countPlural=other": "Invited {count} guests as {role}"
@@ -2127,7 +2450,10 @@
         "local emailsPlural = emails: plural",
         "local groupsPlural = groups: plural"
       ],
-      "selectors": ["emailsPlural", "groupsPlural"],
+      "selectors": [
+        "emailsPlural",
+        "groupsPlural"
+      ],
       "match": {
         "emailsPlural=one, groupsPlural=one": "Invited {emails} person and added {groups} group as {role}",
         "emailsPlural=one, groupsPlural=other": "Invited {emails} person and added {groups} groups as {role}",
@@ -2143,7 +2469,9 @@
         "input role",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Invited {count} person as {role}",
         "countPlural=other": "Invited {count} people as {role}"
@@ -2155,8 +2483,13 @@
   "users_loading_more": "Loading more…",
   "users_member_count": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} member",
         "countPlural=other": "{count} members"
@@ -2174,7 +2507,9 @@
         "input role",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Successfully invited {count} person as {role}",
         "countPlural=other": "Successfully invited {count} people as {role}"
@@ -2187,8 +2522,13 @@
   "users_project_access": "Project access",
   "users_project_count": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} Project",
         "countPlural=other": "{count} Projects"
@@ -2221,8 +2561,13 @@
   "users_url_copied": "URL copied",
   "users_user_count": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} user",
         "countPlural=other": "{count} users"
@@ -2231,9 +2576,13 @@
   ],
   "users_yes_remove": "Yes, remove",
   "users_yes_upgrade": "Yes, upgrade",
-  "workspace_generating_sample_data": "Generating your sample data...",
-  "parquet_preview_read_error_title": "Unable to read Parquet file",
-  "parquet_preview_unknown_error": "Unknown error",
-  "parquet_preview_no_project_dir": "Could not resolve the project directory for this file.",
-  "parquet_preview_requires_duckdb": "Previewing Parquet files requires a DuckDB connector."
+  "visual_metrics_label_cn": "Chinese alias",
+  "visual_metrics_label_cn_hint": "Chinese field name used by business users in Chat (label_cn)",
+  "vtable_click": "Click",
+  "vtable_copy_column_name": "column name to clipboard",
+  "vtable_copy_value": "this value to clipboard",
+  "vtable_pin_column": "Pin this column to left side of the table",
+  "vtable_sort_column": "Sort column",
+  "vtable_unpin_column": "Unpin this column from left side of the table",
+  "workspace_generating_sample_data": "Generating your sample data..."
 }

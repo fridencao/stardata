@@ -22,7 +22,7 @@
   export let metricsViewName: string;
   export let exploreName: string;
 
-  const DEFAULT_LABEL = "Model Data";
+  const DEFAULT_LABEL = m.dashboard_model_data();
   const INITIAL_HEIGHT_EXPANDED = 300;
   const MIN_HEIGHT_EXPANDED = 30;
   const MAX_HEIGHT_EXPANDED = 1000;
@@ -52,7 +52,7 @@
   $: isPivotCellSelected = Boolean(showPivot && activeCellFilters);
 
   $: label = isPivotCellSelected
-    ? "Model data for selected cell"
+    ? m.dashboard_model_data_selected_cell()
     : DEFAULT_LABEL;
 
   $: timeRange = isPivotCellSelected
@@ -113,7 +113,10 @@
     if ($filteredTotalsQuery.data && $totalsQuery.data) {
       const numerator = $filteredTotalsQuery.data?.data?.[0]["count"] as number;
       const denominator = $totalsQuery.data.data?.[0]["count"] as number;
-      rowCountlabel = `${formatCompactInteger(numerator)} of ${formatCompactInteger(denominator)} rows`;
+      rowCountlabel = m.dashboard_rows_count({
+        filtered: formatCompactInteger(numerator),
+        total: formatCompactInteger(denominator),
+      });
     }
   }
 

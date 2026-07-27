@@ -39,8 +39,8 @@ import {
   TimeComparisonOption,
   TimeRangePreset,
 } from "@rilldata/web-common/lib/time/types";
-import type { Expression } from "@rilldata/web-common/proto/gen/rill/runtime/v1/expression_pb";
-import type { TimeGrain } from "@rilldata/web-common/proto/gen/rill/runtime/v1/time_grain_pb";
+import type { Expression } from "@rilldata/web-common/proto/gen/stardata/runtime/v1/expression_pb";
+import type { TimeGrain } from "@rilldata/web-common/proto/gen/stardata/runtime/v1/time_grain_pb";
 import {
   DashboardState,
   DashboardState_ActivePage,
@@ -48,7 +48,7 @@ import {
   DashboardState_PivotTableMode,
   DashboardTimeRange,
   PivotElement,
-} from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+} from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import type {
   MetricsViewSpecDimension,
   V1ExploreSpec,

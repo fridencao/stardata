@@ -17,6 +17,7 @@
   import { parseDocument, YAMLMap, YAMLSeq } from "yaml";
   import { FileArtifact } from "../entity-management/file-artifact";
   import { YAMLDimension, YAMLMeasure, type MenuOption } from "./lib";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import SimpleSqlExpression from "./SimpleSQLExpression.svelte";
   import TagInput from "@rilldata/web-common/components/forms/TagInput.svelte";
 
@@ -107,12 +108,12 @@
       },
       {
         optional: true,
-        label: "中文别名",
+        label: m.visual_metrics_label_cn(),
         fields: [
           {
             key: "label_cn",
-            hint: "业务人员在 Chat 中使用的中文字段名 (label_cn)",
-            label: "中文别名",
+            hint: m.visual_metrics_label_cn_hint(),
+            label: m.visual_metrics_label_cn(),
           },
         ],
         selected: 0,
@@ -220,12 +221,12 @@
       },
       {
         optional: true,
-        label: "中文别名",
+        label: m.visual_metrics_label_cn(),
         fields: [
           {
             key: "label_cn",
-            hint: "业务人员在 Chat 中使用的中文字段名 (label_cn)",
-            label: "中文别名",
+            hint: m.visual_metrics_label_cn_hint(),
+            label: m.visual_metrics_label_cn(),
           },
         ],
         selected: 0,

@@ -18,6 +18,7 @@ import {
 } from "@rilldata/web-common/runtime-client/auth-token";
 import { ConnectError, Code } from "@connectrpc/connect";
 import { eventBus } from "@rilldata/web-common/lib/event-bus/event-bus";
+import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 import { getLocalRuntimeClient } from "../lib/runtime-client";
 import { PORTAL_ALLOWED_PREFIXES } from "./route-constants";
 import { Settings } from "luxon";
@@ -75,7 +76,7 @@ export async function load({ url, depends, untrack, route }) {
         );
       if (!isAllowed) {
         eventBus.emit("notification", {
-          message: "此页面在预览模式下不可用",
+          message: m.preview_page_unavailable(),
         });
         throw redirect(303, "/");
       }

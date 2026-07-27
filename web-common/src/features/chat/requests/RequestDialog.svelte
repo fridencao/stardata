@@ -3,6 +3,7 @@
   import * as Dialog from "@rilldata/web-common/components/dialog";
   import { eventBus } from "@rilldata/web-common/lib/event-bus/event-bus";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { appendRequest } from "./requests-file";
 
   export let open = false;
@@ -24,7 +25,7 @@
 
   async function submit() {
     if (!question.trim()) {
-      errorMessage = "请填写想问的问题";
+      errorMessage = m.chat_request_error_empty();
       return;
     }
     saving = true;
@@ -33,11 +34,11 @@
       await appendRequest(runtimeClient, question.trim(), note);
       eventBus.emit("notification", {
         type: "success",
-        message: "需求已提交，技术团队会在 Studio 中处理",
+        message: m.chat_request_submitted(),
       });
       open = false;
     } catch {
-      errorMessage = "提交失败，请重试";
+      errorMessage = m.chat_request_failed();
     }
     saving = false;
   }
@@ -45,24 +46,24 @@
 
 <Dialog.Root bind:open>
   <Dialog.Content>
-    <Dialog.Title>提数据需求</Dialog.Title>
+    <Dialog.Title>{m.chat_request_dialog_title()}</Dialog.Title>
     <Dialog.Description>
-      没有得到想要的答案？把问题提给技术团队，配置好后就能直接问了。
+      {m.chat_request_dialog_desc()}
     </Dialog.Description>
 
     <div class="flex flex-col gap-3 py-2">
       <label class="flex flex-col gap-1 text-sm">
-        想问的问题
+        {m.chat_request_question_label()}
         <textarea
           class="min-h-[72px] rounded-md border border-gray-300 px-2 py-1.5 text-sm"
           bind:value={question}
         ></textarea>
       </label>
       <label class="flex flex-col gap-1 text-sm">
-        补充说明（可选）
+        {m.chat_request_note_label()}
         <input
           class="rounded-md border border-gray-300 px-2 py-1.5 text-sm"
-          placeholder="例如：月会要用"
+          placeholder={m.chat_request_note_placeholder()}
           bind:value={note}
         />
       </label>
@@ -72,8 +73,8 @@
     </div>
 
     <Dialog.Footer class="gap-x-2">
-      <Button type="tertiary" onClick={() => (open = false)}>取消</Button>
-      <Button type="primary" loading={saving} onClick={submit}>提交需求</Button>
+      <Button type="tertiary" onClick={() => (open = false)}>{m.common_cancel()}</Button>
+      <Button type="primary" loading={saving} onClick={submit}>{m.chat_request_submit()}</Button>
     </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

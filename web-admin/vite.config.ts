@@ -45,7 +45,7 @@ export default defineConfig({
     paraglideVitePlugin({
       project: "../web-common/src/lib/i18n/project.inlang",
       outdir: "../web-common/src/lib/i18n/gen",
-      strategy: ["localStorage", "preferredLanguage", "baseLocale"],
+      strategy: ["cookie", "preferredLanguage", "baseLocale"],
     }),
   ],
   envDir: "../",

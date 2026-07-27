@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/pkg/gitutil"
@@ -103,7 +103,9 @@ func (s *Server) GitStatus(ctx context.Context, req *runtimev1.GitStatusRequest)
 		return nil, fmt.Errorf("failed to get git status: %w", err)
 	}
 	if !gs.IsGitRepo {
-		return nil, status.Error(codes.FailedPrecondition, "not a git repository")
+		// Not an error: local projects are often not git repos. Return an empty
+		// response (no branch/remote) so clients can treat it as "no git".
+		return &runtimev1.GitStatusResponse{}, nil
 	}
 
 	return &runtimev1.GitStatusResponse{

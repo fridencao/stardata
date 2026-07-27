@@ -12,7 +12,7 @@ import {
 import {
   DashboardState_LeaderboardSortDirection,
   DashboardState_LeaderboardSortType,
-} from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+} from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import { describe, expect, it } from "vitest";
 
 const TestCases: {

@@ -10,7 +10,7 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
-	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
+	aiv1 "github.com/fridencao/stardata/proto/gen/stardata/ai/v1"
 	"github.com/fridencao/stardata/runtime"
 	"github.com/fridencao/stardata/runtime/ai"
 	"github.com/fridencao/stardata/runtime/drivers"

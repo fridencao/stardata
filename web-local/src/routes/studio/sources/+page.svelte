@@ -11,6 +11,7 @@
     MetricsEventSpace,
   } from "@rilldata/web-common/metrics/service/MetricsTypes";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   const client = useRuntimeClient();
   const connectors = getAnalyzedConnectors(client, false);
@@ -27,17 +28,17 @@
 </script>
 
 <svelte:head>
-  <title>StarData Studio · 数据源</title>
+  <title>StarData Studio · {m.studio_tabs_sources()}</title>
 </svelte:head>
 
 <div class="flex items-start justify-between">
-  <SectionHeader title="数据源" description="已接入连接器 · 向导式新增 · 表结构浏览">
+  <SectionHeader title={m.studio_tabs_sources()} description={m.studio_sources_desc()}>
     <button
       slot="actions"
       class="rounded-lg bg-primary-600 px-4 py-2 text-[13px] font-semibold text-white hover:bg-primary-700"
       onclick={() => (addDataOpen = true)}
     >
-      ＋ 新增数据源
+      {m.studio_sources_add()}
     </button>
   </SectionHeader>
 </div>
@@ -53,29 +54,29 @@
           {/if}
         </div>
         <div class="mt-1 text-[12px] text-gray-500">
-          驱动：{connector.driver?.name ?? "未知"}
+          {m.studio_sources_driver({ name: connector.driver?.name ?? m.studio_sources_driver_unknown() })}
         </div>
       </div>
     {/each}
   </div>
 {:else if $connectors.isLoading}
-  <p class="mt-5 text-sm text-gray-400">正在分析连接器…</p>
+  <p class="mt-5 text-sm text-gray-400">{m.studio_sources_analyzing()}</p>
 {:else}
   <div class="mt-5 card-hero py-10 text-center text-sm text-gray-500">
-    还没有接入数据源，点击右上角「新增数据源」开始
+    {m.studio_sources_empty()}
   </div>
 {/if}
 
-<h3 class="mt-8 text-lg font-bold text-fg-primary">表浏览</h3>
+<h3 class="mt-8 text-lg font-bold text-fg-primary">{m.studio_sources_table_browser()}</h3>
 <div class="mt-2 card-basic overflow-hidden">
-  <div class="bg-white p-2">
+  <div class="p-2">
     <ConnectorExplorer store={explorerStore} />
   </div>
 </div>
 
 <p class="mt-6 text-[12px] text-gray-400">
-  需要编辑/删除连接器或写 SQL 模型？
-  <a href="/files" class="font-semibold text-primary-600 no-underline">前往高级模式(IDE) →</a>
+  {m.studio_sources_ide_hint()}
+  <a href="/files" class="font-semibold text-primary-600 no-underline">{m.studio_sources_ide_link()}</a>
 </p>
 
 <AddDataModal

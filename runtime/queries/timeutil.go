@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	"github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime/pkg/duration"
 	"github.com/fridencao/stardata/runtime/pkg/timeutil"
 )

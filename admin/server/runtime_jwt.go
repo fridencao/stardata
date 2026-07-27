@@ -6,8 +6,8 @@ import (
 
 	"github.com/fridencao/stardata/admin/database"
 	"github.com/fridencao/stardata/admin/server/auth"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
 	runtimeauth "github.com/fridencao/stardata/runtime/server/auth"
 	"google.golang.org/grpc/codes"

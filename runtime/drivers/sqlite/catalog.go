@@ -521,6 +521,12 @@ func (c *catalogStore) UpdateAISession(ctx context.Context, s *drivers.AISession
 	return nil
 }
 
+// DeleteAISession deletes a conversation session and all its messages.
+// It reuses the batched transaction logic from the expired-session cleanup.
+func (c *catalogStore) DeleteAISession(ctx context.Context, sessionID string) error {
+	return c.deleteAISessionBatch(ctx, []string{sessionID})
+}
+
 func (c *catalogStore) FindAIMessages(ctx context.Context, sessionID string) ([]*drivers.AIMessage, error) {
 	rows, err := c.db.QueryxContext(ctx, `
 		SELECT id, parent_id, session_id, created_on, updated_on, "index", role, type, tool, content_type, content

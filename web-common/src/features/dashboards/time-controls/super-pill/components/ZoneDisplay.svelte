@@ -1,5 +1,6 @@
 <script lang="ts">
   import { formatIANA } from "@rilldata/web-common/lib/time/timezone";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { DateTime } from "luxon";
 
   export let iana: string;
@@ -20,7 +21,7 @@
 
     <p class="truncate font-normal text-left size-full">
       {#if isBrowserTime}
-        Browser Time
+        {m.dashboard_browser_time()}
       {:else}
         {iana}
       {/if}

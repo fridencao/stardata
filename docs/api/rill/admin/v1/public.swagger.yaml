@@ -1586,7 +1586,7 @@ paths:
                 description: If set, will use the provided attributes outright.
               type:
                 type: string
-                description: Type of resource to embed. If not set, defaults to "rill.runtime.v1.Explore".
+                description: Type of resource to embed. If not set, defaults to "stardata.runtime.v1.Explore".
               kind:
                 type: string
                 description: 'Deprecated: Alias for `type`.'
@@ -2243,14 +2243,14 @@ paths:
                 $ref: '#/definitions/v1Expression'
                 description: |-
                   Optional filter to apply as a row filter in queries.
-                  This will be translated to a rill.runtime.v1.SecurityRuleRowFilter, which currently applies to metric views queries.
+                  This will be translated to a stardata.runtime.v1.SecurityRuleRowFilter, which currently applies to metric views queries.
               fields:
                 type: array
                 items:
                   type: string
                 description: |-
                   Optional list of fields to limit access to. If empty, no field access rule will be added.
-                  This will be translated to a rill.runtime.v1.SecurityRuleFieldAccess, which currently applies to dimension and measure names for explores and metrics views.
+                  This will be translated to a stardata.runtime.v1.SecurityRuleFieldAccess, which currently applies to dimension and measure names for explores and metrics views.
               state:
                 type: string
                 description: Optional state to store with the token. Can be fetched with GetCurrentMagicAuthToken.

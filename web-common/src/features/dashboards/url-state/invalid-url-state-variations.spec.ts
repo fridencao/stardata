@@ -18,7 +18,7 @@ import {
   getCleanMetricsExploreForAssertion,
 } from "@rilldata/web-common/features/dashboards/url-state/url-state-variations.spec";
 import type { DashboardTimeControls } from "@rilldata/web-common/lib/time/types";
-import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import { beforeEach, describe, expect, it } from "vitest";
 
 const TestCases: {

@@ -8,7 +8,7 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/iancoleman/strcase"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime/drivers"
 )
 

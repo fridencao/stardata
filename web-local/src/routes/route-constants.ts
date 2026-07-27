@@ -1,12 +1,13 @@
 /** 业务门户专属路由前缀("/" 需精确匹配,见 isPortalRoute) */
 export const PORTAL_ROUTE_PREFIXES = ["/chat", "/boards"] as const;
 
+/** 高级模式(旧 IDE)路由前缀,使用统一的 PortalNav + StudioTabs 壳 */
+export const IDE_ROUTE_PREFIXES = ["/files", "/connector/", "/graph"] as const;
+
 /** 技术侧(Studio + 旧 IDE)专属路由前缀 */
 export const STUDIO_ROUTE_PREFIXES = [
   "/studio",
-  "/files",
-  "/connector/",
-  "/graph",
+  ...IDE_ROUTE_PREFIXES,
   "/status",
 ] as const;
 
@@ -34,4 +35,8 @@ export function isPortalRoute(pathname: string): boolean {
 
 export function isStudioRoute(pathname: string): boolean {
   return STUDIO_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+}
+
+export function isIdeRoute(pathname: string): boolean {
+  return IDE_ROUTE_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 }

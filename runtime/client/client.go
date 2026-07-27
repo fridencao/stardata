@@ -7,7 +7,7 @@ import (
 	"slices"
 	"strings"
 
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime/pkg/pagination"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
@@ -30,7 +30,7 @@ const retryPolicy = `{"methodConfig": [{
 }]}`
 
 // Client connects to a runtime server.
-// It's a thin wrapper around the generated gRPC client for proto/rill/runtime/v1.
+// It's a thin wrapper around the generated gRPC client for proto/stardata/runtime/v1.
 type Client struct {
 	runtimev1.RuntimeServiceClient
 	conn *grpc.ClientConn

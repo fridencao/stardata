@@ -233,12 +233,12 @@
     })}
     href={tddHref}
   >
-    <h2
+    <h4
       class="line-clamp-2 text-fg-muted hover:text-theme-700 group-hover:text-theme-700 font-semibold whitespace-normal"
       style:font-size={withTimeseries ? "" : "0.8rem"}
     >
       {name}
-    </h2>
+    </h4>
     <div
       role="button"
       class="text-fg-secondary relative w-full h-full overflow-hidden text-ellipsis"

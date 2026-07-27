@@ -104,9 +104,9 @@ test.describe("File Explorer", () => {
       await page.getByRole("menuitem", { name: "New folder" }).hover();
       const [createDirectoryResponse, getFilesResponse] = await Promise.all([
         page.waitForResponse(
-          "**/rill.runtime.v1.RuntimeService/CreateDirectory",
+          "**/stardata.runtime.v1.RuntimeService/CreateDirectory",
         ),
-        page.waitForResponse("**/rill.runtime.v1.RuntimeService/ListFiles"),
+        page.waitForResponse("**/stardata.runtime.v1.RuntimeService/ListFiles"),
         page.getByRole("menuitem", { name: "New folder" }).click(),
       ]);
 

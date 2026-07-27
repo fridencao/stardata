@@ -151,17 +151,20 @@ func (a *Authenticator) Login(ctx context.Context, username, password string) (s
 	if err := bcrypt.CompareHashAndPassword([]byte(u.PasswordHash), []byte(password)); err != nil {
 		return "", ErrInvalidCredentials
 	}
-	return a.issueToken(u.Username, u.Role, u.Email, u.Name)
+	return a.issueToken(u.Username, u.Role, u.Email, u.Name, u.SpacesOrDefault())
 }
 
 // issueToken mints a StarData JWT for the given subject/role.
-func (a *Authenticator) issueToken(subject, role, email, name string) (string, error) {
+// spaces is the list of page "spaces" the user may see (business | tech),
+// carried in the token so the SPA can gate navigation by role.
+func (a *Authenticator) issueToken(subject, role, email, name string, spaces []string) (string, error) {
 	if a.issuer == nil {
 		return "", errors.New("token issuer is not configured for this provider")
 	}
 	attrs := map[string]any{
-		"id":    subject,
-		"admin": role == "admin",
+		"id":     subject,
+		"admin":  role == "admin",
+		"spaces": spaces,
 	}
 	if email != "" {
 		attrs["email"] = email
@@ -176,6 +179,41 @@ func (a *Authenticator) issueToken(subject, role, email, name string) (string, e
 		SystemPermissions: rolePermissions(role),
 		Attributes:    attrs,
 	})
+}
+
+// normalizeSpaces coerces the arbitrary value stored in a JWT's "spaces"
+// claim (or a LocalUser.Spaces slice) into a clean []string. Tolerates
+// nil, a comma-separated string, or a []interface{} produced by JSON
+// decoding of the JWT payload.
+func normalizeSpaces(v any) []string {
+	switch t := v.(type) {
+	case nil:
+		return nil
+	case []string:
+		return t
+	case string:
+		if strings.TrimSpace(t) == "" {
+			return nil
+		}
+		parts := strings.Split(t, ",")
+		out := make([]string, 0, len(parts))
+		for _, p := range parts {
+			if p = strings.TrimSpace(p); p != "" {
+				out = append(out, p)
+			}
+		}
+		return out
+	case []any:
+		out := make([]string, 0, len(t))
+		for _, e := range t {
+			if s, ok := e.(string); ok && s != "" {
+				out = append(out, s)
+			}
+		}
+		return out
+	default:
+		return nil
+	}
 }
 
 // LoginHandler handles POST /auth/login (provider=local).
@@ -251,7 +289,8 @@ func (a *Authenticator) RefreshHandler() http.HandlerFunc {
 		if claims.Admin() {
 			role = "admin"
 		}
-		token, err := a.issueToken(claims.UserID, role, "", "")
+		spaces := normalizeSpaces(claims.UserAttributes["spaces"])
+		token, err := a.issueToken(claims.UserID, role, "", "", spaces)
 		if err != nil {
 			http.Error(w, "failed to refresh token", http.StatusInternalServerError)
 			return
@@ -333,7 +372,7 @@ func (a *Authenticator) OIDCCallbackHandler() http.HandlerFunc {
 		}
 		// OIDC users are granted the viewer role by default. Role mapping from IdP groups
 		// can be added later (see plan 1.4 / Phase 3 RBAC).
-		token, err := a.issueToken(subject, "viewer", claims.Email, claims.Name)
+		token, err := a.issueToken(subject, "viewer", claims.Email, claims.Name, []string{"business", "tech"})
 		if err != nil {
 			http.Error(w, "failed to issue token", http.StatusInternalServerError)
 			return

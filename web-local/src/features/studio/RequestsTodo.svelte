@@ -7,6 +7,7 @@
   } from "@rilldata/web-common/features/chat/requests/requests-file";
   import { createRuntimeServiceGetFile } from "@rilldata/web-common/runtime-client";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   const runtimeClient = useRuntimeClient();
 
@@ -41,7 +42,7 @@
 
 <section class="mt-8">
   <h3 class="text-base font-bold text-gray-900">
-    需求待办
+    {m.studio_requests_title()}
     {#if openItems.length > 0}
       <span
         class="ml-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700"
@@ -51,20 +52,20 @@
     {/if}
   </h3>
   <p class="mt-0.5 text-[13px] text-gray-400">
-    业务人员在对话中提出的数据需求（来自 /requests.yaml）
+    {m.studio_requests_desc()}
   </p>
 
   {#if openItems.length === 0}
     <div
-      class="mt-3 rounded-xl border border-dashed border-gray-300 bg-white px-4 py-8 text-center text-sm text-gray-400"
+      class="mt-3 rounded-xl border border-dashed border-gray-300 bg-surface-card px-4 py-8 text-center text-sm text-gray-400"
     >
-      暂无待处理需求
+      {m.studio_requests_empty()}
     </div>
   {:else}
     <ul class="mt-3 flex flex-col gap-2">
       {#each openItems as item (item.created_at + item.question)}
         <li
-          class="flex items-start justify-between gap-3 rounded-xl border border-gray-200 bg-white px-4 py-3"
+          class="flex items-start justify-between gap-3 rounded-xl border border-gray-200 bg-surface-card px-4 py-3"
         >
           <div class="min-w-0">
             <p class="text-sm font-medium text-gray-900">{item.question}</p>
@@ -81,7 +82,7 @@
             disabled={saving}
             onclick={() => markDone(item)}
           >
-            ✓ 标记完成
+            {m.studio_requests_mark_done()}
           </button>
         </li>
       {/each}
@@ -91,7 +92,7 @@
   {#if doneItems.length > 0}
     <details class="mt-3">
       <summary class="cursor-pointer text-[12.5px] text-gray-400">
-        已完成（{doneItems.length}）
+        {m.studio_requests_done_count({ count: doneItems.length })}
       </summary>
       <ul class="mt-2 flex flex-col gap-1">
         {#each doneItems as item (item.created_at + item.question)}

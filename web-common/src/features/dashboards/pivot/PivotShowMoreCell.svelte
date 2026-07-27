@@ -2,6 +2,7 @@
   import Spacer from "@rilldata/web-common/components/icons/Spacer.svelte";
   import Tooltip from "@rilldata/web-common/components/tooltip/Tooltip.svelte";
   import TooltipContent from "@rilldata/web-common/components/tooltip/TooltipContent.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import type { PivotDataRow } from "@rilldata/web-common/features/dashboards/pivot/types";
   import type { Row } from "tanstack-table-8-svelte-5";
 
@@ -19,7 +20,7 @@
   {/if}
   <Tooltip distance={8} location="right">
     <span class={assembled ? "text-fg-primary" : "text-fg-disabled"}>
-      Show more ...
+      {m.dashboard_pivot_show_more()}
     </span>
     <TooltipContent slot="tooltip-content">
       {value}

@@ -28,8 +28,9 @@ func (r *Runtime) FeatureFlags(ctx context.Context, instanceID string, claims *S
 
 // defaultFeatureFlags contains the default feature flag rules.
 var defaultFeatureFlags = map[string]string{
-	// Controls whether the export functionality is visible
-	"exports": "true",
+	// Controls whether the export functionality is visible.
+	// Disabled by default: data export is considered risky and not yet open to users.
+	"exports": "false",
 	// Controls visibility of the source data viewer table in Rill Cloud for metrics views
 	"cloud_data_viewer": "false",
 	// Controls visibility of the global dimension search feature

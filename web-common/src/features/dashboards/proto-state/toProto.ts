@@ -33,7 +33,7 @@ import {
 import {
   Condition,
   Expression,
-} from "@rilldata/web-common/proto/gen/rill/runtime/v1/expression_pb";
+} from "@rilldata/web-common/proto/gen/stardata/runtime/v1/expression_pb";
 import {
   DashboardDimensionFilter,
   DashboardState,
@@ -41,7 +41,7 @@ import {
   DashboardState_LeaderboardContextColumn,
   DashboardTimeRange,
   PivotElement,
-} from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+} from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import type {
   V1ExploreSpec,
   V1Expression,

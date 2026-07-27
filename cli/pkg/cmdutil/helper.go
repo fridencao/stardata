@@ -17,7 +17,7 @@ import (
 	"github.com/fridencao/stardata/cli/pkg/dotrill"
 	"github.com/fridencao/stardata/cli/pkg/printer"
 	"github.com/fridencao/stardata/cli/pkg/version"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	runtimeclient "github.com/fridencao/stardata/runtime/client"
 	"github.com/fridencao/stardata/runtime/pkg/activity"
 	"github.com/fridencao/stardata/runtime/pkg/fileutil"

@@ -33,7 +33,7 @@ type MyFixtures = {
 export const rillCloud = base.extend<MyFixtures>({
   embeddedInitialState: [null, { option: true }],
   embeddedResourceName: ["bids_explore", { option: true }],
-  embeddedResourceType: ["rill.runtime.v1.Explore", { option: true }],
+  embeddedResourceType: ["stardata.runtime.v1.Explore", { option: true }],
 
   // Note: the `e2e` project uses the admin auth file by default, so it's likely that
   // this fixture won't be used often.

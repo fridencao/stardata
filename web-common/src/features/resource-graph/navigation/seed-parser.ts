@@ -87,7 +87,7 @@ export const ALLOWED_FOR_GRAPH = new Set<ResourceKind>([
  * Handles various input formats:
  * - "name" -> defaults to MetricsView kind
  * - "kind:name" -> parses kind and name (accepts plural forms)
- * - "rill.runtime.v1.Kind:name" -> fully qualified kind
+ * - "stardata.runtime.v1.Kind:name" -> fully qualified kind
  *
  * The graph feature accepts plural forms (e.g., "models", "sources") for user convenience,
  * but normalizes them to the singular forms used by the rest of the app.
@@ -96,9 +96,9 @@ export const ALLOWED_FOR_GRAPH = new Set<ResourceKind>([
  * @returns Normalized seed as either a string or V1ResourceName object
  *
  * @example
- * normalizeSeed("orders") // { kind: "rill.runtime.v1.MetricsView", name: "orders" }
- * normalizeSeed("model:clean_orders") // { kind: "rill.runtime.v1.Model", name: "clean_orders" }
- * normalizeSeed("models:clean_orders") // { kind: "rill.runtime.v1.Model", name: "clean_orders" }
+ * normalizeSeed("orders") // { kind: "stardata.runtime.v1.MetricsView", name: "orders" }
+ * normalizeSeed("model:clean_orders") // { kind: "stardata.runtime.v1.Model", name: "clean_orders" }
+ * normalizeSeed("models:clean_orders") // { kind: "stardata.runtime.v1.Model", name: "clean_orders" }
  */
 export function normalizeSeed(s: string): string | V1ResourceName {
   const idx = s.indexOf(":");
@@ -151,7 +151,7 @@ export function isKindToken(s: string): ResourceKind | undefined {
  *
  * @example
  * tokenForKind(ResourceKind.Model) // "models"
- * tokenForKind("rill.runtime.v1.Source") // "sources"
+ * tokenForKind("stardata.runtime.v1.Source") // "sources"
  */
 export function tokenForKind(
   kind?: ResourceKind | string | null,
@@ -387,8 +387,8 @@ export function urlParamsToSeeds(params: GraphUrlParams): string[] {
  * buildGraphUrlNew({ resources: ['orders', 'revenue'] })
  * // '/graph?resource=orders&resource=revenue'
  *
- * buildGraphUrlNew({ resources: ['model:orders'], expanded: 'rill.runtime.v1.Model:orders' })
- * // '/graph?resource=model:orders&expanded=rill.runtime.v1.Model:orders'
+ * buildGraphUrlNew({ resources: ['model:orders'], expanded: 'stardata.runtime.v1.Model:orders' })
+ * // '/graph?resource=model:orders&expanded=stardata.runtime.v1.Model:orders'
  */
 export function buildGraphUrlNew(options: {
   kind?: KindToken | null;

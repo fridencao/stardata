@@ -1,6 +1,7 @@
 import type { V1Resource } from "@rilldata/web-common/runtime-client";
 import { runtimeServiceGetFile } from "@rilldata/web-common/runtime-client";
 import type { RuntimeClient } from "@rilldata/web-common/runtime-client/v2";
+import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 import {
   fieldLabel,
   parseMetricsViewYaml,
@@ -20,11 +21,12 @@ export function buildQuestionsFromYaml(yamlText: string): string[] {
     .map(fieldLabel)
     .find((l): l is string => !!l);
   const questions: string[] = [];
-  if (measures[0]) questions.push(`最近30天${measures[0]}的趋势如何？`);
+  if (measures[0])
+    questions.push(m.portal_home_q_trend({ measure: measures[0] }));
   if (measures[0] && dimension)
-    questions.push(`${measures[0]}按${dimension}分布是怎样的？`);
+    questions.push(m.portal_home_q_dist({ measure: measures[0], dimension }));
   const monthly = measures[1] ?? measures[0];
-  if (monthly) questions.push(`本月${monthly}是多少？`);
+  if (monthly) questions.push(m.portal_home_q_month({ measure: monthly }));
   return questions;
 }
 

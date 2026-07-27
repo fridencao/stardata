@@ -21,7 +21,7 @@ import {
 import {
   DashboardState_ActivePage,
   DashboardState_LeaderboardSortType,
-} from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb.ts";
+} from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb.ts";
 import {
   type V1ExploreSpec,
   type V1Expression,

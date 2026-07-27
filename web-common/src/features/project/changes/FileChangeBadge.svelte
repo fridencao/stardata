@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { GitDiffResponse_GitFileStatus } from "@rilldata/web-common/proto/gen/rill/runtime/v1/api_pb";
+  import type { GitDiffResponse_GitFileStatus } from "@rilldata/web-common/proto/gen/stardata/runtime/v1/api_pb";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   let { status }: { status: GitDiffResponse_GitFileStatus | undefined } =

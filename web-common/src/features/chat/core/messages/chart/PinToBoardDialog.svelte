@@ -9,6 +9,7 @@
     runtimeServicePutFile,
   } from "@rilldata/web-common/runtime-client";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import type { ChartType } from "../../../../components/charts/types";
   import { appendChartToCanvasYaml, newCanvasYaml } from "./pin-to-board";
 
@@ -43,7 +44,7 @@
       if (selectedName !== NEW_BOARD) {
         const board = boards.find((b) => b.meta?.name?.name === selectedName);
         const path = board?.meta?.filePaths?.[0];
-        if (!path) throw new Error("找不到看板文件");
+        if (!path) throw new Error(m.chat_pin_board_file_missing());
         const file = await runtimeServiceGetFile(runtimeClient, { path });
         const blob = appendChartToCanvasYaml(file.blob ?? "", chartType, spec);
         await runtimeServicePutFile(runtimeClient, {
@@ -55,7 +56,7 @@
         boardName = selectedName;
       } else {
         const existing = boards.map((b) => b.meta?.name?.name ?? "");
-        const safeName = (newBoardName.trim() || "我的看板")
+        const safeName = (newBoardName.trim() || m.chat_pin_default_board_name())
           .replace(/[^a-zA-Z0-9_一-龥]/g, "_");
         boardName = getName(safeName, existing);
         await runtimeServicePutFile(runtimeClient, {
@@ -67,12 +68,12 @@
       }
       eventBus.emit("notification", {
         type: "success",
-        message: "已钉到看板",
-        link: { text: "查看看板", href: `/boards/${boardName}` },
+        message: m.chat_pin_success(),
+        link: { text: m.chat_pin_view_board(), href: `/boards/${boardName}` },
       });
       open = false;
     } catch (e) {
-      errorMessage = e instanceof Error ? e.message : "写入失败，请重试";
+      errorMessage = e instanceof Error ? e.message : m.chat_pin_write_failed();
     }
     saving = false;
   }
@@ -80,11 +81,11 @@
 
 <Dialog.Root bind:open>
   <Dialog.Content>
-    <Dialog.Title>钉到看板</Dialog.Title>
+    <Dialog.Title>{m.chat_pin_dialog_title()}</Dialog.Title>
 
     <div class="flex flex-col gap-3 py-2">
       <label class="flex flex-col gap-1 text-sm">
-        选择看板
+        {m.chat_pin_select_board()}
         <select
           class="rounded-md border border-gray-300 px-2 py-1.5 text-sm"
           bind:value={selectedName}
@@ -95,16 +96,16 @@
               {board.canvas?.spec?.displayName || board.meta?.name?.name}
             </option>
           {/each}
-          <option value={NEW_BOARD}>＋ 新建看板…</option>
+          <option value={NEW_BOARD}>{m.chat_pin_new_board_option()}</option>
         </select>
       </label>
 
       {#if selectedName === NEW_BOARD}
         <label class="flex flex-col gap-1 text-sm">
-          新看板名称
+          {m.chat_pin_new_board_name()}
           <input
             class="rounded-md border border-gray-300 px-2 py-1.5 text-sm"
-            placeholder="例如：经营周报"
+            placeholder={m.chat_pin_new_board_placeholder()}
             bind:value={newBoardName}
           />
         </label>
@@ -116,8 +117,8 @@
     </div>
 
     <Dialog.Footer class="gap-x-2">
-      <Button type="tertiary" onClick={() => (open = false)}>取消</Button>
-      <Button type="primary" loading={saving} onClick={pin}>钉到看板</Button>
+      <Button type="tertiary" onClick={() => (open = false)}>{m.common_cancel()}</Button>
+      <Button type="primary" loading={saving} onClick={pin}>{m.chat_pin_dialog_title()}</Button>
     </Dialog.Footer>
   </Dialog.Content>
 </Dialog.Root>

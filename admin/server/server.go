@@ -18,7 +18,7 @@ import (
 	"github.com/fridencao/stardata/admin/database"
 	"github.com/fridencao/stardata/admin/server/auth"
 	"github.com/fridencao/stardata/admin/server/cookies"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/fridencao/stardata/runtime/pkg/activity"
 	"github.com/fridencao/stardata/runtime/pkg/graceful"
 	"github.com/fridencao/stardata/runtime/pkg/httputil"
@@ -43,10 +43,10 @@ var favicon []byte
 var (
 	_minCliVersion         = version.Must(version.NewVersion("0.20.0"))
 	_minCliVersionByMethod = map[string]*version.Version{
-		"/rill.admin.v1.AdminService/UpdateProject":          version.Must(version.NewVersion("0.28.0")),
-		"/rill.admin.v1.AdminService/UpdateOrganization":     version.Must(version.NewVersion("0.28.0")),
-		"/rill.admin.v1.AdminService/UpdateProjectVariables": version.Must(version.NewVersion("0.51.0")),
-		"/rill.admin.v1.AdminService/CreateService":          version.Must(version.NewVersion("0.67.0")),
+		"/stardata.admin.v1.AdminService/UpdateProject":          version.Must(version.NewVersion("0.28.0")),
+		"/stardata.admin.v1.AdminService/UpdateOrganization":     version.Must(version.NewVersion("0.28.0")),
+		"/stardata.admin.v1.AdminService/UpdateProjectVariables": version.Must(version.NewVersion("0.51.0")),
+		"/stardata.admin.v1.AdminService/CreateService":          version.Must(version.NewVersion("0.67.0")),
 	}
 )
 
@@ -193,7 +193,7 @@ func (s *Server) HTTPHandler(ctx context.Context) (http.Handler, error) {
 	runtimeProxyCORSMiddleware := cors.New(newCORSOptions([]string{"*"}, false)).Handler      // Allow any origin but no cookies. In the longer term, we should add explicit domain allowlisting per org or project.
 
 	// Add gRPC and gRPC-to-REST transcoder.
-	// This will be the fallback for REST routes like `/v1/ping` and GPRC routes like `/rill.admin.v1.AdminService/Ping`.
+	// This will be the fallback for REST routes like `/v1/ping` and GPRC routes like `/stardata.admin.v1.AdminService/Ping`.
 	var transcoder http.Handler
 	transcoder, err := vanguardgrpc.NewTranscoder(grpcServer)
 	if err != nil {
@@ -206,9 +206,9 @@ func (s *Server) HTTPHandler(ctx context.Context) (http.Handler, error) {
 	mux.Handle("/v1/users/current", s.authenticator.CookieRefreshMiddleware(transcoder))
 
 	mux.Handle("/v1/", transcoder)
-	mux.Handle("/rill.admin.v1.AdminService/", transcoder)
-	mux.Handle("/rill.admin.v1.AIService/", transcoder)
-	mux.Handle("/rill.admin.v1.TelemetryService/", transcoder)
+	mux.Handle("/stardata.admin.v1.AdminService/", transcoder)
+	mux.Handle("/stardata.admin.v1.AIService/", transcoder)
+	mux.Handle("/stardata.admin.v1.TelemetryService/", transcoder)
 
 	// Add runtime proxy.
 	proxyHandler := observability.Middleware(
@@ -347,7 +347,7 @@ func (s *Server) checkRateLimit(ctx context.Context) (context.Context, error) {
 	}
 
 	limit := ratelimit.Default
-	if strings.HasPrefix(method, "/rill.admin.v1.AIService") {
+	if strings.HasPrefix(method, "/stardata.admin.v1.AIService") {
 		limit = ratelimit.Sensitive
 	}
 
@@ -411,11 +411,11 @@ func (s *Server) jwtAttributesForService(ctx context.Context, serviceID string, 
 }
 
 func timeoutSelector(fullMethodName string) time.Duration {
-	if strings.HasPrefix(fullMethodName, "/rill.admin.v1.AIService") {
+	if strings.HasPrefix(fullMethodName, "/stardata.admin.v1.AIService") {
 		// NOTE: The runtime usually sets a lower timeout through its AILLMTimeoutSeconds config, so this is more of a hard upper bound.
 		return time.Minute * 10
 	}
-	if fullMethodName == "/rill.admin.v1.AdminService/DeleteProject" {
+	if fullMethodName == "/stardata.admin.v1.AdminService/DeleteProject" {
 		return time.Minute * 4
 	}
 	return time.Minute

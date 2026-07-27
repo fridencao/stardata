@@ -37,7 +37,7 @@ import {
   type CreateQueryResult,
   keepPreviousData,
 } from "@tanstack/svelte-query";
-import { DashboardState_ActivePage } from "../../../proto/gen/rill/ui/v1/dashboard_pb";
+import { DashboardState_ActivePage } from "../../../proto/gen/stardata/ui/v1/dashboard_pb";
 import { dimensionSearchText } from "../stores/dashboard-stores";
 import {
   getFilterForComparedDimension,

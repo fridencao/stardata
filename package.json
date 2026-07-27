@@ -11,7 +11,7 @@
     "web-local"
   ],
   "scripts": {
-    "build:i18n": "paraglide-js compile --project web-common/src/lib/i18n/project.inlang --outdir web-common/src/lib/i18n/gen",
+    "build:i18n": "paraglide-js compile --project web-common/src/lib/i18n/project.inlang --outdir web-common/src/lib/i18n/gen --strategy cookie preferredLanguage baseLocale",
     "build": "npm run build:i18n && npm run build -w web-local",
     "dev": "sh -c 'npm run dev-runtime -- \"$@\" & npm run dev-web -- --port 3001 & wait' --",
     "dev-web": "npm run dev -w web-local -- ",

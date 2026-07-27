@@ -2,7 +2,7 @@ import { TDDChart } from "@rilldata/web-common/features/dashboards/time-dimensio
 import { reverseMap } from "@rilldata/web-common/lib/map-utils.ts";
 import { TIME_GRAIN } from "@rilldata/web-common/lib/time/config";
 import { TimeRangePreset } from "@rilldata/web-common/lib/time/types";
-import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import {
   V1ExploreSortType,
   V1ExploreWebView,

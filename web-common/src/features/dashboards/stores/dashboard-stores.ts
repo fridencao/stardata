@@ -16,7 +16,7 @@ import {
   type ScrubRange,
   type TimeRange,
 } from "@rilldata/web-common/lib/time/types";
-import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import type {
   V1ExploreSpec,
   V1Expression,

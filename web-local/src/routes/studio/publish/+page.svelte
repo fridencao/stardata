@@ -21,6 +21,7 @@
     writePublishYaml,
   } from "../../../features/portal/publish/publish-store";
   import RequestsTodo from "../../../features/studio/RequestsTodo.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   const client = useRuntimeClient();
   const publishFile = usePublishFile(client);
@@ -80,26 +81,25 @@
 </script>
 
 <svelte:head>
-  <title>StarData Studio · 发布</title>
+  <title>StarData Studio · {m.studio_tabs_publish()}</title>
 </svelte:head>
 
-<SectionHeader title="发布" description="控制哪些指标集对业务门户(推荐问题 + Chat AI)可见" />
+<SectionHeader title={m.studio_tabs_publish()} description={m.studio_publish_desc()} />
 
 <div class="mt-4 flex items-center rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-[12.5px] text-blue-800">
   <Info class="size-4 mr-1.5 flex-shrink-0 text-blue-600" />
-  门控规则:项目根目录 <code>publish.yaml</code> 列出的指标集才对业务可见;
-  文件不存在或名单为空时不门控(全部可见)。
+  {m.studio_publish_gate_before()} <code>publish.yaml</code> {m.studio_publish_gate_after()}
 </div>
 
 <div class="mt-4 card-basic overflow-hidden">
   <table class="w-full text-left text-[13px]">
     <thead class="border-b border-gray-200 bg-gray-50 text-xs text-gray-500">
       <tr>
-        <th class="px-4 py-2.5 font-medium">指标集</th>
-        <th class="px-4 py-2.5 font-medium">指标 / 维度</th>
-        <th class="px-4 py-2.5 font-medium">中文别名覆盖</th>
-        <th class="px-4 py-2.5 font-medium">状态</th>
-        <th class="px-4 py-2.5 text-right font-medium">发布</th>
+        <th class="px-4 py-2.5 font-medium">{m.studio_semantics_col_metrics_view()}</th>
+        <th class="px-4 py-2.5 font-medium">{m.studio_semantics_col_measures_dims()}</th>
+        <th class="px-4 py-2.5 font-medium">{m.studio_semantics_col_label_coverage()}</th>
+        <th class="px-4 py-2.5 font-medium">{m.studio_semantics_col_status()}</th>
+        <th class="px-4 py-2.5 text-right font-medium">{m.studio_tabs_publish()}</th>
       </tr>
     </thead>
     <tbody>
@@ -122,11 +122,11 @@
           </td>
           <td class="px-4 py-3">
             {#if !row.valid}
-              <StatusBadge variant="error">解析错误</StatusBadge>
+              <StatusBadge variant="error">{m.studio_semantics_status_error()}</StatusBadge>
             {:else if row.published}
-              <StatusBadge variant="success">已发布</StatusBadge>
+              <StatusBadge variant="success">{m.studio_publish_status_published()}</StatusBadge>
             {:else}
-              <StatusBadge variant="neutral">未发布</StatusBadge>
+              <StatusBadge variant="neutral">{m.studio_publish_status_unpublished()}</StatusBadge>
             {/if}
           </td>
           <td class="px-4 py-3 text-right">
@@ -135,7 +135,7 @@
             {:else}
               <label class="flex items-center justify-end gap-2 text-[13px] cursor-pointer">
                 <input type="checkbox" checked={row.published} disabled={saving} on:change={(e) => togglePublish(row.name, (e.target as HTMLInputElement).checked)} />
-                <span>{row.published ? "已发布" : "未发布"}</span>
+                <span>{row.published ? m.studio_publish_status_published() : m.studio_publish_status_unpublished()}</span>
               </label>
             {/if}
           </td>
@@ -143,7 +143,7 @@
       {:else}
         <tr>
           <td colspan="5" class="px-4 py-10 text-center text-gray-400">
-            项目中还没有指标集。请先在「语义层」或高级模式(IDE)中创建。
+            {m.studio_publish_empty()}
           </td>
         </tr>
       {/each}

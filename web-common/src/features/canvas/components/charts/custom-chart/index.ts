@@ -17,7 +17,7 @@ import {
   type PivotState,
 } from "@rilldata/web-common/features/dashboards/pivot/types";
 import type { ExploreState } from "@rilldata/web-common/features/dashboards/stores/explore-state";
-import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import type { V1Resource } from "@rilldata/web-common/runtime-client";
 import { get, writable, type Writable } from "svelte/store";
 import CanvasCustomChart from "./CanvasCustomChart.svelte";

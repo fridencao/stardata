@@ -8,6 +8,7 @@
   import type { Conversation } from "../../conversation";
   import FeedbackButtons from "../../feedback/FeedbackButtons.svelte";
   import RequestDialog from "../../../requests/RequestDialog.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { extractFollowUps, extractMessageText } from "../../utils";
   import type { TextBlock } from "./text-block";
 
@@ -95,7 +96,7 @@
         class="follow-up-chip"
         onclick={() => (requestOpen = true)}
       >
-        ✋ 提需求
+        {m.chat_request_cta()}
       </button>
       <RequestDialog bind:open={requestOpen} {defaultQuestion} />
     {/if}

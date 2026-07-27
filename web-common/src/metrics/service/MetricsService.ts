@@ -4,7 +4,7 @@ import type {
   PickActionFunctions,
 } from "@rilldata/web-common/metrics/service/ServiceBase";
 import { getActionMethods } from "@rilldata/web-common/metrics/service/ServiceBase";
-import { GetMetadataResponse } from "@rilldata/web-common/proto/gen/rill/local/v1/api_pb";
+import { GetMetadataResponse } from "@rilldata/web-common/proto/gen/stardata/local/v1/api_pb";
 import MD5 from "crypto-js/md5";
 import { v4 as uuidv4 } from "uuid";
 import type { BehaviourEventFactory } from "./BehaviourEventFactory";

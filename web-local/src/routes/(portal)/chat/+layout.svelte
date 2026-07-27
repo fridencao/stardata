@@ -1,20 +1,9 @@
 <script lang="ts">
-  import LocalFullPageChat from "../../../features/chat/LocalFullPageChat.svelte";
+  import PortalFullPageChat from "../../../features/chat/PortalFullPageChat.svelte";
 </script>
 
-<div class="chat-page-wrapper">
-  <LocalFullPageChat />
-  <!-- This slot isn't used, but its presence avoids a SvelteKit browser console warning. -->
-  <slot />
-</div>
-
-<style lang="postcss">
-  .chat-page-wrapper {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    background: var(--surface-base);
-  }
-</style>
+<!-- Reuse the PortalNav + page shell provided by the parent (portal)/+layout.svelte. -->
+<!-- This layout only supplies the chat content so the top navigation is not duplicated. -->
+<PortalFullPageChat />
+<!-- Keep slot to satisfy SvelteKit nested layout contract without rendering extra DOM. -->
+<slot />

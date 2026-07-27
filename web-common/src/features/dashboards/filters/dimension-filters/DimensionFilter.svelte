@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { fly } from "svelte/transition";
   import { Chip } from "@rilldata/web-common/components/chip";
   import * as DropdownMenu from "@rilldata/web-common/components/dropdown-menu";
@@ -486,14 +487,14 @@
               <svelte:fragment slot="name">{name}</svelte:fragment>
               <svelte:fragment slot="description"
                 >{required
-                  ? "required dimension"
-                  : "dimension"}</svelte:fragment
+                  ? m.dashboard_required_dimension()
+                  : m.dashboard_dimension()}</svelte:fragment
               >
             </TooltipTitle>
             {#if missingRequired}
-              This filter is required. Select a value to load the dashboard.
+              {m.dashboard_filter_required_set_value()}
             {:else}
-              Click to edit the filters in this dimension
+              {m.dashboard_click_to_edit_dimension_filters()}
             {/if}
           </TooltipContent>
         </div>
@@ -581,10 +582,12 @@
           <LoadingSpinner />
         </div>
       {:else if error}
-        <div class="min-h-9 p-3 text-center text-red-600 text-xs">error</div>
+        <div class="min-h-9 p-3 text-center text-red-600 text-xs">
+          {m.dashboard_dim_filter_error()}
+        </div>
       {:else if inListTooLong}
         <div class="min-h-9 p-3 text-center text-red-600 text-xs">
-          List is too long. Please remove some values.
+          {m.dashboard_dim_filter_list_too_long()}
         </div>
       {:else if correctedSearchResults}
         <DropdownMenu.Group class="px-1" aria-label={`${name} results`}>
@@ -650,7 +653,7 @@
           <!-- Show "no results" only if both checked and unchecked are empty -->
           {#if uncheckedItems.length === 0 && (curMode !== DimensionFilterMode.Select || checkedItems.length === 0)}
             <div class="text-fg-disabled text-center p-2 w-full">
-              no results
+              {m.dashboard_dim_filter_no_results()}
             </div>
           {/if}
         </DropdownMenu.Group>

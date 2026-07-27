@@ -11,6 +11,7 @@
   import { getDeployRoute } from "@rilldata/web-common/features/project/deploy/route-utils.ts";
   import UpdateProjectPopup from "@rilldata/web-common/features/project/deploy/UpdateProjectPopup.svelte";
   import { copyWithAdditionalArguments } from "@rilldata/web-common/lib/url-utils";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { waitUntil } from "@rilldata/web-common/lib/waitUtils";
   import ProjectContainsRemoteChangesDialog from "@rilldata/web-common/features/project/ProjectContainsRemoteChangesDialog.svelte";
   import { eventBus } from "@rilldata/web-common/lib/event-bus/event-bus.ts";
@@ -170,10 +171,10 @@
     >
       <Rocket size={16} />
 
-      Deploy
+      {m.dashboard_deploy()}
     </Button>
     <TooltipContent slot="tooltip-content">
-      Deploy this project to StarData
+      {m.dashboard_deploy_tooltip()}
     </TooltipContent>
   </Tooltip>
 {/if}

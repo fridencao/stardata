@@ -1,40 +1,33 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import { portalRole } from "./portal-role-store";
+  import {
+    canViewBusiness,
+    canViewTech,
+    defaultHome,
+  } from "./user-spaces";
   import { isStudioRoute } from "../../routes/route-constants";
   import { themeControl } from "@rilldata/web-common/features/themes/theme-control";
-  import {
-    getStardataToken,
-    clearStardataToken,
-    decodeStardataToken,
-  } from "@rilldata/web-common/runtime-client/auth-token";
-  import { Wrench, Sun, Moon, ChevronDown, LogOut } from "lucide-svelte";
-
-  const links = [
-    { label: "首页", href: "/" },
-    { label: "对话", href: "/chat" },
-    { label: "看板", href: "/boards" },
-  ];
+  import StardataUserMenu from "@rilldata/web-common/features/authentication/StardataUserMenu.svelte";
+  import { Wrench, Sun, Moon, Home, Languages } from "lucide-svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
+  import { getLocale, setLocale } from "@rilldata/web-common/lib/i18n/gen/runtime";
 
   $: pathname = $page.url.pathname;
-  $: showStudioLink = isStudioRoute(pathname);
+  $: onStudio = isStudioRoute(pathname);
+  $: showTechNav = canViewTech();
+  $: showStudioLink = showTechNav && !onStudio;
+  $: showPortalLink = canViewBusiness() && onStudio;
+  $: brandHref = defaultHome();
   $: currentTheme = $themeControl;
-  $: hasToken = !!getStardataToken();
-  $: userClaims = decodeStardataToken(getStardataToken());
-  let menuOpen = false;
 
-  function isActive(href: string, path: string) {
-    return href === "/" ? path === "/" : path.startsWith(href);
-  }
-
-  function handleLogout() {
-    clearStardataToken();
-    window.location.href = "/login";
+  function toggleLocale() {
+    // setLocale writes localStorage and reloads the page by default
+    setLocale(getLocale() === "zh" ? "en" : "zh");
   }
 </script>
 
-<nav class="flex h-[60px] items-center border-b bg-white/90 px-9 backdrop-blur border-gray-200 dark:border-gray-700 dark:bg-gray-950/90">
-  <a href="/" class="flex items-center gap-2 text-base font-bold text-gray-900 dark:text-gray-100">
+<nav class="flex h-[60px] items-center border-b border-gray-200 bg-surface-background/90 px-9 backdrop-blur">
+  <a href={brandHref} class="flex items-center gap-2 text-base font-bold text-gray-900">
     <span
       class="grid size-[26px] place-items-center rounded-lg bg-primary-600 text-sm text-white"
     >
@@ -42,52 +35,26 @@
     </span>
     StarData
   </a>
-  <div class="flex gap-1">
-    {#each links as link (link.href)}
-      <a
-        href={link.href}
-        class="rounded-lg px-3.5 py-1.5 text-sm no-underline transition-colors {isActive(
-          link.href,
-          pathname,
-        )
-          ? 'bg-primary-50 font-semibold text-primary-700 dark:bg-primary-900/30 dark:text-primary-400'
-          : 'text-gray-600 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800'}"
-      >
-        {link.label}
-      </a>
-    {/each}
-  </div>
   <div class="ml-auto flex items-center gap-3">
     {#if showStudioLink}
       <a
         href="/studio"
-        class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-primary-700 bg-primary-50 no-underline transition-colors hover:bg-primary-100 dark:text-primary-400 dark:bg-primary-900/20 dark:hover:bg-primary-900/30"
+        class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-primary-700 bg-primary-50 no-underline transition-colors hover:bg-primary-100"
       >
-        <Wrench class="size-4" /> 技术工作台
+        <Wrench class="size-4" /> {m.portal_nav_tech_workbench()}
       </a>
     {/if}
-    <!-- Role switcher -->
-    <div class="flex rounded-lg bg-gray-100 p-0.5 text-xs dark:bg-gray-800">
-      <button
-        class="rounded-md px-2.5 py-1 transition-colors {$portalRole === 'business'
-          ? 'bg-white font-semibold shadow-sm dark:bg-gray-700 dark:shadow-none'
-          : 'text-gray-500 dark:text-gray-400'}"
-        onclick={() => portalRole.set("business")}
+    {#if showPortalLink}
+      <a
+        href="/"
+        class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-primary-700 bg-primary-50 no-underline transition-colors hover:bg-primary-100"
       >
-        业务视角
-      </button>
-      <button
-        class="rounded-md px-2.5 py-1 transition-colors {$portalRole === 'tech'
-          ? 'bg-white font-semibold shadow-sm dark:bg-gray-700 dark:shadow-none'
-          : 'text-gray-500 dark:text-gray-400'}"
-        onclick={() => portalRole.set("tech")}
-      >
-        技术视角
-      </button>
-    </div>
+        <Home class="size-4" /> {m.portal_nav_business_portal()}
+      </a>
+    {/if}
     <!-- Theme toggle -->
     <button
-      class="rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800"
+      class="rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100"
       onclick={() => {
         if (currentTheme === "dark") {
           themeControl.set.light();
@@ -95,7 +62,7 @@
           themeControl.set.dark();
         }
       }}
-      title={currentTheme === "dark" ? "切换浅色模式" : "切换深色模式"}
+      title={currentTheme === "dark" ? m.portal_nav_switch_light() : m.portal_nav_switch_dark()}
     >
       {#if currentTheme === "dark"}
         <Sun class="size-4" />
@@ -103,70 +70,16 @@
         <Moon class="size-4" />
       {/if}
     </button>
+    <!-- Language toggle -->
+    <button
+      class="flex items-center gap-1 rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100"
+      onclick={toggleLocale}
+      title={m.portal_nav_switch_language()}
+    >
+      <Languages class="size-4" />
+      <span class="text-xs font-semibold">{getLocale() === "zh" ? "EN" : "中"}</span>
+    </button>
     <!-- User profile dropdown -->
-    {#if hasToken}
-      <div class="relative">
-        <button
-          class="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-2.5 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
-          onclick={() => (menuOpen = !menuOpen)}
-          title={userClaims?.name || userClaims?.id || "用户"}
-        >
-          <span
-            class="grid size-6 place-items-center rounded-full bg-primary-600 text-xs font-semibold text-white"
-          >
-            {(userClaims?.name || userClaims?.id || "?").slice(0, 1).toUpperCase()}
-          </span>
-          <span class="hidden max-w-[120px] truncate sm:inline"
-            >{userClaims?.name || userClaims?.id}</span
-          >
-          <ChevronDown class="hidden size-3.5 text-gray-400 sm:inline" />
-        </button>
-
-        {#if menuOpen}
-          <!-- click-away backdrop -->
-          <div
-            class="fixed inset-0 z-40"
-            role="button"
-            tabindex="-1"
-            aria-label="关闭用户菜单"
-            onclick={() => (menuOpen = false)}
-            onkeydown={(e) => {
-              if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
-                menuOpen = false;
-              }
-            }}
-          ></div>
-          <div
-            class="absolute right-0 top-[calc(100%+8px)] z-50 w-56 rounded-xl border border-gray-200 bg-white p-1.5 shadow-lg dark:border-gray-700 dark:bg-gray-900"
-          >
-            <div class="px-3 py-2">
-              <div
-                class="truncate text-sm font-semibold text-gray-900 dark:text-gray-100"
-                >{userClaims?.name || userClaims?.id}</div
-              >
-              {#if userClaims?.email}
-                <div
-                  class="truncate text-xs text-gray-500 dark:text-gray-400"
-                  >{userClaims.email}</div
-                >
-              {/if}
-              <div
-                class="mt-1.5 inline-block rounded-full bg-gray-100 px-2 py-0.5 text-[11px] text-gray-600 dark:bg-gray-800 dark:text-gray-300"
-              >
-                {userClaims?.admin ? "管理员" : "普通用户"}
-              </div>
-            </div>
-            <div class="my-1 h-px bg-gray-100 dark:bg-gray-800"></div>
-            <button
-              class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
-              onclick={handleLogout}
-            >
-              <LogOut class="size-4" />
-              退出登录
-            </button>
-          </div>
-        {/if}
-      </div>
-    {/if}
+    <StardataUserMenu />
   </div>
 </nav>

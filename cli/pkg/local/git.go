@@ -6,8 +6,8 @@ import (
 
 	"connectrpc.com/connect"
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
-	localv1 "github.com/fridencao/stardata/proto/gen/rill/local/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
+	localv1 "github.com/fridencao/stardata/proto/gen/stardata/local/v1"
 	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 )
 

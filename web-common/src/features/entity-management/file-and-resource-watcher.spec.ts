@@ -187,7 +187,7 @@ describe("FileAndResourceWatcher", () => {
     const stream = fakeStreams[0];
     stream.fire("resource", {
       event: V1ResourceEvent.RESOURCE_EVENT_WRITE,
-      name: { name: "mv", kind: "rill.runtime.v1.MetricsView" },
+      name: { name: "mv", kind: "stardata.runtime.v1.MetricsView" },
       resource: {
         meta: {
           reconcileStatus: V1ReconcileStatus.RECONCILE_STATUS_IDLE,
@@ -200,7 +200,7 @@ describe("FileAndResourceWatcher", () => {
     // setQueryData was called with the resource key — the dispatcher ran.
     expect(qc.setQueryData).toHaveBeenCalledWith(
       getRuntimeServiceGetResourceQueryKey(INSTANCE_ID, {
-        name: { name: "mv", kind: "rill.runtime.v1.MetricsView" },
+        name: { name: "mv", kind: "stardata.runtime.v1.MetricsView" },
       }),
       expect.objectContaining({ resource: expect.any(Object) }),
     );
@@ -220,7 +220,7 @@ describe("FileAndResourceWatcher", () => {
     const stream = fakeStreams[0];
     stream.fire("resource", {
       event: V1ResourceEvent.RESOURCE_EVENT_WRITE,
-      name: { name: "mv", kind: "rill.runtime.v1.MetricsView" },
+      name: { name: "mv", kind: "stardata.runtime.v1.MetricsView" },
       resource: {
         meta: {
           reconcileStatus: V1ReconcileStatus.RECONCILE_STATUS_IDLE,
@@ -231,7 +231,7 @@ describe("FileAndResourceWatcher", () => {
     await new Promise((r) => setTimeout(r, 0));
 
     expect(logSpy).toHaveBeenCalledWith(
-      "[RECONCILE_STATUS_IDLE] rill.runtime.v1.MetricsView/mv",
+      "[RECONCILE_STATUS_IDLE] stardata.runtime.v1.MetricsView/mv",
     );
   });
 

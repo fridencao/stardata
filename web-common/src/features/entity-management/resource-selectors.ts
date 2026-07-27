@@ -19,20 +19,20 @@ import { queryClient } from "@rilldata/web-common/lib/svelte-query/globalQueryCl
 import type { RuntimeClient } from "@rilldata/web-common/runtime-client/v2";
 
 export enum ResourceKind {
-  ProjectParser = "rill.runtime.v1.ProjectParser",
-  Alert = "rill.runtime.v1.Alert",
-  Report = "rill.runtime.v1.Report",
-  Source = "rill.runtime.v1.Source",
-  Connector = "rill.runtime.v1.Connector",
-  Model = "rill.runtime.v1.Model",
-  MetricsView = "rill.runtime.v1.MetricsView",
-  Explore = "rill.runtime.v1.Explore",
-  Theme = "rill.runtime.v1.Theme",
-  Component = "rill.runtime.v1.Component",
-  Canvas = "rill.runtime.v1.Canvas",
-  API = "rill.runtime.v1.API",
-  RefreshTrigger = "rill.runtime.v1.RefreshTrigger",
-  Migration = "rill.runtime.v1.Migration",
+  ProjectParser = "stardata.runtime.v1.ProjectParser",
+  Alert = "stardata.runtime.v1.Alert",
+  Report = "stardata.runtime.v1.Report",
+  Source = "stardata.runtime.v1.Source",
+  Connector = "stardata.runtime.v1.Connector",
+  Model = "stardata.runtime.v1.Model",
+  MetricsView = "stardata.runtime.v1.MetricsView",
+  Explore = "stardata.runtime.v1.Explore",
+  Theme = "stardata.runtime.v1.Theme",
+  Component = "stardata.runtime.v1.Component",
+  Canvas = "stardata.runtime.v1.Canvas",
+  API = "stardata.runtime.v1.API",
+  RefreshTrigger = "stardata.runtime.v1.RefreshTrigger",
+  Migration = "stardata.runtime.v1.Migration",
 }
 
 export function displayResourceKind(kind: ResourceKind | undefined) {
@@ -106,9 +106,9 @@ export type UserFacingResourceKinds = Exclude<
 
 export const SingletonProjectParserName = "parser";
 
-// In the UI, we shouldn't show the `rill.runtime.v1` prefix
+// In the UI, we shouldn't show the `stardata.runtime.v1` prefix
 export function prettyResourceKind(kind: string) {
-  return kind.replace(/^rill\.runtime\.v1\./, "");
+  return kind.replace(/^stardata\.runtime\.v1\./, "");
 }
 
 /**

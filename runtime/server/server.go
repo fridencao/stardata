@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"io/fs"
 	"net/http"
 	"strings"
 	"time"
@@ -13,7 +14,7 @@ import (
 	grpc_validator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
 	gateway "github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
 	"github.com/fridencao/stardata/runtime/ai"
 	"github.com/fridencao/stardata/runtime/drivers"
@@ -186,15 +187,15 @@ func (s *Server) HTTPHandler(ctx context.Context, registerAdditionalHandlers fun
 	runtimev1.RegisterConnectorServiceServer(grpcServer, s)
 
 	// Add gRPC and gRPC-to-REST transcoder.
-	// This will be the fallback for REST routes like `/v1/ping` and GPRC routes like `/rill.admin.v1.RuntimeService/Ping`.
+	// This will be the fallback for REST routes like `/v1/ping` and GPRC routes like `/stardata.admin.v1.RuntimeService/Ping`.
 	transcoder, err := vanguardgrpc.NewTranscoder(grpcServer)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create transcoder: %w", err)
 	}
 	httpMux.Handle("/v1/", transcoder)
-	httpMux.Handle("/rill.runtime.v1.RuntimeService/", transcoder)
-	httpMux.Handle("/rill.runtime.v1.QueryService/", transcoder)
-	httpMux.Handle("/rill.runtime.v1.ConnectorService/", transcoder)
+	httpMux.Handle("/stardata.runtime.v1.RuntimeService/", transcoder)
+	httpMux.Handle("/stardata.runtime.v1.QueryService/", transcoder)
+	httpMux.Handle("/stardata.runtime.v1.ConnectorService/", transcoder)
 
 	// Call callback to register additional paths
 	// NOTE: This is so ugly, but not worth refactoring it properly right now.
@@ -228,6 +229,9 @@ func (s *Server) HTTPHandler(ctx context.Context, registerAdditionalHandlers fun
 
 	// Test a data source connection without saving (raw HTTP, bypasses gRPC/proto).
 	observability.MuxHandle(httpMux, "/v1/instances/{instance_id}/connectors:testconnection", observability.Middleware("runtime", s.logger, auth.HTTPMiddleware(s.aud, http.HandlerFunc(s.TestConnectionHandler))))
+
+	// Delete a conversation (raw HTTP, bypasses gRPC/proto).
+	observability.MuxHandle(httpMux, "/v1/instances/{instance_id}/ai/conversations/{conversation_id}", observability.Middleware("runtime", s.logger, auth.HTTPMiddleware(s.aud, http.HandlerFunc(s.DeleteConversationHandler))))
 
 	// Add Prometheus
 	if s.opts.ServePrometheus {
@@ -308,12 +312,12 @@ func HTTPErrorHandler(ctx context.Context, mux *gateway.ServeMux, marshaler gate
 }
 
 func timeoutSelector(fullMethodName string) time.Duration {
-	if strings.HasPrefix(fullMethodName, "/rill.runtime.v1.RuntimeService") && (strings.Contains(fullMethodName, "/Trigger") || strings.HasSuffix(fullMethodName, "Reconcile")) {
+	if strings.HasPrefix(fullMethodName, "/stardata.runtime.v1.RuntimeService") && (strings.Contains(fullMethodName, "/Trigger") || strings.HasSuffix(fullMethodName, "Reconcile")) {
 		return time.Minute * 59 // Not 60 to avoid forced timeout on ingress
 	}
 
-	if strings.HasPrefix(fullMethodName, "/rill.runtime.v1.QueryService") ||
-		strings.HasPrefix(fullMethodName, "/rill.runtime.v1.ConnectorService") {
+	if strings.HasPrefix(fullMethodName, "/stardata.runtime.v1.QueryService") ||
+		strings.HasPrefix(fullMethodName, "/stardata.runtime.v1.ConnectorService") {
 		return time.Minute * 5
 	}
 
@@ -383,6 +387,8 @@ func mapGRPCError(err error) error {
 		} else if errors.Is(err, drivers.ErrResourceAlreadyExists) {
 			err = status.Error(codes.AlreadyExists, err.Error())
 		} else if errors.Is(err, drivers.ErrNotFound) {
+			err = status.Error(codes.NotFound, err.Error())
+		} else if errors.Is(err, fs.ErrNotExist) {
 			err = status.Error(codes.NotFound, err.Error())
 		} else if errors.Is(err, runtime.ErrAINotConfigured) {
 			err = status.Error(codes.FailedPrecondition, err.Error())

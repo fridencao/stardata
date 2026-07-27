@@ -82,7 +82,7 @@ const config = {
         specs: [
           {
             id: 'admin',
-            spec: '../proto/gen/rill/admin/v1/public.openapi.yaml',
+            spec: '../proto/gen/stardata/admin/v1/public.openapi.yaml',
             route: '/api/admin/',
           },
         ],

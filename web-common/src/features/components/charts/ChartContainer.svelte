@@ -7,7 +7,7 @@
   import { transformTimeAndFiltersToExploreState } from "@rilldata/web-common/features/explores/explore-link/explore-state-transformer";
   import ExploreLink from "@rilldata/web-common/features/explores/explore-link/ExploreLink.svelte";
   import { MetricsViewSelectors } from "@rilldata/web-common/features/metrics-views/metrics-view-selectors";
-  import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+  import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
 
   import Filter from "@rilldata/web-common/components/icons/Filter.svelte";

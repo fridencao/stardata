@@ -1,7 +1,7 @@
 import type { PivotTableMode } from "@rilldata/web-common/features/dashboards/pivot/types";
-import { Operation } from "@rilldata/web-common/proto/gen/rill/runtime/v1/expression_pb";
-import { TimeGrain } from "@rilldata/web-common/proto/gen/rill/runtime/v1/time_grain_pb";
-import { DashboardState_PivotTableMode } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+import { Operation } from "@rilldata/web-common/proto/gen/stardata/runtime/v1/expression_pb";
+import { TimeGrain } from "@rilldata/web-common/proto/gen/stardata/runtime/v1/time_grain_pb";
+import { DashboardState_PivotTableMode } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import { V1Operation, V1TimeGrain } from "@rilldata/web-common/runtime-client";
 
 // This file should contain all the map from proto and API values.

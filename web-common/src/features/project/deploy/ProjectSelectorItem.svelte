@@ -2,7 +2,7 @@
   import ExternalLink from "@rilldata/web-common/components/icons/ExternalLink.svelte";
   import Github from "@rilldata/web-common/components/icons/Github.svelte";
   import StarDataLogoFilled from "@rilldata/web-common/components/icons/StarDataLogoFilled.svelte";
-  import type { Project } from "@rilldata/web-common/proto/gen/rill/admin/v1/api_pb";
+  import type { Project } from "@rilldata/web-common/proto/gen/stardata/admin/v1/api_pb";
   import * as Tooltip from "@rilldata/web-common/components/tooltip-v2";
 
   export let project: Project;

@@ -2124,7 +2124,7 @@ export type AdminServiceGetIFrameBody = {
   /** Optional ID for the external end user of the iframe. If set, the access token enables per-user state, such as AI chat history.
 Cannot be combined with `user_id`. If `user_email` matches a Rill Cloud user, their attributes are used, but this ID takes precedence for per-user state. */
   externalUserId?: string;
-  /** Type of resource to embed. If not set, defaults to "rill.runtime.v1.Explore". */
+  /** Type of resource to embed. If not set, defaults to "stardata.runtime.v1.Explore". */
   type?: string;
   /** Deprecated: Alias for `type`. */
   kind?: string;
@@ -2189,7 +2189,7 @@ export type AdminServiceListMagicAuthTokensParams = {
 
 /**
  * Optional metrics view to filter mapping to apply as row filters in queries.
-This will be translated to a rill.runtime.v1.SecurityRuleRowFilter with the metrics view in the condition_resources, which currently applies to metric views queries.
+This will be translated to a stardata.runtime.v1.SecurityRuleRowFilter with the metrics view in the condition_resources, which currently applies to metric views queries.
  */
 export type AdminServiceIssueMagicAuthTokenBodyMetricsViewFilters = {
   [key: string]: V1Expression;
@@ -2203,10 +2203,10 @@ export type AdminServiceIssueMagicAuthTokenBody = {
   /** Name of the resource to grant access to. */
   resourceName?: string;
   /** Optional metrics view to filter mapping to apply as row filters in queries.
-This will be translated to a rill.runtime.v1.SecurityRuleRowFilter with the metrics view in the condition_resources, which currently applies to metric views queries. */
+This will be translated to a stardata.runtime.v1.SecurityRuleRowFilter with the metrics view in the condition_resources, which currently applies to metric views queries. */
   metricsViewFilters?: AdminServiceIssueMagicAuthTokenBodyMetricsViewFilters;
   /** Optional list of fields to limit access to. If empty, no field access rule will be added.
-This will be translated to a rill.runtime.v1.SecurityRuleFieldAccess, which currently applies to dimension and measure names for explores and metrics views. */
+This will be translated to a stardata.runtime.v1.SecurityRuleFieldAccess, which currently applies to dimension and measure names for explores and metrics views. */
   fields?: string[];
   /** Optional state to store with the token. Can be fetched with GetCurrentMagicAuthToken. */
   state?: string;

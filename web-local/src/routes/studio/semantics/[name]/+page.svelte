@@ -2,7 +2,7 @@
   import { ChevronLeft } from "lucide-svelte";
   import { goto } from "$app/navigation";
   import { page } from "$app/stores";
-  import SectionHeader from "../../../features/studio/SectionHeader.svelte";
+  import SectionHeader from "../../../../features/studio/SectionHeader.svelte";
   import { fileArtifacts } from "@rilldata/web-common/features/entity-management/file-artifacts";
   import {
     ResourceKind,
@@ -10,6 +10,7 @@
   } from "@rilldata/web-common/features/entity-management/resource-selectors";
   import VisualMetrics from "@rilldata/web-common/features/workspaces/VisualMetrics.svelte";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   const client = useRuntimeClient();
 
@@ -26,7 +27,7 @@
 </svelte:head>
 
 <div class="flex h-full min-h-0 flex-col">
-  <SectionHeader title={name} description="编辑自动保存" />
+  <SectionHeader title={name} description={m.studio_semantics_autosave()} />
 
   {#if fileArtifact}
     <div class="min-h-0 flex-1 overflow-hidden card-basic">
@@ -41,10 +42,10 @@
     </div>
   {:else if $resourceQuery.isError}
     <div class="card-hero py-14 text-center text-sm text-gray-500">
-      找不到指标集「{name}」。
-      <a href="/studio/semantics" class="ml-1 font-semibold text-accent-primary-action no-underline">返回列表</a>
+      {m.studio_semantics_not_found({ name })}
+      <a href="/studio/semantics" class="ml-1 font-semibold text-accent-primary-action no-underline">{m.studio_semantics_back_to_list()}</a>
     </div>
   {:else}
-    <p class="text-sm text-gray-400">加载中…</p>
+    <p class="text-sm text-gray-400">{m.common_loading()}</p>
   {/if}
 </div>

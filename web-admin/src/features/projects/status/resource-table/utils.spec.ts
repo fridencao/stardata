@@ -34,7 +34,7 @@ function makeExplore(
 ): V1Resource {
   return {
     meta: {
-      name: { kind: "rill.runtime.v1.Explore", name },
+      name: { kind: "stardata.runtime.v1.Explore", name },
       tags,
     },
     explore: {
@@ -52,7 +52,7 @@ function makeCanvas(
 ): V1Resource {
   return {
     meta: {
-      name: { kind: "rill.runtime.v1.Canvas", name },
+      name: { kind: "stardata.runtime.v1.Canvas", name },
       tags,
     },
     canvas: {

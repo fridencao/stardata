@@ -5,7 +5,7 @@
     getSelectOrganizationRoute,
     getUpdateProjectRoute,
   } from "@rilldata/web-common/features/project/deploy/route-utils.ts";
-  import type { Project } from "@rilldata/web-common/proto/gen/rill/admin/v1/api_pb.ts";
+  import type { Project } from "@rilldata/web-common/proto/gen/stardata/admin/v1/api_pb.ts";
   import { createLocalServiceListMatchingProjectsRequest } from "@rilldata/web-common/runtime-client/local-service.ts";
   import ProjectSelector from "@rilldata/web-common/features/project/deploy/ProjectSelector.svelte";
 

@@ -8,6 +8,7 @@
   import { ResourceKind } from "@rilldata/web-common/features/entity-management/resource-selectors.ts";
   import { isNotFoundError } from "@rilldata/web-common/lib/errors";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   const runtimeClient = useRuntimeClient();
 
@@ -26,7 +27,7 @@
 
 {#key `${runtimeClient.instanceId}::${canvasName}`}
   {#if isCanvasNotFound}
-    <ErrorPage statusCode={404} header="看板不存在" href="/boards" />
+    <ErrorPage statusCode={404} header={m.portal_boards_not_found()} href="/boards" />
   {:else}
     <div class="flex h-full overflow-hidden">
       <div class="flex-1 overflow-hidden">

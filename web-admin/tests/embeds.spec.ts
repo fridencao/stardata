@@ -443,7 +443,7 @@ test.describe("Embeds", () => {
   test.describe("embedded canvas", () => {
     test.use({
       embeddedResourceName: "bids_canvas",
-      embeddedResourceType: "rill.runtime.v1.Canvas",
+      embeddedResourceType: "stardata.runtime.v1.Canvas",
     });
 
     test("embeds should load", async ({ embedPage }) => {

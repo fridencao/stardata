@@ -1,23 +1,27 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import { LayoutDashboard, Database, Network, Rocket } from "lucide-svelte";
+  import { LayoutDashboard, Database, Network, Rocket, Code2 } from "lucide-svelte";
+  import { isIdeRoute } from "../../routes/route-constants";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   const tabs = [
-    { label: "概览", href: "/studio", icon: LayoutDashboard },
-    { label: "数据源", href: "/studio/sources", icon: Database },
-    { label: "语义层", href: "/studio/semantics", icon: Network },
-    { label: "发布", href: "/studio/publish", icon: Rocket },
+    { label: m.studio_tabs_overview(), href: "/studio", icon: LayoutDashboard },
+    { label: m.studio_tabs_sources(), href: "/studio/sources", icon: Database },
+    { label: m.studio_tabs_semantics(), href: "/studio/semantics", icon: Network },
+    { label: m.studio_tabs_publish(), href: "/studio/publish", icon: Rocket },
+    { label: m.studio_tabs_ide(), href: "/files", icon: Code2 },
   ];
 
   $: pathname = $page.url.pathname;
 
   function isActive(href: string, path: string): boolean {
     if (href === "/studio") return path === "/studio";
+    if (href === "/files") return isIdeRoute(path);
     return path.startsWith(href);
   }
 </script>
 
-<div class="h-[52px] flex items-center gap-1 border-b border-gray-200 bg-white px-8">
+<div class="h-[52px] flex items-center gap-1 border-b border-gray-200 bg-surface-background px-8">
   {#each tabs as tab (tab.href)}
     <a
       href={tab.href}

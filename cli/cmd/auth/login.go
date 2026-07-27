@@ -9,7 +9,7 @@ import (
 	"github.com/fridencao/stardata/cli/pkg/browser"
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
 	"github.com/fridencao/stardata/cli/pkg/deviceauth"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/fridencao/stardata/runtime/pkg/activity"
 	"github.com/spf13/cobra"
 )

@@ -9,7 +9,7 @@ import (
 	"github.com/google/go-github/v71/github"
 	"github.com/fridencao/stardata/admin/testadmin"
 	"github.com/fridencao/stardata/cli/testcli"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"github.com/fridencao/stardata/runtime/testruntime/testmode"

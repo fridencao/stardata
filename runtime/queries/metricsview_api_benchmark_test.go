@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	_ "github.com/fridencao/stardata/runtime/drivers/duckdb"
 	"github.com/fridencao/stardata/runtime/queries"
 	"github.com/fridencao/stardata/runtime/testruntime"

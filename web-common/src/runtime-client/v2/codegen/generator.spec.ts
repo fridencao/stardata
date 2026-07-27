@@ -17,26 +17,26 @@ import {
 // --- Mock service descriptors ---
 
 class FakeRequestWithInstanceId {
-  static typeName = "rill.runtime.v1.FakeRequestWithInstanceId";
+  static typeName = "stardata.runtime.v1.FakeRequestWithInstanceId";
   instanceId = "";
 }
 
 class FakeRequestWithoutInstanceId {
-  static typeName = "rill.runtime.v1.FakeRequestWithoutInstanceId";
+  static typeName = "stardata.runtime.v1.FakeRequestWithoutInstanceId";
 }
 
 class FakeResponse {
-  static typeName = "rill.runtime.v1.FakeResponse";
+  static typeName = "stardata.runtime.v1.FakeResponse";
 }
 
 class FakePaginatedRequest {
-  static typeName = "rill.runtime.v1.FakePaginatedRequest";
+  static typeName = "stardata.runtime.v1.FakePaginatedRequest";
   instanceId = "";
   pageToken = "";
 }
 
 class FakePaginatedResponse {
-  static typeName = "rill.runtime.v1.FakePaginatedResponse";
+  static typeName = "stardata.runtime.v1.FakePaginatedResponse";
   nextPageToken = "";
 }
 
@@ -46,7 +46,7 @@ class FakePaginatedResponse {
  * and one paginated query (generates infinite query hooks).
  */
 const mockService: ServiceDef = {
-  typeName: "rill.runtime.v1.RuntimeService",
+  typeName: "stardata.runtime.v1.RuntimeService",
   methods: {
     getFoo: {
       name: "GetFoo",
@@ -389,7 +389,7 @@ describe("generateServiceFile", () => {
   describe("conditional imports", () => {
     it("omits mutation imports for query-only services", () => {
       const queryOnlyService: ServiceDef = {
-        typeName: "rill.runtime.v1.ConnectorService",
+        typeName: "stardata.runtime.v1.ConnectorService",
         methods: {
           getFoo: mockService.methods.getFoo,
         },

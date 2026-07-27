@@ -8,7 +8,7 @@ import (
 	"github.com/fridencao/stardata/admin/database"
 	"github.com/fridencao/stardata/admin/pkg/authtoken"
 	"github.com/fridencao/stardata/admin/server/auth"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.opentelemetry.io/otel/attribute"
 	"google.golang.org/grpc/codes"

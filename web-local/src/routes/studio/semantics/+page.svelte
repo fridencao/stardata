@@ -3,7 +3,7 @@
   import ConnectorExplorer from "@rilldata/web-common/features/connectors/explorer/ConnectorExplorer.svelte";
   import { connectorExplorerStore } from "@rilldata/web-common/features/connectors/explorer/connector-explorer-store";
   import StatusBadge from "@rilldata/web-common/components/status-badge/StatusBadge.svelte";
-  import SectionHeader from "../../features/studio/SectionHeader.svelte";
+  import SectionHeader from "../../../features/studio/SectionHeader.svelte";
   import {
     ResourceKind,
     useFilteredResources,
@@ -16,6 +16,7 @@
     countLabelCnCoverage,
     parseMetricsViewYaml,
   } from "../../../features/portal/metrics-view-yaml";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   const client = useRuntimeClient();
   const metricsViews = useFilteredResources(client, ResourceKind.MetricsView);
@@ -73,17 +74,17 @@
 </script>
 
 <svelte:head>
-  <title>StarData Studio · 语义层</title>
+  <title>StarData Studio · {m.studio_tabs_semantics()}</title>
 </svelte:head>
 
 <div class="flex items-start justify-between">
-  <SectionHeader title="语义层" description="指标/维度定义 · 中文别名(label_cn) · 无代码编辑" />
+  <SectionHeader title={m.studio_tabs_semantics()} description={m.studio_semantics_desc()} />
   <button
     class="rounded-lg bg-primary-600 px-4 py-2 text-[13px] font-semibold text-white hover:bg-primary-700 disabled:opacity-50"
     disabled={creating}
     onclick={() => (pickTableOpen = true)}
   >
-    {creating ? "正在生成…" : "＋ 从表新建指标集"}
+    {creating ? m.studio_semantics_generating() : m.studio_semantics_new_from_table()}
   </button>
 </div>
 
@@ -91,11 +92,11 @@
   <table class="w-full text-left text-[13px]">
     <thead class="border-b border-gray-200 bg-gray-50 text-xs text-gray-500">
       <tr>
-        <th class="px-4 py-2.5 font-medium">指标集</th>
-        <th class="px-4 py-2.5 font-medium">底层表</th>
-        <th class="px-4 py-2.5 font-medium">指标 / 维度</th>
-        <th class="px-4 py-2.5 font-medium">中文别名覆盖</th>
-        <th class="px-4 py-2.5 font-medium">状态</th>
+        <th class="px-4 py-2.5 font-medium">{m.studio_semantics_col_metrics_view()}</th>
+        <th class="px-4 py-2.5 font-medium">{m.studio_semantics_col_table()}</th>
+        <th class="px-4 py-2.5 font-medium">{m.studio_semantics_col_measures_dims()}</th>
+        <th class="px-4 py-2.5 font-medium">{m.studio_semantics_col_label_coverage()}</th>
+        <th class="px-4 py-2.5 font-medium">{m.studio_semantics_col_status()}</th>
       </tr>
     </thead>
     <tbody>
@@ -119,16 +120,16 @@
           </td>
           <td class="px-4 py-3">
             {#if row.valid}
-              <StatusBadge variant="success">有效</StatusBadge>
+              <StatusBadge variant="success">{m.studio_semantics_status_valid()}</StatusBadge>
             {:else}
-              <StatusBadge variant="error">解析错误</StatusBadge>
+              <StatusBadge variant="error">{m.studio_semantics_status_error()}</StatusBadge>
             {/if}
           </td>
         </tr>
       {:else}
         <tr>
           <td colspan="5" class="px-4 py-10 text-center text-gray-400">
-            还没有指标集。点击右上角「从表新建指标集」开始。
+            {m.studio_semantics_empty()}
           </td>
         </tr>
       {/each}
@@ -138,9 +139,9 @@
 
 <Dialog.Root bind:open={pickTableOpen}>
   <Dialog.Content class="max-h-[70vh] w-[440px] overflow-y-auto">
-    <h3 class="text-sm font-bold text-gray-900">选择一张表</h3>
+    <h3 class="text-sm font-bold text-gray-900">{m.studio_semantics_pick_table()}</h3>
     <p class="mt-0.5 text-[12px] text-gray-400">
-      将基于该表{creating ? "" : "由 AI "}生成指标集草稿，生成后可继续编辑
+      {creating ? m.studio_semantics_pick_table_desc() : m.studio_semantics_pick_table_desc_ai()}
     </p>
     <div class="mt-3">
       <ConnectorExplorer store={pickStore} />

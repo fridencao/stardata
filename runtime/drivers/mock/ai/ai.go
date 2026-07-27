@@ -4,7 +4,7 @@ import (
 	"context"
 	"strings"
 
-	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
+	aiv1 "github.com/fridencao/stardata/proto/gen/stardata/ai/v1"
 	rillai "github.com/fridencao/stardata/runtime/ai"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/pkg/activity"
