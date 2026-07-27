@@ -2,8 +2,8 @@
   import { page } from "$app/stores";
   import { portalRole } from "./portal-role-store";
   import { isStudioRoute } from "../../routes/route-constants";
-  import ThemeToggle from "@rilldata/web-common/features/themes/ThemeToggle.svelte";
-  import { Wrench } from "lucide-svelte";
+  import { themeControl } from "@rilldata/web-common/features/themes/theme-control";
+  import { Wrench, Sun, Moon, User } from "lucide-svelte";
 
   const links = [
     { label: "首页", href: "/" },
@@ -13,6 +13,7 @@
 
   $: pathname = $page.url.pathname;
   $: showStudioLink = isStudioRoute(pathname);
+  $: currentTheme = $themeControl;
 
   function isActive(href: string, path: string) {
     return href === "/" ? path === "/" : path.startsWith(href);
@@ -73,6 +74,31 @@
         技术视角
       </button>
     </div>
-    <ThemeToggle />
+    <!-- Theme toggle -->
+    <button
+      class="rounded-lg p-1.5 text-gray-500 transition-colors hover:bg-gray-100"
+      onclick={() => {
+        if (currentTheme === "dark") {
+          themeControl.set.light();
+        } else {
+          themeControl.set.dark();
+        }
+      }}
+      title={currentTheme === "dark" ? "切换浅色模式" : "切换深色模式"}
+    >
+      {#if currentTheme === "dark"}
+        <Sun class="size-4" />
+      {:else}
+        <Moon class="size-4" />
+      {/if}
+    </button>
+    <!-- User profile -->
+    <button
+      class="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+      title="用户"
+    >
+      <User class="size-4" />
+      <span class="hidden sm:inline">用户</span>
+    </button>
   </div>
 </nav>
