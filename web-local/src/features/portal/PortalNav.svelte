@@ -3,8 +3,12 @@
   import { portalRole } from "./portal-role-store";
   import { isStudioRoute } from "../../routes/route-constants";
   import { themeControl } from "@rilldata/web-common/features/themes/theme-control";
-  import { getStardataToken, clearStardataToken } from "@rilldata/web-common/runtime-client/auth-token";
-  import { Wrench, Sun, Moon, User, LogOut } from "lucide-svelte";
+  import {
+    getStardataToken,
+    clearStardataToken,
+    decodeStardataToken,
+  } from "@rilldata/web-common/runtime-client/auth-token";
+  import { Wrench, Sun, Moon, ChevronDown, LogOut } from "lucide-svelte";
 
   const links = [
     { label: "首页", href: "/" },
@@ -16,6 +20,8 @@
   $: showStudioLink = isStudioRoute(pathname);
   $: currentTheme = $themeControl;
   $: hasToken = !!getStardataToken();
+  $: userClaims = decodeStardataToken(getStardataToken());
+  let menuOpen = false;
 
   function isActive(href: string, path: string) {
     return href === "/" ? path === "/" : path.startsWith(href);
@@ -99,14 +105,68 @@
     </button>
     <!-- User profile dropdown -->
     {#if hasToken}
-      <button
-        class="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
-        onclick={handleLogout}
-        title="退出登录"
-      >
-        <LogOut class="size-4" />
-        <span class="hidden sm:inline">退出</span>
-      </button>
+      <div class="relative">
+        <button
+          class="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-2.5 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
+          onclick={() => (menuOpen = !menuOpen)}
+          title={userClaims?.name || userClaims?.id || "用户"}
+        >
+          <span
+            class="grid size-6 place-items-center rounded-full bg-primary-600 text-xs font-semibold text-white"
+          >
+            {(userClaims?.name || userClaims?.id || "?").slice(0, 1).toUpperCase()}
+          </span>
+          <span class="hidden max-w-[120px] truncate sm:inline"
+            >{userClaims?.name || userClaims?.id}</span
+          >
+          <ChevronDown class="hidden size-3.5 text-gray-400 sm:inline" />
+        </button>
+
+        {#if menuOpen}
+          <!-- click-away backdrop -->
+          <div
+            class="fixed inset-0 z-40"
+            role="button"
+            tabindex="-1"
+            aria-label="关闭用户菜单"
+            onclick={() => (menuOpen = false)}
+            onkeydown={(e) => {
+              if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
+                menuOpen = false;
+              }
+            }}
+          ></div>
+          <div
+            class="absolute right-0 top-[calc(100%+8px)] z-50 w-56 rounded-xl border border-gray-200 bg-white p-1.5 shadow-lg dark:border-gray-700 dark:bg-gray-900"
+          >
+            <div class="px-3 py-2">
+              <div
+                class="truncate text-sm font-semibold text-gray-900 dark:text-gray-100"
+                >{userClaims?.name || userClaims?.id}</div
+              >
+              {#if userClaims?.email}
+                <div
+                  class="truncate text-xs text-gray-500 dark:text-gray-400"
+                  >{userClaims.email}</div
+                >
+              {/if}
+              <div
+                class="mt-1.5 inline-block rounded-full bg-gray-100 px-2 py-0.5 text-[11px] text-gray-600 dark:bg-gray-800 dark:text-gray-300"
+              >
+                {userClaims?.admin ? "管理员" : "普通用户"}
+              </div>
+            </div>
+            <div class="my-1 h-px bg-gray-100 dark:bg-gray-800"></div>
+            <button
+              class="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800"
+              onclick={handleLogout}
+            >
+              <LogOut class="size-4" />
+              退出登录
+            </button>
+          </div>
+        {/if}
+      </div>
     {/if}
   </div>
 </nav>
