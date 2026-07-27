@@ -61,7 +61,7 @@
         class="rounded-md px-2.5 py-1 {$portalRole === 'business'
           ? 'bg-white font-semibold shadow-sm'
           : 'text-gray-500'}"
-        on:click={() => portalRole.set("business")}
+        onclick={() => portalRole.set("business")}
       >
         业务视角
       </button>
@@ -69,7 +69,7 @@
         class="rounded-md px-2.5 py-1 {$portalRole === 'tech'
           ? 'bg-white font-semibold shadow-sm'
           : 'text-gray-500'}"
-        on:click={() => portalRole.set("tech")}
+        onclick={() => portalRole.set("tech")}
       >
         技术视角
       </button>
