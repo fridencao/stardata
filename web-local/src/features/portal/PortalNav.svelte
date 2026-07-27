@@ -3,7 +3,8 @@
   import { portalRole } from "./portal-role-store";
   import { isStudioRoute } from "../../routes/route-constants";
   import { themeControl } from "@rilldata/web-common/features/themes/theme-control";
-  import { Wrench, Sun, Moon, User } from "lucide-svelte";
+  import { getStardataToken, clearStardataToken } from "@rilldata/web-common/runtime-client/auth-token";
+  import { Wrench, Sun, Moon, User, LogOut } from "lucide-svelte";
 
   const links = [
     { label: "首页", href: "/" },
@@ -14,9 +15,15 @@
   $: pathname = $page.url.pathname;
   $: showStudioLink = isStudioRoute(pathname);
   $: currentTheme = $themeControl;
+  $: hasToken = !!getStardataToken();
 
   function isActive(href: string, path: string) {
     return href === "/" ? path === "/" : path.startsWith(href);
+  }
+
+  function handleLogout() {
+    clearStardataToken();
+    window.location.href = "/login";
   }
 </script>
 
@@ -90,13 +97,16 @@
         <Moon class="size-4" />
       {/if}
     </button>
-    <!-- User profile -->
-    <button
-      class="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
-      title="用户"
-    >
-      <User class="size-4" />
-      <span class="hidden sm:inline">用户</span>
-    </button>
+    <!-- User profile dropdown -->
+    {#if hasToken}
+      <button
+        class="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 dark:hover:bg-gray-800"
+        on:click={handleLogout}
+        title="退出登录"
+      >
+        <LogOut class="size-4" />
+        <span class="hidden sm:inline">退出</span>
+      </button>
+    {/if}
   </div>
 </nav>
