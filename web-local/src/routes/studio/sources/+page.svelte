@@ -35,7 +35,7 @@
     <button
       slot="actions"
       class="rounded-lg bg-primary-600 px-4 py-2 text-[13px] font-semibold text-white hover:bg-primary-700"
-      on:click={() => (addDataOpen = true)}
+      onclick={() => (addDataOpen = true)}
     >
       ＋ 新增数据源
     </button>

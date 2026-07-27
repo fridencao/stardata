@@ -81,7 +81,7 @@
   <button
     class="rounded-lg bg-primary-600 px-4 py-2 text-[13px] font-semibold text-white hover:bg-primary-700 disabled:opacity-50"
     disabled={creating}
-    on:click={() => (pickTableOpen = true)}
+    onclick={() => (pickTableOpen = true)}
   >
     {creating ? "正在生成…" : "＋ 从表新建指标集"}
   </button>
@@ -102,7 +102,7 @@
       {#each rows as row (row.name)}
         <tr
           class="cursor-pointer border-b border-gray-100 last:border-0 hover:bg-gray-50"
-          on:click={() => (window.location.href = `/studio/semantics/${row.name}`)}
+          onclick={() => (window.location.href = `/studio/semantics/${row.name}`)}
         >
           <td class="px-4 py-3">
             <div class="font-semibold text-gray-900">{row.displayName}</div>

@@ -84,7 +84,7 @@
       </div>
     {/if}
 
-    <form on:submit={handleSubmit} class="flex flex-col gap-4">
+    <form onsubmit={handleSubmit} class="flex flex-col gap-4">
       {#if oidcError}
         <div class="mb-2 rounded-md bg-red-50 px-3 py-2 text-sm text-red-700">
           {oidcError}
