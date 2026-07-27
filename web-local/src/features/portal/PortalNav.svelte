@@ -3,7 +3,7 @@
   import { portalRole } from "./portal-role-store";
   import { isStudioRoute } from "../../routes/route-constants";
   import ThemeToggle from "@rilldata/web-common/features/themes/ThemeToggle.svelte";
-  import { Wrench } from "lucide-svelte";
+  import { Wrench, User } from "lucide-svelte";
 
   const links = [
     { label: "首页", href: "/" },
@@ -73,6 +73,15 @@
         技术视角
       </button>
     </div>
+    <!-- Theme toggle -->
     <ThemeToggle />
+    <!-- User profile -->
+    <button
+      class="flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-1.5 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+      title="用户"
+    >
+      <User class="size-4" />
+      <span class="hidden sm:inline">用户</span>
+    </button>
   </div>
 </nav>
