@@ -1,0 +1,13 @@
+# 排除依赖与构建产物：容器内会重新 npm ci / 构建，避免上下文膨胀与 stale 产物
+node_modules
+**/node_modules
+**/build
+**/.svelte-kit
+
+# VCS 与本地元数据
+.git
+.gitignore
+**/.DS_Store
+
+# 排除 Claude 工作树（含多个完整源码副本，会撑大构建上下文）
+.claude

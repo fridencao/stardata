@@ -37,7 +37,7 @@ func CancelCmd(ch *cmdutil.Helper) *cobra.Command {
 
 			ch.PrintfWarn("\nAt the end of the current billing cycle, you will lose access to %q and all its projects.\n", ch.Org)
 			if ch.Interactive {
-				ch.PrintfWarn("\nIf you want to change the plan, please use `rill billing subscription edit` command.\n")
+				ch.PrintfWarn("\nIf you want to change the plan, please use `stardata billing subscription edit` command.\n")
 
 				if err := cmdutil.ConfirmPrompt("Do you want to continue?", false); err != nil {
 					return err

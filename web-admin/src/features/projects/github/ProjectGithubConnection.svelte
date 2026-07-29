@@ -71,13 +71,7 @@
       <span class="my-1 text-fg-tertiary">
         {m.github_unlock_bi_as_code()}
         <span class="whitespace-nowrap">
-          <a
-            href="https://docs.rilldata.com/developers/deploy/deploy-dashboard/github-101"
-            target="_blank"
-            class="text-primary-600"
-          >
-            {m.common_learn_more()} ->
-          </a>
+          {m.common_learn_more()} ->
         </span>
       </span>
     {/if}

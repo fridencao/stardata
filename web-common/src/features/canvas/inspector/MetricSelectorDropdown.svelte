@@ -1,5 +1,6 @@
 <script lang="ts">
   import Select from "@rilldata/web-common/components/forms/Select.svelte";
+  import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
   import type {
     AllKeys,
     ComponentInputParam,
@@ -46,5 +47,5 @@
   onChange={(value) => {
     component.updateProperty(key, value);
   }}
-  tooltip="View documentation: https://docs.rilldata.com/reference/project-files/metrics-views"
+  tooltip={`View documentation: ${docsUrl("/reference/project-files/metrics-views")}`}
 />

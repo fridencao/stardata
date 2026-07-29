@@ -1,6 +1,5 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import ChoosePlanDialog from "@rilldata/web-admin/features/billing/plans/dialog/ChoosePlanDialog.svelte";
   import DangerZone from "@rilldata/web-admin/components/danger-zone/DangerZone.svelte";
   import DeleteOrg from "@rilldata/web-admin/features/organizations/settings/DeleteOrg.svelte";
   import FaviconSettings from "@rilldata/web-admin/features/organizations/settings/FaviconSettings.svelte";
@@ -11,7 +10,7 @@
 
   export let data: PageData;
 
-  $: ({ showUpgradeDialog, organization: organizationObj } = data);
+  $: ({ organization: organizationObj } = data);
 
   $: ({
     logoUrl: organizationLogoUrl,
@@ -30,7 +29,3 @@
 <DangerZone>
   <DeleteOrg {organization} />
 </DangerZone>
-
-{#if showUpgradeDialog}
-  <ChoosePlanDialog open {organization} type="base" />
-{/if}

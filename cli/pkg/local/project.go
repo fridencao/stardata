@@ -18,7 +18,7 @@ func ParseDotenv(ctx context.Context, projectPath string) (map[string]string, er
 		return nil, err
 	}
 	if p.RillYAML == nil {
-		return nil, fmt.Errorf("not a valid Rill project (missing a rill.yaml file)")
+		return nil, fmt.Errorf("not a valid StarData project (missing a rill.yaml file)")
 	}
 
 	return p.GetDotEnv(), nil

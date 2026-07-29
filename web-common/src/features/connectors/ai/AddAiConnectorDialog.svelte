@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Select as SelectPrimitive } from "bits-ui";
+  import { docsUrl as stardataDocsUrl } from "@rilldata/web-common/lib/stardata-links";
   import * as AlertDialog from "@rilldata/web-common/components/alert-dialog";
   import * as Select from "@rilldata/web-common/components/select";
   import Button from "@rilldata/web-common/components/button/Button.svelte";
@@ -66,7 +67,9 @@
   $: modelProp = schema?.properties?.model;
   $: selectedOption = providerOptions.find((o) => o.value === schemaName);
   $: docsUrl = schemaName
-    ? `https://docs.rilldata.com/developers/build/connectors/services/${getBackendConnectorName(schemaName)}`
+    ? stardataDocsUrl(
+        `/developers/build/connectors/services/${getBackendConnectorName(schemaName)}`,
+      )
     : "";
 
   $: envEditSession = new EnvEditSession(envStore, schemaName, schema);

@@ -39,7 +39,7 @@ func EditCmd(ch *cmdutil.Helper) *cobra.Command {
 						return err
 					}
 				}
-				fmt.Printf("Org name %q doesn't exist, please run `rill org list` to list available orgs\n", orgName)
+				fmt.Printf("Org name %q doesn't exist, please run `stardata org list` to list available orgs\n", orgName)
 				return nil
 			}
 

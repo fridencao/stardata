@@ -89,13 +89,13 @@ func NewApp(ctx context.Context, opts *AppOptions) (*App, error) {
 		_, err = repo.ListGlob(ctx, "**", false)
 		if err != nil {
 			if errors.Is(err, drivers.ErrRepoListLimitExceeded) {
-				return nil, fmt.Errorf("the project directory exceeds the limit of %d files; please open Rill against a directory with fewer files or set \"ignore_paths\" in rill.yaml", drivers.RepoListLimit)
+				return nil, fmt.Errorf("the project directory exceeds the limit of %d files; please open StarData against a directory with fewer files or set \"ignore_paths\" in rill.yaml", drivers.RepoListLimit)
 			}
 			return nil, fmt.Errorf("failed to list project files: %w", err)
 		}
 	}
 
-	// Always attempt to pull env for any valid Rill project (after projectPath is set)
+	// Always attempt to pull env for any valid StarData project (after projectPath is set)
 	if opts.PullEnv && opts.Ch.IsAuthenticated() && IsProjectInit(opts.ProjectPath) {
 		err := env.PullVars(ctx, opts.Ch, opts.ProjectPath, "", opts.Environment, false)
 		if err != nil && !errors.Is(err, cmdutil.ErrInferProjectFailed) {
@@ -394,7 +394,7 @@ type ServeOptions struct {
 	TLSCertPath string
 	TLSKeyPath  string
 
-	// Auth is the self-hosted authentication configuration (nil = legacy Rill Cloud flow).
+	// Auth is the self-hosted authentication configuration (nil = legacy StarData Cloud flow).
 	Auth *auth.AuthConfig
 	// ExternalURL is the public base URL used in issued tokens and login redirects.
 	ExternalURL string
@@ -402,7 +402,7 @@ type ServeOptions struct {
 
 func (a *App) Serve(opts ServeOptions) error {
 	// Get analytics info
-	installID, enabled, err := a.ch.DotRill.AnalyticsInfo()
+	installID, _, err := a.ch.DotRill.AnalyticsInfo()
 	if err != nil {
 		a.Logger.Warnf("error finding install ID: %v", err)
 	}
@@ -418,7 +418,7 @@ func (a *App) Serve(opts ServeOptions) error {
 		BuildCommit:      a.ch.Version.Commit,
 		BuildTime:        a.ch.Version.Timestamp,
 		IsDev:            a.ch.Version.IsDev(),
-		AnalyticsEnabled: enabled,
+		AnalyticsEnabled: false, // StarData: telemetry reporting is disabled for on-premise deployments
 		Readonly:         opts.Readonly,
 		PreviewMode:      opts.PreviewMode,
 	}
@@ -523,7 +523,7 @@ func (a *App) PollServer(ctx context.Context, httpPort int, openOnHealthy, secur
 		// Wait a bit before (re)trying.
 		//
 		// We sleep before the first health check as a slightly hacky way to protect against the situation where
-		// another Rill server is already running, which will pass the health check as a false positive.
+		// another StarData server is already running, which will pass the health check as a false positive.
 		// By sleeping first, the ctx is in practice sure to have been cancelled with a "port taken" error at that point.
 		select {
 		case <-time.After(250 * time.Millisecond):
@@ -542,7 +542,7 @@ func (a *App) PollServer(ctx context.Context, httpPort int, openOnHealthy, secur
 	}
 
 	// Health check succeeded
-	a.Logger.Infof("Serving Rill on: %s", uri)
+	a.Logger.Infof("Serving StarData on: %s", uri)
 	if openOnHealthy {
 		// Check for cancellation again to be safe
 		if ctx.Err() != nil {

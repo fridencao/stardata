@@ -1,0 +1,73 @@
+{
+  "realm": "stardata",
+  "enabled": true,
+  "sslRequired": "none",
+  "loginTheme": "stardata",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "clients": [
+    {
+      "clientId": "stardata-admin",
+      "name": "StarData Admin",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "replace-me-admin-secret",
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": [
+        "http://localhost/*",
+        "http://localhost:8080/auth/callback",
+        "http://localhost:3002/*"
+      ],
+      "webOrigins": ["http://localhost", "+"],
+      "attributes": {
+        "post.logout.redirect.uris": "http://localhost/auth/logout/callback"
+      },
+      "protocolMappers": [
+        {
+          "name": "picture",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-hardcoded-claim-mapper",
+          "config": {
+            "claim.name": "picture",
+            "claim.value": "https://www.gravatar.com/avatar/?d=mp",
+            "jsonType": "String",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "stardata-runtime",
+      "name": "StarData Runtime",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": false,
+      "secret": "replace-me-runtime-secret",
+      "standardFlowEnabled": true,
+      "redirectUris": ["http://localhost:9090/auth/oidc/callback"],
+      "webOrigins": ["+"]
+    }
+  ],
+  "users": [
+    {
+      "username": "admin",
+      "enabled": true,
+      "email": "admin@stardata.local",
+      "emailVerified": true,
+      "firstName": "Admin",
+      "lastName": "User",
+      "credentials": [
+        {
+          "type": "password",
+          "value": "stardata",
+          "temporary": false
+        }
+      ],
+      "realmRoles": ["admin"]
+    }
+  ]
+}

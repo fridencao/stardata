@@ -17,7 +17,7 @@ func MockUsageCmd(ch *cmdutil.Helper) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "mock-usage <org-name>",
 		Short:   "Report a mock usage event for an organization",
-		Example: "rill sudo billing mock-usage my-org --event slot_seconds_spend --value 3600",
+		Example: "stardata sudo billing mock-usage my-org --event slot_seconds_spend --value 3600",
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := cmd.Context()

@@ -4,7 +4,7 @@
   import CreateNewOrgForm, {
     CreateNewOrgFormId,
   } from "@rilldata/web-common/features/organization/CreateNewOrgForm.svelte";
-  import StarDataLogoSquareNegative from "@rilldata/web-common/components/icons/StarDataLogoSquareNegative.svelte";
+  import StarDataLogoWordmark from "@rilldata/web-common/components/icons/StarDataLogoWordmark.svelte";
   import {
     createAdminServiceCreateOrganization,
     getAdminServiceListOrganizationsQueryKey,
@@ -37,22 +37,20 @@
   }
 </script>
 
-<div class="flex flex-col gap-4 mx-auto w-fit">
-  <StarDataLogoSquareNegative size="36px" />
-  <div class="text-2xl font-extrabold text-fg-accent text-center">
+<div class="flex flex-col items-center gap-4 mx-auto w-fit">
+  <StarDataLogoWordmark size="lg" />
+  <div class="auth-title text-center">
     Create an organization
   </div>
 
-  <div
-    class="flex flex-col gap-6 text-left p-6 border rounded-md bg-surface-overlay"
-  >
+  <div class="flex flex-col gap-6 text-left auth-card">
     <div>
-      <div class="text-base font-semibold">Name your organization</div>
-      <div class="text-sm text-fg-muted">
+      <div class="auth-card__title">Name your organization</div>
+      <div class="auth-card__subtitle">
         You can change the name in organization settings.
       </div>
     </div>
-    <CreateNewOrgForm {createOrg} size="xl" />
+    <CreateNewOrgForm {createOrg} size="xl" showUrlField={false} />
     {#if errorMessage}
       <div class="text-sm text-destructive">{errorMessage}</div>
     {/if}

@@ -282,15 +282,7 @@
               {m.status_no_models()}
             </span>
             <span class="text-fg-muted text-sm">
-              {m.status_models_created_in_developer()}
-              <a
-                href="https://docs.rilldata.com/build/models/"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-primary-500 hover:text-primary-600"
-              >
-                {m.common_learn_more()}
-              </a>
+              {m.status_models_created_in_developer()} {m.common_learn_more()}
             </span>
           {/if}
         </div>
@@ -327,14 +319,7 @@
               {m.status_no_external_tables()}
             </span>
             <span class="text-fg-muted text-sm">
-              <a
-                href="https://docs.rilldata.com/developers/build/connectors/olap"
-                target="_blank"
-                rel="noopener noreferrer"
-                class="text-primary-500 hover:text-primary-600"
-              >
-                {m.status_learn_about_external_olap()}
-              </a>
+              {m.status_learn_about_external_olap()}
             </span>
           {/if}
         </div>

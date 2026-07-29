@@ -46,10 +46,8 @@
         message="You don't have any dashboards yet"
       >
         <span slot="action">
-          <a href="/deploy" class="text-primary-600 hover:text-primary-700">
-            Deploy your project
-          </a>
-          to share dashboards with your team
+          Create dashboards using your code editor, then return here to preview
+          them.
         </span>
       </ResourceListEmptyState>
     {/if}

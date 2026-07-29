@@ -13,7 +13,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// localAdminService implements drivers.AdminService by using user's admin token stored locally and calling Rill's admin API.
+// localAdminService implements drivers.AdminService by using user's admin token stored locally and calling StarData's admin API.
 type localAdminService struct {
 	ch          *cmdutil.Helper
 	root        string

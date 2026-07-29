@@ -9,6 +9,7 @@
   import TooltipTitle from "@rilldata/web-common/components/tooltip/TooltipTitle.svelte";
   import { fly } from "svelte/transition";
   import { createLocalServiceGetMetadata } from "@rilldata/web-common/runtime-client/local-service";
+  import { DOCS_BASE_URL } from "@rilldata/web-common/lib/stardata-links";
   import RuntimeTrafficLights from "@rilldata/web-common/features/entity-management/RuntimeTrafficLights.svelte";
 
   const metadataQuery = createLocalServiceGetMetadata();
@@ -58,7 +59,7 @@
     <span>
       <Tooltip alignment="start" distance={16} location="top">
         <a
-          href="https://docs.rilldata.com"
+          href={DOCS_BASE_URL}
           target="_blank"
           rel="noreferrer noopener"
           class="text-fg-secondary"

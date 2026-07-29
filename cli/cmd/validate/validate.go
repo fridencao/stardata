@@ -82,7 +82,7 @@ func ValidateCmd(ch *cmdutil.Helper) *cobra.Command {
 			}
 
 			if cmdutil.IsLocalRillRunning(cmd.Context()) {
-				return fmt.Errorf("`rill start` appears to be running on http://localhost:9009; stop it and rerun validate")
+				return fmt.Errorf("`stardata start` appears to be running on http://localhost:9009; stop it and rerun validate")
 			}
 
 			var projectPath string
@@ -97,7 +97,7 @@ func ValidateCmd(ch *cmdutil.Helper) *cobra.Command {
 			}
 
 			if !local.IsProjectInit(projectPath) {
-				return fmt.Errorf("no Rill project found at %q (missing rill.yaml)", projectPath)
+				return fmt.Errorf("no StarData project found at %q (missing rill.yaml)", projectPath)
 			}
 
 			envVarsMap, err := start.ParseVariables(envVars)
@@ -136,7 +136,7 @@ func ValidateCmd(ch *cmdutil.Helper) *cobra.Command {
 	validateCmd.Flags().SortFlags = false
 	validateCmd.Flags().StringSliceVarP(&envVars, "env", "e", []string{}, "Set environment variables")
 	validateCmd.Flags().BoolVar(&reset, "reset", false, "Clear and re-ingest source data")
-	validateCmd.Flags().BoolVar(&pullEnv, "pull-env", true, "Pull environment variables from Rill Cloud before starting the project")
+	validateCmd.Flags().BoolVar(&pullEnv, "pull-env", true, "Pull environment variables from StarData Cloud before starting the project")
 	validateCmd.Flags().StringVar(&environment, "environment", "dev", `Environment name`)
 	validateCmd.Flags().BoolVar(&verbose, "verbose", false, "Sets the log level to debug")
 	validateCmd.Flags().BoolVar(&silent, "silent", false, "Suppress all log output by setting log level to panic, overrides verbose flag")

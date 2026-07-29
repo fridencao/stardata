@@ -11,11 +11,12 @@ import {
   getSchemaStringKeys,
 } from "../templates/schema-utils";
 import type { EnvEditSession } from "@rilldata/web-common/features/env-management/env-edit-session.ts";
+import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
 
 // Helper text that we put at the top of every Model YAML file
 function sourceModelFileTop(driverName: string) {
   return `# Model YAML
-# Reference documentation: https://docs.rilldata.com/developers/build/connectors/data-source/${driverName}
+# Reference documentation: ${docsUrl(`/developers/build/connectors/data-source/${driverName}`)}
 
 type: model
 materialize: true`;

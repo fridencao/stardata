@@ -1587,6 +1587,8 @@
   "project_delete": "Delete",
   "project_deploying": "Hang tight! We're deploying your project...",
   "project_edit": "Edit",
+  "project_empty_message": "This project doesn't have any project files yet. Use the CLI to deploy project files to it.",
+  "project_empty_title": "This project is empty",
   "project_failed_to_wake": "Failed to wake project: {error}",
   "project_hibernating": "Hibernating...",
   "project_is_hibernating": "Your project is hibernating",

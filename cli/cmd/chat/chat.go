@@ -28,7 +28,7 @@ func ChatCmd(ch *cmdutil.Helper) *cobra.Command {
 	chatCmd := &cobra.Command{
 		Use:               "chat [<project-name>]",
 		Args:              cobra.MaximumNArgs(1),
-		Short:             "Chat with the Rill AI",
+		Short:             "Chat with the StarData AI",
 		PersistentPreRunE: cmdutil.CheckChain(cmdutil.CheckAuth(ch), cmdutil.CheckOrganization(ch)),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			// Determine project name
@@ -148,7 +148,7 @@ func ChatCmd(ch *cmdutil.Helper) *cobra.Command {
 	chatCmd.Flags().StringVar(&project, "project", "", "Project name")
 	chatCmd.Flags().StringVar(&path, "path", ".", "Project directory")
 	chatCmd.Flags().StringVar(&branch, "branch", "", "Target deployment by Git branch (default: primary deployment)")
-	chatCmd.Flags().BoolVar(&local, "local", false, "Target locally running Rill")
+	chatCmd.Flags().BoolVar(&local, "local", false, "Target locally running StarData")
 
 	return chatCmd
 }
@@ -156,7 +156,7 @@ func ChatCmd(ch *cmdutil.Helper) *cobra.Command {
 // printWelcome prints a welcome message with usage tips.
 func printWelcome() {
 	fmt.Println("╭─────────────────────────────────────────────╮")
-	fmt.Println("│ Welcome to Rill AI Chat                     │")
+	fmt.Println("│ Welcome to StarData AI Chat                 │")
 	fmt.Println("├─────────────────────────────────────────────┤")
 	fmt.Println("│ Tips:                                       │")
 	fmt.Println("│ • Type your message and press Enter.        │")

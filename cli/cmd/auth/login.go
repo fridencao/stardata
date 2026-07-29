@@ -14,11 +14,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// LoginCmd is the command for logging into a Rill account.
+// LoginCmd is the command for logging into a StarData account.
 func LoginCmd(ch *cmdutil.Helper) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "login",
-		Short: "Authenticate with the Rill API",
+		Short: "Authenticate with the StarData API",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := cmd.Context()
 
@@ -86,12 +86,12 @@ func Login(ctx context.Context, ch *cmdutil.Helper, redirectURL string) error {
 		return err
 	}
 
-	ch.PrintfBold("Successfully logged in. Welcome to Rill!\n")
+	ch.PrintfBold("Successfully logged in. Welcome to StarData!\n")
 	return nil
 }
 
 func LoginWithTelemetry(ctx context.Context, ch *cmdutil.Helper, redirectURL string) error {
-	ch.PrintfBold("Please log in or sign up for Rill. Opening browser...\n")
+	ch.PrintfBold("Please log in or sign up for StarData. Opening browser...\n")
 	select {
 	case <-time.After(2 * time.Second):
 	case <-ctx.Done():
@@ -102,7 +102,7 @@ func LoginWithTelemetry(ctx context.Context, ch *cmdutil.Helper, redirectURL str
 
 	if err := Login(ctx, ch, redirectURL); err != nil {
 		if errors.Is(err, deviceauth.ErrAuthenticationTimedout) {
-			ch.PrintfWarn("Rill login has timed out as the code was not confirmed in the browser.\n")
+			ch.PrintfWarn("StarData login has timed out as the code was not confirmed in the browser.\n")
 			ch.PrintfWarn("Run the command again.\n")
 			return nil
 		} else if errors.Is(err, deviceauth.ErrCodeRejected) {
@@ -134,7 +134,7 @@ func SelectOrgFlow(ctx context.Context, ch *cmdutil.Helper, forceNoninteractive 
 	}
 
 	if len(res.Organizations) == 0 {
-		ch.PrintfWarn("You are not part of an org. Run `rill org create` to create one.\n")
+		ch.PrintfWarn("You are not part of an org. Run `stardata org create` to create one.\n")
 		return nil
 	}
 
@@ -157,6 +157,6 @@ func SelectOrgFlow(ctx context.Context, ch *cmdutil.Helper, forceNoninteractive 
 	}
 	ch.Org = defaultOrg
 
-	ch.Printf("Set default org to %q (hint: to change, run `rill org switch`).\n", defaultOrg)
+	ch.Printf("Set default org to %q (hint: to change, run `stardata org switch`).\n", defaultOrg)
 	return nil
 }

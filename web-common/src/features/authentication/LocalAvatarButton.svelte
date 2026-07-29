@@ -15,6 +15,7 @@
   } from "../../runtime-client/auth-token";
   import Spinner from "@rilldata/web-common/features/entity-management/Spinner.svelte";
   import ThemeToggle from "@rilldata/web-common/features/themes/ThemeToggle.svelte";
+  import { DOCS_BASE_URL } from "@rilldata/web-common/lib/stardata-links";
 
   $: user = createLocalServiceGetCurrentUser({
     query: {
@@ -89,20 +90,11 @@
       <DropdownMenu.Separator />
 
       <DropdownMenu.Item
-        href="https://docs.rilldata.com"
+        href={DOCS_BASE_URL}
         target="_blank"
         rel="noreferrer noopener"
       >
         Documentation
-      </DropdownMenu.Item>
-      <DropdownMenu.Separator />
-
-      <DropdownMenu.Item
-        href="https://discord.gg/2ubRfjC7Rh"
-        target="_blank"
-        rel="noreferrer noopener"
-      >
-        Join us on Discord
       </DropdownMenu.Item>
 
       {#if loggedIn}

@@ -16,7 +16,7 @@ func JoinCmd(ch *cmdutil.Helper) *cobra.Command {
 		Short: "Add yourself as a permanent admin member of an org",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ch.PrintfWarn("This command will permanently add you as an admin member of %q and your name will show up in member listings. ", args[0])
-			ch.PrintfWarn("If you only need temporary access, consider instead assuming the identity of an existing admin using `rill sudo org list-admins` and `rill sudo user assume`.\n")
+			ch.PrintfWarn("If you only need temporary access, consider instead assuming the identity of an existing admin using `stardata sudo org list-admins` and `stardata sudo user assume`.\n")
 			if !ch.Interactive {
 				return fmt.Errorf("confirmation required; use an interactive terminal")
 			}

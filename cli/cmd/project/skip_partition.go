@@ -18,7 +18,7 @@ func SkipPartitionCmd(ch *cmdutil.Helper) *cobra.Command {
 		Args:  cobra.RangeArgs(1, 2),
 		Short: "Skip partitions for a model",
 		Long: "Mark partitions as skipped so they are excluded from execution and from the model's error state. " +
-			"Skipped partitions remain skipped until they are explicitly triggered (e.g. via 'rill project refresh --partition').",
+			"Skipped partitions remain skipped until they are explicitly triggered (e.g. via 'stardata project refresh --partition').",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) == 1 {
 				model = args[0]
@@ -29,7 +29,7 @@ func SkipPartitionCmd(ch *cmdutil.Helper) *cobra.Command {
 
 			if !local && project == "" {
 				var err error
-				project, err = ch.InferProjectName(cmd.Context(), path, "use --project to specify the name or --local to target a local Rill process")
+				project, err = ch.InferProjectName(cmd.Context(), path, "use --project to specify the name or --local to target a local StarData process")
 				if err != nil {
 					return err
 				}
@@ -66,7 +66,7 @@ func SkipPartitionCmd(ch *cmdutil.Helper) *cobra.Command {
 	skipCmd.Flags().BoolVar(&pending, "pending", false, "Skip all pending partitions")
 	skipCmd.Flags().BoolVar(&errored, "errored", false, "Skip all errored partitions")
 	skipCmd.MarkFlagsOneRequired("partition", "pending", "errored")
-	skipCmd.Flags().BoolVar(&local, "local", false, "Target locally running Rill")
+	skipCmd.Flags().BoolVar(&local, "local", false, "Target locally running StarData")
 
 	return skipCmd
 }

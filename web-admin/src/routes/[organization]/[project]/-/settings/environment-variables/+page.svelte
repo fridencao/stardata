@@ -120,14 +120,7 @@
         <div class="flex flex-col">
           <RadixLarge>{m.env_page_title()}</RadixLarge>
           <p class="text-sm text-fg-tertiary font-medium">
-            {m.env_page_description()}
-            <a
-              href="https://docs.rilldata.com/guide/administration/project-settings/variables-and-credentials"
-              target="_blank"
-              class="text-primary-600 hover:text-primary-700 active:text-primary-800"
-            >
-              {m.env_learn_more()}
-            </a>
+            {m.env_page_description()} {m.env_learn_more()}
           </p>
         </div>
         <TableToolbar

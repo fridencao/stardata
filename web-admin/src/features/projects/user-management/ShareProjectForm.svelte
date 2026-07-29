@@ -433,12 +433,7 @@
   </div>
 </div>
 <div class="flex flex-row items-center px-3.5 py-3 border-t">
-  <a
-    href="https://docs.rilldata.com/guide/administration/users-and-access/roles-permissions#project-level-permissions"
-    target="_blank"
-    class="text-xs text-primary-600 hover:text-primary-700"
-    >{m.users_learn_more_sharing()}</a
-  >
+  <span class="text-xs text-primary-600">{m.users_learn_more_sharing()}</span>
   <div class="grow"></div>
   <CopyInviteLinkButton {copyLink} />
 </div>

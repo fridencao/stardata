@@ -129,10 +129,6 @@ export function isProjectInvitePage(page: Page): boolean {
   return page.route.id === "/[organization]/[project]/-/invite";
 }
 
-export function isBillingUpgradePage(page: Page): boolean {
-  return page.route.id === "/[organization]/-/upgrade-callback";
-}
-
 export function isWelcomePage({ route }: Pick<Page, "route">): boolean {
   return !!route.id?.startsWith("/-/welcome");
 }

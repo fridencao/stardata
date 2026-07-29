@@ -130,13 +130,6 @@
     <DropdownMenu.Separator />
 
     <DropdownMenu.Item
-      href="https://docs.rilldata.com"
-      target="_blank"
-      rel="noreferrer noopener"
-    >
-      {m.avatar_documentation()}
-    </DropdownMenu.Item>
-    <DropdownMenu.Item
       href="https://discord.gg/2ubRfjC7Rh"
       target="_blank"
       rel="noreferrer noopener"

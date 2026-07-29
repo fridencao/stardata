@@ -41,7 +41,7 @@ type DeployOpts struct {
 	ForcePush     bool
 
 	ArchiveUpload bool
-	// Managed indicates if the project should be deployed using Rill Managed Git.
+	// Managed indicates if the project should be deployed using StarData Managed Git.
 	Managed bool
 	// Github indicates if the project should be connected to GitHub for automatic deploys.
 	Github bool
@@ -65,7 +65,7 @@ func (o *DeployOpts) LocalProjectPath() string {
 func (o *DeployOpts) ValidateAndApplyDefaults(ctx context.Context, ch *cmdutil.Helper) error {
 	if o.remoteURL != "" {
 		// already validated
-		// just a hack to avoid re-validation when `rill project deploy` internally calls `rill project connect-github`
+		// just a hack to avoid re-validation when `stardata project deploy` internally calls `stardata project connect-github`
 		return nil
 	}
 	// expand project directory and get absolute path
@@ -102,7 +102,8 @@ func (o *DeployOpts) ValidateAndApplyDefaults(ctx context.Context, ch *cmdutil.H
 			o.pushToProject = p
 			o.Managed = o.pushToProject.ManagedGitId != ""
 			o.Github = o.pushToProject.ManagedGitId == "" && o.pushToProject.GitRemote != ""
-			o.ArchiveUpload = o.pushToProject.ArchiveAssetId != ""
+			// Projects without any git connection (e.g. created empty via web-admin) also use archive upload.
+			o.ArchiveUpload = o.pushToProject.ArchiveAssetId != "" || (o.pushToProject.ManagedGitId == "" && o.pushToProject.GitRemote == "")
 			return nil
 		}
 	}
@@ -143,7 +144,7 @@ func (o *DeployOpts) ValidateAndApplyDefaults(ctx context.Context, ch *cmdutil.H
 		}
 		if o.pushToProject.ManagedGitId != "" && o.Github {
 			ch.Printf("Found another rill managed project %s/%s connected to this folder\n", o.pushToProject.OrgName, o.pushToProject.Name)
-			ch.PrintfBold("Run `rill project edit --remote-url <github_remote>` to tranfer the project to GitHub.\n")
+			ch.PrintfBold("Run `stardata project edit --remote-url <github_remote>` to tranfer the project to GitHub.\n")
 			return fmt.Errorf("aborting deploy")
 		}
 		if o.pushToProject.OrgName != ch.Org {
@@ -152,12 +153,13 @@ func (o *DeployOpts) ValidateAndApplyDefaults(ctx context.Context, ch *cmdutil.H
 		}
 		if subpath != "" && o.pushToProject.Subpath != subpath {
 			// just for verification confirm that subpath matches the one stored in project
-			return fmt.Errorf("current project subpath %q does not match the one stored in rill %q. Try doing deploy using rill cli from github repo root by passing explicit subpath using `rill deploy --subpath %s`", subpath, o.pushToProject.Subpath, o.pushToProject.Subpath)
+			return fmt.Errorf("current project subpath %q does not match the one stored in stardata %q. Try doing deploy using stardata cli from github repo root by passing explicit subpath using `stardata deploy --subpath %s`", subpath, o.pushToProject.Subpath, o.pushToProject.Subpath)
 		}
 		// set flags based on existing project
 		o.Managed = o.pushToProject.ManagedGitId != ""
 		o.Github = o.pushToProject.ManagedGitId == "" && o.pushToProject.GitRemote != ""
-		o.ArchiveUpload = o.pushToProject.ArchiveAssetId != ""
+		// Projects without any git connection (e.g. created empty via web-admin) also use archive upload.
+		o.ArchiveUpload = o.pushToProject.ArchiveAssetId != "" || (o.pushToProject.ManagedGitId == "" && o.pushToProject.GitRemote == "")
 
 		ch.PrintfBold("\nFound existing project: ")
 		ch.Printf("%s/%s\n", o.pushToProject.OrgName, o.pushToProject.Name)
@@ -184,14 +186,14 @@ func (o *DeployOpts) ValidateAndApplyDefaults(ctx context.Context, ch *cmdutil.H
 	}
 	if o.Managed {
 		// if user explicitly wants managed deploys confirm if they want to really skip github connection
-		ok, err := cmdutil.YesNoPrompt("Do you want to skip connecting to GitHub and use Rill managed deploys? (Note: Subsequent deploys/push from Rill will not push changes to your GitHub repo)", true)
+		ok, err := cmdutil.YesNoPrompt("Do you want to skip connecting to GitHub and use StarData managed deploys? (Note: Subsequent deploys/push from StarData will not push changes to your GitHub repo)", true)
 		if err != nil {
 			return err
 		}
 		connectToGithub = !ok
 	} else if !o.Github && ch.Interactive {
 		// still confirm if user wants to connect to github
-		connectToGithub, err = cmdutil.YesNoPrompt("Enable automatic deploys to Rill Cloud from GitHub?", true)
+		connectToGithub, err = cmdutil.YesNoPrompt("Enable automatic deploys to StarData Cloud from GitHub?", true)
 		if err != nil {
 			return err
 		}
@@ -238,7 +240,7 @@ func (o *DeployOpts) detectGitRemoteAndProject(ctx context.Context, ch *cmdutil.
 		return err
 	}
 	if resp.UnauthorizedProject != "" {
-		ch.PrintfWarn("You do not have access to the project %q which is connected to this repository. Please reach out to your Rill admin\n", resp.UnauthorizedProject)
+		ch.PrintfWarn("You do not have access to the project %q which is connected to this repository. Please reach out to your StarData admin\n", resp.UnauthorizedProject)
 		return fmt.Errorf("aborting deploy")
 	}
 	for _, p := range resp.Projects {
@@ -272,7 +274,7 @@ func DeployCmd(ch *cmdutil.Helper) *cobra.Command {
 
 	deployCmd := &cobra.Command{
 		Use:   "deploy [<path>]",
-		Short: "Deploy project to Rill Cloud by using a Rill Managed Git repo",
+		Short: "Deploy project to StarData Cloud by using a StarData Managed Git repo",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				opts.GitPath = args[0]
@@ -306,7 +308,7 @@ func DeployCmd(ch *cmdutil.Helper) *cobra.Command {
 		}
 	}
 
-	deployCmd.Flags().BoolVar(&opts.PushEnv, "push-env", true, "Push local .env file to Rill Cloud")
+	deployCmd.Flags().BoolVar(&opts.PushEnv, "push-env", true, "Push local .env file to StarData Cloud")
 	deployCmd.Flags().BoolVar(&opts.ForcePush, "force-push", false, "Force push local changes")
 	deployCmd.Flags().BoolVar(&opts.SkipDeploy, "skip-deploy", false, "Skip the runtime deployment step (for testing only)")
 	if !ch.IsDev() {
@@ -327,14 +329,14 @@ func ValidateLocalProject(ch *cmdutil.Helper, localGitPath, subPath string) (str
 		localProjectPath = filepath.Join(localGitPath, subPath)
 	}
 
-	// Verify that localProjectPath contains a Rill project.
+	// Verify that localProjectPath contains a StarData project.
 	if cmdutil.HasStardataProject(localProjectPath) {
 		return localGitPath, localProjectPath, nil
 	}
 
-	ch.PrintfWarn("Directory %q doesn't contain a valid Rill project.\n", localProjectPath)
-	ch.PrintfWarn("Run `rill project deploy` from a Rill project directory or use `--path` to pass a project path.\n")
-	ch.PrintfWarn("Run `rill start` to initialize a new Rill project.\n")
+	ch.PrintfWarn("Directory %q doesn't contain a valid StarData project.\n", localProjectPath)
+	ch.PrintfWarn("Run `stardata project deploy` from a StarData project directory or use `--path` to pass a project path.\n")
+	ch.PrintfWarn("Run `stardata start` to initialize a new StarData project.\n")
 	return "", "", ErrInvalidProject
 }
 
@@ -368,7 +370,7 @@ func DeployWithUploadFlow(ctx context.Context, ch *cmdutil.Helper, opts *DeployO
 		if err != nil {
 			return fmt.Errorf("org creation failed with error: %w", err)
 		}
-		ch.PrintfSuccess("Created org %q. Run `rill org edit` to change name if required.\n\n", ch.Org)
+		ch.PrintfSuccess("Created org %q. Run `stardata org edit` to change name if required.\n\n", ch.Org)
 	} else {
 		ch.PrintfBold("Using org %q.\n\n", ch.Org)
 	}
@@ -424,14 +426,14 @@ func DeployWithUploadFlow(ctx context.Context, ch *cmdutil.Helper, opts *DeployO
 	res, err := adminClient.CreateProject(ctx, req)
 	if err != nil {
 		if s, ok := status.FromError(err); ok && s.Code() == codes.PermissionDenied {
-			ch.PrintfError("You do not have the permissions needed to create a project in org %q. Please reach out to your Rill admin.\n", ch.Org)
+			ch.PrintfError("You do not have the permissions needed to create a project in org %q. Please reach out to your StarData admin.\n", ch.Org)
 			return nil
 		}
 		return fmt.Errorf("create project failed with error %w", err)
 	}
 
 	// Success!
-	ch.PrintfSuccess("Created project \"%s/%s\". Use `rill project rename` to change name if required.\n\n", ch.Org, res.Project.Name)
+	ch.PrintfSuccess("Created project \"%s/%s\". Use `stardata project rename` to change name if required.\n\n", ch.Org, res.Project.Name)
 
 	// Upload .env
 	if opts.PushEnv {
@@ -486,7 +488,7 @@ func redeployProject(ctx context.Context, ch *cmdutil.Helper, opts *DeployOpts) 
 		}
 		// Verify subpath matches the one stored in the project
 		if subpath != proj.Subpath {
-			return fmt.Errorf("current project subpath %q does not match the one stored in rill %q. Run rill cli from github repo root and pass explicit subpath using `rill deploy --subpath %s`", subpath, proj.Subpath, proj.Subpath)
+			return fmt.Errorf("current project subpath %q does not match the one stored in stardata %q. Run stardata cli from github repo root and pass explicit subpath using `stardata deploy --subpath %s`", subpath, proj.Subpath, proj.Subpath)
 		}
 		config := &gitutil.Config{
 			Remote:        opts.pushToProject.GitRemote,
@@ -536,10 +538,19 @@ func redeployProject(ctx context.Context, ch *cmdutil.Helper, opts *DeployOpts) 
 		_, err = c.UpdateProject(ctx, updateProjReq)
 		if err != nil {
 			if s, ok := status.FromError(err); ok && s.Code() == codes.PermissionDenied {
-				ch.PrintfError("You do not have the permissions needed to update a project in org %q. Please reach out to your Rill admin.\n", ch.Org)
+				ch.PrintfError("You do not have the permissions needed to update a project in org %q. Please reach out to your StarData admin.\n", ch.Org)
 				return nil
 			}
 			return fmt.Errorf("update project failed with error %w", err)
+		}
+
+		// Projects created empty (e.g. via web-admin) have no deployment yet; UpdateProject only
+		// reconciles existing deployments, so explicitly trigger the first deployment here.
+		if proj.PrimaryDeploymentId == "" {
+			_, err = c.TriggerRedeploy(ctx, &adminv1.TriggerRedeployRequest{Org: ch.Org, Project: proj.Name})
+			if err != nil {
+				return fmt.Errorf("failed to trigger deployment: %w", err)
+			}
 		}
 	}
 

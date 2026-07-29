@@ -33,15 +33,7 @@
   <Popover.Content class="w-[380px]" align="end" sideOffset={8}>
     <div class="flex flex-col gap-y-3">
       <span class="text-sm text-fg-secondary">
-        {m.status_clone_description()}
-        <a
-          href="https://docs.rilldata.com/developers/tutorials/clone-a-project"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-primary-600"
-        >
-          {m.status_learn_more()}
-        </a>
+        {m.status_clone_description()} {m.status_learn_more()}
       </span>
 
       <div class="flex flex-col gap-y-2">

@@ -1,6 +1,7 @@
 <script lang="ts">
   import { replaceState } from "$app/navigation";
   import Button from "@rilldata/web-common/components/button/Button.svelte";
+  import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
   import TagInput from "@rilldata/web-common/components/forms/TagInput.svelte";
   import Input from "@rilldata/web-common/components/forms/Input.svelte";
   import Tooltip from "@rilldata/web-common/components/tooltip/Tooltip.svelte";
@@ -412,7 +413,7 @@
 
     <Input
       hint="View documentation"
-      link="https://docs.rilldata.com/reference/project-files/metrics-views"
+      link={docsUrl("/reference/project-files/metrics-views")}
       lockable
       lockTooltip="Unlock to change metrics view"
       label="Metrics view referenced"

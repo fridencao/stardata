@@ -27,6 +27,9 @@ var (
 	ErrUserIsNotCollaborator      = fmt.Errorf("user is not a collaborator for the repository")
 	ErrGithubInstallationNotFound = fmt.Errorf("github installation not found")
 	ErrBranchNotFound             = fmt.Errorf("branch does not exist in the repository")
+	// ErrGithubNotConfigured is returned by all operations on the no-op Github client, which is
+	// used when the admin server is deployed without a Github App (e.g. private deployments).
+	ErrGithubNotConfigured = fmt.Errorf("github integration is not configured")
 )
 
 type GithubToken struct {
@@ -72,7 +75,15 @@ type githubClient struct {
 }
 
 // NewGithub returns a new client for connecting to Github.
+// Github integration is optional: when no Github App is configured (appID == 0 or
+// appPrivateKey empty), it returns a no-op client so the admin server can still start and
+// all Github-dependent operations fail gracefully with ErrGithubNotConfigured.
 func NewGithub(ctx context.Context, appID int64, appPrivateKey, githubManagedAcct string, logger *zap.Logger) (Github, error) {
+	if appPrivateKey == "" || appID == 0 {
+		logger.Info("github integration not configured; using no-op github client")
+		return githubNoop{}, nil
+	}
+
 	atr, err := ghinstallation.NewAppsTransport(retryableHTTPRoundTripper(), appID, []byte(appPrivateKey))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create github app transport: %w", err)
@@ -457,4 +468,39 @@ func installationCacheKey(installationID int64, repoID *int64) string {
 		return fmt.Sprintf("%d-%d", installationID, *repoID)
 	}
 	return fmt.Sprintf("%d", installationID)
+}
+
+// githubNoop is a no-op implementation of the Github interface, used when Github integration is
+// not configured. Every operation returns ErrGithubNotConfigured so callers fail gracefully
+// instead of panicking (e.g. when a private deployment creates projects without a Github repo).
+var _ Github = &githubNoop{}
+
+type githubNoop struct{}
+
+func (githubNoop) AppClient() *github.Client { return github.NewClient(nil) }
+
+func (githubNoop) InstallationClient(int64, *int64) *github.Client { return github.NewClient(nil) }
+
+func (githubNoop) InstallationToken(context.Context, int64, int64) (string, time.Time, error) {
+	return "", time.Time{}, ErrGithubNotConfigured
+}
+
+func (githubNoop) InstallationTokenForOrg(context.Context, string) (string, time.Time, error) {
+	return "", time.Time{}, ErrGithubNotConfigured
+}
+
+func (githubNoop) DeleteBranch(context.Context, int64, int64, string, string) error {
+	return ErrGithubNotConfigured
+}
+
+func (githubNoop) CreateManagedRepo(context.Context, string, bool) (*github.Repository, error) {
+	return nil, ErrGithubNotConfigured
+}
+
+func (githubNoop) DeleteManagedRepo(context.Context, string) error {
+	return ErrGithubNotConfigured
+}
+
+func (githubNoop) ManagedOrgInstallationID() (int64, error) {
+	return 0, ErrGithubNotConfigured
 }

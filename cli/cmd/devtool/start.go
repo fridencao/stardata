@@ -48,7 +48,7 @@ var (
 		"cloud",
 		// Minimal cloud setup (no Clickhouse, no telemetry)
 		"minimal",
-		// Rill Developer setup (equivalent to `rill start`)
+		// StarData Developer setup (equivalent to `stardata start`)
 		"local",
 		// Cloud setup for e2e tests
 		"e2e",
@@ -175,7 +175,7 @@ func checkDocker(ctx context.Context) error {
 func checkRillRepo() error {
 	_, err := os.Stat(".git")
 	if err != nil {
-		return fmt.Errorf("you must run `rill devtool` from the root of the rill repository")
+		return fmt.Errorf("you must run `stardata devtool` from the root of the rill repository")
 	}
 
 	remote, err := gitutil.ExtractGitRemote("", "", false)
@@ -185,7 +185,7 @@ func checkRillRepo() error {
 	githubRemote, _ := remote.Github()
 
 	if githubRemote != rillGitRemote {
-		return fmt.Errorf("you must run `rill devtool` from the rill repository (expected remote %q, got %q)", rillGitRemote, githubRemote)
+		return fmt.Errorf("you must run `stardata devtool` from the rill repository (expected remote %q, got %q)", rillGitRemote, githubRemote)
 	}
 
 	return nil

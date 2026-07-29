@@ -16,6 +16,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/fridencao/stardata/admin"
 	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/admin/pkg/assetstore"
 	"github.com/fridencao/stardata/admin/server/auth"
 	"github.com/fridencao/stardata/admin/server/cookies"
 	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
@@ -59,6 +60,9 @@ type Options struct {
 	AuthDomain             string
 	AuthClientID           string
 	AuthClientSecret       string
+	// AuthIssuerURL is the full OIDC issuer URL (e.g. http://keycloak:8080/realms/stardata).
+	// When set, the authenticator uses it verbatim; when empty, AuthDomain is used (Auth0-compatible).
+	AuthIssuerURL          string
 	GithubAppName          string
 	GithubAppWebhookSecret string
 	GithubClientID         string
@@ -122,6 +126,7 @@ func New(logger *zap.Logger, adm *admin.Service, issuer *runtimeauth.Issuer, lim
 	cookieStore.Options.SameSite = http.SameSiteLaxMode
 
 	authenticator, err := auth.NewAuthenticator(logger, adm, cookieStore, &auth.AuthenticatorOptions{
+		AuthIssuerURL:    opts.AuthIssuerURL,
 		AuthDomain:       opts.AuthDomain,
 		AuthClientID:     opts.AuthClientID,
 		AuthClientSecret: opts.AuthClientSecret,
@@ -252,6 +257,10 @@ func (s *Server) HTTPHandler(ctx context.Context) (http.Handler, error) {
 
 	// Add project assets endpoint.
 	mux.Handle("/v1/assets/{asset_id}/download", observability.Middleware("assets", s.logger, s.authenticator.HTTPMiddleware(httputil.Handler(s.assetHandler))))
+
+	// Add local asset store endpoints (signed-URL upload/download; auth via HMAC token, not the auth middleware).
+	mux.Handle("PUT "+assetstore.LocalUploadPath, observability.Middleware("assets", s.logger, httputil.Handler(s.assetUploadHandler)))
+	mux.Handle("GET "+assetstore.LocalDownloadPath, observability.Middleware("assets", s.logger, httputil.Handler(s.assetSignedDownloadHandler)))
 
 	// Add biller webhook handler if any
 	if s.admin.Biller != nil {

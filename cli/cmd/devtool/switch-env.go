@@ -25,7 +25,7 @@ func SwitchEnvCmd(ch *cmdutil.Helper) *cobra.Command {
 				return err
 			}
 			if backupToken != "" {
-				return fmt.Errorf("can't switch environment when assuming another user (run `rill sudo user unassume` and try again)")
+				return fmt.Errorf("can't switch environment when assuming another user (run `stardata sudo user unassume` and try again)")
 			}
 
 			fromEnv, err := adminenv.Infer(ch.AdminURL())

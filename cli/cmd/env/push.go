@@ -38,7 +38,7 @@ func PushCmd(ch *cmdutil.Helper) *cobra.Command {
 				return fmt.Errorf("failed to parse project: %w", err)
 			}
 			if p.RillYAML == nil {
-				return fmt.Errorf("not a valid Rill project (missing a rill.yaml file)")
+				return fmt.Errorf("not a valid StarData project (missing a rill.yaml file)")
 			}
 
 			// Find the cloud project name

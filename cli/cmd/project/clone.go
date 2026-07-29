@@ -89,7 +89,7 @@ func CloneCmd(ch *cmdutil.Helper) *cobra.Command {
 				return fmt.Errorf("failed to download variables: %w", err)
 			}
 
-			ch.Printf("Start Rill with: rill start %s\n", subpath)
+			ch.Printf("Start StarData with: stardata start %s\n", subpath)
 
 			return nil
 		},

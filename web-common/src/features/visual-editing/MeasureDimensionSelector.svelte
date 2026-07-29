@@ -1,5 +1,6 @@
 <script lang="ts">
   import FieldSwitcher from "@rilldata/web-common/components/forms/FieldSwitcher.svelte";
+  import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
   import Input from "@rilldata/web-common/components/forms/Input.svelte";
   import InputLabel from "@rilldata/web-common/components/forms/InputLabel.svelte";
   import type {
@@ -76,7 +77,7 @@
     <a
       class="w-fit"
       target="_blank"
-      href="https://docs.rilldata.com/reference/project-files/explore-dashboards"
+      href={docsUrl("/reference/project-files/explore-dashboards")}
     >
       See docs
     </a>

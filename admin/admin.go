@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"time"
 
-	"cloud.google.com/go/storage"
 	lru "github.com/hashicorp/golang-lru"
 	"github.com/fridencao/stardata/admin/billing"
 	"github.com/fridencao/stardata/admin/billing/payment"
 	"github.com/fridencao/stardata/admin/database"
 	"github.com/fridencao/stardata/admin/jobs"
+	"github.com/fridencao/stardata/admin/pkg/assetstore"
 	"github.com/fridencao/stardata/admin/provisioner"
 	"github.com/fridencao/stardata/cli/pkg/version"
 	"github.com/fridencao/stardata/runtime/drivers"
@@ -45,7 +45,7 @@ type Service struct {
 	Email                      *email.Client
 	Github                     Github
 	AI                         drivers.AIService
-	Assets                     *storage.BucketHandle
+	Assets                     assetstore.Store
 	Used                       *usedFlusher
 	Logger                     *zap.Logger
 	opts                       *Options
@@ -61,7 +61,7 @@ type Service struct {
 	PaymentProvider            payment.Provider
 }
 
-func New(ctx context.Context, opts *Options, logger *zap.Logger, issuer *auth.Issuer, emailClient *email.Client, github Github, aiService drivers.AIService, assets *storage.BucketHandle, biller billing.Biller, p payment.Provider) (*Service, error) {
+func New(ctx context.Context, opts *Options, logger *zap.Logger, issuer *auth.Issuer, emailClient *email.Client, github Github, aiService drivers.AIService, assets assetstore.Store, biller billing.Biller, p payment.Provider) (*Service, error) {
 	// Init db
 	db, err := database.Open(opts.DatabaseDriver, opts.DatabaseDSN, opts.DatabaseEncryptionKeyring)
 	if err != nil {

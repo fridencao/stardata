@@ -39,6 +39,7 @@
   } from "@rilldata/web-admin/features/navigation/nav-utils";
   import BranchDeploymentStopped from "@rilldata/web-admin/features/branches/BranchDeploymentStopped.svelte";
   import ProjectBuilding from "@rilldata/web-admin/features/projects/ProjectBuilding.svelte";
+  import ProjectEmptyCta from "@rilldata/web-admin/features/projects/ProjectEmptyCTA.svelte";
   import ProjectHeader from "../../../features/projects/header/ProjectHeader.svelte";
   import ProjectTabs from "@rilldata/web-admin/features/projects/ProjectTabs.svelte";
   import { baseGetProjectQueryOptions } from "@rilldata/web-admin/features/projects/project-query-options";
@@ -46,7 +47,6 @@
   import RedeployProjectCta from "@rilldata/web-admin/features/projects/RedeployProjectCTA.svelte";
   import SlimProjectHeader from "@rilldata/web-admin/features/projects/SlimProjectHeader.svelte";
   import { createAdminServiceGetProjectWithBearerToken } from "@rilldata/web-admin/features/public-urls/get-project-with-bearer-token";
-  import { cloudVersion } from "@rilldata/web-admin/features/telemetry/initCloudMetrics";
   import { getThemedLogoUrl } from "@rilldata/web-admin/features/themes/organization-logo";
   import { viewAsUserStore } from "@rilldata/web-admin/features/view-as-user/viewAsUserStore";
   import ErrorPage from "@rilldata/web-common/components/ErrorPage.svelte";
@@ -242,7 +242,7 @@
         projectId: project,
         organizationId: organization,
         userId: $user.data?.user?.id,
-        version: cloudVersion,
+        version: import.meta.env.RILL_UI_PUBLIC_VERSION,
       });
     }
   });
@@ -323,8 +323,13 @@
       {organizationLogoUrl}
     />
     {#if !projectData.deployment}
-      <!-- No deployment = the project is "hibernating" -->
-      <RedeployProjectCta {organization} {project} />
+      {#if !projectData.project?.gitRemote && !projectData.project?.archiveAssetId}
+        <!-- No source = an empty placeholder project; waking it would never succeed -->
+        <ProjectEmptyCta />
+      {:else}
+        <!-- No deployment = the project is "hibernating" -->
+        <RedeployProjectCta {organization} {project} />
+      {/if}
     {:else if deploymentStatus === V1DeploymentStatus.DEPLOYMENT_STATUS_PENDING}
       <ProjectBuilding branch={activeBranch} />
     {:else if deploymentStatus === V1DeploymentStatus.DEPLOYMENT_STATUS_ERRORED}

@@ -1587,6 +1587,8 @@
   "project_delete": "删除",
   "project_deploying": "请稍候！正在部署你的项目...",
   "project_edit": "编辑",
+  "project_empty_message": "该项目还没有任何项目文件。可通过 CLI 将项目文件部署到该项目。",
+  "project_empty_title": "这是一个空项目",
   "project_failed_to_wake": "唤醒项目失败：{error}",
   "project_hibernating": "休眠中...",
   "project_is_hibernating": "你的项目正在休眠",

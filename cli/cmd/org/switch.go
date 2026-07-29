@@ -63,7 +63,7 @@ func SwitchCmd(ch *cmdutil.Helper) *cobra.Command {
 
 func SwitchSelectFlow(ch *cmdutil.Helper, orgs []*adminv1.Organization) (string, error) {
 	if len(orgs) < 1 {
-		fmt.Println("No organizations found, run `rill org create` first.")
+		fmt.Println("No organizations found, run `stardata org create` first.")
 		return "", nil
 	}
 

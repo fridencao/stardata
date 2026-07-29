@@ -47,6 +47,12 @@ const config = defineConfig({
       "memoize-weak",
     ],
   },
+  css: {
+    // lightningcss (Vite 8 default CSS transformer) mis-parses Tailwind
+    // arbitrary-value utilities such as `.text-[13px]` during transform. Use
+    // the postcss pipeline to transform CSS so the build does not choke.
+    transformer: "postcss",
+  },
   plugins: [
     sveltekit(),
     paraglideVitePlugin({
@@ -54,6 +60,21 @@ const config = defineConfig({
       outdir: "../web-common/src/lib/i18n/gen",
       strategy: ["cookie", "preferredLanguage", "baseLocale"],
     }),
+    {
+      // SvelteKit's vite plugin forces `build.cssMinify` to a boolean derived
+      // from `build.minify` (see @sveltejs/kit src/exports/vite/index.js:923),
+      // ignoring any explicit cssMinify string. lightningcss's CSS *minifier*
+      // mis-parses Tailwind arbitrary-value selectors such as `.text-[13px]`
+      // ("No qualified name in attribute selector"), so CSS minification must
+      // be routed through esbuild instead. This hook runs after SvelteKit's
+      // config() hook, so it wins and forces esbuild for CSS minification
+      // (esbuild does not parse selectors semantically and handles these fine)
+      // while leaving JS minification untouched.
+      name: "force-esbuild-css-minify",
+      configResolved(config) {
+        config.build.cssMinify = "esbuild";
+      },
+    },
   ],
   envDir: "../",
   envPrefix: "RILL_UI_PUBLIC_",

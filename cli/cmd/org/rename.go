@@ -26,7 +26,7 @@ func RenameCmd(ch *cmdutil.Helper) *cobra.Command {
 			resp, err := client.GetOrganization(ctx, &adminv1.GetOrganizationRequest{Org: name})
 			if err != nil {
 				if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
-					ch.PrintfError("org %q doesn't exist, run 'rill org list' to see available orgs", name)
+					ch.PrintfError("org %q doesn't exist, run 'stardata org list' to see available orgs", name)
 					return nil
 				}
 				return err

@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { V1ConnectorDriver } from "@rilldata/web-common/runtime-client";
+  import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
   import { ExternalLinkIcon } from "lucide-svelte";
 
   export let connector: V1ConnectorDriver;
@@ -16,7 +17,7 @@
   <span class="flex flex-row items-center gap-2 group">
     <a
       href={connector.docsUrl ||
-        "https://docs.rilldata.com/developers/build/connectors/"}
+        docsUrl("/developers/build/connectors/")}
       rel="noreferrer noopener"
       target="_blank"
       class="text-sm leading-normal text-primary-500 hover:text-primary-600 font-medium group-hover:underline break-all"

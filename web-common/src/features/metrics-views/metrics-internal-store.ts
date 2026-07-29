@@ -1,9 +1,10 @@
 import { parseDocument } from "yaml";
+import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
 
 export function initBlankDashboardYAML(dashboardTitle: string) {
   const metricsTemplate = `
 # Dashboard YAML
-# Reference documentation: https://docs.rilldata.com/reference/project-files/dashboards
+# Reference documentation: ${docsUrl("/reference/project-files/dashboards")}
 
 type: metrics_view
 

@@ -16,7 +16,6 @@ const SHARED_PREFIXES = [
   "/welcome",
   "/explore/",
   "/canvas/",
-  "/deploy",
   "/-/",
 ] as const;
 

@@ -1,5 +1,6 @@
 <script lang="ts">
   import DelayedSpinner from "@rilldata/web-common/features/entity-management/DelayedSpinner.svelte";
+  import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
   import Search from "@rilldata/web-common/components/search/Search.svelte";
   import Button from "@rilldata/web-common/components/button/Button.svelte";
   import * as DropdownMenu from "@rilldata/web-common/components/dropdown-menu";
@@ -312,7 +313,7 @@
             <span class="text-fg-muted text-sm">
               Models are created in StarData.
               <a
-                href="https://docs.rilldata.com/build/models/"
+                href={docsUrl("/build/models/")}
                 target="_blank"
                 rel="noopener noreferrer"
                 class="text-primary-500 hover:text-primary-600"
@@ -355,7 +356,7 @@
             </span>
             <span class="text-fg-muted text-sm">
               <a
-                href="https://docs.rilldata.com/developers/build/connectors/olap"
+                href={docsUrl("/developers/build/connectors/olap")}
                 target="_blank"
                 rel="noopener noreferrer"
                 class="text-primary-500 hover:text-primary-600"

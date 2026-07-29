@@ -2,12 +2,10 @@ package river
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"net/url"
 	"strings"
 
-	"cloud.google.com/go/storage"
 	"github.com/fridencao/stardata/admin"
 	"github.com/riverqueue/river"
 	"golang.org/x/sync/errgroup"
@@ -25,6 +23,9 @@ type DeleteUnusedAssetsWorker struct {
 }
 
 func (w *DeleteUnusedAssetsWorker) Work(ctx context.Context, job *river.Job[DeleteUnusedAssetsArgs]) error {
+	if w.admin.Assets == nil {
+		return nil
+	}
 	for {
 		// 1. Fetch unused assets
 		assets, err := w.admin.DB.FindUnusedAssets(ctx, _unusedAssetsPageSize)
@@ -49,8 +50,8 @@ func (w *DeleteUnusedAssetsWorker) Work(ctx context.Context, job *river.Job[Dele
 				if err != nil {
 					return fmt.Errorf("failed to parse asset path %q: %w", asset.Path, err)
 				}
-				err = w.admin.Assets.Object(strings.TrimPrefix(parsed.Path, "/")).Delete(cctx)
-				if err != nil && !errors.Is(err, storage.ErrObjectNotExist) {
+				err = w.admin.Assets.Delete(cctx, strings.TrimPrefix(parsed.Path, "/"))
+				if err != nil {
 					return fmt.Errorf("failed to delete asset %q: %w", asset.Path, err)
 				}
 				return nil

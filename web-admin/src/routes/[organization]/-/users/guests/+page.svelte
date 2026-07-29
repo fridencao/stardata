@@ -6,7 +6,6 @@
     V1OrganizationMemberUser,
   } from "@rilldata/web-admin/client";
   import { createAdminServiceGetCurrentUser } from "@rilldata/web-admin/client";
-  import { getOrganizationBillingContactUser } from "@rilldata/web-admin/features/billing/contact/selectors";
   import AddUsersDialog from "@rilldata/web-admin/features/organizations/user-management/dialogs/AddUsersDialog.svelte";
   import AddGuestsDialog from "@rilldata/web-admin/features/organizations/user-management/dialogs/AddGuestsDialog.svelte";
   import ConvertGuestToMemberDialog from "@rilldata/web-admin/features/organizations/user-management/dialogs/ConvertGuestToMemberDialog.svelte";
@@ -107,7 +106,6 @@
   });
 
   const currentUser = createAdminServiceGetCurrentUser();
-  $: billingContactUser = getOrganizationBillingContactUser(organization);
 </script>
 
 <div class="flex flex-col w-full">
@@ -153,11 +151,8 @@
           invitesQuery={$orgInvitesInfiniteQuery}
           currentUserEmail={$currentUser.data?.user.email}
           {organizationPermissions}
-          billingContact={$billingContactUser?.email}
           {scrollToTopTrigger}
           guestOnly
-          onAttemptRemoveBillingContactUser={() => {}}
-          onAttemptChangeBillingContactUserRole={() => {}}
           onEditUserGroup={(groupName) => {
             editingUserGroupName = groupName;
             isEditUserGroupDialogOpen = true;

@@ -38,13 +38,13 @@ import (
 
 const retries = 3
 
-// Server implements endpoints for the local Rill app (usually served on localhost).
+// Server implements endpoints for the local StarData app (usually served on localhost).
 type Server struct {
 	logger   *zap.Logger
 	app      *App
 	metadata *localMetadata
 
-	// auth is the self-hosted auth config (nil when using the legacy Rill Cloud flow).
+	// auth is the self-hosted auth config (nil when using the legacy StarData Cloud flow).
 	auth *authn.AuthConfig
 	// externalURL is the public base URL used in issued tokens and login redirects.
 	externalURL string
@@ -124,7 +124,7 @@ func (s *Server) GetMetadata(ctx context.Context, r *connect.Request[localv1.Get
 // loginURL returns the URL the UI should send users to authenticate.
 // When self-hosted auth is enabled it points at StarData's own login
 // (the /login page for local/jwt, the OIDC redirect for oidc).
-// Otherwise it falls back to the legacy Rill Cloud OAuth flow.
+// Otherwise it falls back to the legacy StarData Cloud OAuth flow.
 func (s *Server) loginURL() string {
 	if s.auth == nil {
 		return s.app.localURL + "/auth"
@@ -180,7 +180,7 @@ func (s *Server) PushToGithub(ctx context.Context, r *connect.Request[localv1.Pu
 	}
 	if !gitStatus.HasAccess {
 		// generally this should not happen as IsGithubConnected should be true before pushing to git
-		return nil, fmt.Errorf("rill git app should be installed by user before pushing by visiting %s", gitStatus.GrantAccessUrl)
+		return nil, fmt.Errorf("stardata git app should be installed by user before pushing by visiting %s", gitStatus.GrantAccessUrl)
 	}
 
 	// if r.Msg.Account is empty, githubAccount will be "" which is equivalent to using default github account which is same as github username
@@ -195,7 +195,7 @@ func (s *Server) PushToGithub(ctx context.Context, r *connect.Request[localv1.Pu
 	// this is a safety check as DeployValidation should take care of this
 	if githubAccount == "" {
 		if gitStatus.UserInstallationPermission != adminv1.GithubPermission_GITHUB_PERMISSION_WRITE {
-			return nil, fmt.Errorf("rill github app should be installed with write permission on user personal account by visiting %s", gitStatus.GrantAccessUrl)
+			return nil, fmt.Errorf("stardata github app should be installed with write permission on user personal account by visiting %s", gitStatus.GrantAccessUrl)
 		}
 	} else {
 		valid := false
@@ -206,7 +206,7 @@ func (s *Server) PushToGithub(ctx context.Context, r *connect.Request[localv1.Pu
 			}
 		}
 		if !valid {
-			return nil, fmt.Errorf("rill github app should be installed with write permission on organization %q by visiting %s", githubAccount, gitStatus.GrantAccessUrl)
+			return nil, fmt.Errorf("stardata github app should be installed with write permission on organization %q by visiting %s", githubAccount, gitStatus.GrantAccessUrl)
 		}
 	}
 
@@ -248,7 +248,7 @@ func (s *Server) PushToGithub(ctx context.Context, r *connect.Request[localv1.Pu
 	if err != nil {
 		return nil, fmt.Errorf("failed to generate git commit signature: %w", err)
 	}
-	_, err = gitutil.CommitAll(ctx, s.app.ProjectPath, "", "Auto committed by Rill", author)
+	_, err = gitutil.CommitAll(ctx, s.app.ProjectPath, "", "Auto committed by StarData", author)
 	if err != nil && !errors.Is(err, gitutil.ErrEmptyCommit) {
 		// on ErrEmptyCommit we still trigger the push
 		return nil, fmt.Errorf("failed to commit files to git: %w", err)
@@ -297,7 +297,7 @@ func (s *Server) DeployProject(ctx context.Context, r *connect.Request[localv1.D
 		return nil, err
 	}
 
-	// check if rill org exists
+	// check if stardata org exists
 	_, err = c.GetOrganization(ctx, &adminv1.GetOrganizationRequest{
 		Org: r.Msg.Org,
 	})
@@ -308,7 +308,7 @@ func (s *Server) DeployProject(ctx context.Context, r *connect.Request[localv1.D
 			_, err = c.CreateOrganization(ctx, &adminv1.CreateOrganizationRequest{
 				Name:        r.Msg.Org,
 				DisplayName: r.Msg.NewOrgDisplayName,
-				Description: "Auto created by Rill",
+				Description: "Auto created by StarData",
 			})
 			if err != nil {
 				return nil, err
@@ -355,7 +355,7 @@ func (s *Server) DeployProject(ctx context.Context, r *connect.Request[localv1.D
 		projRequest = &adminv1.CreateProjectRequest{
 			Org:            r.Msg.Org,
 			Project:        r.Msg.ProjectName,
-			Description:    "Auto created by Rill",
+			Description:    "Auto created by StarData",
 			Provisioner:    "",
 			ProdVersion:    "",
 			ProdSlots:      int64(DefaultProdSlots(s.app.ch)),
@@ -378,7 +378,7 @@ func (s *Server) DeployProject(ctx context.Context, r *connect.Request[localv1.D
 		projRequest = &adminv1.CreateProjectRequest{
 			Org:           r.Msg.Org,
 			Project:       r.Msg.ProjectName,
-			Description:   "Auto created by Rill",
+			Description:   "Auto created by StarData",
 			Provisioner:   "",
 			ProdVersion:   "",
 			ProdSlots:     int64(DefaultProdSlots(s.app.ch)),
@@ -395,7 +395,7 @@ func (s *Server) DeployProject(ctx context.Context, r *connect.Request[localv1.D
 		}
 		if !userStatus.HasAccess {
 			// generally this should not happen as IsGithubConnected should be true before deploying
-			return nil, fmt.Errorf("rill git app should be installed/authorized by user before deploying, please visit %s", userStatus.GrantAccessUrl)
+			return nil, fmt.Errorf("stardata git app should be installed/authorized by user before deploying, please visit %s", userStatus.GrantAccessUrl)
 		}
 
 		gitPath, subPath, err := gitutil.InferRepoRootAndSubpath(s.app.ProjectPath)
@@ -439,7 +439,7 @@ func (s *Server) DeployProject(ctx context.Context, r *connect.Request[localv1.D
 		projRequest = &adminv1.CreateProjectRequest{
 			Org:           r.Msg.Org,
 			Project:       r.Msg.ProjectName,
-			Description:   "Auto created by Rill",
+			Description:   "Auto created by StarData",
 			Provisioner:   "",
 			ProdVersion:   "",
 			ProdSlots:     int64(DefaultProdSlots(s.app.ch)),
@@ -571,7 +571,7 @@ func (s *Server) RedeployProject(ctx context.Context, r *connect.Request[localv1
 			}
 			// just for verification confirm that subpath matches the one stored in project
 			if subpath != projResp.Project.Subpath {
-				return nil, fmt.Errorf("current project subpath %q does not match the one stored in rill %q. Try doing deploy using rill cli from github repo root by passing explicit subpath using `rill deploy --subpath %s`", subpath, projResp.Project.Subpath, projResp.Project.Subpath)
+				return nil, fmt.Errorf("current project subpath %q does not match the one stored in stardata %q. Try doing deploy using stardata cli from github repo root by passing explicit subpath using `stardata deploy --subpath %s`", subpath, projResp.Project.Subpath, projResp.Project.Subpath)
 			}
 			author, err := s.app.ch.GitSignature(ctx, reporoot)
 			if err != nil {
@@ -637,7 +637,7 @@ func (s *Server) GetCurrentUser(ctx context.Context, r *connect.Request[localv1.
 		return nil, errors.New("failed to get current user")
 	}
 
-	// get rill user orgs
+	// get stardata user orgs
 	resp, err := c.ListOrganizations(ctx, &adminv1.ListOrganizationsRequest{PageSize: 1000})
 	if err != nil {
 		return nil, err
@@ -973,7 +973,8 @@ func (s *Server) logoutHandler() http.Handler {
 	})
 }
 
-// trackingHandler proxies events to intake.rilldata.io.
+// trackingHandler receives telemetry events from the UI.
+// StarData: the underlying telemetry client is a no-op, so events are accepted and discarded.
 func (s *Server) trackingHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Read entire body up front (since it may be closed before the request is sent in the goroutine below)
@@ -1002,7 +1003,7 @@ func (s *Server) trackingHandler() http.Handler {
 	})
 }
 
-// localMetadata contains metadata about the current project and Rill configuration.
+// localMetadata contains metadata about the current project and StarData configuration.
 type localMetadata struct {
 	InstanceID       string `json:"instance_id"`
 	ProjectPath      string `json:"project_path"`
@@ -1018,7 +1019,7 @@ type localMetadata struct {
 	GRPCPort         int    `json:"grpc_port"`
 }
 
-// metadataHandler serves the metadata of the local Rill instance.
+// metadataHandler serves the metadata of the local StarData instance.
 func (s *Server) metadataHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		data, err := json.Marshal(s.metadata)
@@ -1041,7 +1042,7 @@ type versionResponse struct {
 	LatestVersion  string `json:"latest_version"`
 }
 
-// versionHandler servers the current and latest version of the Rill CLI.
+// versionHandler servers the current and latest version of the StarData CLI.
 func (s *Server) versionHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Get the latest version available

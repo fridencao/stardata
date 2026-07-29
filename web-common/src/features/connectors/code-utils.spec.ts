@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { V1ConnectorDriver } from "@rilldata/web-common/runtime-client";
+import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
 import {
   replaceAiConnectorInYAML,
   replaceOlapConnectorInYAML,
@@ -420,8 +421,7 @@ describe("generateYAML", () => {
   it("should produce basic connector YAML", async () => {
     const connector: V1ConnectorDriver = {
       name: "clickhouse",
-      docsUrl:
-        "https://docs.rilldata.com/developers/build/connectors/data-source/clickhouse",
+      docsUrl: docsUrl("/developers/build/connectors/data-source/clickhouse"),
     };
     const { envEditSession } = await makeTestEnvEditSession(
       connector.name,

@@ -49,7 +49,7 @@
   // 1. Backend lock: if --preview flag is set, always true
   // 2. URL-derived: portal routes (/, /chat, /boards) → true,
   //    studio routes (/studio, /files, ...) → false
-  // 3. Preserved: shared routes (/explore, /canvas, /deploy) keep previous value
+  // 3. Preserved: shared routes (/explore, /canvas) keep previous value
   $: {
     if (data.previewMode) {
       previewModeStore.set(true);

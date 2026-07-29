@@ -65,7 +65,7 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 				}
 
 				if currentDir == homeDir {
-					if err := cmdutil.ConfirmPrompt("You are trying to start Rill in your home directory, which is not recommended. Do you want to continue?", false); err != nil {
+					if err := cmdutil.ConfirmPrompt("You are trying to start StarData in your home directory, which is not recommended. Do you want to continue?", false); err != nil {
 						return err
 					}
 				}
@@ -79,7 +79,7 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 					displayPath = strings.Replace(currentDir, homeDir, "~", 1)
 				}
 
-				msg := fmt.Sprintf("Rill will create project files in %q. Do you want to continue?", displayPath)
+				msg := fmt.Sprintf("StarData will create project files in %q. Do you want to continue?", displayPath)
 				if err := cmdutil.ConfirmPrompt(msg, defval); err != nil {
 					return err
 				}
@@ -201,7 +201,7 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 	startCmd.Flags().StringSliceVarP(&envVars, "env", "e", []string{}, "Set environment variables")
 	startCmd.Flags().StringVar(&environment, "environment", "dev", `Environment name`)
 	startCmd.Flags().BoolVar(&reset, "reset", false, "Clear and re-ingest source data")
-	startCmd.Flags().BoolVar(&pullEnv, "pull-env", true, "Pull environment variables from Rill Cloud before starting the project")
+	startCmd.Flags().BoolVar(&pullEnv, "pull-env", true, "Pull environment variables from StarData Cloud before starting the project")
 	startCmd.Flags().BoolVar(&noOpen, "no-open", false, "Do not open browser")
 	startCmd.Flags().BoolVar(&verbose, "verbose", false, "Sets the log level to debug")
 	startCmd.Flags().BoolVar(&readonly, "readonly", false, "Deprecated: use --preview instead")
@@ -221,7 +221,7 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 		panic(err)
 	}
 
-	// Deprecated support for "--readonly". Projects should be shared via Rill Cloud.
+	// Deprecated support for "--readonly". Projects should be shared via StarData Cloud.
 	if err := startCmd.Flags().MarkHidden("readonly"); err != nil {
 		panic(err)
 	}

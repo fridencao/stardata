@@ -38,7 +38,7 @@ func StatusCmd(ch *cmdutil.Helper) *cobra.Command {
 				}
 			} else {
 				if name == "" {
-					name, err = ch.InferProjectName(cmd.Context(), path, "use --project to specify the name or --local to target a local Rill process")
+					name, err = ch.InferProjectName(cmd.Context(), path, "use --project to specify the name or --local to target a local StarData process")
 					if err != nil {
 						return err
 					}
@@ -164,7 +164,7 @@ func StatusCmd(ch *cmdutil.Helper) *cobra.Command {
 
 	statusCmd.Flags().StringVar(&name, "project", "", "Project Name")
 	statusCmd.Flags().StringVar(&path, "path", ".", "Project directory")
-	statusCmd.Flags().BoolVar(&local, "local", false, "Target locally running Rill")
+	statusCmd.Flags().BoolVar(&local, "local", false, "Target locally running StarData")
 	statusCmd.Flags().StringVar(&branch, "branch", "", "Target deployment by Git branch (default: primary deployment)")
 
 	return statusCmd

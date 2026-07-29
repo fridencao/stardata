@@ -1,4 +1,5 @@
 import { describe, it, expect } from "vitest";
+import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
 import type { V1ConnectorDriver } from "@rilldata/web-common/runtime-client";
 import {
   getFileTypeFromPath,
@@ -556,7 +557,7 @@ describe("generateSourceYAML", () => {
       { originalDriverName: "s3" },
     );
     expect(result).toContain(
-      "https://docs.rilldata.com/developers/build/connectors/data-source/s3",
+      docsUrl("/developers/build/connectors/data-source/s3"),
     );
   });
 

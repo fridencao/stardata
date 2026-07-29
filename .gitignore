@@ -125,3 +125,6 @@ stardata
 docs/superpowers/
 logs/
 
+
+# Qoder IDE internal cache
+.qoder/

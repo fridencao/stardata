@@ -9,7 +9,7 @@
   import { Wand } from "lucide-svelte";
   import { V1ReconcileStatus } from "../../../runtime-client";
   import { useRuntimeClient } from "../../../runtime-client/v2";
-  import { allowPrimary } from "../../dashboards/workspace/DeployProjectCTA.svelte";
+  import { allowPrimary } from "../../dashboards/workspace/allow-primary";
   import { featureFlags } from "../../feature-flags";
   import { useCreateMetricsViewFromTableUIAction } from "../../metrics-views/ai-generation/generateMetricsView";
   import { useModel } from "../selectors";

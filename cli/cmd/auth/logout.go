@@ -8,11 +8,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// LogoutCmd is the command for logging out of a Rill account.
+// LogoutCmd is the command for logging out of a StarData account.
 func LogoutCmd(ch *cmdutil.Helper) *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "logout",
-		Short: "Logout of the Rill API",
+		Short: "Logout of the StarData API",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			ctx := cmd.Context()
 

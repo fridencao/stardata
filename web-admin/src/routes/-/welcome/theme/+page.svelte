@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import StarDataLogoSquareNegative from "@rilldata/web-common/components/icons/StarDataLogoSquareNegative.svelte";
+  import StarDataLogoWordmark from "@rilldata/web-common/components/icons/StarDataLogoWordmark.svelte";
   import { Button } from "@rilldata/web-common/components/button/index.ts";
   import {
     themeControl,
@@ -40,9 +40,9 @@
   }
 </script>
 
-<div class="flex flex-col gap-4 justify-center">
-  <StarDataLogoSquareNegative size="36px" />
-  <div class="text-2xl font-extrabold text-fg-accent text-center">
+<div class="flex flex-col items-center gap-4 justify-center">
+  <StarDataLogoWordmark size="lg" />
+  <div class="auth-title text-center">
     Pick your color mode
   </div>
   <div class="flex flex-row gap-8 pt-6 mx-auto">

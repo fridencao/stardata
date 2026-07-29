@@ -1,4 +1,5 @@
 import { fileArtifacts } from "@rilldata/web-common/features/entity-management/file-artifacts.ts";
+import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
 import { navigateToFile } from "@rilldata/web-common/layout/navigation/editor-routing";
 import { getName } from "@rilldata/web-common/features/entity-management/name-utils.ts";
 import {
@@ -167,12 +168,12 @@ export function generateBlobForNewResourceFile(
       return ""; // This is constructed in the `features/sources/modal` directory
     case ResourceKind.Model:
       return `-- Model SQL
--- Reference documentation: https://docs.rilldata.com/developers/build/models
+-- Reference documentation: ${docsUrl("/developers/build/models")}
 
 SELECT 'Hello, World!' AS Greeting`;
     case ResourceKind.MetricsView:
       return `# Metrics View YAML
-# Reference documentation: https://docs.rilldata.com/reference/project-files/metrics-views
+# Reference documentation: ${docsUrl("/reference/project-files/metrics-views")}
 
 version: 1
 type: metrics_view
@@ -190,7 +191,7 @@ measures:
           baseResource.metricsView?.state?.validSpec?.displayName;
 
         return `# Explore YAML
-# Reference documentation: https://docs.rilldata.com/reference/project-files/explore-dashboards
+# Reference documentation: ${docsUrl("/reference/project-files/explore-dashboards")}
 
 type: explore
 
@@ -202,7 +203,7 @@ measures: '*'
 `;
       }
       return `# Explore YAML
-# Reference documentation: https://docs.rilldata.com/reference/project-files/explore-dashboards
+# Reference documentation: ${docsUrl("/reference/project-files/explore-dashboards")}
 
 type: explore
 
@@ -214,7 +215,7 @@ measures: '*'
 `;
     case ResourceKind.API:
       return `# API YAML
-# Reference documentation: https://docs.rilldata.com/reference/project-files/apis
+# Reference documentation: ${docsUrl("/reference/project-files/apis")}
 # Test your API endpoint at http://localhost:9009/v1/instances/default/api/<filename>
 
 type: api
@@ -224,7 +225,7 @@ metrics_sql: |
 `;
     case ResourceKind.Canvas:
       return `# Explore YAML
-# Reference documentation: https://docs.rilldata.com/reference/project-files/canvas-dashboards
+# Reference documentation: ${docsUrl("/reference/project-files/canvas-dashboards")}
 
 type: canvas
 display_name: "Canvas Dashboard"
@@ -234,7 +235,7 @@ defaults:
 `;
     case ResourceKind.Theme:
       return `# Theme YAML
-# Reference documentation: https://docs.rilldata.com/reference/project-files/themes
+# Reference documentation: ${docsUrl("/reference/project-files/themes")}
 # This example shows a modern "Aurora" theme with indigo/purple gradients
 
 type: theme

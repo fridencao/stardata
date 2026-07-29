@@ -4,12 +4,14 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/base64"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"net/http"
 	"net/url"
 	"strconv"
+	"strings"
 	"time"
 
 	"github.com/coreos/go-oidc/v3/oidc"
@@ -611,17 +613,80 @@ func (a *Authenticator) authLogoutProvider(w http.ResponseWriter, r *http.Reques
 		}
 	}
 
-	// Build and redirect to the auth provider logout URL.
-	logoutURL, err := url.Parse("https://" + a.opts.AuthDomain + "/v2/logout")
+	// Build and redirect to the auth provider logout URL (RP-Initiated Logout).
+	logoutURL, err := a.buildLogoutURL()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	parameters := url.Values{}
-	parameters.Add("returnTo", a.admin.URLs.AuthLogoutCallback())
-	parameters.Add("client_id", a.opts.AuthClientID)
-	logoutURL.RawQuery = parameters.Encode()
-	http.Redirect(w, r, logoutURL.String(), http.StatusTemporaryRedirect)
+	if logoutURL == "" {
+		// No provider logout endpoint could be resolved; just send the user back to the frontend.
+		http.Redirect(w, r, a.admin.URLs.Frontend(), http.StatusTemporaryRedirect)
+		return
+	}
+	http.Redirect(w, r, logoutURL, http.StatusTemporaryRedirect)
+}
+
+// buildLogoutURL builds the auth provider logout redirect URL using RP-Initiated Logout.
+// For generic OIDC (e.g. Keycloak) it discovers the end_session_endpoint from the issuer's
+// .well-known/openid-configuration. For Auth0-compatible deployments (AuthDomain set, AuthIssuerURL
+// empty) it falls back to the Auth0 /v2/logout endpoint. Returns ("", nil) when no provider logout
+// endpoint can be resolved, in which case the caller should just redirect to the frontend.
+func (a *Authenticator) buildLogoutURL() (string, error) {
+	if a.opts.AuthIssuerURL != "" {
+		// Discover the end_session_endpoint for RP-Initiated Logout.
+		endpoint, err := discoverEndSessionEndpoint(a.opts.AuthIssuerURL)
+		if err == nil && endpoint != "" {
+			q := url.Values{}
+			q.Set("post_logout_redirect_uri", a.admin.URLs.AuthLogoutCallback())
+			q.Set("client_id", a.opts.AuthClientID)
+			return endpoint + "?" + q.Encode(), nil
+		}
+		// Discovery failed; fall through to a frontend redirect below.
+		return "", nil
+	}
+
+	if a.opts.AuthDomain != "" {
+		u, err := url.Parse("https://" + a.opts.AuthDomain + "/v2/logout")
+		if err != nil {
+			return "", err
+		}
+		q := url.Values{}
+		q.Set("returnTo", a.admin.URLs.AuthLogoutCallback())
+		q.Set("client_id", a.opts.AuthClientID)
+		u.RawQuery = q.Encode()
+		return u.String(), nil
+	}
+
+	return "", nil
+}
+
+// openidConfiguration mirrors the fields of an OIDC discovery document relevant to logout.
+type openidConfiguration struct {
+	EndSessionEndpoint string `json:"end_session_endpoint"`
+}
+
+// discoverEndSessionEndpoint fetches the issuer's .well-known/openid-configuration and returns the
+// end_session_endpoint. go-oidc's Provider does not expose this field, so we fetch it directly.
+func discoverEndSessionEndpoint(issuerURL string) (string, error) {
+	discoveryURL := strings.TrimRight(issuerURL, "/") + "/.well-known/openid-configuration"
+	req, err := http.NewRequest(http.MethodGet, discoveryURL, nil)
+	if err != nil {
+		return "", err
+	}
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return "", err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != http.StatusOK {
+		return "", fmt.Errorf("oidc discovery returned status %d", resp.StatusCode)
+	}
+	var cfg openidConfiguration
+	if err := json.NewDecoder(resp.Body).Decode(&cfg); err != nil {
+		return "", err
+	}
+	return cfg.EndSessionEndpoint, nil
 }
 
 // authLogoutCallback is called by the auth provider when a logout flow iniated by authLogout has completed.

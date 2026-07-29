@@ -1,5 +1,6 @@
 <script lang="ts">
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
+  import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
   import ResourceError from "@rilldata/web-common/features/resources/ResourceError.svelte";
   import ResourceList from "@rilldata/web-common/features/resources/ResourceList.svelte";
   import ResourceListEmptyState from "@rilldata/web-common/features/resources/ResourceListEmptyState.svelte";
@@ -133,7 +134,7 @@
           >
             <span slot="action">
               <a
-                href="https://docs.rilldata.com/developers/build/dashboards"
+                href={docsUrl("/developers/build/dashboards")}
                 target="_blank"
                 rel="noopener noreferrer"
               >

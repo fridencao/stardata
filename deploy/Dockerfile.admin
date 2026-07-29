@@ -1,0 +1,19 @@
+# 多阶段构建 StarData admin 管理平面镜像
+FROM golang:1.26 AS build
+WORKDIR /app
+# duckdb 等依赖需要 cgo，必须安装 C 工具链并开启 CGO（不能用 CGO_ENABLED=0）
+RUN apt-get update && apt-get install -y --no-install-recommends gcc libc6-dev && rm -rf /var/lib/apt/lists/*
+# 复用宿主 Go 模块缓存加速构建
+COPY go.mod go.sum ./
+RUN go mod download
+COPY . .
+RUN CGO_ENABLED=1 go build -o /stardata ./cli
+
+FROM ubuntu:24.04
+RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/*
+COPY --from=build /stardata /usr/local/bin/stardata
+RUN groupadd -g 1001 stardata && useradd -m -u 1001 -s /bin/sh -g stardata stardata
+# /data 供持久卷挂载（admin 本地 assets / runtime DuckDB+metastore），预建并授权给运行用户
+RUN mkdir -p /data && chown stardata:stardata /data
+USER stardata
+# 不设置 ENTRYPOINT：由 docker-compose 的 command 控制 "migrate && start" 顺序

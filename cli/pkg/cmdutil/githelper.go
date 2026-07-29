@@ -156,7 +156,7 @@ func SetupGitIgnore(ctx context.Context, repo drivers.RepoStore) error {
 			return err
 		}
 		// Create .gitignore if it does not exist
-		err = repo.Put(ctx, ".gitignore", strings.NewReader(".DS_Store\n\n# Rill\n.env\ntmp\n"))
+		err = repo.Put(ctx, ".gitignore", strings.NewReader(".DS_Store\n\n# StarData\n.env\ntmp\n"))
 		if err != nil {
 			return err
 		}

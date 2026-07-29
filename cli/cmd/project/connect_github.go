@@ -34,7 +34,7 @@ func GitPushCmd(ch *cmdutil.Helper) *cobra.Command {
 
 	deployCmd := &cobra.Command{
 		Use:   "connect-github [<path>]",
-		Short: "Deploy project to Rill Cloud by pulling project files from a git repository",
+		Short: "Deploy project to StarData Cloud by pulling project files from a git repository",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				opts.GitPath = args[0]
@@ -56,7 +56,7 @@ func GitPushCmd(ch *cmdutil.Helper) *cobra.Command {
 	deployCmd.Flags().StringVar(&opts.PrimaryBranch, "primary-branch", "", "Git branch to deploy from (default: the default Git branch)")
 	deployCmd.Flags().IntVar(&opts.Slots, "prod-slots", local.DefaultProdSlots(ch), "Slots to allocate for production deployments")
 	deployCmd.Flags().IntVar(&opts.DevSlots, "dev-slots", local.DefaultDevSlots(ch), "Slots to allocate for dev deployments")
-	deployCmd.Flags().BoolVar(&opts.PushEnv, "push-env", true, "Push local .env file to Rill Cloud")
+	deployCmd.Flags().BoolVar(&opts.PushEnv, "push-env", true, "Push local .env file to StarData Cloud")
 	if !ch.IsDev() {
 		if err := deployCmd.Flags().MarkHidden("prod-slots"); err != nil {
 			panic(err)
@@ -125,7 +125,7 @@ func ConnectGithubFlow(ctx context.Context, ch *cmdutil.Helper, opts *DeployOpts
 		return err
 	}
 	if !ok {
-		ch.PrintfBold("You can run `rill deploy` again when you have pushed your local changes to the remote.\n")
+		ch.PrintfBold("You can run `stardata deploy` again when you have pushed your local changes to the remote.\n")
 		return nil
 	}
 
@@ -157,7 +157,7 @@ func ConnectGithubFlow(ctx context.Context, ch *cmdutil.Helper, opts *DeployOpts
 		if err != nil {
 			return fmt.Errorf("org creation failed with error: %w", err)
 		}
-		ch.PrintfSuccess("Created org %q. Run `rill org edit` to change name if required.\n\n", ch.Org)
+		ch.PrintfSuccess("Created org %q. Run `stardata org edit` to change name if required.\n\n", ch.Org)
 	} else {
 		ch.PrintfBold("Using org %q.\n\n", ch.Org)
 	}
@@ -180,15 +180,15 @@ func ConnectGithubFlow(ctx context.Context, ch *cmdutil.Helper, opts *DeployOpts
 	})
 	if err != nil {
 		if s, ok := status.FromError(err); ok && s.Code() == codes.PermissionDenied {
-			ch.PrintfError("You do not have the permissions needed to create a project in org %q. Please reach out to your Rill admin.\n", ch.Org)
+			ch.PrintfError("You do not have the permissions needed to create a project in org %q. Please reach out to your StarData admin.\n", ch.Org)
 			return nil
 		}
 		return fmt.Errorf("create project failed with error %w", err)
 	}
 
 	// Success!
-	ch.PrintfSuccess("Created project \"%s/%s\". Use `rill project rename` to change name if required.\n\n", ch.Org, res.Project.Name)
-	ch.PrintfSuccess("Rill projects deploy continuously when you push changes to Github.\n")
+	ch.PrintfSuccess("Created project \"%s/%s\". Use `stardata project rename` to change name if required.\n\n", ch.Org, res.Project.Name)
+	ch.PrintfSuccess("StarData projects deploy continuously when you push changes to Github.\n")
 
 	// Upload .env
 	if opts.PushEnv {
@@ -247,7 +247,7 @@ func createGithubRepoFlow(ctx context.Context, ch *cmdutil.Helper, localGitPath 
 
 		if res.GrantAccessUrl != "" {
 			// Print instructions to grant access
-			ch.Print("Open this URL in your browser to grant Rill access to Github:\n\n")
+			ch.Print("Open this URL in your browser to grant StarData access to Github:\n\n")
 			ch.Print("\t" + res.GrantAccessUrl + "\n\n")
 
 			// Open browser if possible
@@ -283,7 +283,7 @@ func createGithubRepoFlow(ctx context.Context, ch *cmdutil.Helper, localGitPath 
 	// Emit success telemetry
 	ch.Telemetry(ctx).RecordBehavioralLegacy(activity.BehavioralEventGithubConnectedSuccess)
 
-	// get orgs on which rill github app is installed with write permission
+	// get orgs on which stardata github app is installed with write permission
 	var candidateOrgs []string
 	if pollRes.UserInstallationPermission == adminv1.GithubPermission_GITHUB_PERMISSION_WRITE {
 		candidateOrgs = append(candidateOrgs, pollRes.Account)
@@ -300,7 +300,7 @@ func createGithubRepoFlow(ctx context.Context, ch *cmdutil.Helper, localGitPath 
 		return nil
 	} else if len(candidateOrgs) == 1 {
 		repoOwner = candidateOrgs[0]
-		if err := cmdutil.ConfirmPrompt(fmt.Sprintf("Rill will create a new repository in the Github account %q. Do you want to continue?", repoOwner), true); err != nil {
+		if err := cmdutil.ConfirmPrompt(fmt.Sprintf("StarData will create a new repository in the Github account %q. Do you want to continue?", repoOwner), true); err != nil {
 			return err
 		}
 	} else {
@@ -429,8 +429,8 @@ func githubFlow(ctx context.Context, ch *cmdutil.Helper, gitRemote string) (*adm
 		ch.Telemetry(ctx).RecordBehavioralLegacy(activity.BehavioralEventGithubConnectedStart)
 
 		// Print instructions to grant access
-		ch.Print("Rill projects deploy continuously when you push changes to Github.\n")
-		ch.Print("You need to grant Rill read only access to your repository on Github.\n\n")
+		ch.Print("StarData projects deploy continuously when you push changes to Github.\n")
+		ch.Print("You need to grant StarData read only access to your repository on Github.\n\n")
 
 		// Wait three seconds before opening the browser
 		select {
@@ -438,7 +438,7 @@ func githubFlow(ctx context.Context, ch *cmdutil.Helper, gitRemote string) (*adm
 		case <-ctx.Done():
 			return nil, ctx.Err()
 		}
-		ch.Print("Open this URL in your browser to grant Rill access to Github:\n\n")
+		ch.Print("Open this URL in your browser to grant StarData access to Github:\n\n")
 		ch.Print("\t" + res.GrantAccessUrl + "\n\n")
 
 		// Open browser if possible
@@ -498,7 +498,7 @@ func createProjectFlow(ctx context.Context, ch *cmdutil.Helper, req *adminv1.Cre
 			return nil, fmt.Errorf("a project with the name %q already exists in the org %q. Please provide a different name using the --name flag and try again", req.Project, req.Org)
 		}
 
-		ch.PrintfWarn("Rill project names are derived from your Github repository name.\n")
+		ch.PrintfWarn("StarData project names are derived from your Github repository name.\n")
 		ch.PrintfWarn("The %q project already exists under org %q. Please enter a different name.\n", req.Project, req.Org)
 
 		// project name already exists, prompt for project name and create project with new name again

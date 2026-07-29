@@ -71,7 +71,7 @@ vars:
 		return modelOutputFn == 1
 	}, 10*time.Second, 100*time.Millisecond, "unexpected model output")
 
-	// set env via `rill env set limit 10`
+	// set env via `stardata env set limit 10`
 	result = u1.Run(t, "env", "set", "limit", "10", "--org=reload-configs-test", "--project=rill-mgd-deploy")
 	require.Equal(t, 0, result.ExitCode, result.Output)
 
@@ -84,7 +84,7 @@ vars:
 		return modelOutputFn == 10
 	}, 10*time.Second, 100*time.Millisecond, "unexpected model output after env set")
 
-	// stop the deployment - rill project deployments stop main
+	// stop the deployment - stardata project deployments stop main
 	result = u1.Run(t, "project", "deployment", "stop", "main", "--org=reload-configs-test", "--project=rill-mgd-deploy")
 	require.Equal(t, 0, result.ExitCode, result.Output)
 
