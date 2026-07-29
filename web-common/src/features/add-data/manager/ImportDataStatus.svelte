@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import {
     type AddDataConfig,
     type ImportAddDataStep,
@@ -102,61 +103,58 @@
   {#if error}
     <div class="header">
       <AlertCircleIcon class="w-5 h-5 text-red-500" />
-      Data import failed
+      {m.add_data_import_failed()}
     </div>
     <div class="content text-destructive">
       {error}
     </div>
     <div class="footer">
       <Button type="secondary" href={currentFileRoute} onClick={onDone}>
-        View YAML
+        {m.add_data_view_yaml()}
       </Button>
     </div>
   {:else if isDone}
     <div class="header">
       <CheckCircle2Icon class="w-5 h-5 text-green-500" />
-      Data imported successfully!
+      {m.add_data_import_success()}
     </div>
     <div class="content">
       <span class="font-mono text-fg-primary break-all">{sourceName}</span>
-      has been ingested. What would you like to do next?
+      {m.add_data_ingested_next()}
     </div>
     <div class="footer">
       <Button onClick={generateMetrics} type="primary">
-        Generate dashboard
+        {m.add_data_generate_dashboard()}
 
         {#if $ai}
-          with AI
+          {m.add_data_with_ai()}
           <WandIcon class="w-3 h-3" />
         {/if}
       </Button>
 
       <Button type="secondary" href={currentFileRoute} onClick={onDone}>
-        View this source
+        {m.add_data_view_source()}
       </Button>
     </div>
   {:else}
     <div class="header">
       <Loader2Icon class="w-5 h-5 text-primary-500 animate-spin" />
-      Ingesting data...
+      {m.add_data_ingesting()}
     </div>
     <div class="content">
       <p class="font-medium">
-        Safe to close this window, we'll notify you when complete.
+        {m.add_data_safe_to_close()}
       </p>
       <p class="mt-2 text-sm text-muted-foreground">
-        Processing may take several minutes depending on file size. The upload
-        continues in the background, and you'll receive a notification when it's
-        complete. You can safely close this window — the import will continue in
-        the background.
+        {m.add_data_ingesting_detail()}
       </p>
     </div>
     <div class="footer">
       <Button type="secondary" href={currentFileRoute} onClick={onDone}>
-        View this source
+        {m.add_data_view_source()}
       </Button>
 
-      <Button onClick={onDone} type="primary">Close</Button>
+      <Button onClick={onDone} type="primary">{m.common_close()}</Button>
     </div>
   {/if}
 </div>

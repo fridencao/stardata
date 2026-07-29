@@ -29,6 +29,7 @@
     >
       ✦
     </span>
+    <!-- i18n-ignore: brand name -->
     StarData
   </a>
   <div class="ml-auto flex items-center gap-3">

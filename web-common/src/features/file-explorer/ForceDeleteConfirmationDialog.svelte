@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import * as AlertDialog from "@rilldata/web-common/components/alert-dialog/index";
   import { Button } from "@rilldata/web-common/components/button";
 
@@ -20,11 +21,11 @@
 >
   <AlertDialog.Content>
     <AlertDialog.Title>
-      Delete this folder and all its contents?
+      {m.file_delete_folder_title()}
     </AlertDialog.Title>
 
     <AlertDialog.Description>
-      This folder is not empty. All contained items will be deleted.
+      {m.file_delete_folder_description()}
     </AlertDialog.Description>
 
     <AlertDialog.Footer>
@@ -39,7 +40,7 @@
             }}
             type="destructive"
           >
-            Delete
+            {m.common_delete()}
           </Button>
         {/snippet}
       </AlertDialog.Action>
@@ -47,7 +48,7 @@
       <AlertDialog.Cancel>
         {#snippet child({ props })}
           <Button {...props} large onClick={handleClose} type="tertiary"
-            >Cancel</Button
+            >{m.common_cancel()}</Button
           >
         {/snippet}
       </AlertDialog.Cancel>

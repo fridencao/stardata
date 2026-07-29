@@ -157,6 +157,7 @@
 </script>
 
 <svelte:head>
+  <!-- i18n-ignore: brand name -->
   <title>StarData Studio · {m.studio_tabs_publish()}</title>
 </svelte:head>
 

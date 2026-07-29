@@ -10,6 +10,7 @@
   import * as Collapsible from "../../../../../components/collapsible";
   import CaretDownIcon from "../../../../../components/icons/CaretDownIcon.svelte";
   import LoadingSpinner from "../../../../../components/icons/LoadingSpinner.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import type { V1Message, V1Tool } from "../../../../../runtime-client";
   import { MessageContentType } from "../../types";
   import { getToolDisplayName } from "./tool-display-names";
@@ -100,14 +101,14 @@
           class:active={activeTab === "request"}
           onclick={() => (activeTab = "request")}
         >
-          Request
+          {m.chat_tool_tab_request()}
         </button>
         <button
           class="tool-tab"
           class:active={activeTab === "response"}
           onclick={() => (activeTab = "response")}
         >
-          {isError ? "Error" : "Response"}
+          {isError ? m.chat_tool_tab_error() : m.chat_tool_tab_response()}
         </button>
       </div>
 
@@ -123,7 +124,7 @@
         {:else}
           <div class="tool-loading">
             <LoadingSpinner size="0.875rem" />
-            <span>Waiting for response...</span>
+            <span>{m.chat_tool_waiting()}</span>
           </div>
         {/if}
       </div>

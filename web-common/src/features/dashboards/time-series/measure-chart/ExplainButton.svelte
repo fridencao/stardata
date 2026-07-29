@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { Bot } from "lucide-svelte";
   import type { PlotBounds } from "./types";
 
@@ -17,5 +18,5 @@
   }}
 >
   <Bot size={14} class="stroke-primary -mt-0.5" />
-  <span>Explain (E)</span>
+  <span>{m.chart_explain_button()}</span>
 </button>

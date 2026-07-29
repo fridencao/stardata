@@ -9,6 +9,7 @@
   import { withEditorPrefix } from "@rilldata/web-common/layout/navigation/editor-routing.ts";
   import { EntityStatus } from "@rilldata/web-common/features/entity-management/types.ts";
   import Spinner from "@rilldata/web-common/features/entity-management/Spinner.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let startConnectorSelection: (name: string | null) => void = () => {};
   export let onWelcomeScreen = false;
@@ -34,19 +35,19 @@
       ? { href: withEditorPrefix("/welcome/add-data") }
       : { onclick: () => startConnectorSelection(null) }}
     class="all-connectors"
-    aria-label="Connect your data"
+    aria-label={m.add_data_connect_your_data()}
   >
     <div class="header">
       <DatabaseIcon class="h-[18px]" />
-      <span>Connect your data</span>
+      <span>{m.add_data_connect_your_data()}</span>
     </div>
 
     <div class="grow"></div>
 
-    <div class="see-more-container" aria-label="See more connectors">
+    <div class="see-more-container" aria-label={m.add_data_see_more_connectors()}>
       <span class="grow"></span>
       <div class="see-more">
-        <span>See more connectors</span>
+        <span>{m.add_data_see_more_connectors()}</span>
         <ArrowRightIcon class="w-4 h-4" />
       </div>
     </div>

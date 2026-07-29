@@ -6,6 +6,7 @@
    */
   import Tooltip from "@rilldata/web-common/components/tooltip/Tooltip.svelte";
   import TooltipContent from "@rilldata/web-common/components/tooltip/TooltipContent.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { datesToFormattedTimeRange } from "@rilldata/web-common/lib/formatters";
   import type { V1TimeGrain } from "@rilldata/web-common/runtime-client";
   import { GridCell, LeftRightGrid } from "../../../grid";
@@ -47,7 +48,7 @@
         </div>
         <TooltipContent slot="tooltip-content">
           <div style:max-width="315px">
-            The range of this column is {formattedTimeRange}.
+            {m.graphic_range_of_column({ range: formattedTimeRange })}
           </div>
         </TooltipContent>
       </Tooltip>
@@ -55,15 +56,16 @@
     <GridCell side="right">
       <Tooltip distance={16} location="top">
         <div>
-          <span class="font-semibold">{displayRollupGrain}</span> row counts
+          <span class="font-semibold">{displayRollupGrain}</span>
+          {m.graphic_row_counts()}
         </div>
 
         <TooltipContent slot="tooltip-content">
           <div style:max-width="315px">
-            This timestamp column is aggregated so each point on the time series
-            represents a rollup count at the <b style:font-weight="600"
-              >{displayRollupGrain} level</b
-            >.
+            {m.graphic_rollup_prefix()}
+            <b style:font-weight="600"
+              >{displayRollupGrain} {m.graphic_level()}</b
+            >{m.graphic_rollup_suffix()}
           </div>
         </TooltipContent>
       </Tooltip>
@@ -72,17 +74,18 @@
       <Tooltip distance={16} location="top">
         <div class="text-right">
           {#if estimatedSmallestTimeGrain}
-            min. interval at
+            {m.graphic_min_interval_at()}
             <span class="font-semibold"
               >{displayEstimatedSmallestTimegrain}</span
             >
-            level
+            {m.graphic_level()}
           {/if}
         </div>
         <TooltipContent slot="tooltip-content">
           <div style:max-width="315px">
-            The smallest available time interval in this column appears to be at
-            the <i>{displayEstimatedSmallestTimegrain}</i> level.
+            {m.graphic_smallest_interval_prefix()}
+            <i>{displayEstimatedSmallestTimegrain}</i>
+            {m.graphic_smallest_interval_suffix()}
           </div>
         </TooltipContent>
       </Tooltip>

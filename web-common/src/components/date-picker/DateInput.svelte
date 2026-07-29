@@ -1,5 +1,6 @@
 <script lang="ts">
   import { DateTime } from "luxon";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import * as Tooltip from "@rilldata/web-common/components/tooltip-v2";
   import AlertTriangle from "../icons/AlertTriangle.svelte";
 
@@ -173,9 +174,9 @@
         </Tooltip.Trigger>
         <Tooltip.Content side="top" sideOffset={10} class="shadow-md">
           {#if errorType === ErrorType.OUT_OF_RANGE}
-            Date is out of range. Click to reset.
+            {m.date_out_of_range_reset()}
           {:else}
-            Date is invalid. Click to reset.
+            {m.date_invalid_reset()}
           {/if}
         </Tooltip.Content>
       </Tooltip.Root>

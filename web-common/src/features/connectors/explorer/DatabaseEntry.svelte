@@ -9,6 +9,7 @@
   import DatabaseSchemaEntry from "./DatabaseSchemaEntry.svelte";
   import { useListDatabaseSchemas } from "../selectors";
   import type { ConnectorExplorerStore } from "./connector-explorer-store";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let connector: V1AnalyzedConnector;
   export let database: string;
@@ -53,12 +54,16 @@
   <ol transition:slide={{ duration }}>
     {#if expanded}
       {#if error}
-        <span class="message">Error: {extractErrorMessage(error)}</span>
+        <span class="message"
+          >{m.connector_error_message({
+            message: extractErrorMessage(error),
+          })}</span
+        >
       {:else if isLoading}
-        <span class="message">Loading schemas...</span>
+        <span class="message">{m.connector_loading_schemas()}</span>
       {:else if data}
         {#if data.length === 0}
-          <span class="message">No schemas found</span>
+          <span class="message">{m.connector_no_schemas()}</span>
         {:else}
           {#each data as schema (schema)}
             <DatabaseSchemaEntry

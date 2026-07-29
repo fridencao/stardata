@@ -156,15 +156,15 @@
   </Dialog.Trigger>
   <Dialog.Content class="max-w-md">
     <Dialog.Header>
-      <Dialog.Title>Start editing</Dialog.Title>
+      <Dialog.Title>{m.edit_start_editing()}</Dialog.Title>
       <Dialog.Description>
         {#if hasOwnSessions}
-          Edit an existing branch or create a new one from
-          <code class="font-mono text-fg-primary">{sourceBranch}</code>.
+          {m.edit_dialog_existing_prefix()}
+          <code class="font-mono text-fg-primary">{sourceBranch}</code>{m.edit_dialog_existing_suffix()}
         {:else}
-          We'll create a branch from
+          {m.edit_dialog_new_prefix()}
           <code class="font-mono text-fg-primary">{sourceBranch}</code>
-          for your edits.
+          {m.edit_dialog_new_suffix()}
         {/if}
       </Dialog.Description>
     </Dialog.Header>
@@ -173,7 +173,7 @@
       <div
         class="rounded-md border border-yellow-200 bg-yellow-50 px-3 py-2 text-xs text-yellow-800"
       >
-        This branch is read-only. Pick another branch or create a new one.
+        {m.edit_readonly_branch_warning()}
       </div>
     {/if}
 
@@ -187,19 +187,19 @@
             class="flex h-7 flex-1 items-center justify-center gap-1.5 rounded-md text-sm transition-all data-[state=active]:bg-surface-overlay data-[state=active]:font-semibold data-[state=active]:shadow-sm"
           >
             <GitBranchIcon size="14" />
-            Existing branch
+            {m.edit_existing_branch()}
           </TabsTrigger>
           <TabsTrigger
             value="new"
             class="flex h-7 flex-1 items-center justify-center gap-1.5 rounded-md text-sm transition-all data-[state=active]:bg-surface-overlay data-[state=active]:font-semibold data-[state=active]:shadow-sm"
           >
             <GitBranchPlusIcon size="14" />
-            New branch
+            {m.edit_new_branch()}
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="existing" class="mt-4 space-y-1.5">
-          <span class="text-sm font-medium text-fg-primary">Branch</span>
+          <span class="text-sm font-medium text-fg-primary">{m.branch_branch()}</span>
           <SelectPrimitive.Root
             type="single"
             value={selectedBranchId}
@@ -296,7 +296,7 @@
           disabled={!selectedBranchId || isStarting}
           onClick={handleResume}
         >
-          Continue editing
+          {m.edit_continue_editing()}
         </Button>
       {:else}
         <Button
@@ -306,7 +306,7 @@
           loadingCopy={m.edit_starting()}
           onClick={handleCreate}
         >
-          Create &amp; edit
+          {m.edit_create_and_edit()}
         </Button>
       {/if}
     </Dialog.Footer>

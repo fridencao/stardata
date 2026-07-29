@@ -8,6 +8,7 @@
     shouldFilterByPending,
     type PartitionFilterType,
   } from "@rilldata/web-common/features/projects/status/tables/utils";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let open = false;
   export let resource: V1Resource | null = null;
@@ -37,7 +38,7 @@
 >
   <Dialog.Content class="max-w-screen-xl max-h-[90vh] flex flex-col">
     <Dialog.Header>
-      <Dialog.Title>Model Partitions: {modelName}</Dialog.Title>
+      <Dialog.Title>{m.status_model_partitions()}: {modelName}</Dialog.Title>
     </Dialog.Header>
 
     {#if resource}

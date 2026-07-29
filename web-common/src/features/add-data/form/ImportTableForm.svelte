@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { defaults, superForm } from "sveltekit-superforms";
   import { yup } from "sveltekit-superforms/adapters";
   import { object, string } from "yup";
@@ -183,18 +184,18 @@
   }}
   id={FormId}
   class="flex flex-col flex-1 min-h-0"
-  aria-label="Import Table Form"
+  aria-label={m.add_data_import_table_form_aria()}
 >
   <div class="flex flex-col gap-2 px-6 pt-4" class:pb-3={!supportsModeling}>
     {#if supportsModeling}
-      <div>Pick a table or input your SQL to power your first dashboard</div>
+      <div>{m.add_data_pick_table_or_sql()}</div>
       <Tabs bind:value={$form["mode"]} options={modeOptions} disableMarginTop>
         {#each modeOptions as option (option.value)}
           <TabsContent value={option.value} />
         {/each}
       </Tabs>
     {:else}
-      <div>Pick a table to power your first dashboard</div>
+      <div>{m.add_data_pick_table()}</div>
     {/if}
   </div>
   {#if $form["mode"] === "table"}
@@ -233,7 +234,7 @@
   {/if}
 
   <div class="flex flex-row px-6 py-4 gap-2 border-t">
-    <Button onClick={onBack} type="tertiary">Back</Button>
+    <Button onClick={onBack} type="tertiary">{m.common_back()}</Button>
     <div class="grow"></div>
     <Button
       disabled={$submitting || isSubmitDisabled}

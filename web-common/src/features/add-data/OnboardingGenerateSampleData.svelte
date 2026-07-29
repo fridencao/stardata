@@ -6,6 +6,7 @@
   import { object, string } from "yup";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import { Button } from "@rilldata/web-common/components/button";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let open = false;
   export let onGenerate: () => void;
@@ -50,7 +51,7 @@
 <div class="container">
   <div class="header">
     <SparklesIcon size="16px" class="rotate-90" />
-    <span>Generate sample data</span>
+    <span>{m.add_data_generate_sample()}</span>
   </div>
 
   <form

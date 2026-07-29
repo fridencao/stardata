@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { Button } from "@rilldata/web-common/components/button";
   import * as Dialog from "@rilldata/web-common/components/dialog";
   import { yup } from "sveltekit-superforms/adapters";
@@ -136,15 +137,14 @@
 <Dialog.Root bind:open>
   <Dialog.Trigger>
     {#snippet child({ props })}
-      <Button {...props} type="primary">Create dashboard</Button>
+      <Button {...props} type="primary">{m.personal_create_dashboard()}</Button>
     {/snippet}
   </Dialog.Trigger>
   <Dialog.Content class="top-[30%] translate-y-0">
     <Dialog.Header>
-      <Dialog.Title>Create personal dashboard</Dialog.Title>
+      <Dialog.Title>{m.personal_create_dashboard_title()}</Dialog.Title>
       <Dialog.Description>
-        Personal dashboards are only visible to you. They live alongside the
-        project but never sync to git.
+        {m.personal_create_dashboard_description()}
       </Dialog.Description>
     </Dialog.Header>
 
@@ -160,15 +160,19 @@
       <Input
         bind:value={$form.name}
         id="name"
-        label="Display name"
-        placeholder="e.g. My revenue dashboard"
+        label={m.personal_display_name()}
+        placeholder={m.personal_display_name_placeholder()}
       />
 
       {#if personalCanvasOptions.length}
         <div class="flex items-center space-x-2">
-          <Switch bind:checked={$form["copy"]} id="copy" label="Copy from" />
+          <Switch
+            bind:checked={$form["copy"]}
+            id="copy"
+            label={m.personal_copy_from()}
+          />
           <Label class="font-normal flex gap-x-1 items-center" for="copy">
-            Start from an existing dashboard
+            {m.personal_copy_from_description()}
           </Label>
         </div>
 
@@ -176,7 +180,7 @@
           <Select
             bind:value={$form.copySource}
             id="source"
-            placeholder="Select a dashboard..."
+            placeholder={m.personal_select_dashboard_placeholder()}
             options={personalCanvasOptions}
             optionsLoading={$personalCanvasesQuery.isPending}
             sameWidth
@@ -191,15 +195,17 @@
     </form>
 
     <Dialog.Footer>
-      <Button type="secondary" onClick={() => (open = false)}>Cancel</Button>
+      <Button type="secondary" onClick={() => (open = false)}
+        >{m.common_cancel()}</Button
+      >
       <Button
         type="primary"
         onClick={submit}
         loading={$submitting}
-        loadingCopy="Creating..."
+        loadingCopy={m.personal_creating()}
         disabled={$submitting}
       >
-        Create
+        {m.common_create()}
       </Button>
     </Dialog.Footer>
   </Dialog.Content>

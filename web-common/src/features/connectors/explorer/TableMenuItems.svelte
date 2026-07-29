@@ -17,6 +17,7 @@
     createYamlModelFromTable,
   } from "../code-utils";
   import GenerateMenuItem from "./GenerateMenuItem.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let connector: string;
   export let database: string = "";
@@ -105,7 +106,7 @@
 {#if isModelingSupported || showGenerateModel}
   <NavigationMenuItem onclick={handleCreateModelFromTable}>
     <Model slot="icon" />
-    Create model
+    {m.connector_create_model()}
   </NavigationMenuItem>
 {/if}
 

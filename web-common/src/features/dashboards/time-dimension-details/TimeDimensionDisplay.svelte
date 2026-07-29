@@ -199,7 +199,9 @@
 
 <div
   class="h-full w-full flex flex-col bg-surface-base"
-  aria-label="{expandedMeasureName} Time Dimension Display"
+  aria-label={m.dashboard_time_dimension_display_aria({
+    name: expandedMeasureName,
+  })}
 >
   <TDDHeader
     {areAllTableRowsSelected}

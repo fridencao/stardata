@@ -6,6 +6,7 @@
     requestSkipBranchInjection,
   } from "@rilldata/web-admin/features/branches/branch-utils";
   import { Button } from "@rilldata/web-common/components/button";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { useDevDeployments } from "./use-edit-session";
   import EditBranchDialog from "./EditBranchDialog.svelte";
 
@@ -56,7 +57,7 @@
     disabled={isLoading}
     onClick={handleDirectEdit}
   >
-    Edit
+    {m.common_edit()}
   </Button>
 {:else}
   <Button
@@ -64,7 +65,7 @@
     disabled={isLoading}
     onClick={() => (dialogOpen = true)}
   >
-    Edit
+    {m.common_edit()}
   </Button>
   <EditBranchDialog
     bind:open={dialogOpen}

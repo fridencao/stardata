@@ -1,5 +1,6 @@
 <script lang="ts">
   import LoadingSpinner from "@rilldata/web-common/components/icons/LoadingSpinner.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import Viz from "@rilldata/web-common/components/icons/Viz.svelte";
 
   export let value: string | string[] | undefined = undefined;
@@ -128,10 +129,10 @@
     {:else}
       <Viz size="28px" class="text-fg-secondary pointer-events-none" />
       <div class="container-flex-col pointer-events-none">
-        <span class="upload-title"> Upload an image </span>
+        <span class="upload-title"> {m.image_upload_title()} </span>
         {#if multiple}
           <span class="upload-description">
-            Support for a single or bulk upload.
+            {m.image_upload_description()}
           </span>
         {/if}
       </div>

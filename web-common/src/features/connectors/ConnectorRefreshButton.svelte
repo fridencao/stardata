@@ -10,6 +10,7 @@
   } from "@rilldata/web-common/runtime-client";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import { createRuntimeServiceCreateTriggerMutation } from "@rilldata/web-common/runtime-client";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let resource: V1Resource | undefined;
   export let hasUnsavedChanges = false;
@@ -40,16 +41,16 @@
         isReconciling ||
         hasUnsavedChanges}
       loading={$triggerMutation.isPending}
-      loadingCopy="Refreshing"
-      label="Refresh Connector"
+      loadingCopy={m.connector_refreshing()}
+      label={m.connector_refresh_label()}
     >
       <RefreshIcon size="14px" />
     </Button>
     <TooltipContent slot="tooltip-content">
       {#if hasUnsavedChanges}
-        Save your changes to refresh
+        {m.connector_save_to_refresh()}
       {:else}
-        Refresh connector
+        {m.connector_refresh_tooltip()}
       {/if}
     </TooltipContent>
   </Tooltip>

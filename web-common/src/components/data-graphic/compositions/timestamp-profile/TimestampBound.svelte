@@ -7,6 +7,7 @@
    */
   import Shortcut from "@rilldata/web-common/components/tooltip/Shortcut.svelte";
   import StackingWord from "@rilldata/web-common/components/tooltip/StackingWord.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import Tooltip from "@rilldata/web-common/components/tooltip/Tooltip.svelte";
   import TooltipContent from "@rilldata/web-common/components/tooltip/TooltipContent.svelte";
   import TooltipShortcutContainer from "@rilldata/web-common/components/tooltip/TooltipShortcutContainer.svelte";
@@ -78,7 +79,8 @@
     </TooltipTitle>
     <TooltipShortcutContainer>
       <div>
-        <StackingWord key="shift">Copy</StackingWord> to clipboard
+        <StackingWord key="shift">{m.graphic_copy()}</StackingWord>
+        {m.graphic_to_clipboard()}
       </div>
       <Shortcut>
         <span
@@ -86,7 +88,9 @@
           font-family: var(--system); 
           font-size: 11.5px;
         ">⇧</span
-        > + Click
+        >
+        <!-- i18n-ignore: keyboard shortcut -->
+        + Click
       </Shortcut>
     </TooltipShortcutContainer>
   </TooltipContent>

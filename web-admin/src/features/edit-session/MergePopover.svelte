@@ -261,7 +261,7 @@
       {#snippet child({ props })}
         <Button {...props} type="primary" {disabled}>
           <GitPullRequest size="14" />
-          Merge to production
+          {m.edit_merge_to_production()}
         </Button>
       {/snippet}
     </Popover.Trigger>
@@ -269,19 +269,17 @@
       <div class="flex flex-col gap-y-3">
         <p class="text-xs text-fg-secondary">
           {#if !prodDeployment}
-            Merging
+            {m.edit_merge_first_deploy_prefix()}
             <span class="font-semibold text-fg-primary">"{currentBranch}"</span>
-            sets up your production deployment. We'll open a new tab where you can
-            invite teammates while it reconciles.
+            {m.edit_merge_first_deploy_suffix()}
           {:else if !prodDeploymentActive}
-            Production is hibernated. Merging
+            {m.edit_merge_hibernated_prefix()}
             <span class="font-semibold text-fg-primary">"{currentBranch}"</span>
-            will resume it and apply your changes. We'll open the deployment in a
-            new tab so you can watch updates reconcile.
+            {m.edit_merge_hibernated_suffix()}
           {:else}
-            Merging pushes changes from
+            {m.edit_merge_push_prefix()}
             <span class="font-semibold text-fg-primary">"{currentBranch}"</span>
-            to production. We'll open a new tab so you can watch updates reconcile.
+            {m.edit_merge_push_suffix()}
           {/if}
         </p>
         <ChangedFilesList
@@ -300,7 +298,7 @@
             target="_blank"
             rel="noopener noreferrer"
           >
-            View branch on GitHub
+            {m.edit_view_branch_on_github()}
             <ExternalLink size="11" />
           </a>
         {/if}
@@ -312,7 +310,7 @@
           loadingCopy={m.edit_merging()}
           onClick={handleMerge}
         >
-          Merge
+          {m.edit_merge()}
         </Button>
         {#if errorMessage}
           <p class="text-xs text-red-600">{errorMessage}</p>
@@ -323,15 +321,15 @@
   <TooltipContent slot="tooltip-content" maxWidth="220px">
     <span class="text-xs">
       {#if alreadyOnPrimary}
-        Already on production
+        {m.edit_publish_tooltip_on_primary()}
       {:else if isPending || !projectLoaded}
-        Loading project...
+        {m.edit_publish_tooltip_loading()}
       {:else if !hasLocalChanges}
-        No changes to merge
+        {m.edit_merge_tooltip_no_changes()}
       {:else if hasRemoteChanges}
-        Remote has updates not in your session. Click to review.
+        {m.edit_publish_tooltip_remote_updates()}
       {:else}
-        Review and confirm before merging
+        {m.edit_merge_tooltip_confirm()}
       {/if}
     </span>
   </TooltipContent>

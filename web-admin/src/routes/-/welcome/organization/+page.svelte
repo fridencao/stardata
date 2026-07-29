@@ -12,6 +12,7 @@
   } from "@rilldata/web-admin/client";
   import type { AxiosError } from "axios";
   import { queryClient } from "@rilldata/web-common/lib/svelte-query/globalQueryClient.ts";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   const createOrgMutation = createAdminServiceCreateOrganization();
   $: ({ isPending, error } = $createOrgMutation);
@@ -40,14 +41,14 @@
 <div class="flex flex-col items-center gap-4 mx-auto w-fit">
   <StarDataLogoWordmark size="lg" />
   <div class="auth-title text-center">
-    Create an organization
+    {m.auth_create_org_title()}
   </div>
 
   <div class="flex flex-col gap-6 text-left auth-card">
     <div>
-      <div class="auth-card__title">Name your organization</div>
+      <div class="auth-card__title">{m.auth_org_name_title()}</div>
       <div class="auth-card__subtitle">
-        You can change the name in organization settings.
+        {m.auth_org_name_subtitle()}
       </div>
     </div>
     <CreateNewOrgForm {createOrg} size="xl" showUrlField={false} />
@@ -61,7 +62,7 @@
         form={CreateNewOrgFormId}
         loading={isPending}
       >
-        Continue
+        {m.auth_continue()}
       </Button>
     </div>
   </div>

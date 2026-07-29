@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { prettyFormatTimeRange } from "@rilldata/web-common/lib/time/ranges/formatter.ts";
   import { V1TimeGrain } from "@rilldata/web-common/runtime-client";
   import { Interval } from "luxon";
@@ -18,7 +19,7 @@
         {abbreviation}
       {/if}
     {:else}
-      Invalid Interval
+      {m.dashboard_invalid_interval()}
     {/if}
   </span>
 </div>

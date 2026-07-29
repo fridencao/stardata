@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import ContextButton from "@rilldata/web-common/components/button/ContextButton.svelte";
   import * as DropdownMenu from "@rilldata/web-common/components/dropdown-menu/";
   import Cancel from "@rilldata/web-common/components/icons/Cancel.svelte";
@@ -110,9 +111,9 @@
         {#snippet child({ props })}
           <ContextButton
             {...props}
-            label="{dir.name} actions menu trigger"
+            label={m.file_actions_menu_label({ name: dir.name })}
             suppressTooltip={contextMenuOpen}
-            tooltipText="More actions"
+            tooltipText={m.common_more_actions()}
           >
             <MoreHorizontal />
           </ContextButton>
@@ -126,15 +127,15 @@
       >
         <NavigationMenuItem onclick={handleAddFolder}>
           <Folder slot="icon" size="12px" />
-          New folder
+          {m.file_new_folder()}
         </NavigationMenuItem>
         <NavigationMenuItem onclick={() => onRename(dir.path, true)}>
           <EditIcon slot="icon" />
-          Rename
+          {m.file_rename()}
         </NavigationMenuItem>
         <NavigationMenuItem onclick={() => onDelete(dir.path, true)}>
           <Cancel slot="icon" />
-          Delete
+          {m.common_delete()}
         </NavigationMenuItem>
       </DropdownMenu.Content>
     </DropdownMenu.Root>

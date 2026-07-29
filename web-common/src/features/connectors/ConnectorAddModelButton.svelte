@@ -12,6 +12,7 @@
     MetricsEventSpace,
   } from "@rilldata/web-common/metrics/service/MetricsTypes.ts";
   import { BehaviourEventMedium } from "@rilldata/web-common/metrics/service/BehaviourEventTypes.ts";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let resource: V1Resource | undefined;
   export let hasUnsavedChanges = false;
@@ -33,16 +34,16 @@
       type="primary"
       onClick={() => (addModelOpen = true)}
       disabled={isDisabled}
-      label="Import data"
+      label={m.connector_import_data()}
     >
       <Plus size="14px" />
-      Import data
+      {m.connector_import_data()}
     </Button>
     <TooltipContent slot="tooltip-content">
       {#if hasUnsavedChanges}
-        Save your changes first
+        {m.connector_save_changes_first()}
       {:else if hasReconcileError}
-        Fix connector errors first
+        {m.connector_fix_errors_first()}
       {/if}
     </TooltipContent>
   </Tooltip>

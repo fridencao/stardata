@@ -7,6 +7,7 @@
     duplicateSourceAction,
     duplicateSourceName,
   } from "../sources-store";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let onComplete: () => void;
   export let onCancel: () => void;
@@ -35,13 +36,18 @@
 </script>
 
 <Dialog.Description>
-  A source with the name <b>{$duplicateSourceName}</b> already exists.
+  {m.source_duplicate_prefix()} <b>{$duplicateSourceName}</b>
+  {m.source_duplicate_suffix()}
 </Dialog.Description>
 
 <Dialog.Footer>
-  <Button type="text" onClick={cancel}>Cancel</Button>
+  <Button type="text" onClick={cancel}>{m.common_cancel()}</Button>
 
-  <Button type="text" onClick={overwriteSource}>Replace Existing Source</Button>
+  <Button type="text" onClick={overwriteSource}
+    >{m.source_duplicate_replace()}</Button
+  >
 
-  <Button type="primary" onClick={keepBoth}>Keep Both</Button>
+  <Button type="primary" onClick={keepBoth}
+    >{m.source_duplicate_keep_both()}</Button
+  >
 </Dialog.Footer>

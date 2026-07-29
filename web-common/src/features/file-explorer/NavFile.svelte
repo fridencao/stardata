@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import ContextButton from "@rilldata/web-common/components/button/ContextButton.svelte";
   import { getFileHref } from "@rilldata/web-common/layout/navigation/editor-routing";
   import * as DropdownMenu from "@rilldata/web-common/components/dropdown-menu/";
@@ -94,7 +95,7 @@
 </script>
 
 <li
-  aria-label="{filePath} Nav Entry"
+  aria-label={m.file_nav_entry_label({ path: filePath })}
   class="w-full text-left pr-2 h-6 group flex justify-between gap-x-1 items-center hover:bg-surface-hover"
   class:bg-surface-active={isCurrentFile}
   class:opacity-50={$hasUnsavedChanges || $saving || isGenerating}
@@ -139,9 +140,9 @@
         {#snippet child({ props })}
           <ContextButton
             {...props}
-            label="{filePath} actions menu trigger"
+            label={m.file_actions_menu_label({ name: filePath })}
             suppressTooltip={contextMenuOpen}
-            tooltipText="More actions"
+            tooltipText={m.common_more_actions()}
           >
             <MoreHorizontal />
           </ContextButton>
@@ -156,16 +157,16 @@
         {#if $hasUnsavedChanges}
           <NavigationMenuItem onclick={saveLocalContent}>
             <Save slot="icon" size="12px" />
-            Save file
+            {m.file_save_file()}
           </NavigationMenuItem>
         {/if}
         <NavigationMenuItem onclick={() => onRename(filePath, false)}>
           <EditIcon slot="icon" />
-          Rename
+          {m.file_rename()}
         </NavigationMenuItem>
         <NavigationMenuItem onclick={() => onDuplicate(filePath, false)}>
           <CopyIcon slot="icon" />
-          Duplicate
+          {m.file_duplicate()}
         </NavigationMenuItem>
         {#if resourceKind}
           {#if resourceKind === ResourceKind.Source}
@@ -183,7 +184,7 @@
         <NavigationMenuSeparator />
         <NavigationMenuItem onclick={() => onDelete(filePath, false)}>
           <Trash slot="icon" />
-          Delete
+          {m.common_delete()}
         </NavigationMenuItem>
       </DropdownMenu.Content>
     </DropdownMenu.Root>

@@ -4,6 +4,7 @@
   import { TDDChart } from "@rilldata/web-common/features/dashboards/time-dimension-details/types";
   import Spinner from "@rilldata/web-common/features/entity-management/Spinner.svelte";
   import { EntityStatus } from "@rilldata/web-common/features/entity-management/types";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { V1TimeGrainToDateTimeUnit } from "@rilldata/web-common/lib/time/new-grains";
   import type { MetricsViewSpecMeasure } from "@rilldata/web-common/runtime-client";
   import {
@@ -376,7 +377,7 @@
     />
   {:else}
     <div class="flex items-center justify-center h-full text-gray-400 text-sm">
-      No data available
+      {m.chart_no_data()}
     </div>
   {/if}
 </div>

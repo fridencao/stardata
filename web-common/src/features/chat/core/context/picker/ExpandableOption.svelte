@@ -15,6 +15,7 @@
   import SimpleOption from "@rilldata/web-common/features/chat/core/context/picker/SimpleOption.svelte";
   import { getInlineChatContextMetadata } from "@rilldata/web-common/features/chat/core/context/metadata.ts";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let node: PickerTreeNode;
   export let selectedChatContext: InlineContext | null;
@@ -100,9 +101,9 @@
             </div>
           {/if}
         {:else if item.recentlyUsed}
-          <span class="parent-context-label">Recently asked</span>
+          <span class="parent-context-label">{m.chat_context_recently_asked()}</span>
         {:else if item.currentlyActive}
-          <span class="parent-context-label">Current</span>
+          <span class="parent-context-label">{m.chat_context_current()}</span>
         {/if}
       </button>
     {/snippet}

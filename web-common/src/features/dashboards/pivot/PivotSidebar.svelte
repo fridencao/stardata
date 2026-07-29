@@ -194,18 +194,18 @@
       {/if}
 
       <PivotDrag
-        title="Time"
+        section="Time"
         label={m.dashboard_time()}
         items={timeGrainOptions}
         {tableMode}
       />
       <PivotDrag
-        title="Measures"
+        section="Measures"
         label={m.dashboard_measures()}
         items={filteredMeasures}
       />
       <PivotDrag
-        title="Dimensions"
+        section="Dimensions"
         label={m.dashboard_dimensions()}
         items={filteredDimensions}
         {tableMode}

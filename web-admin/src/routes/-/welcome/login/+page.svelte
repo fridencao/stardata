@@ -1,19 +1,20 @@
 <script lang="ts">
   import StarDataLogoWordmark from "@rilldata/web-common/components/icons/StarDataLogoWordmark.svelte";
   import SignIn from "@rilldata/web-admin/features/authentication/SignIn.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 </script>
 
 <div class="flex flex-col items-center gap-4 mx-auto w-fit">
   <StarDataLogoWordmark size="lg" />
   <div class="auth-title text-center">
-    Sign in to StarData
+    {m.auth_signin_title()}
   </div>
 
   <div class="flex flex-col gap-6 text-left auth-card">
     <div>
-      <div class="auth-card__title">Welcome back</div>
+      <div class="auth-card__title">{m.auth_welcome_back()}</div>
       <div class="auth-card__subtitle">
-        Sign in with your StarData account to continue.
+        {m.auth_signin_subtitle()}
       </div>
     </div>
     <SignIn />

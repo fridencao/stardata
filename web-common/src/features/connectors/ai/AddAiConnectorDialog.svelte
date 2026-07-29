@@ -31,6 +31,7 @@
   import { getScreenNameFromPage } from "../../file-explorer/telemetry";
   import { getEnvFileStore } from "@rilldata/web-common/features/env-management/env-file-store.ts";
   import { EnvEditSession } from "@rilldata/web-common/features/env-management/env-edit-session.ts";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let open = false;
 
@@ -180,12 +181,12 @@
 
 <AlertDialog.Root bind:open>
   <AlertDialog.Content>
-    <AlertDialog.Title>Add AI connector</AlertDialog.Title>
+    <AlertDialog.Title>{m.connector_ai_add_title()}</AlertDialog.Title>
 
     <div class="flex flex-col gap-y-3">
       <div class="flex flex-col gap-y-2">
         <div class="flex items-center justify-between">
-          <span class="text-sm font-medium">Provider</span>
+          <span class="text-sm font-medium">{m.connector_ai_provider()}</span>
           {#if docsUrl}
             <a
               href={docsUrl}
@@ -193,7 +194,7 @@
               target="_blank"
               class="inline-flex items-center gap-1 text-sm text-primary-500 hover:text-primary-600 hover:underline"
             >
-              View documentation
+              {m.connector_ai_view_docs()}
               <ExternalLinkIcon size="14px" />
             </a>
           {/if}
@@ -216,7 +217,7 @@
                 </span>
               </div>
             {:else}
-              <span class="text-fg-muted">Select a provider</span>
+              <span class="text-fg-muted">{m.connector_ai_select_provider()}</span>
             {/if}
             <div class="caret transition-transform ml-2">
               <CaretDownIcon size="12px" className="fill-fg-secondary" />
@@ -238,7 +239,7 @@
 
       <Input
         id="ai-connector-api-key"
-        label={apiKeyProp?.title ?? "API Key"}
+        label={apiKeyProp?.title ?? m.connector_ai_api_key()}
         placeholder={apiKeyProp?.["x-placeholder"] ?? ""}
         hint={apiKeyProp?.description ?? ""}
         secret
@@ -250,7 +251,7 @@
 
       <Input
         id="ai-connector-model"
-        label={modelProp?.title ?? "Model"}
+        label={modelProp?.title ?? m.connector_ai_model()}
         placeholder={modelProp?.["x-placeholder"] ?? ""}
         hint={modelProp?.description ?? ""}
         optional
@@ -258,7 +259,7 @@
       />
       {#if existingAiConnector}
         <p class="text-sm text-red-500">
-          This will replace your existing AI connector ({existingAiConnector}).
+          {m.connector_ai_replace_warning({ name: existingAiConnector })}
         </p>
       {/if}
       {#if error}
@@ -270,7 +271,7 @@
       <AlertDialog.Cancel>
         {#snippet child({ props })}
           <Button {...props} large type="secondary" disabled={saving}
-            >Cancel</Button
+            >{m.common_cancel()}</Button
           >
         {/snippet}
       </AlertDialog.Cancel>

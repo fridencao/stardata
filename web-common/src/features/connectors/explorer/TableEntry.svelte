@@ -10,6 +10,7 @@
   import { useIsModelingSupportedForConnectorOLAP as useIsModelingSupportedForConnector } from "../selectors";
   import { useRuntimeClient } from "../../../runtime-client/v2";
   import type { ConnectorExplorerStore } from "./connector-explorer-store";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import {
     makeFullyQualifiedTableName,
     makeTablePreviewHref,
@@ -119,7 +120,7 @@
               {...props}
               data-testid="more-actions-context-button"
               tooltipText="More actions"
-              label="{tableId} actions menu trigger"
+              label={m.connector_actions_menu_label({ name: tableId })}
               suppressTooltip={contextMenuOpen}
             >
               <MoreHorizontal />

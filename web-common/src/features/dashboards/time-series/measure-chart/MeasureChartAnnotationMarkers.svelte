@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import type { AnnotationGroup } from "./annotation-utils";
   import { AnnotationWidth, AnnotationHeight } from "./annotation-utils";
   import type { PlotBounds } from "./types";
@@ -29,7 +30,7 @@
   {@const cx = group.left}
   {@const cy = group.top + AnnotationHeight / 2}
   <rect
-    aria-label="annotation marker"
+    aria-label={m.chart_annotation_marker_aria()}
     x={cx - halfSize}
     y={cy - halfSize}
     width={halfSize * 2}
