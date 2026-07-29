@@ -1,15 +1,25 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import { Home, MessageSquare, LayoutDashboard } from "lucide-svelte";
+  import { Home, MessageSquare, LayoutDashboard, FileText, Bell } from "lucide-svelte";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   /** 路由前缀(web-local 为 "";web-admin 为 "/[org]/[project]" 等) */
   export let basePath = "";
+  /** 「我的报告」入口;null = 不显示(功能未启用或无权限) */
+  export let reportsHref: string | null = null;
+  /** 「我的订阅」入口;null = 不显示(功能未启用或无权限) */
+  export let alertsHref: string | null = null;
 
   $: tabs = [
     { label: m.portal_tabs_home(), href: basePath || "/", exact: true, icon: Home },
     { label: m.portal_tabs_chat(), href: `${basePath}/chat`, exact: false, icon: MessageSquare },
     { label: m.portal_tabs_boards(), href: `${basePath}/boards`, exact: false, icon: LayoutDashboard },
+    ...(reportsHref
+      ? [{ label: m.nav_tab_reports(), href: reportsHref, exact: false, icon: FileText }]
+      : []),
+    ...(alertsHref
+      ? [{ label: m.nav_tab_alerts(), href: alertsHref, exact: false, icon: Bell }]
+      : []),
   ];
 
   $: pathname = $page.url.pathname;

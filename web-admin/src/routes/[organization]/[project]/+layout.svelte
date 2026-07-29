@@ -310,6 +310,15 @@
               adminHref={organizationPermissions?.manageOrg
                 ? `/${organization}/-/settings`
                 : null}
+            >
+              <svelte:fragment slot="user">
+                <AvatarButton
+                  projectPermissions={runtime.projectPermissions}
+                />
+              </svelte:fragment>
+            </PortalNav>
+            <PortalTabs
+              basePath={`/${organization}/${project}`}
               reportsHref={$reports &&
               runtime.projectPermissions?.manageProject
                 ? `/${organization}/${project}/-/reports`
@@ -318,14 +327,7 @@
               runtime.projectPermissions?.manageProject
                 ? `/${organization}/${project}/-/alerts`
                 : null}
-            >
-              <svelte:fragment slot="user">
-                <AvatarButton
-                  projectPermissions={runtime.projectPermissions}
-                />
-              </svelte:fragment>
-            </PortalNav>
-            <PortalTabs basePath={`/${organization}/${project}`} />
+            />
             <main class="min-h-0 flex-1 overflow-hidden">
               {@render children()}
             </main>
