@@ -55,9 +55,12 @@ export function withinProject(page: Page): boolean {
 }
 
 /**
- * Business-portal pages (StarData): project home, chat, and boards.
- * These render the portal chrome (PortalNav + PortalTabs) instead of the
- * technical ProjectHeader + ProjectTabs.
+ * Business-portal pages (StarData): project home, chat, boards, and the
+ * reports/alerts list + detail views. These render the portal chrome
+ * (PortalNav + PortalTabs) instead of the technical ProjectHeader + ProjectTabs,
+ * so navigating into 报表/告警 keeps the user inside the business portal.
+ * (Email deep-link sub-routes open/unsubscribe/export are intentionally
+ * excluded — they are standalone CTA pages, not portal views.)
  */
 export function isPortalPage(page: Page): boolean {
   const routeId = page.route?.id;
@@ -65,7 +68,11 @@ export function isPortalPage(page: Page): boolean {
   return (
     routeId === "/[organization]/[project]" ||
     routeId.startsWith("/[organization]/[project]/chat") ||
-    routeId.startsWith("/[organization]/[project]/boards")
+    routeId.startsWith("/[organization]/[project]/boards") ||
+    routeId === "/[organization]/[project]/-/reports" ||
+    routeId === "/[organization]/[project]/-/reports/[report]" ||
+    routeId === "/[organization]/[project]/-/alerts" ||
+    routeId === "/[organization]/[project]/-/alerts/[alert]"
   );
 }
 
