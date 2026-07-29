@@ -85,9 +85,9 @@ echo "== i18n guard: catalog integrity + migrated areas =="
 # filesystem, so it runs unconditionally rather than under an app filter: the
 # migrated areas span multiple apps and are independent of which files a given
 # PR touched. Catalog integrity errors are exact and fatal; hardcoded-string
-# findings are heuristic and non-fatal for now: the final i18n migration chunk
-# adds --strict to make them fatal too.
-node ./scripts/i18n-guard.js || exit_code=$?
+# findings are fatal too (--strict) now that every listed area has been
+# migrated.
+node ./scripts/i18n-guard.js --strict || exit_code=$?
 
 if [[ "$ADMIN" == "true" ]]; then
   echo ""

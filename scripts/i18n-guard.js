@@ -16,9 +16,9 @@
 //    and a fixed set of human-facing attributes. Intentionally a lightweight,
 //    dependency-free heuristic, not a parser: it runs at WARNING level
 //    (exit 0) by default so occasional false positives are tolerable. Pass
-//    `--strict` to make findings fatal (exit 1) — the final i18n migration
-//    chunk flips the quality pipeline to strict once every listed area is
-//    clean. Suppress a specific line with an `i18n-ignore` comment on it or
+//    `--strict` to make findings fatal (exit 1) — the quality pipeline runs
+//    in strict mode now that every listed area is clean. Suppress a specific
+//    line with an `i18n-ignore` comment on it or
 //    the line above.
 //
 // Usage: node scripts/i18n-guard.js [--strict]
@@ -221,9 +221,50 @@ const MIGRATED_GLOBS = [
   // web-admin organization overview page. Literal `[organization]` brackets are
   // a glob character class, so match the segment with a wildcard.
   "web-admin/src/routes/*organization*/+page.svelte",
-  "web-common/src/features/chat/core/messages/file-diff/*.svelte",
+  // Welcome onboarding flow (login / theme / organization) migrated in the
+  // welcome i18n chunk.
+  "web-admin/src/routes/-/welcome/**/*.svelte",
+  // Entire chat feature (core, layouts, context picker) migrated in the chat
+  // i18n chunk.
+  "web-common/src/features/chat/**/*.svelte",
+  // Data ingestion surfaces (add data flow, connector explorer, source modals)
+  // migrated in the add-data i18n chunk.
+  "web-common/src/features/add-data/**/*.svelte",
+  "web-common/src/features/connectors/**/*.svelte",
+  "web-common/src/features/sources/**/*.svelte",
+  // Edit-session banners, branch management, project status pages, and env
+  // variable management migrated in the edit-session/branches/status chunk.
+  "web-admin/src/features/edit-session/**/*.svelte",
+  "web-admin/src/features/branches/**/*.svelte",
+  "web-admin/src/features/projects/status/**/*.svelte",
+  "web-common/src/features/projects/status/**/*.svelte",
+  "web-common/src/features/env-management/**/*.svelte",
+  // Low-frequency admin surfaces and shared base components migrated in the
+  // admin/base-components i18n chunk.
+  "web-admin/src/features/public-urls/**/*.svelte",
+  "web-admin/src/features/bookmarks/**/*.svelte",
+  "web-admin/src/features/personal-files/**/*.svelte",
+  "web-admin/src/features/view-as-user/**/*.svelte",
+  "web-common/src/features/file-explorer/**/*.svelte",
+  "web-common/src/components/data-graphic/**/*.svelte",
+  "web-common/src/components/forms/ImageInput.svelte",
+  "web-common/src/components/date-picker/DateInput.svelte",
   "web-common/src/features/exports/pdf/*.svelte",
   "web-common/src/features/project/changes/*.svelte",
+  // Studio workbench pages and the business portal shell (migrated in Phase 4).
+  "web-common/src/features/studio/*.svelte",
+  "web-common/src/features/portal/**/*.svelte",
+  // Explore dashboard areas migrated during the explore i18n chunk.
+  "web-common/src/features/dashboards/pivot/**/*.svelte",
+  "web-common/src/features/dashboards/time-controls/**/*.svelte",
+  "web-common/src/features/dashboards/time-dimension-details/**/*.svelte",
+  "web-common/src/features/dashboards/dimension-table/**/*.svelte",
+  "web-common/src/features/dashboards/leaderboard/**/*.svelte",
+  "web-common/src/features/dashboards/filters/**/*.svelte",
+  "web-common/src/features/dashboards/rows-viewer/**/*.svelte",
+  "web-common/src/features/dashboards/big-number/**/*.svelte",
+  "web-common/src/features/dashboards/time-series/**/*.svelte",
+  "web-common/src/features/dashboards/tab-bar/**/*.svelte",
 ];
 
 // Human-facing attributes worth translating. Attributes like `class`, `id`,
@@ -237,6 +278,27 @@ function stripBlocks(src) {
     /<(script|style)\b[^>]*>[\s\S]*?<\/\1>/gi,
     (m) => m.replace(/[^\n]/g, " "),
   );
+}
+
+function stripMustaches(src) {
+  // Blank out balanced `{...}` template expressions (including Svelte control
+  // blocks and nested braces from destructuring or object literals) so the
+  // text-node scan only sees static copy. Newlines are preserved so line
+  // numbers stay accurate.
+  let out = "";
+  let depth = 0;
+  for (const ch of src) {
+    if (ch === "{") {
+      depth++;
+      out += " ";
+    } else if (ch === "}" && depth > 0) {
+      depth--;
+      out += " ";
+    } else {
+      out += depth > 0 && ch !== "\n" ? " " : ch;
+    }
+  }
+  return out;
 }
 
 function lineOf(src, index) {
@@ -267,7 +329,7 @@ const findings = [];
 for (const pattern of MIGRATED_GLOBS) {
   for (const file of globSync(pattern)) {
     const original = readFileSync(file, "utf8");
-    const src = stripBlocks(original);
+    const src = stripMustaches(stripBlocks(original));
     const rel = relative(process.cwd(), file);
 
     // Visible text nodes: content between a closing `>` and the next `<`.
