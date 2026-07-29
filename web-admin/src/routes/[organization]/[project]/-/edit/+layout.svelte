@@ -25,7 +25,10 @@
   import { useQueryClient } from "@tanstack/svelte-query";
   import { onDestroy } from "svelte";
   import { setCloudReadonlyNotice } from "@rilldata/web-common/features/entity-management/actions/protected-files.ts";
-  import { isProjectWelcomePage } from "@rilldata/web-admin/features/navigation/nav-utils.ts";
+  import {
+    isProjectWelcomePage,
+    isStudioPage,
+  } from "@rilldata/web-admin/features/navigation/nav-utils.ts";
   import WelcomeRedirector from "@rilldata/web-admin/features/welcome/project/WelcomeRedirector.svelte";
   import { InfoIcon } from "lucide-svelte";
   import { overlay } from "@rilldata/web-common/layout/overlay-store";
@@ -109,6 +112,9 @@
     jwt !== null;
 
   $: inProjectWelcomePage = isProjectWelcomePage($page);
+  // Studio pages render their own chrome (PortalNav + StudioTabs) via the
+  // studio layout, so the technical ProjectHeader is hidden there.
+  $: inStudioPage = isStudioPage($page);
 
   // Invalidating this query refetches a fresh JWT; `runtimeClient.getJwt()`
   // reads the updated value on the next call. Branch must be part of the
@@ -179,7 +185,7 @@
   {:else if isReady && deployment?.id && instanceId && runtimeHost && jwt}
     {#key `${runtimeHost}::${instanceId}::${hasPrimaryDeployment}`}
       <RuntimeProvider host={runtimeHost} {instanceId} {jwt}>
-        {#if !inProjectWelcomePage}
+        {#if !inProjectWelcomePage && !inStudioPage}
           <ProjectHeader
             {organization}
             {project}
@@ -192,6 +198,8 @@
             {organizationLogoUrl}
             editContext={true}
           />
+        {/if}
+        {#if !inProjectWelcomePage}
           <EditSessionTimeoutBanner
             usedOn={deployment.usedOn}
             {devTtlSeconds}

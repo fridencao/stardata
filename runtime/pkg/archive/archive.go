@@ -10,6 +10,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 
@@ -86,6 +87,56 @@ func Create(ctx context.Context, files []drivers.DirEntry, root string) (*bytes.
 
 	err := createTar(b, files, root)
 	if err != nil {
+		return nil, err
+	}
+
+	return b, nil
+}
+
+// BlobEntry is an in-memory file used with CreateFromBlobs.
+type BlobEntry struct {
+	Path string
+	Data []byte
+}
+
+// CreateFromBlobs generates a tar.gz archive from in-memory file blobs.
+// It is used when the files are fetched remotely (e.g. from a runtime) instead of a local directory.
+func CreateFromBlobs(ctx context.Context, entries []BlobEntry) (*bytes.Buffer, error) {
+	b := &bytes.Buffer{}
+
+	gw, err := gzip.NewWriterLevel(b, gzip.BestCompression)
+	if err != nil {
+		return nil, err
+	}
+	tw := tar.NewWriter(gw)
+	for _, entry := range entries {
+		if drivers.IsIgnored(entry.Path, ignoreFileList) {
+			continue
+		}
+		name := strings.TrimPrefix(entry.Path, "/")
+		if name == "" {
+			continue
+		}
+		// Reject unsafe entry names (defense against archive path traversal on extraction).
+		if path.IsAbs(name) || name != path.Clean(name) || strings.HasPrefix(name, "..") || strings.Contains(name, "/../") {
+			return nil, fmt.Errorf("%s: unsafe archive entry path", entry.Path)
+		}
+		hdr := &tar.Header{
+			Name: name,
+			Mode: 0o644,
+			Size: int64(len(entry.Data)),
+		}
+		if err := tw.WriteHeader(hdr); err != nil {
+			return nil, fmt.Errorf("%s: %w", entry.Path, err)
+		}
+		if _, err := tw.Write(entry.Data); err != nil {
+			return nil, fmt.Errorf("%s: %w", entry.Path, err)
+		}
+	}
+	if err := tw.Close(); err != nil {
+		return nil, err
+	}
+	if err := gw.Close(); err != nil {
 		return nil, err
 	}
 

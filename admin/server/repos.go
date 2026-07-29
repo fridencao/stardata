@@ -32,6 +32,16 @@ func (s *Server) GetRepoMeta(ctx context.Context, req *adminv1.GetRepoMetaReques
 		return nil, status.Error(codes.PermissionDenied, "does not have permission to read project repo")
 	}
 
+	// If the caller is a deployment, resolve it to determine editability (used by both the archive and git branches below).
+	var depl *database.Deployment
+	if claims.OwnerType() == auth.OwnerTypeDeployment {
+		var err error
+		depl, err = s.admin.DB.FindDeployment(ctx, claims.OwnerID())
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	if proj.ArchiveAssetID != nil {
 		asset, err := s.admin.DB.FindAsset(ctx, *proj.ArchiveAssetID)
 		if err != nil {
@@ -48,20 +58,13 @@ func (s *Server) GetRepoMeta(ctx context.Context, req *adminv1.GetRepoMetaReques
 			ArchiveId:          asset.ID,
 			ArchiveDownloadUrl: downloadURL,
 			ArchiveCreatedOn:   timestamppb.New(asset.CreatedOn),
+			// Editable enables the runtime to maintain a writable draft copy of the archive (dev deployments).
+			Editable: depl != nil && depl.Editable,
 		}, nil
 	}
 
 	if proj.GitRemote == nil || proj.GithubInstallationID == nil {
 		return nil, status.Error(codes.FailedPrecondition, "project does not have a github integration")
-	}
-
-	var depl *database.Deployment
-	if claims.OwnerType() == auth.OwnerTypeDeployment {
-		var err error
-		depl, err = s.admin.DB.FindDeployment(ctx, claims.OwnerID())
-		if err != nil {
-			return nil, err
-		}
 	}
 
 	repoID, err := s.githubRepoIDForProject(ctx, proj)

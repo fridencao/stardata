@@ -8,6 +8,7 @@
   import type { Conversation } from "../../conversation";
   import FeedbackButtons from "../../feedback/FeedbackButtons.svelte";
   import RequestDialog from "../../../requests/RequestDialog.svelte";
+  import { getRequestSubmitter } from "../../../requests/request-submitter";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { extractFollowUps, extractMessageText } from "../../utils";
   import type { TextBlock } from "./text-block";
@@ -38,8 +39,9 @@
     ),
   );
 
-  // Only show in local (web-local), not cloud (organization param present)
-  $: canRequest = !$page.params.organization;
+  // Shown in web-local (no organization param) and in cloud apps that registered
+  // an admin-side request submitter (web-admin portal).
+  $: canRequest = !$page.params.organization || getRequestSubmitter() !== null;
 
   function findPrecedingUserQuestion(
     messages: V1Message[],

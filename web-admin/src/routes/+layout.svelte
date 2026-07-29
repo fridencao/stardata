@@ -22,6 +22,8 @@
   import { eventBus } from "@rilldata/web-common/lib/event-bus/event-bus.ts";
   import { queryClient } from "@rilldata/web-common/lib/svelte-query/globalQueryClient";
   import { errorEventHandler } from "@rilldata/web-common/metrics/initMetrics";
+  import { setRequestSubmitter } from "@rilldata/web-common/features/chat/requests/request-submitter";
+  import { submitDataRequest } from "@rilldata/web-admin/features/data-requests/data-requests";
   import { type Query, QueryClientProvider } from "@tanstack/svelte-query";
   import { onMount } from "svelte";
   import ErrorBoundary from "../components/errors/ErrorBoundary.svelte";
@@ -36,10 +38,12 @@
 
   initializeI18n();
 
+  // Route chat data requests through the admin service (viewers have no runtime repo permissions)
+  setRequestSubmitter(submitDataRequest);
+
   $: ({
     organizationPermissions,
     organization: organizationObj,
-    planDisplayName,
   } = data);
 
   $: organizationFaviconUrl = organizationObj?.faviconUrl;
@@ -147,7 +151,6 @@
       {#if !isEmbed && !hideTopBar && !withinProject($page)}
         <OrgHeader
           readProjects={organizationPermissions?.readProjects}
-          {planDisplayName}
           {organizationLogoUrl}
         />
 

@@ -225,6 +225,31 @@ func (s *Server) HTTPHandler(ctx context.Context) (http.Handler, error) {
 	observability.MuxHandle(mux, "/v1/organizations/{org}/projects/{project}/runtime/{path...}", proxyHandler)        // Backwards compatibility
 	observability.MuxHandle(mux, "/v1/orgs/{org}/projects/{project}/branch/{branch}/runtime/{path...}", proxyHandler) // Branch-specific deployment
 
+	// Add data-requests endpoint (StarData).
+	// Lets business users submit data requirements from the portal chat (persisted as a dev-environment virtual file).
+	dataRequestsHandler := observability.Middleware(
+		"admin",
+		s.logger,
+		transcoderCORSMiddleware(s.authenticator.HTTPMiddleware(httputil.Handler(s.dataRequestsForOrgAndProject))),
+	)
+	observability.MuxHandle(mux, "/v1/orgs/{org}/projects/{project}/data-requests", dataRequestsHandler)
+
+	// Add publish model endpoints (StarData).
+	// Publishing packages the Studio (dev) draft into an archive asset and points production at it;
+	// history and rollback operate on the recorded publish versions.
+	publishesHandler := observability.Middleware(
+		"admin",
+		s.logger,
+		transcoderCORSMiddleware(s.authenticator.HTTPMiddleware(httputil.Handler(s.publishesForOrgAndProject))),
+	)
+	observability.MuxHandle(mux, "/v1/orgs/{org}/projects/{project}/publishes", publishesHandler)
+	rollbackHandler := observability.Middleware(
+		"admin",
+		s.logger,
+		transcoderCORSMiddleware(s.authenticator.HTTPMiddleware(httputil.Handler(s.rollbackForOrgAndProject))),
+	)
+	observability.MuxHandle(mux, "/v1/orgs/{org}/projects/{project}/publishes/{version}/rollback", rollbackHandler)
+
 	// Add backwards compatibility alias for iframe endpoint
 	observability.MuxHandle(mux, "/v1/organizations/{org}/projects/{project}/iframe", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		r.URL.Path = strings.Replace(r.URL.Path, "/v1/organizations/", "/v1/orgs/", 1)

@@ -14,6 +14,7 @@
 
   let navItems = $derived([
     { label: m.settings_nav_general(), route: "", hasPermission: true },
+    { label: m.settings_nav_ai(), route: "/ai", hasPermission: true },
   ]);
 </script>
 

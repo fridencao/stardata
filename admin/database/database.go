@@ -321,6 +321,10 @@ type DB interface {
 	InsertAsset(ctx context.Context, id string, organizationID, path, ownerID string, public bool) (*Asset, error)
 	DeleteAssets(ctx context.Context, ids []string) error
 
+	FindProjectPublishes(ctx context.Context, projectID string, limit int) ([]*ProjectPublish, error)
+	FindProjectPublish(ctx context.Context, projectID string, version int) (*ProjectPublish, error)
+	InsertProjectPublish(ctx context.Context, opts *InsertProjectPublishOptions) (*ProjectPublish, error)
+
 	FindOrganizationIDsWithBilling(ctx context.Context) ([]string, error)
 	FindOrganizationIDsWithoutBilling(ctx context.Context) ([]string, error)
 
@@ -1254,6 +1258,27 @@ type Asset struct {
 	OwnerID        string    `db:"owner_id"`
 	Public         bool      `db:"public"`
 	CreatedOn      time.Time `db:"created_on"`
+}
+
+// ProjectPublish is a versioned snapshot of a project's files, packaged as an archive asset (StarData).
+// It records the publish history that powers the publish page and rollback.
+type ProjectPublish struct {
+	ID          string    `db:"id"`
+	ProjectID   string    `db:"project_id"`
+	AssetID     string    `db:"asset_id"`
+	Version     int       `db:"version"`
+	Note        string    `db:"note"`
+	PublishedBy string    `db:"published_by"`
+	CreatedOn   time.Time `db:"created_on"`
+}
+
+// InsertProjectPublishOptions defines options for inserting a ProjectPublish.
+// Version is assigned automatically as the next value for the project.
+type InsertProjectPublishOptions struct {
+	ProjectID   string
+	AssetID     string
+	Note        string
+	PublishedBy string
 }
 
 // ProjectVariable represents a key-value variable for a project, possible for a specific environment (e.g. production or development).

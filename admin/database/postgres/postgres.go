@@ -2998,6 +2998,7 @@ func (c *connection) FindUnusedAssets(ctx context.Context, limit int) ([]*databa
 		SELECT a.* FROM assets a 
 		WHERE a.created_on < now() - INTERVAL '7 DAYS'
 		AND NOT EXISTS (SELECT 1 FROM projects p WHERE p.archive_asset_id = a.id)
+		AND NOT EXISTS (SELECT 1 FROM project_publishes pp WHERE pp.asset_id = a.id)
 		AND NOT EXISTS (SELECT 1 FROM orgs o WHERE o.logo_asset_id = a.id)
 		AND NOT EXISTS (SELECT 1 FROM orgs o WHERE o.logo_dark_asset_id = a.id)
 		AND NOT EXISTS (SELECT 1 FROM orgs o WHERE o.favicon_asset_id = a.id)
@@ -3013,6 +3014,42 @@ func (c *connection) FindUnusedAssets(ctx context.Context, limit int) ([]*databa
 func (c *connection) DeleteAssets(ctx context.Context, ids []string) error {
 	_, err := c.getDB(ctx).ExecContext(ctx, "DELETE FROM assets WHERE id=ANY($1)", ids)
 	return parseErr("asset", err)
+}
+
+func (c *connection) FindProjectPublishes(ctx context.Context, projectID string, limit int) ([]*database.ProjectPublish, error) {
+	var res []*database.ProjectPublish
+	err := c.getDB(ctx).SelectContext(ctx, &res, `
+		SELECT * FROM project_publishes WHERE project_id=$1 ORDER BY version DESC LIMIT $2
+	`, projectID, limit)
+	if err != nil {
+		return nil, parseErr("project publishes", err)
+	}
+	return res, nil
+}
+
+func (c *connection) FindProjectPublish(ctx context.Context, projectID string, version int) (*database.ProjectPublish, error) {
+	res := &database.ProjectPublish{}
+	err := c.getDB(ctx).QueryRowxContext(ctx, `
+		SELECT * FROM project_publishes WHERE project_id=$1 AND version=$2
+	`, projectID, version).StructScan(res)
+	if err != nil {
+		return nil, parseErr("project publish", err)
+	}
+	return res, nil
+}
+
+func (c *connection) InsertProjectPublish(ctx context.Context, opts *database.InsertProjectPublishOptions) (*database.ProjectPublish, error) {
+	res := &database.ProjectPublish{}
+	err := c.getDB(ctx).QueryRowxContext(ctx, `
+		INSERT INTO project_publishes (project_id, asset_id, version, note, published_by)
+		VALUES ($1, $2, COALESCE((SELECT MAX(version) FROM project_publishes WHERE project_id=$1), 0)+1, $3, $4)
+		RETURNING *`,
+		opts.ProjectID, opts.AssetID, opts.Note, opts.PublishedBy,
+	).StructScan(res)
+	if err != nil {
+		return nil, parseErr("project publish", err)
+	}
+	return res, nil
 }
 
 func (c *connection) FindOrganizationIDsWithBilling(ctx context.Context) ([]string, error) {

@@ -32,6 +32,8 @@ var ignorePathPrefixes = []string{
 	// StarData: portal config files managed via Studio; listed in the UI but not parsed as resources.
 	"/publish.yaml",
 	"/requests.yaml",
+	// StarData: data-request backlog synced as a dev-environment virtual file (see admin/server/data_requests.go).
+	"/__virtual__/requests.yaml",
 }
 
 // Resource parsed from code files.

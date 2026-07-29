@@ -1,7 +1,7 @@
 import { redirect } from "@sveltejs/kit";
-import type { PageLoad } from "./$types";
+import type { LayoutLoad } from "./$types";
 
-export const load: PageLoad = async ({ parent, params }) => {
+export const load: LayoutLoad = async ({ parent, params }) => {
   const { organizationPermissions } = await parent();
 
   if (!organizationPermissions?.manageOrg) {

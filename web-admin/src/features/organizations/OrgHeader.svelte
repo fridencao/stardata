@@ -13,7 +13,6 @@
   import { isOrganizationPage } from "../navigation/nav-utils";
 
   export let readProjects: boolean;
-  export let planDisplayName: string | undefined;
   export let organizationLogoUrl: string | undefined;
 
   const user = createAdminServiceGetCurrentUser();
@@ -25,12 +24,14 @@
   $: onOrgPage = isOrganizationPage($page);
 
   $: loggedIn = !!$user.data?.user;
-  $: rillLogoHref = !loggedIn ? "https://www.rilldata.com" : "/";
+  // StarData: private deployment — the brand logo always links to the app root
+  $: rillLogoHref = "/";
 
   $: orgPathsQuery = useBreadcrumbOrgPaths(
     loggedIn,
     organization,
-    planDisplayName,
+    // StarData: hide the billing-plan pill in the enterprise deployment
+    undefined,
   );
   $: projectPathsQuery = useBreadcrumbProjectPaths(organization, readProjects);
 

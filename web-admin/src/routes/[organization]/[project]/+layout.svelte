@@ -30,6 +30,7 @@
   } from "@rilldata/web-admin/client";
   import {
     isEditPage,
+    isPortalPage,
     isProjectInvitePage,
     isProjectPage,
     isPublicAlertPage,
@@ -37,6 +38,9 @@
     isPublicURLPage,
     isProjectWelcomePage,
   } from "@rilldata/web-admin/features/navigation/nav-utils";
+  import AvatarButton from "@rilldata/web-admin/features/authentication/AvatarButton.svelte";
+  import PortalNav from "@rilldata/web-common/features/portal/PortalNav.svelte";
+  import PortalTabs from "@rilldata/web-common/features/portal/PortalTabs.svelte";
   import BranchDeploymentStopped from "@rilldata/web-admin/features/branches/BranchDeploymentStopped.svelte";
   import ProjectBuilding from "@rilldata/web-admin/features/projects/ProjectBuilding.svelte";
   import ProjectEmptyCta from "@rilldata/web-admin/features/projects/ProjectEmptyCTA.svelte";
@@ -81,6 +85,7 @@
   });
 
   let onProjectPage = $derived(isProjectPage(page));
+  let onPortalPage = $derived(isPortalPage(page));
   let onEditPage = $derived(isEditPage(page));
   let onInvitePage = $derived(isProjectInvitePage(page));
   let onPublicURLPage = $derived(isPublicURLPage(page));
@@ -289,29 +294,55 @@
         jwt={runtime.jwt}
         authContext={runtime.authContext}
       >
-        {#if !onWelcomePage}
-          <ProjectHeader
-            {organization}
-            {project}
-            projectPermissions={runtime.projectPermissions}
-            manageOrgAdmins={organizationPermissions?.manageOrgAdmins}
-            manageOrgMembers={organizationPermissions?.manageOrgMembers}
-            readProjects={organizationPermissions?.readProjects}
-            primaryBranch={projectData?.project?.primaryBranch}
-            {planDisplayName}
-            {organizationLogoUrl}
-          />
-          {#if onProjectPage && deploymentStatus === V1DeploymentStatus.DEPLOYMENT_STATUS_RUNNING}
-            <ProjectTabs
-              projectPermissions={runtime.projectPermissions}
+        {#if onPortalPage}
+          <!-- Business-portal chrome (StarData): PortalNav + PortalTabs replace
+               the technical ProjectHeader + ProjectTabs on portal routes. -->
+          <div class="flex h-full min-h-0 flex-1 flex-col bg-gray-50">
+            <PortalNav
+              brandHref={`/${organization}/${project}`}
+              studioHref={runtime.projectPermissions?.manageProject
+                ? `/${organization}/${project}/-/edit/studio`
+                : null}
+              adminHref={organizationPermissions?.manageOrg
+                ? `/${organization}/-/settings`
+                : null}
+            >
+              <svelte:fragment slot="user">
+                <AvatarButton
+                  projectPermissions={runtime.projectPermissions}
+                />
+              </svelte:fragment>
+            </PortalNav>
+            <PortalTabs basePath={`/${organization}/${project}`} />
+            <main class="min-h-0 flex-1 overflow-hidden">
+              {@render children()}
+            </main>
+          </div>
+        {:else}
+          {#if !onWelcomePage}
+            <ProjectHeader
               {organization}
-              pathname={page.url.pathname}
               {project}
-              {branchPrefix}
+              projectPermissions={runtime.projectPermissions}
+              manageOrgAdmins={organizationPermissions?.manageOrgAdmins}
+              manageOrgMembers={organizationPermissions?.manageOrgMembers}
+              readProjects={organizationPermissions?.readProjects}
+              primaryBranch={projectData?.project?.primaryBranch}
+              {planDisplayName}
+              {organizationLogoUrl}
             />
+            {#if onProjectPage && deploymentStatus === V1DeploymentStatus.DEPLOYMENT_STATUS_RUNNING}
+              <ProjectTabs
+                projectPermissions={runtime.projectPermissions}
+                {organization}
+                pathname={page.url.pathname}
+                {project}
+                {branchPrefix}
+              />
+            {/if}
           {/if}
+          {@render children()}
         {/if}
-        {@render children()}
       </RuntimeProvider>
     {/key}
   {:else}

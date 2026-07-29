@@ -1,129 +1,134 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import ContentContainer from "@rilldata/web-common/components/layout/ContentContainer.svelte";
-  import DashboardsTable from "@rilldata/web-admin/features/dashboards/listing/DashboardsTable.svelte";
-  import InlineChat from "@rilldata/web-common/features/chat/layouts/inline/InlineChat.svelte";
-  import DelayedContent from "@rilldata/web-common/features/entity-management/DelayedContent.svelte";
-  import { featureFlags } from "@rilldata/web-common/features/feature-flags";
-  import { createRuntimeServiceGetInstance } from "@rilldata/web-common/runtime-client";
+  import { Search, ArrowRight, MessageSquare, LayoutGrid } from "lucide-svelte";
+  import {
+    ResourceKind,
+    useFilteredResources,
+  } from "@rilldata/web-common/features/entity-management/resource-selectors";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
-  import PersonalCanvasesList from "@rilldata/web-admin/features/personal-files/canvas/PersonalCanvasesList.svelte";
-  import CreatePersonalCanvasDialog from "@rilldata/web-admin/features/personal-files/canvas/CreatePersonalCanvasDialog.svelte";
-  import { getPersonalFilteredResources } from "@rilldata/web-admin/features/personal-files/selectors.ts";
-  import { ResourceKind } from "@rilldata/web-common/features/entity-management/resource-selectors.ts";
-  import DashboardsTagFilter from "@rilldata/web-admin/features/dashboards/listing/DashboardsTagFilter.svelte";
-  import { UrlParamsState } from "web-common/src/lib/store-utils/url-params-state.svelte.ts";
+  import { generateRecommendedQuestions } from "@rilldata/web-common/features/portal/home/recommended-questions";
+  import {
+    UNGATED,
+    parsePublishYaml,
+    usePublishFile,
+  } from "@rilldata/web-common/features/portal/publish/publish-store";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
-  import { escapeHtml } from "@rilldata/web-common/lib/i18n";
-  import TableToolbarSort from "@rilldata/web-common/components/table-toolbar/TableToolbarSort.svelte";
-  import { DashboardTableSortOptions } from "../../../features/dashboards/listing/dashboard-favourites.ts";
 
-  const { chat, personalCanvases } = featureFlags;
-
-  const runtimeClient = useRuntimeClient();
+  const client = useRuntimeClient();
+  const publishFile = usePublishFile(client);
+  const metricsViews = useFilteredResources(client, ResourceKind.MetricsView);
 
   $: ({
     params: { organization, project },
   } = $page);
 
-  // Query the instance to get the project display name
-  $: instanceQuery = createRuntimeServiceGetInstance(runtimeClient, {});
-  $: projectDisplayName =
-    $instanceQuery.data?.instance?.projectDisplayName || project;
-  $: isLoadingDisplayName = $instanceQuery.isLoading;
-  $: isErrorDisplayName = $instanceQuery.isError;
+  $: basePath = `/${organization}/${project}`;
 
-  $: personalCanvasesQuery = getPersonalFilteredResources(
-    runtimeClient,
-    organization,
-    project,
-    ResourceKind.Canvas,
-  );
-  $: hasNoPersonalCanvases =
-    !$personalCanvasesQuery.isPending &&
-    ($personalCanvasesQuery.data?.length ?? 0) === 0;
+  // Governance permission drives the "go publish" affordance (web-local used canViewTech)
+  $: canManageProject = !!$page.data?.projectPermissions?.manageProject;
 
-  const selectedTagsStore = UrlParamsState.createStringArrayParam("tags");
-  const sortStore = UrlParamsState.createStringParam(
-    "sort",
-    DashboardTableSortOptions[0].value,
+  $: gate = $publishFile.isSuccess
+    ? parsePublishYaml(String($publishFile.data?.blob ?? ""))
+    : UNGATED;
+
+  // 两个查询都出结果(成功或 404)后才生成,避免加载期误判空态
+  $: ready =
+    ($publishFile.isSuccess || $publishFile.isError) && $metricsViews.isSuccess;
+
+  $: publishedResources = ($metricsViews.data ?? []).filter(
+    (r) => !gate.gated || gate.published.has(r.meta?.name?.name ?? ""),
   );
+
+  let questions: string[] = [];
+  let questionsLoaded = false;
+  $: if (ready) {
+    void generateRecommendedQuestions(client, publishedResources).then((qs) => {
+      questions = qs;
+      questionsLoaded = true;
+    });
+  }
+
+  $: placeholder = questions[0] ?? m.portal_home_placeholder_example();
+
+  function chatHref(q: string) {
+    return `${basePath}/chat?new=true&q=${encodeURIComponent(q)}`;
+  }
 </script>
 
 <svelte:head>
-  <title>{projectDisplayName} - StarData</title>
+  <title>StarData · {m.app_header_ask_ai()}</title>
 </svelte:head>
 
-<ContentContainer maxWidth={900}>
-  <div class="flex flex-col gap-y-8 py-12">
-    <!-- Welcome Section with Chat Input -->
-    <div class="flex flex-col gap-y-6">
-      <div class="flex flex-col gap-y-4">
-        {#if isLoadingDisplayName}
-          <DelayedContent visible={isLoadingDisplayName}>
-            <div class="h-11 w-96 animate-pulse rounded bg-gray-200"></div>
-          </DelayedContent>
-        {:else if isErrorDisplayName}
-          <h1
-            class="text-4xl font-semibold text-fg-secondary"
-            aria-label={m.home_project_title_label()}
+<div class="h-full overflow-y-auto">
+  <div class="mx-auto max-w-[880px] px-9 pb-20 pt-16">
+    <h1 class="text-center text-3xl font-bold text-gray-900">
+      {m.portal_home_greeting()}
+    </h1>
+    <p class="mt-2 text-center text-sm text-gray-400">
+      {m.portal_home_subtitle()}
+    </p>
+
+    <a
+      href={`${basePath}/chat?new=true`}
+      class="mx-auto mt-7 flex max-w-[680px] items-center gap-3 rounded-2xl border-[1.5px] border-gray-200 bg-surface-card px-5 py-4 no-underline shadow-sm transition-colors hover:border-primary-300"
+    >
+      <Search class="size-5 text-gray-400" />
+      <span class="flex-1 text-[15px] text-gray-400">{placeholder}</span>
+      <span
+        class="grid size-9 place-items-center rounded-xl bg-primary-600"
+      >
+        <ArrowRight class="size-5 text-white" />
+      </span>
+    </a>
+
+    {#if questionsLoaded && questions.length > 0}
+      <div class="mx-auto mt-5 flex max-w-[680px] flex-wrap justify-center gap-2">
+        {#each questions as q (q)}
+          <a
+            href={chatHref(q)}
+            class="rounded-full border border-gray-200 bg-surface-card px-3.5 py-1.5 text-[13px] text-gray-600 no-underline shadow-sm transition-colors hover:border-primary-300 hover:text-primary-700"
           >
-            {@html m.home_welcome_to({
-              projectName: `<span class="text-accent-primary-action">${escapeHtml(project)}</span>`,
-            })}
-          </h1>
-        {:else}
-          <h1
-            class="text-4xl font-semibold text-fg-secondary"
-            aria-label={m.home_project_title_label()}
-          >
-            {@html m.home_welcome_to({
-              projectName: `<span class="text-accent-primary-action">${escapeHtml(projectDisplayName)}</span>`,
-            })}
-          </h1>
-        {/if}
-        <p class="text-lg text-fg-muted">
-          {#if $chat}
-            {m.home_subtitle_with_chat()}
-          {:else}
-            {m.home_subtitle_no_chat()}
-          {/if}
-        </p>
+            {q}
+          </a>
+        {/each}
       </div>
-
-      <!-- Chat Input -->
-      {#if $chat}
-        <div class="w-full">
-          <InlineChat noMargin height="110px" />
-        </div>
-      {/if}
-    </div>
-
-    <!-- Dashboards Section -->
-    {#if $personalCanvases}
-      <PersonalCanvasesList org={organization} {project} />
+    {:else if questionsLoaded}
+      <div class="mx-auto mt-5 max-w-[680px] rounded-xl border border-dashed border-gray-300 bg-surface-card px-5 py-4 text-center text-[13px] text-gray-500">
+        {m.portal_home_no_published()}
+        {#if canManageProject}
+          <a
+            href={`${basePath}/-/edit`}
+            class="ml-1 font-semibold text-primary-600 no-underline"
+          >
+            {m.portal_home_go_publish()}
+          </a>
+        {/if}
+      </div>
+    {:else}
+      <p class="mt-5 text-center text-xs text-gray-400">{m.portal_home_loading_questions()}</p>
     {/if}
 
-    <div class="flex flex-col gap-y-4">
-      <h2
-        class="flex flex-row gap-x-2 items-center text-xl font-semibold text-fg-secondary"
+    <div class="mt-14 grid grid-cols-2 gap-4">
+      <a
+        href={`${basePath}/chat`}
+        class="rounded-2xl border border-gray-200 bg-surface-card p-6 no-underline shadow-sm transition-colors hover:border-primary-300"
       >
-        <div class="flex flex-row w-full gap-x-2 items-center grow">
-          <span>{m.home_dashboards_heading()}</span>
-          <TableToolbarSort
-            {sortStore}
-            sortOptions={DashboardTableSortOptions}
-            size="sm"
-            noOutline
-          />
-          <div class="grow"></div>
-          <DashboardsTagFilter align="end" {selectedTagsStore} />
+        <MessageSquare class="size-6 text-gray-900" />
+        <div class="mt-2 font-semibold text-gray-900">{m.portal_home_continue_chat()}</div>
+        <div class="mt-1 text-[13px] text-gray-500">
+          {m.portal_home_continue_chat_desc()}
         </div>
-        {#if $personalCanvases && hasNoPersonalCanvases}
-          <CreatePersonalCanvasDialog org={organization} {project} />
-        {/if}
-      </h2>
-      <DashboardsTable isPreview previewLimit={5} />
+      </a>
+      <a
+        href={`${basePath}/boards`}
+        class="rounded-2xl border border-gray-200 bg-surface-card p-6 no-underline shadow-sm transition-colors hover:border-primary-300"
+      >
+        <LayoutGrid class="size-6 text-gray-900" />
+        <div class="mt-2 font-semibold text-gray-900">{m.portal_home_my_boards()}</div>
+        <div class="mt-1 text-[13px] text-gray-500">
+          {m.portal_home_my_boards_desc()}
+        </div>
+      </a>
     </div>
   </div>
-</ContentContainer>
+</div>

@@ -35,6 +35,21 @@ export function withinProject(page: Page): boolean {
   return !!page.route?.id?.startsWith("/[organization]/[project]");
 }
 
+/**
+ * Business-portal pages (StarData): project home, chat, and boards.
+ * These render the portal chrome (PortalNav + PortalTabs) instead of the
+ * technical ProjectHeader + ProjectTabs.
+ */
+export function isPortalPage(page: Page): boolean {
+  const routeId = page.route?.id;
+  if (!routeId) return false;
+  return (
+    routeId === "/[organization]/[project]" ||
+    routeId.startsWith("/[organization]/[project]/chat") ||
+    routeId.startsWith("/[organization]/[project]/boards")
+  );
+}
+
 export function isMetricsExplorerPage(page: Page): boolean {
   return (
     page.route.id === "/[organization]/[project]/explore/[dashboard]" ||
@@ -105,6 +120,15 @@ export function isPublicAlertPage(page: Page): boolean {
 
 export function isEditPage({ route }: Pick<Page, "route">): boolean {
   return !!route?.id?.startsWith("/[organization]/[project]/-/edit");
+}
+
+/**
+ * Studio pages (StarData): the guided workbench (overview/sources/semantics/
+ * publish) nested inside the edit route group. They render the portal-style
+ * chrome (PortalNav + StudioTabs) instead of the technical ProjectHeader.
+ */
+export function isStudioPage({ route }: Pick<Page, "route">): boolean {
+  return !!route?.id?.startsWith("/[organization]/[project]/-/edit/studio");
 }
 
 /**

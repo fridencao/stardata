@@ -1,0 +1,2 @@
+ALTER TABLE instances ADD COLUMN ai_locale TEXT NOT NULL DEFAULT '';
+ALTER TABLE instances ADD COLUMN project_ai_locale TEXT NOT NULL DEFAULT '';

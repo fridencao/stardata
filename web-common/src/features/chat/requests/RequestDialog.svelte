@@ -5,6 +5,7 @@
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { appendRequest } from "./requests-file";
+  import { getRequestSubmitter } from "./request-submitter";
 
   export let open = false;
   export let defaultQuestion = "";
@@ -31,7 +32,13 @@
     saving = true;
     errorMessage = "";
     try {
-      await appendRequest(runtimeClient, question.trim(), note);
+      // Cloud apps (web-admin) register an admin-side submitter; web-local writes via the runtime.
+      const customSubmitter = getRequestSubmitter();
+      if (customSubmitter) {
+        await customSubmitter(question.trim(), note);
+      } else {
+        await appendRequest(runtimeClient, question.trim(), note);
+      }
       eventBus.emit("notification", {
         type: "success",
         message: m.chat_request_submitted(),
