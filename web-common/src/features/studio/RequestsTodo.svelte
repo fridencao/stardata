@@ -102,7 +102,7 @@
 
   {#if doneItems.length > 0}
     <details class="mt-3">
-      <summary class="cursor-pointer text-[12.5px] text-gray-400">
+      <summary class="cursor-pointer text-lg text-gray-400">
         {m.studio_requests_done_count({ count: doneItems.length })}
       </summary>
       <ul class="mt-2 flex flex-col gap-1">

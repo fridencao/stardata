@@ -25,6 +25,7 @@ type Options struct {
 	DatabaseDSN                string
 	DatabaseEncryptionKeyring  string
 	ExternalURL                string
+	ExternalGRPCURL            string // Defaults to ExternalURL. Set separately when gRPC is served on a different host/port (e.g. behind an HTTP-only reverse proxy).
 	FrontendURL                string
 	ProvisionerSetJSON         string
 	DefaultProvisioner         string
@@ -62,6 +63,11 @@ type Service struct {
 }
 
 func New(ctx context.Context, opts *Options, logger *zap.Logger, issuer *auth.Issuer, emailClient *email.Client, github Github, aiService drivers.AIService, assets assetstore.Store, biller billing.Biller, p payment.Provider) (*Service, error) {
+	// Default the external gRPC URL to the external (HTTP) URL when not set separately.
+	if opts.ExternalGRPCURL == "" {
+		opts.ExternalGRPCURL = opts.ExternalURL
+	}
+
 	// Init db
 	db, err := database.Open(opts.DatabaseDriver, opts.DatabaseDSN, opts.DatabaseEncryptionKeyring)
 	if err != nil {

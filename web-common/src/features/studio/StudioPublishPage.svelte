@@ -166,7 +166,7 @@
 {#if backend}
   <div class="mt-4 card-basic p-4">
     <h3 class="text-sm font-bold text-gray-900">{m.studio_publish_release_title()}</h3>
-    <p class="mt-0.5 text-[12.5px] text-gray-500">{m.studio_publish_release_desc()}</p>
+    <p class="mt-0.5 text-lg text-gray-500">{m.studio_publish_release_desc()}</p>
     <div class="mt-3 flex items-center gap-2">
       <input
         type="text"
@@ -191,7 +191,7 @@
 {#if backend}
   <div class="mt-4 card-basic p-4">
     <h3 class="text-sm font-bold text-gray-900">{m.studio_publish_release_title()}</h3>
-    <p class="mt-0.5 text-[12.5px] text-gray-500">{m.studio_publish_release_desc()}</p>
+    <p class="mt-0.5 text-lg text-gray-500">{m.studio_publish_release_desc()}</p>
     <div class="mt-3 flex items-center gap-2">
       <input
         type="text"
@@ -213,7 +213,7 @@
   </div>
 {/if}
 
-<div class="mt-4 flex items-center rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-[12.5px] text-blue-800">
+<div class="mt-4 flex items-center rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-lg text-blue-800">
   <Info class="size-4 mr-1.5 flex-shrink-0 text-blue-600" />
   {m.studio_publish_gate_before()} <code>publish.yaml</code> {m.studio_publish_gate_after()}
 </div>

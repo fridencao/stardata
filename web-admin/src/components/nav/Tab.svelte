@@ -54,7 +54,7 @@
   a {
     @apply px-2 py-1.5 flex gap-x-1 items-center w-fit;
     @apply rounded-sm text-fg-muted;
-    @apply text-xs font-medium justify-center;
+    @apply text-base font-medium justify-center;
   }
 
   .selected {

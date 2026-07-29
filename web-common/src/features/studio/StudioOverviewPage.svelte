@@ -82,7 +82,7 @@
   </div>
 </div>
 
-<div class="mt-4 flex items-center rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-[12.5px] text-blue-800">
+<div class="mt-4 flex items-center rounded-xl border border-blue-200 bg-blue-50 px-4 py-2.5 text-lg text-blue-800">
   <Info class="size-4 mr-1.5 flex-shrink-0 text-blue-600" />
   {m.studio_overview_banner()}
 </div>

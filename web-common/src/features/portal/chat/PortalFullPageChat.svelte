@@ -284,7 +284,7 @@
   }
 
   .sidebar-title {
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
     color: var(--color-gray-900);
   }
@@ -297,7 +297,7 @@
     border: 1px solid var(--color-gray-200);
     background: #ffffff;
     padding: 0.375rem 0.875rem;
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.4;
     color: var(--color-gray-600);
     text-decoration: none;
@@ -366,7 +366,7 @@
   }
 
   .conversation-title {
-    font-size: 13px;
+    font-size: 12px;
     line-height: 1.4;
     white-space: nowrap;
     overflow: hidden;

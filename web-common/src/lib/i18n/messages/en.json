@@ -1155,6 +1155,8 @@
   "edit_merge_tooltip_no_changes": "No changes to merge",
   "edit_merging": "Merging...",
   "edit_new_branch": "New branch",
+  "edit_no_active_session_body": "Start an edit session to make changes to this project in Studio.",
+  "edit_no_active_session_title": "No active edit session",
   "edit_no_uncommitted_changes": "No uncommitted changes detected",
   "edit_popup_blocked": "Pop-up was blocked.",
   "edit_provisioning_env": "Provisioning your editing environment...",

@@ -1155,6 +1155,8 @@
   "edit_merge_tooltip_no_changes": "没有可合并的更改",
   "edit_merging": "合并中...",
   "edit_new_branch": "新分支",
+  "edit_no_active_session_body": "启动一个编辑会话后即可在 Studio 中修改此项目。",
+  "edit_no_active_session_title": "没有正在进行的编辑会话",
   "edit_no_uncommitted_changes": "未检测到未提交的更改",
   "edit_popup_blocked": "弹出窗口被拦截。",
   "edit_provisioning_env": "正在为你准备编辑环境...",

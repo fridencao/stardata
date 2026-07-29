@@ -268,7 +268,7 @@ func (s *Service) StartDeploymentInner(ctx context.Context, depl *database.Deplo
 
 	// Prepare connectors
 	adminConfig, err := structpb.NewStruct(map[string]any{
-		"admin_url":    s.opts.ExternalURL,
+		"admin_url":    s.opts.ExternalGRPCURL, // NOTE: the runtime's admin connector speaks gRPC
 		"access_token": dat.Token().String(),
 		"project_id":   depl.ProjectID,
 	})

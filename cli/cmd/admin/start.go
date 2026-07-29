@@ -367,7 +367,8 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 				DatabaseDriver:             conf.DatabaseDriver,
 				DatabaseDSN:                conf.DatabaseURL,
 				DatabaseEncryptionKeyring:  conf.DatabaseEncryptionKeyring,
-				ExternalURL:                conf.ExternalGRPCURL, // NOTE: using gRPC url
+				ExternalURL:                conf.ExternalURL,
+				ExternalGRPCURL:            conf.ExternalGRPCURL, // the runtime's admin connector needs a direct gRPC address (a plain HTTP reverse proxy can't carry gRPC)
 				FrontendURL:                conf.FrontendURL,
 				ProvisionerSetJSON:         conf.ProvisionerSetJSON,
 				DefaultProvisioner:         conf.DefaultProvisioner,

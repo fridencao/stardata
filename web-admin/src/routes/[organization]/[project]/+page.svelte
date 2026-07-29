@@ -73,7 +73,7 @@
       class="mx-auto mt-7 flex max-w-[680px] items-center gap-3 rounded-2xl border-[1.5px] border-gray-200 bg-surface-card px-5 py-4 no-underline shadow-sm transition-colors hover:border-primary-300"
     >
       <Search class="size-5 text-gray-400" />
-      <span class="flex-1 text-[15px] text-gray-400">{placeholder}</span>
+      <span class="flex-1 text-lg text-gray-400">{placeholder}</span>
       <span
         class="grid size-9 place-items-center rounded-xl bg-primary-600"
       >

@@ -112,7 +112,7 @@
 
   .chat-message-content {
     @apply py-2;
-    @apply text-sm leading-relaxed break-words;
+    @apply text-base leading-relaxed break-words;
     @apply text-fg-primary;
   }
 

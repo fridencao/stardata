@@ -31,8 +31,8 @@
   $: hasProjects = projectCount > 0;
 
   function getProjectShareUrl(projectName: string) {
-    // Link the user to the project dashboard list and open the share popover immediately.
-    return `/${organization}/${projectName}/-/dashboards?share=true`;
+    // Link the user to the project status page and open the share popover immediately.
+    return `/${organization}/${projectName}/-/status?share=true`;
   }
 </script>
 

@@ -130,7 +130,7 @@
     @apply font-medium;
   }
   :global(.canvas-markdown p) {
-    font-size: 14px;
+    font-size: 11px;
     @apply my-2;
   }
 

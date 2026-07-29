@@ -35,6 +35,19 @@ export default {
   darkMode: "class",
   theme: {
     extend: {
+      // Compact enterprise BI type scale (design baseline: body = 11px).
+      // Defined at the theme level so markup classes, style-block @apply and
+      // !important variants all resolve to the same compact values. Keep in
+      // sync with the arbitrary-value remaps in src/app.css.
+      fontSize: {
+        xs: ["9.5px", { lineHeight: "1.5" }],
+        sm: ["10.5px", { lineHeight: "1.5" }],
+        base: ["11px", { lineHeight: "1.45" }],
+        lg: ["12px", { lineHeight: "1.4" }],
+        xl: ["13px", { lineHeight: "1.4" }],
+        "2xl": ["14px", { lineHeight: "1.35" }],
+        "3xl": ["16px", { lineHeight: "1.3" }],
+      },
       borderColor: {
         DEFAULT: oklabString("border"),
       },

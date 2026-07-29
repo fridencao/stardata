@@ -403,7 +403,10 @@
   }
 
   .big-number {
-    @apply text-3xl font-medium text-fg-primary;
+    /* display numeral: intentionally larger than the compact type scale */
+    font-size: 30px;
+    line-height: 1.2;
+    @apply font-medium text-fg-primary;
   }
 
   :global(.dark) .big-number {
