@@ -1,7 +1,16 @@
 <script lang="ts">
   import { themeControl } from "@rilldata/web-common/features/themes/theme-control";
   import StardataUserMenu from "@rilldata/web-common/features/authentication/StardataUserMenu.svelte";
-  import { Wrench, Sun, Moon, Home, Languages, ShieldCheck } from "lucide-svelte";
+  import {
+    Wrench,
+    Sun,
+    Moon,
+    Home,
+    Languages,
+    ShieldCheck,
+    Bell,
+    FileText,
+  } from "lucide-svelte";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { getLocale, setLocale } from "@rilldata/web-common/lib/i18n/gen/runtime";
 
@@ -13,6 +22,10 @@
   export let portalHref: string | null = null;
   /** 「平台管理」入口;null = 不显示(非 org admin) */
   export let adminHref: string | null = null;
+  /** 「我的报告」入口;null = 不显示(功能未启用或无权限) */
+  export let reportsHref: string | null = null;
+  /** 「我的订阅」入口;null = 不显示(功能未启用或无权限) */
+  export let alertsHref: string | null = null;
 
   $: currentTheme = $themeControl;
 
@@ -48,6 +61,22 @@
         class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-primary-700 bg-primary-50 no-underline transition-colors hover:bg-primary-100"
       >
         <Home class="size-4" /> {m.portal_nav_business_portal()}
+      </a>
+    {/if}
+    {#if reportsHref}
+      <a
+        href={reportsHref}
+        class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-primary-700 bg-primary-50 no-underline transition-colors hover:bg-primary-100"
+      >
+        <FileText class="size-4" /> {m.nav_tab_reports()}
+      </a>
+    {/if}
+    {#if alertsHref}
+      <a
+        href={alertsHref}
+        class="flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-semibold text-primary-700 bg-primary-50 no-underline transition-colors hover:bg-primary-100"
+      >
+        <Bell class="size-4" /> {m.nav_tab_alerts()}
       </a>
     {/if}
     {#if adminHref}

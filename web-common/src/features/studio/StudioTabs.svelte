@@ -1,6 +1,14 @@
 <script lang="ts">
   import { page } from "$app/stores";
-  import { LayoutDashboard, Database, Network, Rocket, Code2 } from "lucide-svelte";
+  import {
+    LayoutDashboard,
+    Database,
+    Network,
+    Rocket,
+    Code2,
+    Activity,
+    Settings,
+  } from "lucide-svelte";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   /** 路由前缀(web-local 为 "";web-admin 为 "/[org]/[project]/-/edit") */
@@ -10,13 +18,23 @@
   /** IDE Tab 的激活判定(IDE 路由结构两端不同,由调用方决定) */
   export let ideActive: (path: string) => boolean = (p) =>
     ["/files", "/connector/", "/graph"].some((prefix) => p.startsWith(prefix));
+  /** 运行状态入口(StarData:收编自遗留控制台的 -/status);不传则不显示 */
+  export let statusHref: string | undefined = undefined;
+  /** 项目设置入口(StarData:收编自遗留控制台的 -/settings);不传则不显示 */
+  export let settingsHref: string | undefined = undefined;
 
   $: tabs = [
     { label: m.studio_tabs_overview(), href: `${basePath}/studio`, icon: LayoutDashboard },
     { label: m.studio_tabs_sources(), href: `${basePath}/studio/sources`, icon: Database },
     { label: m.studio_tabs_semantics(), href: `${basePath}/studio/semantics`, icon: Network },
     { label: m.studio_tabs_publish(), href: `${basePath}/studio/publish`, icon: Rocket },
+    ...(settingsHref
+      ? [{ label: m.nav_tab_settings(), href: settingsHref, icon: Settings }]
+      : []),
     { label: m.studio_tabs_ide(), href: ideHref, icon: Code2 },
+    ...(statusHref
+      ? [{ label: m.nav_tab_status(), href: statusHref, icon: Activity }]
+      : []),
   ];
 
   $: pathname = $page.url.pathname;

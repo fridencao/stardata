@@ -1,7 +1,26 @@
 import { MetricsEventScreenName } from "@rilldata/web-common/metrics/service/MetricsTypes";
 import type { Page } from "@sveltejs/kit";
+import type { V1ProjectPermissions } from "@rilldata/web-admin/client";
 
 // TODO: update all methods to use partial Page based on what is needed, so that it can be called in loader functions.
+
+export type Space = "portal" | "studio" | "admin";
+
+/**
+ * Single source of truth: which spaces a user may access, derived from their
+ * permissions. Replaces the inline `manageProject`/`manageOrg` ternaries
+ * scattered across layouts.
+ */
+export function spacesForUser(perm: {
+  readOrg?: boolean;
+  manageProject?: boolean;
+  manageOrg?: boolean;
+}): Space[] {
+  const spaces: Space[] = ["portal"]; // everyone lands in the business portal
+  if (perm.manageProject) spaces.push("studio");
+  if (perm.manageOrg) spaces.push("admin");
+  return spaces;
+}
 
 export function isOrganizationPage(page: Page): boolean {
   return (

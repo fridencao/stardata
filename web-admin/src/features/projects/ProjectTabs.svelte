@@ -15,7 +15,7 @@
   export let pathname: string;
   export let branchPrefix: string = "";
 
-  const { chat, reports, alerts } = featureFlags;
+  const { reports, alerts } = featureFlags;
 
   $: tabs = [
     {
@@ -24,29 +24,16 @@
       hasPermission: true,
     },
     {
-      route: `/${organization}/${project}${branchPrefix}/-/ai`,
-      label: m.nav_tab_ai(),
-      hasPermission: $chat,
-    },
-    {
-      route: `/${organization}/${project}${branchPrefix}/-/dashboards`,
-      label: m.nav_tab_dashboards(),
-      hasPermission: true,
-    },
-    {
-      route: `/${organization}/${project}${branchPrefix}/-/query`,
-      label: m.nav_tab_query(),
-      hasPermission: false,
-    },
-    {
       route: `/${organization}/${project}${branchPrefix}/-/reports`,
       label: m.nav_tab_reports(),
-      hasPermission: $reports,
+      // StarData: feature flag gates the feature; role gates visibility.
+      // Business viewers (no manageProject) must never see these technical tabs.
+      hasPermission: $reports && projectPermissions.manageProject,
     },
     {
       route: `/${organization}/${project}${branchPrefix}/-/alerts`,
       label: m.nav_tab_alerts(),
-      hasPermission: $alerts,
+      hasPermission: $alerts && projectPermissions.manageProject,
     },
     {
       route: `/${organization}/${project}${branchPrefix}/-/status`,

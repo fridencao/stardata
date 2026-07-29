@@ -30,7 +30,13 @@
       <AvatarButton projectPermissions={$page.data?.projectPermissions} />
     </svelte:fragment>
   </PortalNav>
-  <StudioTabs basePath={editBase} ideHref={editBase || "/"} {ideActive} />
+  <StudioTabs
+    basePath={editBase}
+    ideHref={editBase || "/"}
+    {ideActive}
+    statusHref={`${portalBase}/-/status`}
+    settingsHref={`${portalBase}/-/settings`}
+  />
   <main class="w-full flex-1 overflow-y-auto p-8 xl:max-w-6xl xl:mx-auto">
     <slot />
   </main>

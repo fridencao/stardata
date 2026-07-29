@@ -15,6 +15,7 @@
   import { untrack } from "svelte";
   import type { Snippet } from "svelte";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
+  import { featureFlags } from "@rilldata/web-common/features/feature-flags";
   import {
     branchPathPrefix,
     extractBranchFromPath,
@@ -305,6 +306,14 @@
                 : null}
               adminHref={organizationPermissions?.manageOrg
                 ? `/${organization}/-/settings`
+                : null}
+              reportsHref={$featureFlags.reports &&
+              runtime.projectPermissions?.manageProject
+                ? `/${organization}/${project}/-/reports`
+                : null}
+              alertsHref={$featureFlags.alerts &&
+              runtime.projectPermissions?.manageProject
+                ? `/${organization}/${project}/-/alerts`
                 : null}
             >
               <svelte:fragment slot="user">
