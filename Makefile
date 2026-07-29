@@ -12,11 +12,9 @@ cli: cli.prepare
 
 .PHONY: cli.prepare
 cli.prepare: runtime.examples.embed
-	npm install
-	npm run build
+	# web-local has been removed: the CLI no longer embeds a frontend build.
+	# cli/pkg/web falls back to its default index.html when embed/dist is absent.
 	rm -rf cli/pkg/web/embed/dist || true
-	mkdir -p cli/pkg/web/embed/dist
-	cp -r web-local/build/* cli/pkg/web/embed/dist
 	go run scripts/embed_duckdb_ext/main.go
 
 .PHONY: coverage.go

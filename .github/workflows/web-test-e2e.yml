@@ -8,7 +8,6 @@ on:
       - "runtime/**"
       - "web-admin/**"
       - "web-common/**"
-      - "web-local/**"
   workflow_dispatch:
     inputs:
       browser:
@@ -42,11 +41,6 @@ jobs:
               - "cli/**"
               - "runtime/**"
               - "web-admin/**"
-            local:
-              - ".github/workflows/web-test-e2e.yml"
-              - "cli/**"
-              - "runtime/**"
-              - "web-local/**"
             common:
               - ".github/workflows/web-test-e2e.yml"
               - "cli/**"
@@ -58,13 +52,11 @@ jobs:
         run: |
           echo "matrix=$(jq -n '[
               ("web-admin" | select(env.FILTER_ADMIN == "true" or env.FILTER_COMMON == "true")),
-              ("web-local" | select(env.FILTER_LOCAL == "true" or env.FILTER_COMMON == "true")),
-              ("web-integration" | select(env.FILTER_LOCAL == "true" or env.FILTER_ADMIN == "true" or env.FILTER_COMMON == "true"))
+              ("web-integration" | select(env.FILTER_ADMIN == "true" or env.FILTER_COMMON == "true"))
             ]' | jq -c)" >> "$GITHUB_OUTPUT"
         env:
           FILTER_ADMIN: ${{ steps.filter.outputs.admin }}
           FILTER_COMMON: ${{ steps.filter.outputs.common }}
-          FILTER_LOCAL: ${{ steps.filter.outputs.local }}
 
   e2e:
     runs-on: ubuntu-22.04
@@ -93,7 +85,7 @@ jobs:
         with:
           go-version: 1.26.5
 
-      - name: Build and embed static UI
+      - name: Build rill cli
         if: matrix.name != 'web-admin'
         run: PLAYWRIGHT_TEST=true make cli
 
@@ -136,26 +128,6 @@ jobs:
       - name: Set up GCloud SDK
         if: (matrix.name == 'web-admin' || matrix.name == 'web-integration')
         uses: google-github-actions/setup-gcloud@v2
-
-      - name: Test web-local
-        if: matrix.name == 'web-local'
-        run: |-
-          # For pull requests, always use chrome
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            npm run test:chrome -w web-local
-          # For manual workflow runs, use the selected browser
-          elif [ "${{ github.event.inputs.browser }}" == "all" ]; then
-            npm run test:all -w web-local
-          elif [ "${{ github.event.inputs.browser }}" == "chrome" ]; then
-            npm run test:chrome -w web-local
-          elif [ "${{ github.event.inputs.browser }}" == "safari" ]; then
-            npm run test:safari -w web-local
-          elif [ "${{ github.event.inputs.browser }}" == "firefox" ]; then
-            npm run test:firefox -w web-local
-          else
-            echo "Invalid browser choice: ${{ github.event.inputs.browser }}"
-            exit 1
-          fi
 
       - name: Test web-admin
         if: matrix.name == 'web-admin'

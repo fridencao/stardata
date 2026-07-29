@@ -32,7 +32,6 @@ const (
 	composeFile    = "cli/cmd/devtool/data/cloud-deps.docker-compose.yml"
 	minGoVersion   = "1.25"
 	minNodeVersion = "18"
-	stateDirLocal  = "dev-project"
 	rillGitRemote  = "https://github.com/fridencao/stardata.git"
 )
 
@@ -48,8 +47,6 @@ var (
 		"cloud",
 		// Minimal cloud setup (no Clickhouse, no telemetry)
 		"minimal",
-		// StarData Developer setup (equivalent to `stardata start`)
-		"local",
 		// Cloud setup for e2e tests
 		"e2e",
 		// TODO: What is this?
@@ -62,7 +59,7 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 	services := &servicesCfg{}
 
 	cmd := &cobra.Command{
-		Use:   "start [cloud|minimal|local|e2e]",
+		Use:   "start [cloud|minimal|e2e]",
 		Short: "Start a local development environment",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			var preset string
@@ -112,8 +109,6 @@ func start(ch *cmdutil.Helper, preset string, verbose, reset, refreshDotenv bool
 	switch preset {
 	case "cloud", "minimal", "e2e", "other":
 		err = cloud{}.start(ctx, ch, verbose, reset, refreshDotenv, preset, services)
-	case "local":
-		err = local{}.start(ctx, verbose, reset, services)
 	default:
 		err = fmt.Errorf("unknown preset %q", preset)
 	}
@@ -619,151 +614,6 @@ func (s cloud) awaitUI(ctx context.Context) error {
 			resp.Body.Close()
 			if resp.StatusCode == http.StatusOK {
 				logInfo.Printf("UI ready at %s\n", uiURL)
-				return nil
-			}
-		}
-
-		select {
-		case <-time.After(1 * time.Second):
-		case <-ctx.Done():
-			return ctx.Err()
-		}
-	}
-}
-
-type local struct{}
-
-func (s local) start(ctx context.Context, verbose, reset bool, services *servicesCfg) error {
-	g, ctx := errgroup.WithContext(ctx)
-
-	if services.runtime {
-		g.Go(func() error { return s.runRuntime(ctx, verbose, reset) })
-	}
-
-	runtimeReadyCh := make(chan struct{})
-	g.Go(func() error {
-		if services.runtime {
-			err := s.awaitRuntime(ctx)
-			if err != nil {
-				return err
-			}
-		}
-		close(runtimeReadyCh)
-		return nil
-	})
-
-	if services.ui {
-		npmReadyCh := make(chan struct{})
-		g.Go(func() error {
-			err := s.runUIInstall(ctx)
-			if err != nil {
-				return err
-			}
-			close(npmReadyCh)
-			return nil
-		})
-
-		g.Go(func() error {
-			if err := awaitClose(ctx, runtimeReadyCh, npmReadyCh); err != nil {
-				return err
-			}
-			return s.runUI(ctx)
-		})
-	}
-
-	uiReadyCh := make(chan struct{})
-	g.Go(func() error {
-		if services.ui {
-			err := s.awaitUI(ctx)
-			if err != nil {
-				return err
-			}
-		}
-		close(uiReadyCh)
-		return nil
-	})
-
-	g.Go(func() error {
-		// Wait for runtime, then UI
-		if err := awaitClose(ctx, runtimeReadyCh, uiReadyCh); err != nil {
-			return err
-		}
-		logInfo.Printf("All services ready\n")
-		return nil
-	})
-
-	return g.Wait()
-}
-
-func (s local) runRuntime(ctx context.Context, verbose, reset bool) error {
-	logInfo.Printf("Starting runtime\n")
-	defer func() { logInfo.Printf("Stopped runtime\n") }()
-
-	args := []string{"run", "cli/main.go", "start", stateDirLocal, "--no-ui", "--debug", "--allowed-origins", "http://localhost:3001"}
-	if verbose {
-		args = append(args, "--verbose")
-	}
-	if reset {
-		args = append(args, "--reset")
-	}
-
-	cmd := newCmd(ctx, "go", args...)
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stdout
-	return cmd.Run()
-}
-
-func (s local) awaitRuntime(ctx context.Context) error {
-	pingURL := "http://localhost:9009/v1/ping"
-	for {
-		resp, err := http.Get(pingURL)
-		if err == nil {
-			resp.Body.Close()
-			if resp.StatusCode == http.StatusOK {
-				logInfo.Printf("Backend ready\n")
-				return nil
-			}
-		}
-
-		select {
-		case <-time.After(1 * time.Second):
-		case <-ctx.Done():
-			return ctx.Err()
-		}
-	}
-}
-
-func (s local) runUIInstall(ctx context.Context) (err error) {
-	logInfo.Printf("Running `npm install -w web-local`\n")
-	defer func() {
-		if err == nil {
-			logInfo.Printf("Finished `npm install -w web-local`\n")
-		} else {
-			logErr.Printf("Failed running `npm install -w web-local`: %v", err)
-		}
-	}()
-
-	return newCmd(ctx, "npm", "install", "-w", "web-local").Run()
-}
-
-func (s local) runUI(ctx context.Context) (err error) {
-	logInfo.Printf("Starting UI\n")
-	defer logInfo.Printf("Stopped UI\n")
-
-	cmd := newCmd(ctx, "npm", "run", "dev", "-w", "web-local", "--", "--port", "3001")
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stdout
-	return cmd.Run()
-}
-
-func (s local) awaitUI(ctx context.Context) error {
-	uiURL := "http://localhost:3001"
-	for {
-		resp, err := http.Get(uiURL)
-		if err == nil {
-			resp.Body.Close()
-			if resp.StatusCode == http.StatusOK {
-				logInfo.Printf("UI ready\n")
 				return nil
 			}
 		}

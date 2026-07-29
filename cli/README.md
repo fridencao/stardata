@@ -2,7 +2,7 @@
 
 ## Building the CLI
 
-In production builds, the CLI embeds the SPA in `web-local` and the examples in `examples` (from the root of the repo). To create a production build of the CLI with these embedded, run:
+In production builds, the CLI embeds the examples in `examples` (from the root of the repo). The frontend `web-local` has been removed: `cli/pkg/web` no longer embeds an SPA and instead serves a static placeholder page (`cli/pkg/web/embed/index.html`) — the enterprise web console is `web-admin`, built and served separately. To create a production build of the CLI, run:
 ```bash
 # Build the binary and output it to ./rill
 make

@@ -31,8 +31,7 @@
       "@rilldata/web-admin/*": ["web-admin/src/*"],
       "@rilldata/web-common/*": ["web-common/src/*"],
       "@rilldata/web-common/tests/*": ["web-common/tests/*"],
-      "@rilldata/web-integration/tests/*": ["web-integration/tests/*"],
-      "@rilldata/web-local/lib/*": ["web-local/src/lib/*"]
+      "@rilldata/web-integration/tests/*": ["web-integration/tests/*"]
     },
     "incremental": true,
     "tsBuildInfoFile": "./node_modules/.cache/tsbuildinfo",
