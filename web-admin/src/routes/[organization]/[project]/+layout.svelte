@@ -16,6 +16,9 @@
   import type { Snippet } from "svelte";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { featureFlags } from "@rilldata/web-common/features/feature-flags";
+
+  // 解构出各 flag 的 store（FeatureFlag 实例自带 subscribe），不能用 $featureFlags.xxx
+  const { reports, alerts } = featureFlags;
   import {
     branchPathPrefix,
     extractBranchFromPath,
@@ -307,11 +310,11 @@
               adminHref={organizationPermissions?.manageOrg
                 ? `/${organization}/-/settings`
                 : null}
-              reportsHref={$featureFlags.reports &&
+              reportsHref={$reports &&
               runtime.projectPermissions?.manageProject
                 ? `/${organization}/${project}/-/reports`
                 : null}
-              alertsHref={$featureFlags.alerts &&
+              alertsHref={$alerts &&
               runtime.projectPermissions?.manageProject
                 ? `/${organization}/${project}/-/alerts`
                 : null}
