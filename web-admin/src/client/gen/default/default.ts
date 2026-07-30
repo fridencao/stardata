@@ -65,6 +65,7 @@ import type {
   AdminServiceIssueUserAuthTokenBody,
   AdminServiceListBookmarksParams,
   AdminServiceListDeploymentsParams,
+  AdminServiceListFeatureAccessParams,
   AdminServiceListMagicAuthTokensParams,
   AdminServiceListOrganizationBillingIssuesParams,
   AdminServiceListOrganizationInvitesParams,
@@ -90,6 +91,8 @@ import type {
   AdminServiceSearchProjectNamesParams,
   AdminServiceSearchProjectUsersParams,
   AdminServiceSearchUsersParams,
+  AdminServiceSetFeatureAccessBody,
+  AdminServiceSetOrgFeatureDefaultsBody,
   AdminServiceSetOrganizationMemberUserRoleBody,
   AdminServiceSetProjectMemberUserRoleBodyBody,
   AdminServiceSudoGetResourceParams,
@@ -189,6 +192,7 @@ import type {
   V1LeaveOrganizationResponse,
   V1ListBookmarksResponse,
   V1ListDeploymentsResponse,
+  V1ListFeatureAccessResponse,
   V1ListGithubUserReposResponse,
   V1ListMagicAuthTokensResponse,
   V1ListOrganizationBillingIssuesResponse,
@@ -243,6 +247,8 @@ import type {
   V1SearchProjectNamesResponse,
   V1SearchProjectUsersResponse,
   V1SearchUsersResponse,
+  V1SetFeatureAccessResponse,
+  V1SetOrgFeatureDefaultsResponse,
   V1SetOrganizationMemberServiceRoleResponse,
   V1SetOrganizationMemberUserRoleResponse,
   V1SetOrganizationMemberUsergroupRoleResponse,
@@ -3114,6 +3120,292 @@ export const createAdminServiceCreateAsset = <
   TContext
 > => {
   const mutationOptions = getAdminServiceCreateAssetMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary ListFeatureAccess lists feature access for an org (optionally scoped to a project),
+including org defaults and each subject's effective access.
+ */
+export const adminServiceListFeatureAccess = (
+  org: string,
+  params?: AdminServiceListFeatureAccessParams,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1ListFeatureAccessResponse>({
+    url: `/v1/orgs/${org}/feature-access`,
+    method: "GET",
+    params,
+    signal,
+  });
+};
+
+export const getAdminServiceListFeatureAccessQueryKey = (
+  org?: string,
+  params?: AdminServiceListFeatureAccessParams,
+) => {
+  return [
+    `/v1/orgs/${org}/feature-access`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getAdminServiceListFeatureAccessQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceListFeatureAccess>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  params?: AdminServiceListFeatureAccessParams,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListFeatureAccess>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getAdminServiceListFeatureAccessQueryKey(org, params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminServiceListFeatureAccess>>
+  > = ({ signal }) => adminServiceListFeatureAccess(org, params, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!org,
+    ...queryOptions,
+  } as CreateQueryOptions<
+    Awaited<ReturnType<typeof adminServiceListFeatureAccess>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type AdminServiceListFeatureAccessQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceListFeatureAccess>>
+>;
+export type AdminServiceListFeatureAccessQueryError = RpcStatus;
+
+/**
+ * @summary ListFeatureAccess lists feature access for an org (optionally scoped to a project),
+including org defaults and each subject's effective access.
+ */
+
+export function createAdminServiceListFeatureAccess<
+  TData = Awaited<ReturnType<typeof adminServiceListFeatureAccess>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  params?: AdminServiceListFeatureAccessParams,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListFeatureAccess>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getAdminServiceListFeatureAccessQueryOptions(
+    org,
+    params,
+    options,
+  );
+
+  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary SetFeatureAccess sets feature access overrides for a user or user group.
+ */
+export const adminServiceSetFeatureAccess = (
+  org: string,
+  adminServiceSetFeatureAccessBody: AdminServiceSetFeatureAccessBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1SetFeatureAccessResponse>({
+    url: `/v1/orgs/${org}/feature-access`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceSetFeatureAccessBody,
+    signal,
+  });
+};
+
+export const getAdminServiceSetFeatureAccessMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceSetFeatureAccess>>,
+    TError,
+    { org: string; data: AdminServiceSetFeatureAccessBody },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceSetFeatureAccess>>,
+  TError,
+  { org: string; data: AdminServiceSetFeatureAccessBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceSetFeatureAccess"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceSetFeatureAccess>>,
+    { org: string; data: AdminServiceSetFeatureAccessBody }
+  > = (props) => {
+    const { org, data } = props ?? {};
+
+    return adminServiceSetFeatureAccess(org, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceSetFeatureAccessMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceSetFeatureAccess>>
+>;
+export type AdminServiceSetFeatureAccessMutationBody =
+  AdminServiceSetFeatureAccessBody;
+export type AdminServiceSetFeatureAccessMutationError = RpcStatus;
+
+/**
+ * @summary SetFeatureAccess sets feature access overrides for a user or user group.
+ */
+export const createAdminServiceSetFeatureAccess = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceSetFeatureAccess>>,
+      TError,
+      { org: string; data: AdminServiceSetFeatureAccessBody },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceSetFeatureAccess>>,
+  TError,
+  { org: string; data: AdminServiceSetFeatureAccessBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceSetFeatureAccessMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary SetOrgFeatureDefaults sets the org-level default feature grants.
+ */
+export const adminServiceSetOrgFeatureDefaults = (
+  org: string,
+  adminServiceSetOrgFeatureDefaultsBody: AdminServiceSetOrgFeatureDefaultsBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1SetOrgFeatureDefaultsResponse>({
+    url: `/v1/orgs/${org}/feature-access/defaults`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceSetOrgFeatureDefaultsBody,
+    signal,
+  });
+};
+
+export const getAdminServiceSetOrgFeatureDefaultsMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceSetOrgFeatureDefaults>>,
+    TError,
+    { org: string; data: AdminServiceSetOrgFeatureDefaultsBody },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceSetOrgFeatureDefaults>>,
+  TError,
+  { org: string; data: AdminServiceSetOrgFeatureDefaultsBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceSetOrgFeatureDefaults"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceSetOrgFeatureDefaults>>,
+    { org: string; data: AdminServiceSetOrgFeatureDefaultsBody }
+  > = (props) => {
+    const { org, data } = props ?? {};
+
+    return adminServiceSetOrgFeatureDefaults(org, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceSetOrgFeatureDefaultsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceSetOrgFeatureDefaults>>
+>;
+export type AdminServiceSetOrgFeatureDefaultsMutationBody =
+  AdminServiceSetOrgFeatureDefaultsBody;
+export type AdminServiceSetOrgFeatureDefaultsMutationError = RpcStatus;
+
+/**
+ * @summary SetOrgFeatureDefaults sets the org-level default feature grants.
+ */
+export const createAdminServiceSetOrgFeatureDefaults = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceSetOrgFeatureDefaults>>,
+      TError,
+      { org: string; data: AdminServiceSetOrgFeatureDefaultsBody },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceSetOrgFeatureDefaults>>,
+  TError,
+  { org: string; data: AdminServiceSetOrgFeatureDefaultsBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceSetOrgFeatureDefaultsMutationOptions(options);
 
   return createMutation(mutationOptions, queryClient);
 };

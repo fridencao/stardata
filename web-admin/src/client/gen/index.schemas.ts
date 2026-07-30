@@ -527,6 +527,26 @@ export interface V1Expression {
   subquery?: V1Subquery;
 }
 
+/**
+ * FeatureAccessEntry is a single feature grant/deny.
+ */
+export interface V1FeatureAccessEntry {
+  featureKey?: string;
+  granted?: boolean;
+}
+
+export type V1FeatureAccessSubjectFeatures = { [key: string]: boolean };
+
+/**
+ * FeatureAccessSubject holds the effective feature access for a single subject (user or group).
+ */
+export interface V1FeatureAccessSubject {
+  subjectType?: string;
+  subjectId?: string;
+  subjectName?: string;
+  features?: V1FeatureAccessSubjectFeatures;
+}
+
 export interface V1GenerateAlertYAMLResponse {
   yaml?: string;
 }
@@ -843,6 +863,11 @@ export interface V1ListDeploymentsResponse {
   deployments?: V1Deployment[];
 }
 
+export interface V1ListFeatureAccessResponse {
+  orgDefaults?: V1FeatureAccessEntry[];
+  subjects?: V1FeatureAccessSubject[];
+}
+
 export interface V1ListGithubUserReposResponse {
   repos?: ListGithubUserReposResponseRepo[];
 }
@@ -1086,6 +1111,7 @@ export interface V1OrganizationPermissions {
   readOrgMembers?: boolean;
   manageOrgMembers?: boolean;
   manageOrgAdmins?: boolean;
+  accessAdmin?: boolean;
 }
 
 export interface V1OrganizationQuotas {
@@ -1202,6 +1228,11 @@ export interface V1ProjectPermissions {
   manageAlerts?: boolean;
   createBookmarks?: boolean;
   manageBookmarks?: boolean;
+  accessChat?: boolean;
+  accessDashboards?: boolean;
+  accessReports?: boolean;
+  accessAlerts?: boolean;
+  accessStudio?: boolean;
 }
 
 export interface V1ProjectRole {
@@ -1416,6 +1447,14 @@ export interface V1ServiceToken {
   prefix?: string;
   createdOn?: string;
   expiresOn?: string;
+}
+
+export interface V1SetFeatureAccessResponse {
+  [key: string]: unknown;
+}
+
+export interface V1SetOrgFeatureDefaultsResponse {
+  [key: string]: unknown;
 }
 
 export interface V1SetOrganizationMemberServiceRoleResponse {
@@ -1923,6 +1962,25 @@ export type AdminServiceCreateAssetBody = {
   extension?: string;
   public?: boolean;
   estimatedSizeBytes?: string;
+};
+
+export type AdminServiceListFeatureAccessParams = {
+  project?: string;
+  subjectType?: string;
+};
+
+/**
+ * SetFeatureAccessRequest sets feature access overrides for a user or user group.
+ */
+export type AdminServiceSetFeatureAccessBody = {
+  project?: string;
+  subjectType?: string;
+  subjectId?: string;
+  features?: V1FeatureAccessEntry[];
+};
+
+export type AdminServiceSetOrgFeatureDefaultsBody = {
+  features?: V1FeatureAccessEntry[];
 };
 
 export type AdminServiceListOrganizationInvitesParams = {

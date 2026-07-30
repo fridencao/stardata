@@ -364,6 +364,14 @@ type DB interface {
 
 	FindGitRepoTransfer(ctx context.Context, remote string) (*GitRepoTransfer, error)
 	InsertGitRepoTransfer(ctx context.Context, fromRemote, toRemote string) (*GitRepoTransfer, error)
+
+	// Feature access control
+	UpsertFeatureAccess(ctx context.Context, orgID string, projectID *string, subjectType, subjectID, featureKey string, granted bool, createdBy *string) error
+	DeleteFeatureAccess(ctx context.Context, orgID string, projectID *string, subjectType, subjectID, featureKey string) error
+	ListFeatureAccessRows(ctx context.Context, orgID string, projectID *string, subjectType *string, subjectID *string) ([]*FeatureAccessRow, error)
+	GetOrgFeatureDefaults(ctx context.Context, orgID string) (map[string]bool, error)
+	SetOrgFeatureDefault(ctx context.Context, orgID, featureKey string, granted bool) error
+	ResolveSubjectFeatureAccess(ctx context.Context, orgID, projectID, subjectType, subjectID string, features []string) (map[string]bool, error)
 }
 
 // Tx represents a database transaction. It can only be used to commit and rollback transactions.
@@ -852,6 +860,19 @@ type MagicAuthToken struct {
 type ResourceName struct {
 	Type string `json:"type"`
 	Name string `json:"name"`
+}
+
+// FeatureAccessRow represents a per-user / per-user-group feature access override.
+// ProjectID is nil when the override is org-scoped.
+type FeatureAccessRow struct {
+	ID          string    `db:"id"`
+	OrgID       string    `db:"org_id"`
+	ProjectID   *string   `db:"project_id"`
+	SubjectType string    `db:"subject_type"`
+	SubjectID   string    `db:"subject_id"`
+	FeatureKey  string    `db:"feature_key"`
+	Granted     bool      `db:"granted"`
+	CreatedOn   time.Time `db:"created_on"`
 }
 
 // MagicAuthTokenWithUser is a MagicAuthToken with additional information about the user who created it.

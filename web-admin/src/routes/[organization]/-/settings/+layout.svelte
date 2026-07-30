@@ -7,14 +7,20 @@
   import ContentContainer from "@rilldata/web-common/components/layout/ContentContainer.svelte";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
-  let { children }: { children: Snippet } = $props();
+  let { children, data }: { children: Snippet; data: any } = $props();
 
   let organization = $derived($page.params.organization);
   let basePage = $derived(`/${organization}/-/settings`);
+  let organizationPermissions = $derived(data.organizationPermissions);
 
   let navItems = $derived([
     { label: m.settings_nav_general(), route: "", hasPermission: true },
     { label: m.settings_nav_ai(), route: "/ai", hasPermission: true },
+    {
+      label: m.settings_nav_feature_access(),
+      route: "/feature-access",
+      hasPermission: organizationPermissions?.manageOrgMembers,
+    },
   ]);
 </script>
 

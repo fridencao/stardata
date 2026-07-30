@@ -5,6 +5,10 @@
 
   /** 路由前缀(web-local 为 "";web-admin 为 "/[org]/[project]" 等) */
   export let basePath = "";
+  /** 「对话」入口;null = 不显示(无功能权限) */
+  export let chatHref: string | null = `${basePath}/chat`;
+  /** 「看板」入口;null = 不显示(无功能权限) */
+  export let dashboardsHref: string | null = `${basePath}/boards`;
   /** 「我的报告」入口;null = 不显示(功能未启用或无权限) */
   export let reportsHref: string | null = null;
   /** 「我的订阅」入口;null = 不显示(功能未启用或无权限) */
@@ -12,8 +16,12 @@
 
   $: tabs = [
     { label: m.portal_tabs_home(), href: basePath || "/", exact: true, icon: Home },
-    { label: m.portal_tabs_chat(), href: `${basePath}/chat`, exact: false, icon: MessageSquare },
-    { label: m.portal_tabs_boards(), href: `${basePath}/boards`, exact: false, icon: LayoutDashboard },
+    ...(chatHref
+      ? [{ label: m.portal_tabs_chat(), href: chatHref, exact: false, icon: MessageSquare }]
+      : []),
+    ...(dashboardsHref
+      ? [{ label: m.portal_tabs_boards(), href: dashboardsHref, exact: false, icon: LayoutDashboard }]
+      : []),
     ...(reportsHref
       ? [{ label: m.portal_tab_reports(), href: reportsHref, exact: false, icon: FileText }]
       : []),

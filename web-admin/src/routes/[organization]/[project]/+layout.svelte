@@ -15,10 +15,7 @@
   import { untrack } from "svelte";
   import type { Snippet } from "svelte";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
-  import { featureFlags } from "@rilldata/web-common/features/feature-flags";
 
-  // 解构出各 flag 的 store（FeatureFlag 实例自带 subscribe），不能用 $featureFlags.xxx
-  const { reports, alerts } = featureFlags;
   import {
     branchPathPrefix,
     extractBranchFromPath,
@@ -304,10 +301,11 @@
           <div class="flex h-full min-h-0 flex-1 flex-col bg-gray-50">
             <PortalNav
               brandHref={`/${organization}/${project}`}
-              studioHref={runtime.projectPermissions?.manageProject
+              studioHref={runtime.projectPermissions?.accessStudio
                 ? `/${organization}/${project}/-/edit/studio`
                 : null}
-              adminHref={organizationPermissions?.manageOrg
+              adminHref={(organizationPermissions?.accessAdmin ??
+                organizationPermissions?.manageOrg)
                 ? `/${organization}/-/settings`
                 : null}
             >
@@ -319,10 +317,16 @@
             </PortalNav>
             <PortalTabs
               basePath={`/${organization}/${project}`}
-              reportsHref={$reports
+              chatHref={runtime.projectPermissions?.accessChat
+                ? `/${organization}/${project}/chat`
+                : null}
+              dashboardsHref={runtime.projectPermissions?.accessDashboards
+                ? `/${organization}/${project}/boards`
+                : null}
+              reportsHref={runtime.projectPermissions?.accessReports
                 ? `/${organization}/${project}/-/reports`
                 : null}
-              alertsHref={$alerts
+              alertsHref={runtime.projectPermissions?.accessAlerts
                 ? `/${organization}/${project}/-/alerts`
                 : null}
             />
