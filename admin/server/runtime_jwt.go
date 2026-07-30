@@ -199,22 +199,29 @@ func (s *Server) issueRuntimeToken(ctx context.Context, opts *issueRuntimeTokenO
 			runtime.ReadInstance,
 			runtime.ReadResolvers,
 		)
+	}
+	// Read-only repo + OLAP + profiling access is granted whenever the subject
+	// can see the deployment status or manage it — including on non-editable
+	// (prod) deployments. The studio/editor must read project files and
+	// subscribe to file events (SSE) to render the editing environment; without
+	// ReadRepo those calls fail with "action not allowed" and the SSE stream
+	// drops ("Lost connection to the editing environment").
+	if canReadStatus || canManage {
+		instancePermissions = append(instancePermissions,
+			runtime.ReadOLAP,
+			runtime.ReadProfiling,
+			runtime.ReadRepo,
+		)
+	}
+	if canManage {
+		instancePermissions = append(instancePermissions, runtime.EditTrigger)
+		// Write access (edit repo, manage instance) is only possible on editable deployments.
 		if opts.deployment.Editable {
-			instancePermissions = append(instancePermissions,
-				runtime.ReadOLAP,
-				runtime.ReadProfiling,
-				runtime.ReadRepo,
+			instancePermissions = append(
+				instancePermissions,
+				runtime.EditRepo,
+				runtime.ManageInstance,
 			)
-		}
-		if canManage {
-			instancePermissions = append(instancePermissions, runtime.EditTrigger)
-			if opts.deployment.Editable {
-				instancePermissions = append(
-					instancePermissions,
-					runtime.EditRepo,
-					runtime.ManageInstance,
-				)
-			}
 		}
 	}
 
