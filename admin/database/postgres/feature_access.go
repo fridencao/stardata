@@ -48,10 +48,11 @@ func (c *connection) ListFeatureAccessRows(ctx context.Context, orgID string, pr
 	args := []any{orgID}
 	var qry strings.Builder
 	qry.WriteString(`SELECT id, org_id, project_id, subject_type, subject_id, feature_key, granted, created_on FROM feature_access WHERE org_id = $1`)
-	if projectID != nil {
+	if projectID != nil && *projectID != "" {
 		qry.WriteString(` AND (project_id IS NOT DISTINCT FROM $2 OR project_id IS NULL)`)
 		args = append(args, *projectID)
 	} else {
+		// nil 或空串 "" 都表示「仅组织级」配置
 		qry.WriteString(` AND project_id IS NULL`)
 	}
 	if subjectType != nil {
@@ -129,8 +130,11 @@ func (c *connection) ResolveSubjectFeatureAccess(ctx context.Context, orgID, pro
 		return nil, fmt.Errorf("unknown subject_type %q", subjectType)
 	}
 
-	pid := projectID
-	rows, err := c.ListFeatureAccessRows(ctx, orgID, &pid, nil, nil)
+	var pid *string
+	if projectID != "" {
+		pid = &projectID
+	}
+	rows, err := c.ListFeatureAccessRows(ctx, orgID, pid, nil, nil)
 	if err != nil {
 		return nil, err
 	}
