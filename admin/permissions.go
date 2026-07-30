@@ -132,6 +132,11 @@ func (s *Service) ProjectPermissionsForUser(ctx context.Context, projectID, user
 			ManageAlerts:               true,
 			CreateBookmarks:            true,
 			ManageBookmarks:            true,
+			AccessChat:                 true,
+			AccessDashboards:           true,
+			AccessReports:              true,
+			AccessAlerts:               true,
+			AccessStudio:               true,
 		}, nil
 	}
 
@@ -196,6 +201,11 @@ func (s *Service) ProjectPermissionsForService(ctx context.Context, projectID, s
 			ManageAlerts:               true,
 			CreateBookmarks:            true,
 			ManageBookmarks:            true,
+			AccessChat:                 true,
+			AccessDashboards:           true,
+			AccessReports:              true,
+			AccessAlerts:               true,
+			AccessStudio:               true,
 		}, nil
 	}
 
