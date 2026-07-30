@@ -1622,6 +1622,8 @@
   "nav_tab_home": "Home",
   "nav_tab_query": "Query",
   "nav_tab_reports": "Reports",
+  "portal_tab_alerts": "My Alerts",
+  "portal_tab_reports": "My Reports",
   "nav_tab_settings": "Settings",
   "nav_tab_status": "Status",
   "org_check_out_projects": "Check out your data domains below.",

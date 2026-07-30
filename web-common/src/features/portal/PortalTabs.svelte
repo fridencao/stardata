@@ -15,10 +15,10 @@
     { label: m.portal_tabs_chat(), href: `${basePath}/chat`, exact: false, icon: MessageSquare },
     { label: m.portal_tabs_boards(), href: `${basePath}/boards`, exact: false, icon: LayoutDashboard },
     ...(reportsHref
-      ? [{ label: m.nav_tab_reports(), href: reportsHref, exact: false, icon: FileText }]
+      ? [{ label: m.portal_tab_reports(), href: reportsHref, exact: false, icon: FileText }]
       : []),
     ...(alertsHref
-      ? [{ label: m.nav_tab_alerts(), href: alertsHref, exact: false, icon: Bell }]
+      ? [{ label: m.portal_tab_alerts(), href: alertsHref, exact: false, icon: Bell }]
       : []),
   ];
 
