@@ -147,27 +147,31 @@
           {reportSpec.displayName}
         </h1>
         <div class="grow"></div>
-        <RunNowButton {organization} {project} {report} />
-        {#if !$isReportCreatedByCode.data}
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-              <IconButton ariaLabel={m.report_context_menu_aria()}>
-                <ThreeDot size="16px" />
-              </IconButton>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content align="start">
-              <DropdownMenu.Item
-                onclick={handleEditReport}
-                disabled={!$exploreIsValid}
-              >
-                {m.report_edit()}
-              </DropdownMenu.Item>
-              <DropdownMenu.Item onclick={handleDeleteReport}>
-                {m.report_delete()}
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
-        {/if}
+        <ProjectAccessControls {organization} {project}>
+          <svelte:fragment slot="manage-project">
+            <RunNowButton {organization} {project} {report} />
+            {#if !$isReportCreatedByCode.data}
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <IconButton ariaLabel={m.report_context_menu_aria()}>
+                    <ThreeDot size="16px" />
+                  </IconButton>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content align="start">
+                  <DropdownMenu.Item
+                    onclick={handleEditReport}
+                    disabled={!$exploreIsValid}
+                  >
+                    {m.report_edit()}
+                  </DropdownMenu.Item>
+                  <DropdownMenu.Item onclick={handleDeleteReport}>
+                    {m.report_delete()}
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
+            {/if}
+          </svelte:fragment>
+        </ProjectAccessControls>
       </div>
     </div>
 

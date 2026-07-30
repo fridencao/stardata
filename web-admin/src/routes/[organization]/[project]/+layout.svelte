@@ -319,12 +319,10 @@
             </PortalNav>
             <PortalTabs
               basePath={`/${organization}/${project}`}
-              reportsHref={$reports &&
-              runtime.projectPermissions?.manageProject
+              reportsHref={$reports
                 ? `/${organization}/${project}/-/reports`
                 : null}
-              alertsHref={$alerts &&
-              runtime.projectPermissions?.manageProject
+              alertsHref={$alerts
                 ? `/${organization}/${project}/-/alerts`
                 : null}
             />
