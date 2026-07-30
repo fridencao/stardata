@@ -13,6 +13,7 @@
   import BranchDeploymentStopped from "@rilldata/web-admin/features/branches/BranchDeploymentStopped.svelte";
   import EditSessionLoading from "@rilldata/web-admin/features/edit-session/EditSessionLoading.svelte";
   import EditSessionTimeoutBanner from "@rilldata/web-admin/features/edit-session/EditSessionTimeoutBanner.svelte";
+  import EditSessionGate from "@rilldata/web-admin/features/edit-session/EditSessionGate.svelte";
   import ProjectHeader from "../../../../../features/projects/header/ProjectHeader.svelte";
   import { baseGetProjectQueryOptions } from "@rilldata/web-admin/features/projects/project-query-options";
   import SlimProjectHeader from "@rilldata/web-admin/features/projects/SlimProjectHeader.svelte";
@@ -183,40 +184,48 @@
       bind:starting
     />
   {:else if isReady && deployment?.id && instanceId && runtimeHost && jwt}
-    {#key `${runtimeHost}::${instanceId}::${hasPrimaryDeployment}`}
-      <RuntimeProvider host={runtimeHost} {instanceId} {jwt}>
-        {#if !inProjectWelcomePage && !inStudioPage}
-          <ProjectHeader
-            {organization}
-            {project}
-            {projectPermissions}
-            manageOrgAdmins={organizationPermissions?.manageOrgAdmins}
-            manageOrgMembers={organizationPermissions?.manageOrgMembers}
-            readProjects={organizationPermissions?.readProjects}
-            {primaryBranch}
-            {planDisplayName}
-            {organizationLogoUrl}
-            editContext={true}
-          />
-        {/if}
-        {#if !inProjectWelcomePage}
-          <EditSessionTimeoutBanner
-            usedOn={deployment.usedOn}
-            {devTtlSeconds}
-          />
-        {/if}
-        <FileAndResourceWatcher
-          lifecycle="none"
-          {onBeforeReconnect}
-          errorBody="Lost connection to the editing environment. Try ending the session and starting a new one."
-        >
-          {#if !inProjectWelcomePage}
-            <WelcomeRedirector />
+    {#if deployment.editable}
+      {#key `${runtimeHost}::${instanceId}::${hasPrimaryDeployment}`}
+        <RuntimeProvider host={runtimeHost} {instanceId} {jwt}>
+          {#if !inProjectWelcomePage && !inStudioPage}
+            <ProjectHeader
+              {organization}
+              {project}
+              {projectPermissions}
+              manageOrgAdmins={organizationPermissions?.manageOrgAdmins}
+              manageOrgMembers={organizationPermissions?.manageOrgMembers}
+              readProjects={organizationPermissions?.readProjects}
+              {primaryBranch}
+              {planDisplayName}
+              {organizationLogoUrl}
+              editContext={true}
+            />
           {/if}
-          <slot />
-        </FileAndResourceWatcher>
-      </RuntimeProvider>
-    {/key}
+          {#if !inProjectWelcomePage}
+            <EditSessionTimeoutBanner
+              usedOn={deployment.usedOn}
+              {devTtlSeconds}
+            />
+          {/if}
+          <FileAndResourceWatcher
+            lifecycle="none"
+            {onBeforeReconnect}
+            errorBody="Lost connection to the editing environment. Try ending the session and starting a new one."
+          >
+            {#if !inProjectWelcomePage}
+              <WelcomeRedirector />
+            {/if}
+            <slot />
+          </FileAndResourceWatcher>
+        </RuntimeProvider>
+      {/key}
+    {:else}
+      <!-- Reached an edit URL whose resolved deployment is not editable
+           (e.g. the primary prod deployment). Hand off to the gate, which
+           auto-resumes the latest editable dev session by rewriting the URL
+           onto its `@branch`, or offers to start a new edit session. -->
+      <EditSessionGate {organization} {project} activeBranch={branch} {primaryBranch} />
+    {/if}
   {:else}
     <SlimProjectHeader
       {organization}
