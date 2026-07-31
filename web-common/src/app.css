@@ -547,15 +547,8 @@
 /* Compact enterprise BI type scale lives in tailwind.config.ts
    (theme.extend.fontSize), so text-xs..text-3xl resolve to compact values
    everywhere — markup classes, style-block @apply and !important variants.
-   Arbitrary px utilities are remapped one notch down here to keep legacy
-   upstream markup on the compact scale. Selectors must be escaped
-   (.text-\[13px\]) to actually match Tailwind's generated class names. */
-.text-\[13px\] { font-size: 12px; }
-.text-\[12px\] { font-size: 11px; }
-.text-\[11px\] { font-size: 10px; }
-.text-\[10\.5px\] { font-size: 9.5px; }
-.text-\[10px\] { font-size: 9px; }
-.text-\[9\.5px\] { font-size: 8.5px; }
+   With body at 12px the scale matches upstream's arbitrary px utilities
+   (text-[12px] etc.), so no remapping of those is needed. */
 
 html {
   @apply text-fg-primary;
@@ -571,7 +564,7 @@ body {
     "SF Pro Text",
     "Helvetica Neue",
     sans-serif;
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.5;
 
   --system:

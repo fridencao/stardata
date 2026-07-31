@@ -114,23 +114,23 @@
     @apply text-fg-primary;
   }
   :global(.canvas-markdown h1) {
-    font-size: 24px;
-    @apply font-medium;
-  }
-  :global(.canvas-markdown h2) {
-    font-size: 20px;
-    @apply font-medium;
-  }
-  :global(.canvas-markdown h3) {
-    font-size: 18px;
-    @apply font-medium;
-  }
-  :global(.canvas-markdown h4) {
     font-size: 16px;
     @apply font-medium;
   }
+  :global(.canvas-markdown h2) {
+    font-size: 15px;
+    @apply font-medium;
+  }
+  :global(.canvas-markdown h3) {
+    font-size: 14px;
+    @apply font-medium;
+  }
+  :global(.canvas-markdown h4) {
+    font-size: 13px;
+    @apply font-medium;
+  }
   :global(.canvas-markdown p) {
-    font-size: 11px;
+    font-size: 12px;
     @apply my-2;
   }
 

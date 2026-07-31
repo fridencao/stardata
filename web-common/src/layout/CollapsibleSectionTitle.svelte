@@ -44,7 +44,7 @@
     >
       <div
         class="text-ellipsis overflow-hidden whitespace-nowrap text-fg-primary font-semibold"
-        style="font-size: 11px;"
+        style="font-size: 12px;"
       >
         <slot />
       </div>
