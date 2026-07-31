@@ -8,19 +8,38 @@
   import { createRuntimeServiceGetFile } from "@rilldata/web-common/runtime-client";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
+  import type { RequestsBackend } from "./requests-backend";
 
   // 语义层入口，需求闭环用：web-admin 会传带路由前缀的地址
   export let semanticsHref = "/studio/semantics";
+  // 需求清单后端：web-admin 注入 admin 通道（虚拟文件存在 Postgres，
+  // runtime 的 /requests.yaml 读不到）；web-local 不传，读写 runtime 文件
+  export let backend: RequestsBackend | null = null;
 
   const runtimeClient = useRuntimeClient();
 
-  // retry=false — file missing (404) means no requests yet
+  // retry=false — file missing (404) means no requests yet; disabled entirely when a backend is injected
   $: fileQuery = createRuntimeServiceGetFile(
     runtimeClient,
     { path: REQUESTS_PATH },
-    { query: { retry: false } },
+    { query: { retry: false, enabled: !backend } },
   );
-  $: items = $fileQuery.isError ? [] : parseRequestsYaml($fileQuery.data?.blob);
+
+  let backendItems: RequestItem[] = [];
+  $: if (backend) void loadBackendItems(backend);
+  async function loadBackendItems(b: RequestsBackend) {
+    try {
+      backendItems = await b.list();
+    } catch {
+      backendItems = [];
+    }
+  }
+
+  $: items = backend
+    ? backendItems
+    : $fileQuery.isError
+      ? []
+      : parseRequestsYaml($fileQuery.data?.blob);
   $: openItems = items.filter((it) => it.status === "open");
   $: doneItems = items.filter((it) => it.status === "done");
 
@@ -32,7 +51,12 @@
       it === item ? { ...it, status: "done" as const } : it,
     );
     try {
-      await writeRequests(runtimeClient, next);
+      if (backend) {
+        await backend.save(next);
+        backendItems = next;
+      } else {
+        await writeRequests(runtimeClient, next);
+      }
     } finally {
       saving = false;
     }

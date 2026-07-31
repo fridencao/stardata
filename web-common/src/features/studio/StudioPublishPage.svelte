@@ -21,12 +21,15 @@
   } from "@rilldata/web-common/features/portal/publish/publish-store";
   import RequestsTodo from "./RequestsTodo.svelte";
   import type { PublishBackend, PublishEntry } from "./publish-backend";
+  import type { RequestsBackend } from "./requests-backend";
   import { eventBus } from "@rilldata/web-common/lib/event-bus/event-bus";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   // 发布模型后端（web-admin 注入；web-local 不传则隐藏发布/历史区块）
   export let backend: PublishBackend | null = null;
   export let semanticsBase = "/studio/semantics";
+  // 需求清单后端（web-admin 注入 admin 通道；web-local 不传则读写 runtime 文件）
+  export let requestsBackend: RequestsBackend | null = null;
 
   const client = useRuntimeClient();
   const publishFile = usePublishFile(client);
@@ -330,4 +333,4 @@
   </div>
 {/if}
 
-<RequestsTodo semanticsHref={semanticsBase} />
+<RequestsTodo semanticsHref={semanticsBase} backend={requestsBackend} />

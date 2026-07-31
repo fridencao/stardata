@@ -41,6 +41,7 @@ type dataRequestsDoc struct {
 // dataRequestsForOrgAndProject serves the data-request backlog endpoint (StarData):
 //   - POST: business users submit a data requirement from the portal chat (requires ReadProject).
 //   - GET: technical users list the backlog in Studio (requires ManageProject).
+//   - PUT: technical users replace the backlog, e.g. marking items done (requires ManageProject).
 //
 // Requests are persisted as a virtual file in the "dev" environment, so submissions work even
 // when the viewer has no runtime repo permissions and no dev deployment is running.
@@ -75,6 +76,11 @@ func (s *Server) dataRequestsForOrgAndProject(w http.ResponseWriter, r *http.Req
 			return err
 		}
 		return writeJSON(w, map[string]any{"requests": items})
+	case http.MethodPut:
+		if !perms.ManageProject {
+			return httputil.Errorf(http.StatusForbidden, "does not have permission to update data requests")
+		}
+		return s.replaceDataRequests(w, r, proj.ID)
 	default:
 		return httputil.Errorf(http.StatusMethodNotAllowed, "method %s not allowed", r.Method)
 	}
@@ -114,6 +120,52 @@ func (s *Server) submitDataRequest(w http.ResponseWriter, r *http.Request, proje
 	}
 	if len(data) > 1<<17 { // Virtual file limit is 128kb
 		return httputil.Errorf(http.StatusRequestEntityTooLarge, "data request backlog is full, resolve existing requests first")
+	}
+
+	err = s.admin.DB.UpsertVirtualFile(r.Context(), &database.InsertVirtualFileOptions{
+		ProjectID:   projectID,
+		Environment: dataRequestsEnvironment,
+		Path:        dataRequestsVirtualPath,
+		Data:        data,
+	})
+	if err != nil {
+		return httputil.Error(http.StatusInternalServerError, err)
+	}
+
+	w.WriteHeader(http.StatusNoContent)
+	return nil
+}
+
+// replaceDataRequests overwrites the backlog with the provided list (Studio "mark done" flow).
+// Items are round-tripped from GET, so they are already HTML-encoded — no re-encoding here.
+func (s *Server) replaceDataRequests(w http.ResponseWriter, r *http.Request, projectID string) error {
+	var body struct {
+		Requests []dataRequestItem `json:"requests"`
+	}
+	dec := json.NewDecoder(http.MaxBytesReader(w, r.Body, 1<<17))
+	if err := dec.Decode(&body); err != nil {
+		return httputil.Errorf(http.StatusBadRequest, "invalid request body: %s", err.Error())
+	}
+
+	items := body.Requests
+	if items == nil {
+		items = []dataRequestItem{}
+	}
+	for i := range items {
+		if strings.TrimSpace(items[i].Question) == "" {
+			return httputil.Errorf(http.StatusBadRequest, "requests[%d].question is required", i)
+		}
+		if items[i].Status != "open" && items[i].Status != "done" {
+			return httputil.Errorf(http.StatusBadRequest, "requests[%d].status must be %q or %q", i, "open", "done")
+		}
+	}
+
+	data, err := yaml.Marshal(dataRequestsDoc{Requests: items})
+	if err != nil {
+		return httputil.Error(http.StatusInternalServerError, err)
+	}
+	if len(data) > 1<<17 { // Virtual file limit is 128kb
+		return httputil.Errorf(http.StatusRequestEntityTooLarge, "data request backlog is too large")
 	}
 
 	err = s.admin.DB.UpsertVirtualFile(r.Context(), &database.InsertVirtualFileOptions{

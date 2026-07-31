@@ -1,5 +1,7 @@
 import { page } from "$app/stores";
 import { AXIOS_INSTANCE } from "@rilldata/web-admin/client/http-client";
+import type { RequestItem } from "@rilldata/web-common/features/chat/requests/requests-file";
+import type { RequestsBackend } from "@rilldata/web-common/features/studio/requests-backend";
 import { get } from "svelte/store";
 
 /**
@@ -24,4 +26,29 @@ export async function submitDataRequest(
       ...(note?.trim() ? { note: note.trim() } : {}),
     },
   );
+}
+
+/**
+ * Read/write backend for the Studio backlog views (StarData).
+ *
+ * The backlog lives in the admin virtual file, not in the runtime repo at
+ * /requests.yaml, so Studio must list and update it through the admin service
+ * (GET/PUT require ManageProject).
+ */
+export function createRequestsBackend(
+  organization: string,
+  project: string,
+): RequestsBackend {
+  const base = `/v1/orgs/${encodeURIComponent(organization)}/projects/${encodeURIComponent(project)}/data-requests`;
+  return {
+    async list(): Promise<RequestItem[]> {
+      const { data } = await AXIOS_INSTANCE.get<{ requests: RequestItem[] }>(
+        base,
+      );
+      return data?.requests ?? [];
+    },
+    async save(items: RequestItem[]): Promise<void> {
+      await AXIOS_INSTANCE.put(base, { requests: items });
+    },
+  };
 }

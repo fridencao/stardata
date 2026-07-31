@@ -18,9 +18,12 @@
     usePublishFile,
   } from "@rilldata/web-common/features/portal/publish/publish-store";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
+  import type { RequestsBackend } from "./requests-backend";
 
   /** Studio 路由前缀(web-local "/studio";web-admin "…/-/edit/studio") */
   export let studioBase = "/studio";
+  /** 需求清单后端：web-admin 注入 admin 通道；web-local 不传，读 runtime 文件 */
+  export let requestsBackend: RequestsBackend | null = null;
 
   const client = useRuntimeClient();
   const publishFile = usePublishFile(client);
@@ -29,13 +32,28 @@
   const requestsFileQuery = createRuntimeServiceGetFile(
     client,
     { path: REQUESTS_PATH },
-    { query: { retry: false } },
+    { query: { retry: false, enabled: !requestsBackend } },
   );
-  $: openRequestCount = $requestsFileQuery.isError
-    ? 0
-    : parseRequestsYaml($requestsFileQuery.data?.blob).filter(
+
+  let backendOpenCount = 0;
+  $: if (requestsBackend) void loadBackendCount(requestsBackend);
+  async function loadBackendCount(b: RequestsBackend) {
+    try {
+      backendOpenCount = (await b.list()).filter(
         (it) => it.status === "open",
       ).length;
+    } catch {
+      backendOpenCount = 0;
+    }
+  }
+
+  $: openRequestCount = requestsBackend
+    ? backendOpenCount
+    : $requestsFileQuery.isError
+      ? 0
+      : parseRequestsYaml($requestsFileQuery.data?.blob).filter(
+          (it) => it.status === "open",
+        ).length;
 
   $: gate = $publishFile.isSuccess
     ? parsePublishYaml(String($publishFile.data?.blob ?? ""))
