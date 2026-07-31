@@ -17,6 +17,13 @@ export default defineConfig({
   server: {
     port: 3000,
     strictPort: true,
+    // Local dev: forward runtime API + auth + Connect-RPC protocol paths to the
+    // standalone StarData backend running on :9009 (started with --no-ui).
+    proxy: {
+      "/v1": { target: "http://localhost:9009", changeOrigin: true },
+      "/auth": { target: "http://localhost:9009", changeOrigin: true },
+      "^/stardata\\.": { target: "http://localhost:9009", changeOrigin: true },
+    },
   },
   preview: {
     port: 3000,
