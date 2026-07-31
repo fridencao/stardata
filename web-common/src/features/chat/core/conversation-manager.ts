@@ -108,8 +108,9 @@ export class ConversationManager {
   > {
     return createQuery(
       getRuntimeServiceListConversationsQueryOptions(this.client, {
-        // Filter to only show Rill client conversations, excluding MCP conversations
-        userAgentPattern: "rill%",
+        // Filter to only show StarData client conversations (the chat server
+        // stamps sessions with "stardata/<version>"), excluding MCP conversations
+        userAgentPattern: "stardata%",
       }),
       queryClient,
     );
