@@ -213,7 +213,9 @@
 
   <!-- Main chat area: reuse Rill's Messages + ChatInput (typography preserved) -->
   <div class="portal-main">
-    <div class="portal-messages">
+    <!-- `chat-messages-wrapper` class is required: Messages.svelte's fullpage
+         auto-scroll finds its scroll container via closest(".chat-messages-wrapper"). -->
+    <div class="portal-messages chat-messages-wrapper">
       <Messages {conversationManager} layout="fullpage" config={projectChat} />
     </div>
 
@@ -433,7 +435,9 @@
   .portal-messages {
     flex: 1;
     min-height: 0;
-    overflow: hidden;
+    /* The scroll container for the fullpage Messages variant (which has no
+       overflow of its own) — mirrors FullPageChat's .chat-messages-wrapper. */
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
   }
