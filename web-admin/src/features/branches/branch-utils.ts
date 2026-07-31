@@ -61,7 +61,8 @@ export function branchPathPrefix(branch: string | undefined): string {
  * the navigation should be redirected, or null if no redirect is needed.
  *
  * Used by `handleBranchNavigation` to transparently preserve the active
- * `@branch` segment on project-internal navigations.
+ * `@branch` segment while navigating *within* the editor (`/-/edit`).
+ * Navigations that leave the editor are left branchless.
  */
 export function getBranchRedirect(
   to: URL,
@@ -72,8 +73,12 @@ export function getBranchRedirect(
   const prefix = `/${organization}/${project}`;
   if (!to.pathname.startsWith(prefix + "/") && to.pathname !== prefix)
     return null;
-  if (to.pathname.includes("/-/share/")) return null;
   if (extractBranchFromPath(to.pathname)) return null;
+  // Branches are only valid inside the editor (`/-/edit`). The project layout
+  // rejects `@branch` on non-edit routes, so never inject a branch into
+  // project-management or portal pages (settings, status, home, dashboards,
+  // share links). Leaving the editor drops the branch and shows production.
+  if (!to.pathname.startsWith(`${prefix}/-/edit`)) return null;
   return injectBranchIntoPath(to.pathname, activeBranch) + to.search + to.hash;
 }
 

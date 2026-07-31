@@ -144,34 +144,34 @@ describe("branch-utils", () => {
     const branch = "staging";
     const url = (path: string) => new URL(`http://localhost${path}`);
 
-    it("returns redirect URL for a project-internal path missing @branch", () => {
+    it("injects @branch for an edit path missing the branch", () => {
       expect(
         getBranchRedirect(
-          url("/acme/analytics/explore/revenue-overview"),
+          url("/acme/analytics/-/edit/studio/sources"),
           branch,
           org,
           proj,
         ),
-      ).toBe("/acme/analytics/@staging/explore/revenue-overview");
+      ).toBe("/acme/analytics/@staging/-/edit/studio/sources");
     });
 
     it("preserves search params and hash", () => {
       expect(
         getBranchRedirect(
-          url("/acme/analytics/explore/revenue-overview?filter=us#section"),
+          url("/acme/analytics/-/edit/studio/sources?filter=us#section"),
           branch,
           org,
           proj,
         ),
       ).toBe(
-        "/acme/analytics/@staging/explore/revenue-overview?filter=us#section",
+        "/acme/analytics/@staging/-/edit/studio/sources?filter=us#section",
       );
     });
 
     it("returns null if path already has @branch", () => {
       expect(
         getBranchRedirect(
-          url("/acme/analytics/@staging/explore/revenue-overview"),
+          url("/acme/analytics/@staging/-/edit/studio/sources"),
           branch,
           org,
           proj,
@@ -188,7 +188,7 @@ describe("branch-utils", () => {
     it("returns null for a different project that shares a name prefix", () => {
       expect(
         getBranchRedirect(
-          url("/acme/analytics-v2/explore/dashboard"),
+          url("/acme/analytics-v2/-/edit/studio/sources"),
           branch,
           org,
           proj,
@@ -196,21 +196,16 @@ describe("branch-utils", () => {
       ).toBeNull();
     });
 
-    it("returns null for public share URLs", () => {
-      expect(
-        getBranchRedirect(
-          url("/acme/analytics/-/share/abc123"),
-          branch,
-          org,
-          proj,
-        ),
-      ).toBeNull();
-    });
-
-    it("handles the bare project path", () => {
-      expect(getBranchRedirect(url("/acme/analytics"), branch, org, proj)).toBe(
-        "/acme/analytics/@staging",
-      );
+    it("returns null for non-edit project pages (branch is editor-only)", () => {
+      for (const path of [
+        "/acme/analytics",
+        "/acme/analytics/-/settings",
+        "/acme/analytics/-/status",
+        "/acme/analytics/explore/revenue-overview",
+        "/acme/analytics/-/share/abc123",
+      ]) {
+        expect(getBranchRedirect(url(path), branch, org, proj)).toBeNull();
+      }
     });
   });
 
@@ -242,20 +237,20 @@ describe("branch-utils", () => {
       consumeSkipBranchInjection();
     });
 
-    it("redirects a branch-unaware project URL", () => {
+    it("redirects a branch-unaware edit URL", () => {
       const { nav, navigateFn } = makeNav(
-        "/acme/analytics/explore/revenue-overview",
+        "/acme/analytics/-/edit/studio/sources",
       );
       handleBranchNavigation(nav, branch, org, proj, navigateFn);
       expect(nav.cancel).toHaveBeenCalled();
       expect(navigateFn).toHaveBeenCalledWith(
-        "/acme/analytics/@staging/explore/revenue-overview",
+        "/acme/analytics/@staging/-/edit/studio/sources",
       );
     });
 
     it("does nothing when there is no active branch", () => {
       const { nav, navigateFn } = makeNav(
-        "/acme/analytics/explore/revenue-overview",
+        "/acme/analytics/-/edit/studio/sources",
       );
       handleBranchNavigation(nav, undefined, org, proj, navigateFn);
       expect(nav.cancel).not.toHaveBeenCalled();
@@ -264,7 +259,7 @@ describe("branch-utils", () => {
 
     it("does nothing for popstate navigations", () => {
       const { nav, navigateFn } = makeNav(
-        "/acme/analytics/explore/revenue-overview",
+        "/acme/analytics/-/edit/studio/sources",
         "popstate",
       );
       handleBranchNavigation(nav, branch, org, proj, navigateFn);
@@ -274,12 +269,12 @@ describe("branch-utils", () => {
 
     it("preserves search params and hash in redirect", () => {
       const { nav, navigateFn } = makeNav(
-        "/acme/analytics/explore/revenue-overview?filter=us#section",
+        "/acme/analytics/-/edit/studio/sources?filter=us#section",
       );
       handleBranchNavigation(nav, branch, org, proj, navigateFn);
       expect(nav.cancel).toHaveBeenCalled();
       expect(navigateFn).toHaveBeenCalledWith(
-        "/acme/analytics/@staging/explore/revenue-overview?filter=us#section",
+        "/acme/analytics/@staging/-/edit/studio/sources?filter=us#section",
       );
     });
 
