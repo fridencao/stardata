@@ -12,8 +12,12 @@ export const load = async ({
   url,
   parent,
 }) => {
-  const { runtime } = await parent();
+  const { runtime, user } = await parent();
   const client = getCloudRuntimeClient(runtime);
+  // Scope the persisted conversation ID by user so switching accounts in the
+  // same tab never replays another user's conversation (runtime rejects it
+  // with "action not allowed").
+  const userId = user?.id;
 
   const fetchedFeatureFlags = await getFeatureFlags(client);
 
@@ -28,12 +32,16 @@ export const load = async ({
       // If user explicitly wants a new conversation, clear stored ID and skip redirect logic
       const isExplicitNewConversation = url.searchParams.get("new") === "true";
       if (isExplicitNewConversation) {
-        setLastConversationId(organization, project, null);
+        setLastConversationId(organization, project, null, userId);
         return;
       }
 
       // Try to redirect to the last conversation
-      const lastConversationId = getLastConversationId(organization, project);
+      const lastConversationId = getLastConversationId(
+        organization,
+        project,
+        userId,
+      );
       if (lastConversationId) {
         throw redirect(
           307,
@@ -52,7 +60,7 @@ export const load = async ({
       }
 
       // Store this conversation ID as the last accessed conversation
-      setLastConversationId(organization, project, conversationId);
+      setLastConversationId(organization, project, conversationId, userId);
 
       // Go to the conversation
       return;

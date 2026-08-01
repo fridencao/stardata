@@ -17,7 +17,6 @@
   import * as Popover from "@rilldata/web-common/components/popover";
   import Tooltip from "@rilldata/web-common/components/tooltip/Tooltip.svelte";
   import TooltipContent from "@rilldata/web-common/components/tooltip/TooltipContent.svelte";
-  import { getGitUrlFromRemote } from "@rilldata/web-common/features/project/deploy/github-utils";
   import MergeConflictResolutionDialog from "@rilldata/web-common/features/project/MergeConflictResolutionDialog.svelte";
   import { extractErrorMessage } from "@rilldata/web-common/lib/errors";
   import { eventBus } from "@rilldata/web-common/lib/event-bus/event-bus";
@@ -29,7 +28,7 @@
   } from "@rilldata/web-common/runtime-client";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import type { ConnectError } from "@connectrpc/connect";
-  import { ExternalLink, GitPullRequest } from "lucide-svelte";
+  import { GitPullRequest } from "lucide-svelte";
   import ChangedFilesList from "@rilldata/web-common/features/project/changes/ChangedFilesList.svelte";
   import ChangedFilesDialog from "@rilldata/web-common/features/project/changes/ChangedFilesDialog.svelte";
   import { buildPostMergeUrl } from "./post-merge-url";
@@ -62,8 +61,8 @@
   const client = useRuntimeClient();
   const gitMergeMutation = createRuntimeServiceGitMergeToBranchMutation(client);
   const gitStatusQuery = getDeploymentGithubStatus(client, primaryBranch);
-  // Raw current-branch status drives the branch name and GitHub link shown in
-  // the popover; the derived booleans come from `getDeploymentGithubStatus`.
+  // Raw current-branch status drives the branch name shown in the popover;
+  // the derived booleans come from `getDeploymentGithubStatus`.
   const currentBranchStatusQuery = createRuntimeServiceGitStatus(client, {});
   // Query GetProject without a branch param so `data.deployment` reflects
   // the project's primary (prod) deployment. Self-managed projects can lack
@@ -85,10 +84,6 @@
   } = $gitStatusQuery);
 
   $: currentBranch = $currentBranchStatusQuery.data?.branch ?? "";
-  $: branchUrl =
-    $currentBranchStatusQuery.data?.githubUrl && currentBranch
-      ? `${getGitUrlFromRemote($currentBranchStatusQuery.data.githubUrl)}/tree/${encodeURIComponent(currentBranch)}`
-      : "";
   $: projectLoaded = $projectQuery.data !== undefined;
   $: prodDeployment = $projectQuery.data?.deployment;
   $: prodDeploymentActive =
@@ -291,17 +286,6 @@
             diffDialogOpen = true;
           }}
         />
-        {#if branchUrl}
-          <a
-            class="github-link"
-            href={branchUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {m.edit_view_branch_on_github()}
-            <ExternalLink size="11" />
-          </a>
-        {/if}
         <Button
           type="primary"
           small
@@ -347,10 +331,3 @@
   remoteBranch={primaryBranch}
   initialPath={diffInitialPath}
 />
-
-<style lang="postcss">
-  .github-link {
-    @apply inline-flex items-center gap-x-1 text-xs text-fg-secondary;
-    @apply hover:text-fg-primary hover:underline;
-  }
-</style>

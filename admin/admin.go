@@ -44,7 +44,6 @@ type Service struct {
 	URLs                       *URLs
 	ProvisionerSet             map[string]provisioner.Provisioner
 	Email                      *email.Client
-	Github                     Github
 	AI                         drivers.AIService
 	Assets                     assetstore.Store
 	Used                       *usedFlusher
@@ -62,7 +61,7 @@ type Service struct {
 	PaymentProvider            payment.Provider
 }
 
-func New(ctx context.Context, opts *Options, logger *zap.Logger, issuer *auth.Issuer, emailClient *email.Client, github Github, aiService drivers.AIService, assets assetstore.Store, biller billing.Biller, p payment.Provider) (*Service, error) {
+func New(ctx context.Context, opts *Options, logger *zap.Logger, issuer *auth.Issuer, emailClient *email.Client, aiService drivers.AIService, assets assetstore.Store, biller billing.Biller, p payment.Provider) (*Service, error) {
 	// Default the external gRPC URL to the external (HTTP) URL when not set separately.
 	if opts.ExternalGRPCURL == "" {
 		opts.ExternalGRPCURL = opts.ExternalURL
@@ -134,7 +133,6 @@ func New(ctx context.Context, opts *Options, logger *zap.Logger, issuer *auth.Is
 		URLs:                       urls,
 		ProvisionerSet:             provSet,
 		Email:                      emailClient,
-		Github:                     github,
 		AI:                         aiService,
 		Assets:                     assets,
 		Used:                       newUsedFlusher(logger, db),

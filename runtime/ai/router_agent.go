@@ -7,6 +7,7 @@ import (
 	"regexp"
 	"slices"
 	"strings"
+	"unicode/utf8"
 
 	"github.com/google/jsonschema-go/jsonschema"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
@@ -228,15 +229,74 @@ You must respond with ONLY a JSON object containing the agent choice, no other t
 // whitespaceRegexp matches one or more whitespace characters (including newlines).
 var whitespaceRegexp = regexp.MustCompile(`\s+`)
 
+// chatReferenceRegexp matches an inline chat-reference tag embedded in a prompt,
+// e.g. `<chat-reference>type="metricsView" metricsView="sales"</chat-reference>`.
+// It mirrors the frontend's INLINE_CHAT_CONTEXT_TAG (see inline-context.ts).
+var chatReferenceRegexp = regexp.MustCompile(`<chat-reference>(.*?)</chat-reference>`)
+
+// chatReferenceAttrRegexp extracts key="value" attribute pairs from a tag body.
+var chatReferenceAttrRegexp = regexp.MustCompile(`(\w+)="([^"]*)"`)
+
+// humanizeChatReferences replaces inline <chat-reference> tags with a readable
+// "@name" mention so conversation titles derived from the prompt don't leak the
+// raw markup. The displayed name mirrors the frontend's notion of a reference's
+// primary value (see inline-context.ts normalizeInlineContext).
+func humanizeChatReferences(message string) string {
+	return chatReferenceRegexp.ReplaceAllStringFunc(message, func(match string) string {
+		body := chatReferenceRegexp.FindStringSubmatch(match)[1]
+		attrs := map[string]string{}
+		for _, m := range chatReferenceAttrRegexp.FindAllStringSubmatch(body, -1) {
+			attrs[m[1]] = m[2]
+		}
+		// Pick the most specific label available for the reference type.
+		var label string
+		switch attrs["type"] {
+		case "measure":
+			label = attrs["measure"]
+		case "dimension":
+			label = attrs["dimension"]
+		case "timeRange":
+			label = attrs["timeRange"]
+		case "column":
+			label = attrs["column"]
+		case "model":
+			label = attrs["model"]
+		case "canvasComponent":
+			label = attrs["canvasComponent"]
+		case "canvas":
+			label = attrs["canvas"]
+		case "metricsView":
+			label = attrs["metricsView"]
+		}
+		if label == "" {
+			// Fall back to any identifying attribute.
+			for _, k := range []string{"metricsView", "model", "canvas", "value"} {
+				if v := attrs[k]; v != "" {
+					label = v
+					break
+				}
+			}
+		}
+		if label == "" {
+			return ""
+		}
+		return "@" + label
+	})
+}
+
 // promptToTitle generates a truncated conversation title from a prompt.
 func promptToTitle(message string) string {
+	// Replace inline chat-reference tags with readable @mentions so the raw
+	// markup never surfaces in the conversation title.
+	title := humanizeChatReferences(message)
 	// Collapse whitespace to single spaces.
-	title := whitespaceRegexp.ReplaceAllString(message, " ")
+	title = whitespaceRegexp.ReplaceAllString(title, " ")
 	title = strings.TrimSpace(title)
 
-	// Truncate to 50 characters.
-	if len(title) > 50 {
-		title = title[:47] + "..."
+	// Truncate to 50 characters. Count runes (not bytes) so multi-byte
+	// characters (e.g. Chinese) are never split into invalid UTF-8.
+	if utf8.RuneCountInString(title) > 50 {
+		title = string([]rune(title)[:47]) + "..."
 	}
 
 	// Fallback title if empty.

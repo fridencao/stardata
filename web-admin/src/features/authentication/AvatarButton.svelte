@@ -76,10 +76,6 @@
   }
 
   $: ({ params } = $page);
-
-  function handlePylon() {
-    window.Pylon("show");
-  }
 </script>
 
 <DropdownMenu.Root bind:open={primaryMenuOpen}>
@@ -111,6 +107,13 @@
           </DropdownMenu.SubContent>
         </DropdownMenu.Sub>
       {/if}
+      {#if projectPermissions.manageProject}
+        <DropdownMenu.Item
+          href={`/${params.organization}/${params.project}/-/settings`}
+        >
+          {m.nav_tab_settings()}
+        </DropdownMenu.Item>
+      {/if}
       {#if params.dashboard}
         <DropdownMenu.Item
           href={`/${params.organization}/${params.project}/-/alerts`}
@@ -129,16 +132,6 @@
     <LanguageSwitcher />
     <DropdownMenu.Separator />
 
-    <DropdownMenu.Item
-      href="https://discord.gg/2ubRfjC7Rh"
-      target="_blank"
-      rel="noreferrer noopener"
-    >
-      {m.avatar_join_discord()}
-    </DropdownMenu.Item>
-    <DropdownMenu.Item onclick={handlePylon}>
-      {m.avatar_contact_support()}
-    </DropdownMenu.Item>
     <DropdownMenu.Item onclick={redirectToLogout}
       >{m.avatar_logout()}</DropdownMenu.Item
     >

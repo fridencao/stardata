@@ -17,6 +17,7 @@
   import { waitUntil } from "@rilldata/web-common/lib/waitUtils.ts";
   import { chatMounted } from "@rilldata/web-common/features/chat/layouts/sidebar/sidebar-store";
   import { getStardataToken } from "@rilldata/web-common/runtime-client/auth-token";
+  import { extractErrorStatusCode } from "@rilldata/web-common/lib/errors";
   import PlusIcon from "@rilldata/web-common/components/icons/PlusIcon.svelte";
   import Pin from "@rilldata/web-common/components/icons/Pin.svelte";
   import Trash from "@rilldata/web-common/components/icons/Trash.svelte";
@@ -68,6 +69,26 @@
   $: currentConversation = conversationManager.getCurrentConversation();
   $: getConversationQuery = $currentConversation?.getConversationQuery();
   $: currentConversationDto = $getConversationQuery?.data?.conversation ?? null;
+
+  // Recover from unloadable conversations: a stale/foreign conversation ID
+  // (e.g. left in the URL or session storage by a previous login) fails with
+  // 401/403/404. Instead of dead-ending on the error page, drop it and start
+  // a fresh conversation.
+  let recoveredConversationId: string | null = null;
+  $: {
+    const loadError = $getConversationQuery?.error;
+    const conversationId = $page.params.conversationId;
+    if (loadError && conversationId) {
+      const status = extractErrorStatusCode(loadError);
+      if (
+        (status === 401 || status === 403 || status === 404) &&
+        recoveredConversationId !== conversationId
+      ) {
+        recoveredConversationId = conversationId;
+        void goto(`${basePath}?new=true`, { replaceState: true });
+      }
+    }
+  }
 
   $: listConversationsQuery = conversationManager.listConversationsQuery();
   $: conversations = ($listConversationsQuery.data?.conversations ?? []).filter(

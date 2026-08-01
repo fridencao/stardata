@@ -18,8 +18,16 @@ export function toggleConversationSidebar() {
 // CONVERSATION ID PERSISTENCE
 // =============================================================================
 
-function getConversationIdStorageKey(organization: string, project: string) {
-  return `project-chat-conversation-id-${organization}-${project}`;
+function getConversationIdStorageKey(
+  organization: string,
+  project: string,
+  userId?: string,
+) {
+  // Scope by user when known so a conversation ID left behind by a previous
+  // login in the same tab is never replayed for a different user (the runtime
+  // rejects foreign conversations with "action not allowed").
+  const userSuffix = userId ? `-${userId}` : "";
+  return `project-chat-conversation-id-${organization}-${project}${userSuffix}`;
 }
 
 /**
@@ -29,8 +37,9 @@ function getConversationIdStorageKey(organization: string, project: string) {
 export function getLastConversationId(
   organization: string,
   project: string,
+  userId?: string,
 ): string | null {
-  const storageKey = getConversationIdStorageKey(organization, project);
+  const storageKey = getConversationIdStorageKey(organization, project, userId);
   const storedValue = sessionStorage.getItem(storageKey);
 
   if (!storedValue) {
@@ -55,8 +64,9 @@ export function setLastConversationId(
   organization: string,
   project: string,
   conversationId: string | null,
+  userId?: string,
 ): void {
-  const storageKey = getConversationIdStorageKey(organization, project);
+  const storageKey = getConversationIdStorageKey(organization, project, userId);
 
   if (conversationId === null) {
     sessionStorage.removeItem(storageKey);

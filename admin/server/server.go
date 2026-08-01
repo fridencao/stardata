@@ -63,11 +63,6 @@ type Options struct {
 	// AuthIssuerURL is the full OIDC issuer URL (e.g. http://keycloak:8080/realms/stardata).
 	// When set, the authenticator uses it verbatim; when empty, AuthDomain is used (Auth0-compatible).
 	AuthIssuerURL          string
-	GithubAppName          string
-	GithubAppWebhookSecret string
-	GithubClientID         string
-	GithubClientSecret     string
-	GithubManagedAccount   string
 	// AssetsBucket is the path on gcs where rill managed project artifacts are stored.
 	AssetsBucket string
 	// PylonIdentitySecret is an optional secret for Pylon identity verification.
@@ -276,9 +271,6 @@ func (s *Server) HTTPHandler(ctx context.Context) (http.Handler, error) {
 
 	// Add auth endpoints (not gRPC handlers, just regular endpoints on /auth/*)
 	s.authenticator.RegisterEndpoints(mux, s.limiter, s.issuer)
-
-	// Add Github-related endpoints (not gRPC handlers, just regular endpoints on /github/*)
-	s.registerGithubEndpoints(mux)
 
 	// Add project assets endpoint.
 	mux.Handle("/v1/assets/{asset_id}/download", observability.Middleware("assets", s.logger, s.authenticator.HTTPMiddleware(httputil.Handler(s.assetHandler))))

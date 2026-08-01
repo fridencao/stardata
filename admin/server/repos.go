@@ -2,13 +2,11 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/fridencao/stardata/admin/database"
 	"github.com/fridencao/stardata/admin/server/auth"
 	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
-	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.opentelemetry.io/otel/attribute"
 	"google.golang.org/grpc/codes"
@@ -63,40 +61,7 @@ func (s *Server) GetRepoMeta(ctx context.Context, req *adminv1.GetRepoMetaReques
 		}, nil
 	}
 
-	if proj.GitRemote == nil || proj.GithubInstallationID == nil {
-		return nil, status.Error(codes.FailedPrecondition, "project does not have a github integration")
-	}
-
-	repoID, err := s.githubRepoIDForProject(ctx, proj)
-	if err != nil {
-		return nil, err
-	}
-
-	token, expiresAt, err := s.admin.Github.InstallationToken(ctx, *proj.GithubInstallationID, repoID)
-	if err != nil {
-		return nil, err
-	}
-
-	cfg := &gitutil.Config{
-		Remote:   *proj.GitRemote,
-		Username: "x-access-token",
-		Password: token,
-	}
-	gitURL, err := cfg.FullyQualifiedRemote()
-	if err != nil {
-		return nil, fmt.Errorf("failed to build git url from %q: %w", *proj.GitRemote, err)
-	}
-
-	return &adminv1.GetRepoMetaResponse{
-		ExpiresOn:      timestamppb.New(expiresAt),
-		LastUpdatedOn:  timestamppb.New(proj.UpdatedOn),
-		GitUrl:         gitURL,
-		GitSubpath:     proj.Subpath,
-		GitBranch:      depl.Branch,
-		Editable:       depl.Editable,
-		PrimaryBranch:  proj.PrimaryBranch,
-		ManagedGitRepo: proj.ManagedGitRepoID != nil,
-	}, nil
+	return nil, status.Error(codes.FailedPrecondition, "project does not have an uploaded archive")
 }
 
 func (s *Server) PullVirtualRepo(ctx context.Context, req *adminv1.PullVirtualRepoRequest) (*adminv1.PullVirtualRepoResponse, error) {

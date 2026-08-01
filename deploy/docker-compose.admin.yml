@@ -43,6 +43,10 @@ services:
       KC_HOSTNAME: localhost
       KC_HOSTNAME_PORT: "8081"
       KC_HOSTNAME_SCHEME: http
+      # Keycloak 25 reads KEYCLOAK_ADMIN/KEYCLOAK_ADMIN_PASSWORD (KC_BOOTSTRAP_* is 26+).
+      # Both are set so the bootstrap admin survives an image upgrade.
+      KEYCLOAK_ADMIN: "${KEYCLOAK_ADMIN:-admin}"
+      KEYCLOAK_ADMIN_PASSWORD: "${KEYCLOAK_ADMIN_PASSWORD:-admin}"
       KC_BOOTSTRAP_ADMIN_USERNAME: "${KEYCLOAK_ADMIN:-admin}"
       KC_BOOTSTRAP_ADMIN_PASSWORD: "${KEYCLOAK_ADMIN_PASSWORD:-admin}"
     command: ["start-dev", "--import-realm"]

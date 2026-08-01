@@ -21,7 +21,7 @@ type GitHelper struct {
 	project   string
 	localPath string
 
-	// do not access gitConfig directly, use GitConfig and setGitConfig
+	// do not access gitConfig directly, use GitConfig
 	gitConfig   *gitutil.Config
 	gitConfigMu *semaphore.Weighted
 }
@@ -71,81 +71,6 @@ func (g *GitHelper) GitConfig(ctx context.Context) (*gitutil.Config, error) {
 		ManagedRepo:       resp.GitManagedRepo,
 	}
 	return g.gitConfig, nil
-}
-
-func (g *GitHelper) PushToNewManagedRepo(ctx context.Context, primaryBranch string) (*adminv1.CreateManagedGitRepoResponse, error) {
-	c, err := g.h.Client()
-	if err != nil {
-		return nil, err
-	}
-
-	gitRepo, err := c.CreateManagedGitRepo(ctx, &adminv1.CreateManagedGitRepoRequest{
-		Org:  g.org,
-		Name: g.project,
-	})
-	if err != nil {
-		return nil, err
-	}
-	// git does not allow setting default branch on repo on creation
-	// but there is no restriction to push to any branch so directly update default branch here
-	if primaryBranch != "" {
-		gitRepo.DefaultBranch = primaryBranch
-	}
-	author, err := g.h.GitSignature(ctx, g.localPath)
-	if err != nil {
-		return nil, err
-	}
-	config := &gitutil.Config{
-		Remote:            gitRepo.Remote,
-		Username:          gitRepo.Username,
-		Password:          gitRepo.Password,
-		PasswordExpiresAt: gitRepo.PasswordExpiresAt.AsTime(),
-		DefaultBranch:     gitRepo.DefaultBranch,
-		ManagedRepo:       true,
-	}
-
-	err = gitutil.CommitAndPush(ctx, g.localPath, config, "", author)
-	if err != nil {
-		return nil, err
-	}
-
-	err = g.setGitConfig(ctx, config)
-	if err != nil {
-		return nil, err
-	}
-
-	return gitRepo, nil
-}
-
-func (g *GitHelper) PushToManagedRepo(ctx context.Context, forcePush bool) error {
-	gitConfig, err := g.GitConfig(ctx)
-	if err != nil {
-		return err
-	}
-
-	author, err := g.h.GitSignature(ctx, g.localPath)
-	if err != nil {
-		return err
-	}
-	if forcePush {
-		return gitutil.CommitAndForcePush(ctx, g.localPath, gitConfig, "", author)
-	}
-	err = g.h.CommitAndSafePush(ctx, g.localPath, gitConfig, "", author, "1")
-	if err != nil {
-		return err
-	}
-	return nil
-}
-
-func (g *GitHelper) setGitConfig(ctx context.Context, c *gitutil.Config) error {
-	err := g.gitConfigMu.Acquire(ctx, 1)
-	if err != nil {
-		return err
-	}
-	defer g.gitConfigMu.Release(1)
-
-	g.gitConfig = c
-	return nil
 }
 
 func SetupGitIgnore(ctx context.Context, repo drivers.RepoStore) error {

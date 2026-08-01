@@ -84,7 +84,6 @@ type DB interface {
 	FindProjectsForOrgAndUser(ctx context.Context, orgID, userID string, includePublic, includeGroups bool, afterProjectName string, limit int) ([]*Project, error)
 	FindPublicProjectsInOrganization(ctx context.Context, orgID, afterProjectName string, limit int) ([]*Project, error)
 	FindProjectsByGitRemote(ctx context.Context, remote string) ([]*Project, error)
-	FindProjectsByGithubInstallationID(ctx context.Context, id int64) ([]*Project, error)
 	FindProject(ctx context.Context, id string) (*Project, error)
 	FindProjectByName(ctx context.Context, orgName string, name string) (*Project, error)
 	FindProjectsByNameAndUser(ctx context.Context, name, userID string) ([]*Project, error)
@@ -354,16 +353,6 @@ type DB interface {
 	InsertProvisionerResource(ctx context.Context, opts *InsertProvisionerResourceOptions) (*ProvisionerResource, error)
 	UpdateProvisionerResource(ctx context.Context, id string, opts *UpdateProvisionerResourceOptions) (*ProvisionerResource, error)
 	DeleteProvisionerResource(ctx context.Context, id string) error
-
-	FindManagedGitRepos(ctx context.Context, afterRemote string, limit int) ([]*ManagedGitRepo, error)
-	FindManagedGitRepo(ctx context.Context, remote string) (*ManagedGitRepo, error)
-	FindUnusedManagedGitRepos(ctx context.Context, limit int) ([]*ManagedGitRepo, error)
-	CountManagedGitRepos(ctx context.Context, orgID string) (int, error)
-	InsertManagedGitRepo(ctx context.Context, opts *InsertManagedGitRepoOptions) (*ManagedGitRepo, error)
-	DeleteManagedGitRepos(ctx context.Context, ids []string) error
-
-	FindGitRepoTransfer(ctx context.Context, remote string) (*GitRepoTransfer, error)
-	InsertGitRepoTransfer(ctx context.Context, fromRemote, toRemote string) (*GitRepoTransfer, error)
 
 	// Feature access control
 	UpsertFeatureAccess(ctx context.Context, orgID string, projectID *string, subjectType, subjectID, featureKey string, granted bool, createdBy *string) error
@@ -1520,22 +1509,6 @@ type UpdateProvisionerResourceOptions struct {
 	Config        map[string]any
 }
 
-// ManagedGitRepo represents metadata about a Rill managed Git repository for projects deployed on Rill Cloud.
-type ManagedGitRepo struct {
-	ID        string    `db:"id"`
-	OrgID     *string   `db:"org_id"`
-	Remote    string    `db:"remote"`
-	OwnerID   string    `db:"owner_id"`
-	CreatedOn time.Time `db:"created_on"`
-	UpdatedOn time.Time `db:"updated_on"`
-}
-
-type InsertManagedGitRepoOptions struct {
-	OrgID   string `validate:"required"`
-	Remote  string `validate:"required"`
-	OwnerID string `validate:"required"`
-}
-
 type OrganizationMemberService struct {
 	ID              string
 	Name            string
@@ -1566,11 +1539,4 @@ type ProjectMemberServiceWithProject struct {
 	Attributes  map[string]any `db:"attributes"`
 	CreatedOn   time.Time      `db:"created_on"`
 	UpdatedOn   time.Time      `db:"updated_on"`
-}
-
-// GitRepoTransfer tracks a transfer of a project between two Git repositories.
-// This is set when a user switches a rill managed repo to self hosted Git repo.
-type GitRepoTransfer struct {
-	From string `db:"from_git_remote"`
-	To   string `db:"to_git_remote"`
 }

@@ -394,15 +394,6 @@ func (c *connection) FindProjectsByGitRemote(ctx context.Context, remote string)
 	return c.projectsFromDTOs(res)
 }
 
-func (c *connection) FindProjectsByGithubInstallationID(ctx context.Context, id int64) ([]*database.Project, error) {
-	var res []*projectDTO
-	err := c.getDB(ctx).SelectContext(ctx, &res, "SELECT p.* FROM projects p WHERE p.github_installation_id=$1", id)
-	if err != nil {
-		return nil, parseErr("projects", err)
-	}
-	return c.projectsFromDTOs(res)
-}
-
 func (c *connection) FindProject(ctx context.Context, id string) (*database.Project, error) {
 	res := &projectDTO{}
 	err := c.getDB(ctx).QueryRowxContext(ctx, "SELECT * FROM projects WHERE id=$1", id).StructScan(res)
@@ -3393,102 +3384,6 @@ func (c *connection) UpdateProvisionerResource(ctx context.Context, id string, o
 func (c *connection) DeleteProvisionerResource(ctx context.Context, id string) error {
 	res, err := c.getDB(ctx).ExecContext(ctx, "DELETE FROM provisioner_resources WHERE id = $1", id)
 	return checkDeleteRow("provisioner resource", res, err)
-}
-
-func (c *connection) FindManagedGitRepos(ctx context.Context, afterRemote string, limit int) ([]*database.ManagedGitRepo, error) {
-	var res []*database.ManagedGitRepo
-	err := c.getDB(ctx).SelectContext(ctx, &res, "SELECT * FROM managed_git_repos WHERE remote > $1 ORDER BY remote LIMIT $2", afterRemote, limit)
-	if err != nil {
-		return nil, parseErr("managed git repos", err)
-	}
-	return res, nil
-}
-
-func (c *connection) FindManagedGitRepo(ctx context.Context, remote string) (*database.ManagedGitRepo, error) {
-	res := &database.ManagedGitRepo{}
-	err := c.getDB(ctx).QueryRowxContext(ctx, "SELECT * FROM managed_git_repos WHERE remote = $1", remote).StructScan(res)
-	if err != nil {
-		return nil, parseErr("managed git repo", err)
-	}
-	return res, nil
-}
-
-func (c *connection) FindUnusedManagedGitRepos(ctx context.Context, pageSize int) ([]*database.ManagedGitRepo, error) {
-	// find managed github repos that are not associated with any project
-	// skip repos that are less than 7 days old to avoid deleting repos for projects
-	// that were accidentally deleted and may need to be restored
-	var res []*database.ManagedGitRepo
-	err := c.getDB(ctx).SelectContext(ctx, &res, `
-		SELECT * FROM managed_git_repos m
-		WHERE updated_on < now() - INTERVAL '7 DAYS'
-		AND (
-			m.org_id IS NULL 
-			OR NOT EXISTS (SELECT 1 FROM projects p WHERE p.managed_git_repo_id = m.id)
-		)
-		ORDER BY updated_on DESC
-		LIMIT $1
-	`, pageSize)
-	if err != nil {
-		return nil, parseErr("managed git repo", err)
-	}
-	return res, nil
-}
-
-func (c *connection) CountManagedGitRepos(ctx context.Context, orgID string) (int, error) {
-	var count int
-	err := c.getDB(ctx).QueryRowxContext(ctx, `
-		SELECT COUNT(*)
-		FROM managed_git_repos m
-		WHERE org_id = $1
-	`, orgID).Scan(&count)
-	if err != nil {
-		return 0, parseErr("managed git repo count", err)
-	}
-	return count, nil
-}
-
-func (c *connection) InsertManagedGitRepo(ctx context.Context, opts *database.InsertManagedGitRepoOptions) (*database.ManagedGitRepo, error) {
-	if err := database.Validate(opts); err != nil {
-		return nil, err
-	}
-
-	res := &database.ManagedGitRepo{}
-	err := c.getDB(ctx).QueryRowxContext(ctx, `
-		INSERT INTO managed_git_repos (org_id, remote, owner_id)
-		VALUES ($1, $2, $3) RETURNING *`,
-		opts.OrgID, opts.Remote, opts.OwnerID,
-	).StructScan(res)
-	if err != nil {
-		return nil, parseErr("managed git repo", err)
-	}
-	return res, nil
-}
-
-func (c *connection) DeleteManagedGitRepos(ctx context.Context, ids []string) error {
-	_, err := c.getDB(ctx).ExecContext(ctx, "DELETE FROM managed_git_repos WHERE id = ANY($1)", ids)
-	return parseErr("managed git repo", err)
-}
-
-func (c *connection) FindGitRepoTransfer(ctx context.Context, remote string) (*database.GitRepoTransfer, error) {
-	res := &database.GitRepoTransfer{}
-	err := c.getDB(ctx).QueryRowxContext(ctx, "SELECT * FROM git_repo_transfers WHERE from_git_remote = $1", remote).StructScan(res)
-	if err != nil {
-		return nil, parseErr("git repo transfer", err)
-	}
-	return res, nil
-}
-
-func (c *connection) InsertGitRepoTransfer(ctx context.Context, fromRemote, toRemote string) (*database.GitRepoTransfer, error) {
-	res := &database.GitRepoTransfer{}
-	err := c.getDB(ctx).QueryRowxContext(ctx, `
-		INSERT INTO git_repo_transfers (from_git_remote, to_git_remote)
-		VALUES ($1, $2) RETURNING *`,
-		fromRemote, toRemote,
-	).StructScan(res)
-	if err != nil {
-		return nil, parseErr("git repo transfer", err)
-	}
-	return res, nil
 }
 
 // projectDTO wraps database.Project, using the pgtype package to handle types that pgx can't read directly into their native Go types.

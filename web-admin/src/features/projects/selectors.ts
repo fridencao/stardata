@@ -209,17 +209,3 @@ export function useParserCommitSha(
     },
   );
 }
-
-export function useGithubLastSynced(client: RuntimeClient) {
-  return useResourceV2(
-    client,
-    SingletonProjectParserName,
-    ResourceKind.ProjectParser,
-    {
-      select: (data) =>
-        data.resource?.projectParser?.state?.currentCommitOn
-          ? new Date(data.resource.projectParser.state.currentCommitOn)
-          : null,
-    },
-  );
-}

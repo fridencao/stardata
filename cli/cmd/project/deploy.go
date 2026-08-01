@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
-	"strings"
 	"time"
 
 	"github.com/AlecAivazis/survey/v2"
@@ -17,7 +16,6 @@ import (
 	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/fridencao/stardata/runtime/pkg/activity"
 	"github.com/fridencao/stardata/runtime/pkg/fileutil"
-	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -26,31 +24,22 @@ import (
 var ErrInvalidProject = errors.New("invalid project")
 
 type DeployOpts struct {
-	GitPath       string
-	SubPath       string
-	RemoteName    string
-	Name          string
-	Description   string
-	Public        bool
-	Provisioner   string
-	ProdVersion   string
-	PrimaryBranch string
-	Slots         int
-	DevSlots      int
-	PushEnv       bool
-	ForcePush     bool
+	GitPath     string
+	SubPath     string
+	Name        string
+	Description string
+	Public      bool
+	Provisioner string
+	ProdVersion string
+	Slots       int
+	DevSlots    int
+	PushEnv     bool
 
 	ArchiveUpload bool
-	// Managed indicates if the project should be deployed using StarData Managed Git.
-	Managed bool
-	// Github indicates if the project should be connected to GitHub for automatic deploys.
-	Github bool
 
 	// SkipDeploy skips the runtime deployment step. Used for testing.
 	SkipDeploy bool
 
-	// remoteURL is the git remote url of the repository if detected. Set internally.
-	remoteURL string
 	// pushToProject is set if the deploy should push current changes to this existing project. Set internally.
 	pushToProject *adminv1.Project
 }
@@ -63,11 +52,6 @@ func (o *DeployOpts) LocalProjectPath() string {
 }
 
 func (o *DeployOpts) ValidateAndApplyDefaults(ctx context.Context, ch *cmdutil.Helper) error {
-	if o.remoteURL != "" {
-		// already validated
-		// just a hack to avoid re-validation when `stardata project deploy` internally calls `stardata project connect-github`
-		return nil
-	}
 	// expand project directory and get absolute path
 	var err error
 	o.GitPath, err = fileutil.ExpandHome(o.GitPath)
@@ -84,6 +68,9 @@ func (o *DeployOpts) ValidateAndApplyDefaults(ctx context.Context, ch *cmdutil.H
 		return err
 	}
 
+	// Archive upload is the only supported deploy mode.
+	o.ArchiveUpload = true
+
 	// check if specified project already exists
 	if o.Name != "" && ch.Org != "" {
 		p, exists, err := getProject(ctx, ch, ch.Org, o.Name)
@@ -91,8 +78,8 @@ func (o *DeployOpts) ValidateAndApplyDefaults(ctx context.Context, ch *cmdutil.H
 			return err
 		}
 		if exists {
-			if p.ManagedGitId == "" && p.ArchiveAssetId == "" && o.ForcePush {
-				return fmt.Errorf("project %q/%q is connected to a GitHub repository. Cannot use --force-push flag", ch.Org, o.Name)
+			if p.GitRemote != "" {
+				return fmt.Errorf("project %q/%q is connected to a git repository, which is no longer supported; recreate the project using archive uploads", ch.Org, o.Name)
 			}
 			if ch.Interactive {
 				if err := cmdutil.ConfirmPrompt(fmt.Sprintf("Project with name %q already exists. Do you want to push current changes to the existing project?", o.Name), true); err != nil {
@@ -100,169 +87,7 @@ func (o *DeployOpts) ValidateAndApplyDefaults(ctx context.Context, ch *cmdutil.H
 				}
 			}
 			o.pushToProject = p
-			o.Managed = o.pushToProject.ManagedGitId != ""
-			o.Github = o.pushToProject.ManagedGitId == "" && o.pushToProject.GitRemote != ""
-			// Projects without any git connection (e.g. created empty via web-admin) also use archive upload.
-			o.ArchiveUpload = o.pushToProject.ArchiveAssetId != "" || (o.pushToProject.ManagedGitId == "" && o.pushToProject.GitRemote == "")
-			return nil
 		}
-	}
-	if o.ArchiveUpload {
-		return nil
-	}
-
-	// detect repo root and subpath
-	var repoRoot, subpath string
-	if o.SubPath != "" {
-		repoRoot = o.GitPath
-		subpath = o.SubPath
-	} else {
-		// detect subpath
-		repoRoot, subpath, err = gitutil.InferRepoRootAndSubpath(o.GitPath)
-		if err != nil {
-			// Not a git repository
-			return nil
-		}
-	}
-
-	// extract remote and check if project already exists
-	err = o.detectGitRemoteAndProject(ctx, ch, repoRoot, subpath)
-	if err != nil {
-		return err
-	}
-
-	// if there is a project already connected to this repo+subpath offer to push changes to it
-	if o.pushToProject != nil {
-		if o.pushToProject.ManagedGitId == "" {
-			if o.Managed {
-				ch.PrintfError("Project %s/%s is already connected to this GitHub repository. Cannot use --managed flag.\n", o.pushToProject.OrgName, o.pushToProject.Name)
-				return fmt.Errorf("aborting deploy")
-			}
-			if o.ForcePush {
-				return fmt.Errorf("project %s/%s is connected to a GitHub repository. Cannot use --force-push flag", o.pushToProject.OrgName, o.pushToProject.Name)
-			}
-		}
-		if o.pushToProject.ManagedGitId != "" && o.Github {
-			ch.Printf("Found another rill managed project %s/%s connected to this folder\n", o.pushToProject.OrgName, o.pushToProject.Name)
-			ch.PrintfBold("Run `stardata project edit --remote-url <github_remote>` to tranfer the project to GitHub.\n")
-			return fmt.Errorf("aborting deploy")
-		}
-		if o.pushToProject.OrgName != ch.Org {
-			ch.PrintfError("A project in another org deploys from this repository. Please switch to org %q to push changes to the project %q.\n", o.pushToProject.OrgName, o.pushToProject.Name)
-			return fmt.Errorf("aborting deploy")
-		}
-		if subpath != "" && o.pushToProject.Subpath != subpath {
-			// just for verification confirm that subpath matches the one stored in project
-			return fmt.Errorf("current project subpath %q does not match the one stored in stardata %q. Try doing deploy using stardata cli from github repo root by passing explicit subpath using `stardata deploy --subpath %s`", subpath, o.pushToProject.Subpath, o.pushToProject.Subpath)
-		}
-		// set flags based on existing project
-		o.Managed = o.pushToProject.ManagedGitId != ""
-		o.Github = o.pushToProject.ManagedGitId == "" && o.pushToProject.GitRemote != ""
-		// Projects without any git connection (e.g. created empty via web-admin) also use archive upload.
-		o.ArchiveUpload = o.pushToProject.ArchiveAssetId != "" || (o.pushToProject.ManagedGitId == "" && o.pushToProject.GitRemote == "")
-
-		ch.PrintfBold("\nFound existing project: ")
-		ch.Printf("%s/%s\n", o.pushToProject.OrgName, o.pushToProject.Name)
-		if !ch.Interactive {
-			return nil
-		}
-		return cmdutil.ConfirmPrompt("Do you want to push current changes to the existing project?", true)
-	}
-
-	if o.remoteURL == "" {
-		// no remote configured
-		return nil
-	}
-
-	// there is a self hosted git repo but no project connected to it
-	connectToGithub := true
-	ch.PrintfBold("Detected git repository at: ")
-	ch.Printf("%s\n", repoRoot)
-	ch.PrintfBold("Connected to Github repository: ")
-	ch.Printf("%s\n", o.remoteURL)
-	if subpath != "" {
-		ch.PrintfBold("Project location within repo: ")
-		ch.Printf("%s\n", subpath)
-	}
-	if o.Managed {
-		// if user explicitly wants managed deploys confirm if they want to really skip github connection
-		ok, err := cmdutil.YesNoPrompt("Do you want to skip connecting to GitHub and use StarData managed deploys? (Note: Subsequent deploys/push from StarData will not push changes to your GitHub repo)", true)
-		if err != nil {
-			return err
-		}
-		connectToGithub = !ok
-	} else if !o.Github && ch.Interactive {
-		// still confirm if user wants to connect to github
-		connectToGithub, err = cmdutil.YesNoPrompt("Enable automatic deploys to StarData Cloud from GitHub?", true)
-		if err != nil {
-			return err
-		}
-	}
-	if connectToGithub {
-		o.SubPath = subpath
-		o.GitPath = repoRoot
-		o.Github = true
-		return nil
-	}
-	o.Managed = true
-	return nil
-}
-
-func (o *DeployOpts) detectGitRemoteAndProject(ctx context.Context, ch *cmdutil.Helper, repoRoot, subpath string) error {
-	remotes, err := gitutil.ExtractRemotes(repoRoot, false)
-	if err != nil && !errors.Is(err, gitutil.ErrGitRemoteNotFound) {
-		return err
-	}
-	c, err := ch.Client()
-	if err != nil {
-		return err
-	}
-
-	// find matching projects
-	req := &adminv1.ListProjectsForFingerprintRequest{
-		DirectoryName: filepath.Base(o.LocalProjectPath()),
-		SubPath:       subpath,
-	}
-	for _, remote := range remotes {
-		switch remote.Name {
-		case "__rill_remote":
-			req.RillMgdGitRemote = remote.URL
-		case o.RemoteName:
-			gitremote, err := remote.Github()
-			if err == nil {
-				req.GitRemote = gitremote
-			}
-		}
-	}
-	resp, err := c.ListProjectsForFingerprint(ctx, req)
-	if err != nil {
-		// TODO: check for not found error
-		return err
-	}
-	if resp.UnauthorizedProject != "" {
-		ch.PrintfWarn("You do not have access to the project %q which is connected to this repository. Please reach out to your StarData admin\n", resp.UnauthorizedProject)
-		return fmt.Errorf("aborting deploy")
-	}
-	for _, p := range resp.Projects {
-		if p.ManagedGitId != "" {
-			o.pushToProject = p
-			o.remoteURL = p.GitRemote
-			return nil
-		}
-		o.pushToProject = p
-		o.remoteURL = p.GitRemote
-		// do not return yet, there might be a managed project
-		// this is not possible with new flow but keeping it for consistency
-	}
-
-	if len(resp.Projects) == 1 && resp.Projects[0].ManagedGitId == "" && req.RillMgdGitRemote != "" {
-		err = ch.HandleRepoTransfer(repoRoot, req.GitRemote)
-		if err != nil {
-			return err
-		}
-	}
-	if req.GitRemote != "" {
-		o.remoteURL = req.GitRemote
 	}
 	return nil
 }
@@ -274,12 +99,11 @@ func DeployCmd(ch *cmdutil.Helper) *cobra.Command {
 
 	deployCmd := &cobra.Command{
 		Use:   "deploy [<path>]",
-		Short: "Deploy project to StarData Cloud by using a StarData Managed Git repo",
+		Short: "Deploy project to StarData Cloud by uploading the project files",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) > 0 {
 				opts.GitPath = args[0]
 			}
-			opts.Managed = true
 			err := opts.ValidateAndApplyDefaults(cmd.Context(), ch)
 			if err != nil {
 				return err
@@ -296,7 +120,6 @@ func DeployCmd(ch *cmdutil.Helper) *cobra.Command {
 	deployCmd.Flags().StringVar(&opts.Description, "description", "", "Project description")
 	deployCmd.Flags().BoolVar(&opts.Public, "public", false, "Make dashboards publicly accessible")
 	deployCmd.Flags().StringVar(&opts.Provisioner, "provisioner", "", "Project provisioner")
-	deployCmd.Flags().StringVar(&opts.PrimaryBranch, "primary-branch", "", "Git branch to deploy from (default: the default Git branch)")
 	deployCmd.Flags().IntVar(&opts.Slots, "prod-slots", local.DefaultProdSlots(ch), "Slots to allocate for production deployments")
 	deployCmd.Flags().IntVar(&opts.DevSlots, "dev-slots", local.DefaultDevSlots(ch), "Slots to allocate for dev deployments")
 	if !ch.IsDev() {
@@ -309,7 +132,6 @@ func DeployCmd(ch *cmdutil.Helper) *cobra.Command {
 	}
 
 	deployCmd.Flags().BoolVar(&opts.PushEnv, "push-env", true, "Push local .env file to StarData Cloud")
-	deployCmd.Flags().BoolVar(&opts.ForcePush, "force-push", false, "Force push local changes")
 	deployCmd.Flags().BoolVar(&opts.SkipDeploy, "skip-deploy", false, "Skip the runtime deployment step (for testing only)")
 	if !ch.IsDev() {
 		err := deployCmd.Flags().MarkHidden("skip-deploy")
@@ -405,21 +227,12 @@ func DeployWithUploadFlow(ctx context.Context, ch *cmdutil.Helper, opts *DeployO
 	}
 
 	ch.Printer.Println("Starting upload.")
-	if opts.ArchiveUpload {
-		// create a tar archive of the project and upload it
-		assetID, err := cmdutil.UploadRepo(ctx, repo, ch, ch.Org, opts.Name)
-		if err != nil {
-			return err
-		}
-		req.ArchiveAssetId = assetID
-	} else {
-		gitRepo, err := ch.GitHelper(ch.Org, opts.Name, localProjectPath).PushToNewManagedRepo(ctx, opts.PrimaryBranch)
-		if err != nil {
-			return err
-		}
-		req.GitRemote = gitRepo.Remote
-		req.PrimaryBranch = gitRepo.DefaultBranch
+	// create a tar archive of the project and upload it
+	assetID, err := cmdutil.UploadRepo(ctx, repo, ch, ch.Org, opts.Name)
+	if err != nil {
+		return err
 	}
+	req.ArchiveAssetId = assetID
 	printer.ColorGreenBold.Printf("All files uploaded successfully.\n\n")
 
 	// Create the project
@@ -475,82 +288,38 @@ func redeployProject(ctx context.Context, ch *cmdutil.Helper, opts *DeployOpts) 
 		return err
 	}
 	proj := opts.pushToProject
-	if proj.ManagedGitId != "" {
-		err := ch.GitHelper(ch.Org, proj.Name, opts.LocalProjectPath()).PushToManagedRepo(ctx, opts.ForcePush)
-		if err != nil {
-			return err
-		}
-	} else if proj.GitRemote != "" {
-		// Infer repo root and subpath for git operations
-		repoRoot, subpath, err := gitutil.InferRepoRootAndSubpath(opts.LocalProjectPath())
-		if err != nil {
-			return err
-		}
-		// Verify subpath matches the one stored in the project
-		if subpath != proj.Subpath {
-			return fmt.Errorf("current project subpath %q does not match the one stored in stardata %q. Run stardata cli from github repo root and pass explicit subpath using `stardata deploy --subpath %s`", subpath, proj.Subpath, proj.Subpath)
-		}
-		config := &gitutil.Config{
-			Remote:        opts.pushToProject.GitRemote,
-			DefaultBranch: opts.pushToProject.PrimaryBranch,
-			Subpath:       subpath,
-		}
-		author, err := ch.GitSignature(ctx, repoRoot)
-		if err != nil {
-			return err
-		}
-		err = ch.CommitAndSafePush(ctx, repoRoot, config, "", author, "1")
-		if err != nil {
-			return err
-		}
-	} else {
-		// tarball flow
-		var updateProjReq *adminv1.UpdateProjectRequest
-		if opts.ArchiveUpload {
-			repo, _, err := cmdutil.RepoForProjectPath(opts.LocalProjectPath())
-			if err != nil {
-				return err
-			}
-			assetID, err := cmdutil.UploadRepo(ctx, repo, ch, ch.Org, opts.Name)
-			if err != nil {
-				return err
-			}
-			updateProjReq = &adminv1.UpdateProjectRequest{
-				Org:            ch.Org,
-				Project:        proj.Name,
-				ArchiveAssetId: &assetID,
-			}
-		} else {
-			// need to migrate to rill managed git
-			gitRepo, err := ch.GitHelper(ch.Org, opts.Name, opts.LocalProjectPath()).PushToNewManagedRepo(ctx, opts.PrimaryBranch)
-			if err != nil {
-				return err
-			}
-			updateProjReq = &adminv1.UpdateProjectRequest{
-				Org:           ch.Org,
-				Project:       opts.Name,
-				GitRemote:     &gitRepo.Remote,
-				PrimaryBranch: &gitRepo.DefaultBranch,
-			}
-		}
-		// Update the project
-		// Silently ignores other flags like description etc which are handled with project update.
-		_, err = c.UpdateProject(ctx, updateProjReq)
-		if err != nil {
-			if s, ok := status.FromError(err); ok && s.Code() == codes.PermissionDenied {
-				ch.PrintfError("You do not have the permissions needed to update a project in org %q. Please reach out to your StarData admin.\n", ch.Org)
-				return nil
-			}
-			return fmt.Errorf("update project failed with error %w", err)
-		}
 
-		// Projects created empty (e.g. via web-admin) have no deployment yet; UpdateProject only
-		// reconciles existing deployments, so explicitly trigger the first deployment here.
-		if proj.PrimaryDeploymentId == "" {
-			_, err = c.TriggerRedeploy(ctx, &adminv1.TriggerRedeployRequest{Org: ch.Org, Project: proj.Name})
-			if err != nil {
-				return fmt.Errorf("failed to trigger deployment: %w", err)
-			}
+	// upload a new archive of the project
+	repo, _, err := cmdutil.RepoForProjectPath(opts.LocalProjectPath())
+	if err != nil {
+		return err
+	}
+	assetID, err := cmdutil.UploadRepo(ctx, repo, ch, ch.Org, proj.Name)
+	if err != nil {
+		return err
+	}
+
+	// Update the project
+	// Silently ignores other flags like description etc which are handled with project update.
+	_, err = c.UpdateProject(ctx, &adminv1.UpdateProjectRequest{
+		Org:            ch.Org,
+		Project:        proj.Name,
+		ArchiveAssetId: &assetID,
+	})
+	if err != nil {
+		if s, ok := status.FromError(err); ok && s.Code() == codes.PermissionDenied {
+			ch.PrintfError("You do not have the permissions needed to update a project in org %q. Please reach out to your StarData admin.\n", ch.Org)
+			return nil
+		}
+		return fmt.Errorf("update project failed with error %w", err)
+	}
+
+	// Projects created empty (e.g. via web-admin) have no deployment yet; UpdateProject only
+	// reconciles existing deployments, so explicitly trigger the first deployment here.
+	if proj.PrimaryDeploymentId == "" {
+		_, err = c.TriggerRedeploy(ctx, &adminv1.TriggerRedeployRequest{Org: ch.Org, Project: proj.Name})
+		if err != nil {
+			return fmt.Errorf("failed to trigger deployment: %w", err)
 		}
 	}
 
@@ -674,11 +443,4 @@ func getProject(ctx context.Context, ch *cmdutil.Helper, org, project string) (*
 		return nil, false, err
 	}
 	return p.Project, true, nil
-}
-
-func errMsgContains(err error, msg string) bool {
-	if st, ok := status.FromError(err); ok && st != nil {
-		return strings.Contains(st.Message(), msg)
-	}
-	return false
 }

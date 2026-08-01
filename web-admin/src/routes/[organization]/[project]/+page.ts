@@ -1,0 +1,13 @@
+import { redirect } from "@sveltejs/kit";
+
+export const load = async ({ parent, params: { organization, project } }) => {
+  // StarData: the project home is role-adaptive. Business viewers land on the
+  // business portal home (this page). Technical governors (manageProject) have
+  // their own entry — the Studio workbench — so bounce them there instead of
+  // showing the business-facing home. They can still reach chat/boards via the
+  // portal nav (those are separate routes, unaffected by this redirect).
+  const { projectPermissions } = await parent();
+  if (projectPermissions?.manageProject) {
+    throw redirect(307, `/${organization}/${project}/-/edit/studio`);
+  }
+};

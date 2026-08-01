@@ -8,15 +8,10 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"path/filepath"
-	goruntime "runtime"
-	"strconv"
 	"strings"
 	"testing"
 	"time"
 
-	"github.com/google/go-github/v71/github"
-	"github.com/joho/godotenv"
 	"github.com/fridencao/stardata/admin"
 	"github.com/fridencao/stardata/admin/billing"
 	"github.com/fridencao/stardata/admin/billing/payment"
@@ -30,7 +25,6 @@ import (
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/pkg/activity"
 	"github.com/fridencao/stardata/runtime/pkg/email"
-	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"github.com/fridencao/stardata/runtime/pkg/ratelimit"
 	runtimeserver "github.com/fridencao/stardata/runtime/server"
 	runtimeauth "github.com/fridencao/stardata/runtime/server/auth"
@@ -56,7 +50,6 @@ import (
 // The service, servers and other resources will be cleaned up when the test that created the Fixture stops.
 //
 // The service has several limitations compared to a production server:
-// - Github operation are no-ops in short testing mode
 // - Billing operations are no-ops
 // - No configured metrics project
 // - Does not run background jobs
@@ -155,19 +148,9 @@ func NewWithOptionalRuntime(t *testing.T, startRt bool) *Fixture {
 		AutoscalerCron:            "",
 		ScaleDownConstraint:       0,
 	}
-	adm, err := admin.New(ctx, admOpts, logger, issuer, emailClient, newGithub(t), mockAI, nil, billing.NewNoop(), payment.NewNoop())
+	adm, err := admin.New(ctx, admOpts, logger, issuer, emailClient, mockAI, nil, billing.NewNoop(), payment.NewNoop())
 	require.NoError(t, err)
 	t.Cleanup(func() {
-		// cleanup any managed repos created during testing since the repos are cleaned in a river job not executed in tests
-		// ignore pagination since we don't expect more than 20 repos to be created during testing
-		repos, err := adm.DB.FindManagedGitRepos(context.Background(), "", 20)
-		require.NoError(t, err)
-		for _, repo := range repos {
-			_, name, ok := gitutil.SplitGithubRemote(repo.Remote)
-			require.True(t, ok, "invalid github remote: %s", repo.Remote)
-			err := adm.Github.DeleteManagedRepo(context.Background(), name)
-			require.NoError(t, err, "failed to delete managed github repo %s", repo.Remote)
-		}
 		adm.Close()
 	})
 
@@ -296,64 +279,6 @@ func (f *Fixture) TriggerDeployment(t *testing.T, org, project string) *database
 	require.NoError(t, err)
 	require.Len(t, depl, 1)
 	return depl[0]
-}
-
-// newGithub creates a new Github client. In short testing mode this is a mock client which has no-op implementations of all methods.
-// Otherwise it creates a real implementation that makes real API calls to Github.
-func newGithub(t *testing.T) admin.Github {
-	if testing.Short() {
-		return &mockGithub{}
-	}
-
-	_, currentFile, _, _ := goruntime.Caller(0)
-	envPath := filepath.Join(currentFile, "..", "..", "..", ".env")
-	_, err := os.Stat(envPath)
-	if err == nil {
-		err := godotenv.Load(envPath)
-		require.NoError(t, err)
-	}
-
-	githubAppID, err := strconv.ParseInt(os.Getenv("RILL_ADMIN_TEST_GITHUB_APP_ID"), 10, 64)
-	require.NoError(t, err)
-
-	github, err := admin.NewGithub(t.Context(), githubAppID, os.Getenv("RILL_ADMIN_TEST_GITHUB_APP_PRIVATE_KEY"), os.Getenv("RILL_ADMIN_TEST_GITHUB_MANAGED_ACCOUNT"), zap.Must(zap.NewDevelopment()))
-	require.NoError(t, err)
-	return github
-}
-
-// mockGithub provides a mock implementation of admin.Github.
-type mockGithub struct{}
-
-func (m *mockGithub) AppClient() *github.Client {
-	return nil
-}
-
-func (m *mockGithub) InstallationClient(installationID int64, repoID *int64) *github.Client {
-	return nil
-}
-
-func (m *mockGithub) InstallationToken(ctx context.Context, installationID, repoID int64) (string, time.Time, error) {
-	return "", time.Time{}, nil
-}
-
-func (m *mockGithub) InstallationTokenForOrg(ctx context.Context, org string) (string, time.Time, error) {
-	return "", time.Time{}, nil
-}
-
-func (m *mockGithub) DeleteBranch(ctx context.Context, installationID, repoID int64, remote, branch string) error {
-	return nil
-}
-
-func (m *mockGithub) CreateManagedRepo(ctx context.Context, repoPrefix string, autoInit bool) (*github.Repository, error) {
-	return nil, fmt.Errorf("not implemented")
-}
-
-func (m *mockGithub) DeleteManagedRepo(ctx context.Context, repo string) error {
-	return fmt.Errorf("not implemented")
-}
-
-func (m *mockGithub) ManagedOrgInstallationID() (int64, error) {
-	return 0, fmt.Errorf("not implemented")
 }
 
 // runtimeServerFixture contains the runtime server components created for testing.

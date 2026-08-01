@@ -157,7 +157,7 @@ func RefreshCmd(ch *cmdutil.Helper) *cobra.Command {
 	refreshCmd.Flags().StringSliceVar(&alerts, "alert", nil, "Refresh an alert")
 	refreshCmd.Flags().StringSliceVar(&reports, "report", nil, "Refresh a report")
 	refreshCmd.Flags().StringSliceVar(&connectors, "connector", nil, "Re-validate a connector")
-	refreshCmd.Flags().BoolVar(&parser, "parser", false, "Refresh the parser (forces a pull from Github)")
+	refreshCmd.Flags().BoolVar(&parser, "parser", false, "Refresh the parser (forces a re-pull of the project files)")
 
 	return refreshCmd
 }

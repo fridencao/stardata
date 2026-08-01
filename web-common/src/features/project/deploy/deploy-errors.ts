@@ -7,7 +7,6 @@ const OrgQuotaErrorMatcher =
 const TrialEndedMatcher = /trial has ended/;
 const TrialCreditsDepleted = /trial credits depleted/;
 const SubEndedMatcher = /subscription cancelled/;
-export const GithubRepoNoAccessError = "GitNoAccessError";
 
 export enum DeployErrorType {
   Unknown,
@@ -17,7 +16,6 @@ export enum DeployErrorType {
   OrgLimitHit,
   TrialEnded,
   SubscriptionEnded,
-  GithubNoAccess,
 }
 const ErrorMessageVariants = {
   [DeployErrorType.OrgLimitHit]: {
@@ -54,14 +52,6 @@ export function getPrettyDeployError(
     };
   }
   const title = "Oops! An error occurred";
-
-  if (error.message === GithubRepoNoAccessError) {
-    return {
-      type: DeployErrorType.GithubNoAccess,
-      title,
-      message: "Failed to get access to the repo. Please try again.",
-    };
-  }
 
   const match = RPCErrorExtractor.exec(error.message);
   if (!match) {

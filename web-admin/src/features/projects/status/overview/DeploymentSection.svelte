@@ -6,7 +6,6 @@
   } from "@rilldata/web-admin/client";
   import { extractBranchFromPath } from "@rilldata/web-admin/features/branches/branch-utils";
   import { useDashboardsLastUpdated } from "@rilldata/web-admin/features/dashboards/listing/selectors";
-  import { useGithubLastSynced } from "@rilldata/web-admin/features/projects/selectors";
 
   import { createRuntimeServiceGetInstance } from "@rilldata/web-common/runtime-client";
   import { createQueryServiceProjectStorage } from "@rilldata/web-common/runtime-client/v2/gen/query-service";
@@ -29,7 +28,6 @@
   } from "../display-utils";
   import LoadingCircleOutline from "@rilldata/web-common/components/icons/LoadingCircleOutline.svelte";
   import Callout from "@rilldata/web-common/components/callout/Callout.svelte";
-  import { getGitUrlFromRemote } from "@rilldata/web-common/features/project/deploy/github-utils";
   import ProjectClone from "./ProjectClone.svelte";
   import OverviewCard from "@rilldata/web-common/features/projects/status/overview/OverviewCard.svelte";
   import ClusterSize from "./ClusterSize.svelte";
@@ -59,15 +57,13 @@
   // Project
   $: proj = createAdminServiceGetProject(organization, project);
   $: projectData = $proj.data?.project;
-  $: primaryBranch = projectData?.primaryBranch;
   // Last synced
-  $: githubLastSynced = useGithubLastSynced(runtimeClient);
   $: dashboardsLastUpdated = useDashboardsLastUpdated(
     runtimeClient,
     organization,
     project,
   );
-  $: lastUpdated = $githubLastSynced.data ?? $dashboardsLastUpdated;
+  $: lastUpdated = $dashboardsLastUpdated;
 
   // Runtime
   $: runtimeVersionQuery = useRuntimeVersion(runtimeClient);
@@ -97,13 +93,6 @@
       ? m.status_data_size()
       : m.status_data_accessible();
 
-  // Repo — only shown when the user connected their own GitHub
-  $: githubUrl = projectData?.gitRemote
-    ? getGitUrlFromRemote(projectData.gitRemote)
-    : "";
-  $: isGithubConnected =
-    !!projectData?.gitRemote && !projectData?.managedGitId && !!githubUrl;
-
   $: olapConnector = instance?.projectConnectors?.find(
     (c) => c.name === instance?.olapConnector,
   );
@@ -124,8 +113,6 @@
     <ProjectClone
       {organization}
       {project}
-      gitRemote={projectData?.gitRemote}
-      managedGitId={projectData?.managedGitId}
       disabled={!!parserReconcileError}
     />
   </div>
@@ -156,29 +143,6 @@
         <span class="info-value">
           <ClusterSize slots={currentSlots} />
         </span>
-      </div>
-    {/if}
-
-    {#if isGithubConnected}
-      <div class="info-row">
-        <span class="info-label">{m.status_label_repo()}</span>
-        <span class="info-value">
-          <a
-            href={githubUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="repo-link"
-          >
-            {githubUrl.replace("https://github.com/", "")}
-          </a>
-        </span>
-      </div>
-    {/if}
-
-    {#if isGithubConnected && (deployment?.branch || primaryBranch)}
-      <div class="info-row">
-        <span class="info-label">{m.status_label_branch()}</span>
-        <span class="info-value">{deployment?.branch || primaryBranch}</span>
       </div>
     {/if}
 
@@ -267,12 +231,6 @@
   }
   .status-dot {
     @apply w-2 h-2 rounded-full inline-block;
-  }
-  .repo-link {
-    @apply text-primary-500 text-sm;
-  }
-  .repo-link:hover {
-    @apply underline;
   }
   .data-size-link {
     @apply no-underline;

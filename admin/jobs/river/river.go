@@ -103,9 +103,6 @@ func New(ctx context.Context, dsn string, adm *admin.Service) (jobs.Client, erro
 	river.AddWorker(workers, &DeleteOrgWorker{admin: adm, logger: billingLogger})
 	river.AddWorker(workers, &HibernateInactiveOrgsWorker{admin: adm, logger: billingLogger})
 
-	// managed github repo cleanup
-	river.AddWorker(workers, &deleteUnusedGithubReposWorker{admin: adm, logger: adm.Logger})
-
 	// token cleanup workers
 	river.AddWorker(workers, &DeleteUnusedUserTokenWorker{admin: adm, logger: adm.Logger})
 	river.AddWorker(workers, &DeleteUnusedServiceTokenWorker{admin: adm, logger: adm.Logger})
@@ -130,7 +127,6 @@ func New(ctx context.Context, dsn string, adm *admin.Service) (jobs.Client, erro
 		{&SubscriptionCancellationCheckArgs{}, "20 1 * * *", true}, // daily at 1:20am UTC
 		{&DeleteUnusedUserTokenArgs{}, "0 */12 * * *", true},       // every 12 hours
 		{&DeleteUnusedServiceTokenArgs{}, "0 */12 * * *", true},    // every 12 hours
-		{&deleteUnusedGithubReposArgs{}, "0 */6 * * *", true},      // every 6 hours
 		{&HibernateInactiveOrgsArgs{}, "0 7 * * 1", true},          // Monday at 7:00am UTC
 		{&CheckProvisionersArgs{}, "0 */15 * * *", true},           // every 15 minutes
 		{&DeleteExpiredAuthCodesArgs{}, "0 */6 * * *", true},       // every 6 hours
@@ -319,8 +315,6 @@ func (c *Client) EnqueueByKind(ctx context.Context, kind string) (*jobs.InsertRe
 		jobArgs = DeleteUnusedUserTokenArgs{}
 	case "delete_unused_service_tokens":
 		jobArgs = DeleteUnusedServiceTokenArgs{}
-	case "delete_unused_github_repos":
-		jobArgs = deleteUnusedGithubReposArgs{}
 	default:
 		return nil, fmt.Errorf("unknown job kind: %s", kind)
 	}

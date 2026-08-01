@@ -11,17 +11,6 @@ export interface GetAlertMetaResponseURLs {
   unsubscribeUrl?: string;
 }
 
-export type GetGithubPullRequestResponseState =
-  (typeof GetGithubPullRequestResponseState)[keyof typeof GetGithubPullRequestResponseState];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetGithubPullRequestResponseState = {
-  STATE_UNSPECIFIED: "STATE_UNSPECIFIED",
-  STATE_OPEN: "STATE_OPEN",
-  STATE_CLOSED_UNMERGED: "STATE_CLOSED_UNMERGED",
-  STATE_MERGED: "STATE_MERGED",
-} as const;
-
 export type GetReportMetaResponseDeliveryMetaUserAttrs = {
   [key: string]: unknown;
 };
@@ -33,14 +22,6 @@ export interface GetReportMetaResponseDeliveryMeta {
   unsubscribeUrl?: string;
   userId?: string;
   userAttrs?: GetReportMetaResponseDeliveryMetaUserAttrs;
-}
-
-export interface ListGithubUserReposResponseRepo {
-  name?: string;
-  owner?: string;
-  description?: string;
-  remote?: string;
-  defaultBranch?: string;
 }
 
 export interface ProtobufAny {
@@ -330,10 +311,6 @@ export interface V1Condition {
   exprs?: V1Expression[];
 }
 
-export interface V1ConnectProjectToGithubResponse {
-  [key: string]: unknown;
-}
-
 export interface V1ContentBlock {
   text?: string;
   toolCall?: V1ToolCall;
@@ -369,18 +346,6 @@ export interface V1CreateBookmarkResponse {
 
 export interface V1CreateDeploymentResponse {
   deployment?: V1Deployment;
-}
-
-export interface V1CreateGithubPullRequestResponse {
-  prUrl?: string;
-}
-
-export interface V1CreateManagedGitRepoResponse {
-  remote?: string;
-  username?: string;
-  password?: string;
-  defaultBranch?: string;
-  passwordExpiresAt?: string;
 }
 
 export interface V1CreateOrganizationRequest {
@@ -672,32 +637,6 @@ export interface V1GetDeploymentResponse {
   ttlSeconds?: number;
 }
 
-export interface V1GetGithubPullRequestResponse {
-  prUrl?: string;
-  prState?: GetGithubPullRequestResponseState;
-}
-
-export interface V1GetGithubRepoStatusResponse {
-  hasAccess?: boolean;
-  grantAccessUrl?: string;
-  defaultBranch?: string;
-}
-
-export type V1GetGithubUserStatusResponseOrganizationInstallationPermissions = {
-  [key: string]: V1GithubPermission;
-};
-
-export interface V1GetGithubUserStatusResponse {
-  hasAccess?: boolean;
-  grantAccessUrl?: string;
-  accessToken?: string;
-  account?: string;
-  userInstallationPermission?: V1GithubPermission;
-  organizationInstallationPermissions?: V1GetGithubUserStatusResponseOrganizationInstallationPermissions;
-  /** DEPRECATED: Use organization_installation_permissions instead. */
-  orgs?: string[];
-}
-
 export interface V1GetIFrameResponse {
   iframeSrc?: string;
   runtimeHost?: string;
@@ -814,16 +753,6 @@ export interface V1GetVirtualFileResponse {
   file?: V1VirtualFile;
 }
 
-export type V1GithubPermission =
-  (typeof V1GithubPermission)[keyof typeof V1GithubPermission];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const V1GithubPermission = {
-  GITHUB_PERMISSION_UNSPECIFIED: "GITHUB_PERMISSION_UNSPECIFIED",
-  GITHUB_PERMISSION_READ: "GITHUB_PERMISSION_READ",
-  GITHUB_PERMISSION_WRITE: "GITHUB_PERMISSION_WRITE",
-} as const;
-
 export interface V1HibernateProjectResponse {
   [key: string]: unknown;
 }
@@ -866,10 +795,6 @@ export interface V1ListDeploymentsResponse {
 export interface V1ListFeatureAccessResponse {
   orgDefaults?: V1FeatureAccessEntry[];
   subjects?: V1FeatureAccessSubject[];
-}
-
-export interface V1ListGithubUserReposResponse {
-  repos?: ListGithubUserReposResponseRepo[];
 }
 
 export interface V1ListMagicAuthTokensResponse {
@@ -1899,10 +1824,6 @@ export type AdminServiceTriggerRefreshSourcesBody = {
   sources?: string[];
 };
 
-export type AdminServiceGetGithubRepoStatusParams = {
-  remote?: string;
-};
-
 export type AdminServiceListOrganizationsParams = {
   pageSize?: number;
   pageToken?: string;
@@ -1947,13 +1868,6 @@ export type AdminServiceGetBillingSubscriptionParams = {
 
 export type AdminServiceCancelBillingSubscriptionParams = {
   superuserForceAccess?: boolean;
-};
-
-export type AdminServiceCreateManagedGitRepoBody = {
-  /** name of the repo to create. 
-Note: The final name will be suffixed with a random string to ensure uniqueness. */
-  name?: string;
-  autoInit?: boolean;
 };
 
 export type AdminServiceCreateAssetBody = {
@@ -2099,10 +2013,6 @@ export type AdminServiceGetCloneCredentialsParams = {
   superuserForceAccess?: boolean;
 };
 
-export type AdminServiceConnectProjectToGithubBody = {
-  remote?: string;
-};
-
 /**
  * If set, will use the provided attributes outright.
  */
@@ -2143,12 +2053,6 @@ Optional for `dev` deployments. */
   /** Whether the deployment is editable and the edited changes are persisted back to the git repo.
 Can't be set for `prod` deployments. */
   editable?: boolean;
-};
-
-export type AdminServiceCreateGithubPullRequestBody = {
-  branch?: string;
-  title?: string;
-  body?: string;
 };
 
 export type AdminServiceHibernateProjectParams = {

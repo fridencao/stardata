@@ -46,15 +46,19 @@ func SeedCmd(ch *cmdutil.Helper) *cobra.Command {
 					return err
 				}
 			}
-			return project.ConnectGithubFlow(cmd.Context(), ch, &project.DeployOpts{
-				GitPath:     temp,
-				SubPath:     "rill-openrtb-prog-ads",
-				Name:        "rill-openrtb-prog-ads",
-				RemoteName:  "origin",
-				ProdVersion: "latest",
-				Slots:       2,
-				Github:      true,
-			})
+			opts := &project.DeployOpts{
+				GitPath:       temp,
+				SubPath:       "rill-openrtb-prog-ads",
+				Name:          "rill-openrtb-prog-ads",
+				ProdVersion:   "latest",
+				Slots:         2,
+				ArchiveUpload: true,
+			}
+			err = opts.ValidateAndApplyDefaults(cmd.Context(), ch)
+			if err != nil {
+				return err
+			}
+			return project.DeployWithUploadFlow(cmd.Context(), ch, opts)
 		},
 	}
 
