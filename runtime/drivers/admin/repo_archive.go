@@ -83,7 +83,20 @@ func (r *archiveRepo) syncEditable(ctx context.Context) error {
 	_ = os.Remove(markerPath)
 
 	// Clean extraction: a new archive version replaces the draft contents.
-	err := archive.Download(ctx, r.archiveDownloadURL, archivePath, filesDir, true, false)
+	//
+	// We clear and recreate the draft directory ourselves instead of letting the archive
+	// extraction do it (clean=false below). Release archives built by the publish flow
+	// contain only file entries, so extraction would otherwise create the draft directory
+	// with a *file* mode (0644, no execute bit) and every following write would fail with
+	// EACCES. Creating it explicitly with 0755 keeps the draft area writable.
+	if err := os.RemoveAll(filesDir); err != nil {
+		return fmt.Errorf("archiveRepo: %w", err)
+	}
+	if err := os.MkdirAll(filesDir, 0o755); err != nil {
+		return fmt.Errorf("archiveRepo: %w", err)
+	}
+
+	err := archive.Download(ctx, r.archiveDownloadURL, archivePath, filesDir, false, false)
 	if err != nil {
 		return fmt.Errorf("archiveRepo: %w", err)
 	}
