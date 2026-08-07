@@ -98,6 +98,22 @@ Phase 4「双层角色化智能 BI」改造，整体完成度约 **80%**。核�
 | Feature Access 后端双保险缺失 | 前端隐藏 tab，后端 runtime API 未校验 access_* | 垂直越权：用户直接调 API 或猜路由访问被隐藏功能 | 结合发布门控 fail-closed（P0-2），关键数据查询已经受语义层 security policy 与发布门控双重拦截；剩余风险主要是 reports/alerts 列表接口的 metadata 泄漏 |
 | Studio 挂 `-/edit/studio` | 生命周期绑 dev deployment，URL 暴露 `-/edit` | 治理者遇到 dev deployment 问题时体验割裂 | P2-5 的 error boundary 消化 90% 场景 |
 | `-/ai`、`-/dashboards` 等 legacy 路由保留 | 未删，仍可访问 | 内部路径不一致，可能被 bookmark 分发 | 门户 tab 已经指向新路由，legacy 路径视为内部实现 |
+| web-admin 585 个 svelte-check 类型错误 | 既有类型债，遍布 121 文件 | CI 无法用 svelte-check 卡住新增类型错误 | 见 V-5：建议设 baseline 白名单（参考 `scripts/tsc-with-whitelist.sh`）先卡增量 |
+
+## 4b. 待验证清单（Verification Backlog）
+
+已实现但**尚未在真实环境确认**的部分。每一项都对应一个具体的复现步骤，不是"再看一眼"级别的检查。
+
+| # | 待验证项 | 为什么重要 | 关联改动 |
+|---|---|---|---|
+| V-1 | Studio error boundary 的错误文案匹配 | 正则（`runtime not reachable` / `not ready` / `failed\|error\|unavailable`）是读代码推断的；兜不住就会漏出原始技术错误，等于 P2-5 白做 | `studio/+error.svelte` |
+| V-2 | `?preview=1` 不被上游 layout 截胡 | `?preview` 语义只在 `[project]/+page.ts` 实现；`+layout.ts` 的 `maybeRedirectToEditableDeployment` / branch / welcome 重定向都可能抢先跳走 | `[project]/+page.ts` |
+| V-3 | R1 全链路 docker-compose 人工走查 | R1-X 修复只在 unit test 层验证过；容器内 `USER stardata`(uid 1001) + `runtime_data` volume 的实际行为未确认。另需确认 publish/rollback 可靠触发 prod 重部署 | `repo_archive.go` |
+| V-4 | 发布门控 HTTP 层端到端 | P0-2 只有单元级验证；未用非治理账号实际访问未发布 explore/canvas/embed URL 确认 403/404 | `runtime/publishgate.go` 及三处接入点 |
+| V-5 | svelte-check 585 错误的处理策略 | 决定 CI 能否卡住前端类型回归 | — |
+| V-6 | `build:i18n` 锁定 node 22 | node 18 下 paraglide 报 `crypto is not defined` 静默失败；CI/镜像若用 18 则 i18n 产物不更新 | `.nvmrc` / CI 配置 |
+
+> 原则：这些项在 Phase 4 收尾判定（§6）之前必须闭合 V-1 ~ V-4；V-5 / V-6 属工程化改进，可与 4c 并行。
 
 ## 5. 执行顺序与依赖
 
