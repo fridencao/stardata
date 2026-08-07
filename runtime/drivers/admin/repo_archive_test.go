@@ -13,6 +13,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/fridencao/stardata/runtime/pkg/archive"
 	"github.com/stretchr/testify/require"
 )
 
@@ -20,7 +21,7 @@ import (
 //
 // It emits explicit directory entries (mode 0755) for every parent path so extraction
 // works regardless of file order. This mirrors a well-formed project archive; see
-// TestCreateFromBlobsOmitsDirEntries for the separate finding about the publish path,
+// TestEditableDraftFromPublishArchiveIsWritable for the publish-path archive shape,
 // whose archives (built via archive.CreateFromBlobs) omit directory entries.
 func serveArchive(t *testing.T, files map[string]string) string {
 	t.Helper()
@@ -149,6 +150,50 @@ func TestEditableDraftClobberedByRollback(t *testing.T) {
 	require.Equal(t, "version: 1\n", string(rolled), "draft area follows the rolled-back asset content")
 }
 
+// TestEditableDraftFromPublishArchiveIsWritable reproduces the exact failure seen on a
+// live stack (V-3 walkthrough):
+//
+//	archive sync failed: archiveRepo: open .../archive/files/dashboards/draft_explore.yaml:
+//	permission denied
+//
+// Release archives are built by archive.CreateFromBlobs (the publish flow), which emits
+// only file entries with mode 0644 and no directory entries. untar used to create each
+// parent directory with that *file* mode, so nested directories lost their execute bit
+// and writing into them failed. Pre-creating just the top-level draft directory was not
+// enough — every nested directory hit the same problem.
+func TestEditableDraftFromPublishArchiveIsWritable(t *testing.T) {
+	dir := t.TempDir()
+
+	// Build the archive exactly like packageDevDraft does.
+	buf, err := archive.CreateFromBlobs(context.Background(), []archive.BlobEntry{
+		{Path: "/rill.yaml", Data: []byte("compiler: rill-beta\n")},
+		{Path: "/metrics/published_mv.yaml", Data: []byte("type: metrics_view\n")},
+		{Path: "/dashboards/draft_explore.yaml", Data: []byte("type: explore\n")},
+	})
+	require.NoError(t, err)
+	body := buf.Bytes()
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, _ *http.Request) {
+		_, _ = w.Write(body)
+	}))
+	t.Cleanup(srv.Close)
+
+	r := &archiveRepo{tmpDir: dir, editable: true, archiveDownloadURL: srv.URL, archiveID: "asset-v1"}
+	require.NoError(t, r.sync(context.Background()))
+
+	// Nested files must have extracted.
+	for _, p := range []string{"rill.yaml", "metrics/published_mv.yaml", "dashboards/draft_explore.yaml"} {
+		_, err := os.Stat(filepath.Join(r.root(), p))
+		require.NoError(t, err, "expected %s to be extracted", p)
+	}
+
+	// And the nested directories must remain writable so Studio edits succeed.
+	for _, d := range []string{"metrics", "dashboards"} {
+		probe := filepath.Join(r.root(), d, "probe.yaml")
+		require.NoError(t, os.WriteFile(probe, []byte("x: 1\n"), 0o644),
+			"nested dir %q must stay writable for dev draft edits", d)
+	}
+}
+
 // TestNonEditableArchiveAlwaysReExtracts covers the production path for contrast:
 // prod deployments are not editable, so every new archive replaces the files wholesale.
 func TestNonEditableArchiveAlwaysReExtracts(t *testing.T) {
@@ -165,29 +210,4 @@ func TestNonEditableArchiveAlwaysReExtracts(t *testing.T) {
 	// A non-editable repo has no marker file, so it must not leak one into the files dir.
 	_, err = os.Stat(filepath.Join(r.root(), syncedArchiveIDFile))
 	require.True(t, os.IsNotExist(err))
-}
-
-// TestCreateFromBlobsOmitsDirEntries pins down an additional R1 finding.
-//
-// packageDevDraft (used by every publish + rollback) builds the release archive via
-// archive.CreateFromBlobs, which writes only file entries. When the receiving side
-// (dev or prod) runs an "untar into an empty directory", untar creates the parent
-// directory with the file mode of the first entry (0644, no execute bit), so every
-// subsequent write into that directory fails with EACCES.
-//
-// syncEditable used to trigger this: it called archive.Download(..., clean=true, ...),
-// which lets untar create the top-level draft directory. We now pre-create the draft
-// directory with 0755 and pass clean=false so untar only writes files into it, which
-// sidesteps the issue for the editable path.
-//
-// The underlying archive/untar contract still allows an ill-formed archive to produce
-// unwritable directories — a caller that decompresses into a fresh path without a
-// pre-existing writable root will hit the same problem. Consider whether prod
-// deployment redeploy is affected (their sync builds files under a MkdirTemp'd
-// directory, which is writable, so the extraction succeeds; but any nested-only
-// archive relies on that pre-existing writable root).
-func TestCreateFromBlobsOmitsDirEntries(t *testing.T) {
-	t.Skip("addressed for the editable dev path by pre-creating the draft directory in syncEditable; " +
-		"prod path relies on the pre-existing MkdirTemp'd directory. See " +
-		"design/phase4-review-and-hardening-r1-findings.md for the full analysis.")
 }

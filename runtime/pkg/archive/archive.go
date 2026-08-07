@@ -234,13 +234,18 @@ func untar(src, dest string, ignorePaths bool) error {
 
 		switch header.Typeflag {
 		case tar.TypeDir:
-			// Handle directory
-			if err := os.MkdirAll(target, header.FileInfo().Mode()); err != nil {
+			// Handle directory. OR in 0700 so the extraction process can always
+			// traverse/write into it, even if the archive recorded a restrictive mode.
+			if err := os.MkdirAll(target, header.FileInfo().Mode()|0o700); err != nil {
 				return err
 			}
 		case tar.TypeReg:
-			// Handle regular file
-			if err := os.MkdirAll(filepath.Dir(target), header.FileInfo().Mode()); err != nil {
+			// Handle regular file. Parent directories are created with 0755 rather than
+			// the *file's* mode: archives produced by CreateFromBlobs (the publish flow)
+			// contain only file entries with mode 0644, and using that for the parent
+			// directory would drop the execute bit, so writing files into it — and any
+			// later edits in the dev draft area — would fail with EACCES.
+			if err := os.MkdirAll(filepath.Dir(target), 0o755); err != nil {
 				return err
 			}
 			outFile, err := os.Create(target)
