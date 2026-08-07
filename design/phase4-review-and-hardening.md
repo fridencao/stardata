@@ -89,6 +89,12 @@ Phase 4「双层角色化智能 BI」改造，整体完成度约 **80%**。核�
 - **Feature Access 后端双保险**（延后项，见 D5）：runtime API 层校验 `AccessChat / AccessDashboards / AccessReports / AccessAlerts` 拒绝越权
 - Studio 路由从 `-/edit/studio` 迁到 `/studio/[domain]`，解耦 dev deployment 生命周期
 
+### 实施过程中新增并已完成的项
+
+- **P2-7 RouterAgent 对 DeepSeek 的 tool-calling 兼容性**（已修）：router agent 用「无 tools 的结构化输出」选 agent，DeepSeek 却把选择当 tool call 返回（`name="Agent choice"`），框架去执行不存在的 tool 而报错——**生产 ChatBI 走 router agent 入口时会失败**。修复在 deepseek 驱动：请求未声明 tools 时把返回的 tool call 规范化为携带 JSON 的 text block。真实 DeepSeek 端到端验证通过。
+- **parser 冷启动 bug**（已修）：`ignorePathPrefixes` 只在 `Reparse` / `IsSkippable` 生效，初次全量 `parsePaths` 未过滤，导致每个启用门控的项目启动时都带一条 `/publish.yaml: resource type not specified` 解析错误。
+- **R1-X 草稿区目录权限 bug**（已修）：见 `phase4-review-and-hardening-r1-findings.md`。
+
 ## 4. 已接受的技术债档案
 
 以下项目**主动延后**，在客户方安全 / 交付 review 时可援引本文档说明是审慎权衡的结果，非遗漏：
@@ -98,22 +104,22 @@ Phase 4「双层角色化智能 BI」改造，整体完成度约 **80%**。核�
 | Feature Access 后端双保险缺失 | 前端隐藏 tab，后端 runtime API 未校验 access_* | 垂直越权：用户直接调 API 或猜路由访问被隐藏功能 | 结合发布门控 fail-closed（P0-2），关键数据查询已经受语义层 security policy 与发布门控双重拦截；剩余风险主要是 reports/alerts 列表接口的 metadata 泄漏 |
 | Studio 挂 `-/edit/studio` | 生命周期绑 dev deployment，URL 暴露 `-/edit` | 治理者遇到 dev deployment 问题时体验割裂 | P2-5 的 error boundary 消化 90% 场景 |
 | `-/ai`、`-/dashboards` 等 legacy 路由保留 | 未删，仍可访问 | 内部路径不一致，可能被 bookmark 分发 | 门户 tab 已经指向新路由，legacy 路径视为内部实现 |
-| web-admin 585 个 svelte-check 类型错误 | 既有类型债，遍布 121 文件 | CI 无法用 svelte-check 卡住新增类型错误 | 见 V-5：建议设 baseline 白名单（参考 `scripts/tsc-with-whitelist.sh`）先卡增量 |
+| `svelte-check --tsconfig` 模式约 585 个类型错误 | 深层类型债；**注意 CI 并不跑这个模式** | 无法启用更严格的类型门禁 | CI 实际跑 `--no-tsconfig`，已在 V-5 中清零；严格模式清理属独立课题 |
 
 ## 4b. 待验证清单（Verification Backlog）
 
 已实现但**尚未在真实环境确认**的部分。每一项都对应一个具体的复现步骤，不是"再看一眼"级别的检查。
 
-| # | 待验证项 | 为什么重要 | 关联改动 |
-|---|---|---|---|
-| V-1 | Studio error boundary 的错误文案匹配 | 正则（`runtime not reachable` / `not ready` / `failed\|error\|unavailable`）是读代码推断的；兜不住就会漏出原始技术错误，等于 P2-5 白做 | `studio/+error.svelte` |
-| V-2 | `?preview=1` 不被上游 layout 截胡 | `?preview` 语义只在 `[project]/+page.ts` 实现；`+layout.ts` 的 `maybeRedirectToEditableDeployment` / branch / welcome 重定向都可能抢先跳走 | `[project]/+page.ts` |
-| V-3 | R1 全链路 docker-compose 人工走查 | R1-X 修复只在 unit test 层验证过；容器内 `USER stardata`(uid 1001) + `runtime_data` volume 的实际行为未确认。另需确认 publish/rollback 可靠触发 prod 重部署 | `repo_archive.go` |
-| V-4 | 发布门控 HTTP 层端到端 | P0-2 只有单元级验证；未用非治理账号实际访问未发布 explore/canvas/embed URL 确认 403/404 | `runtime/publishgate.go` 及三处接入点 |
-| V-5 | svelte-check 585 错误的处理策略 | 决定 CI 能否卡住前端类型回归 | — |
-| V-6 | `build:i18n` 锁定 node 22 | node 18 下 paraglide 报 `crypto is not defined` 静默失败；CI/镜像若用 18 则 i18n 产物不更新 | `.nvmrc` / CI 配置 |
+| # | 待验证项 | 状态 | 为什么重要 | 关联改动 |
+|---|---|---|---|---|
+| V-1 | Studio error boundary 的错误文案匹配 | 待验证 | 正则（`runtime not reachable` / `not ready` / `failed\|error\|unavailable`）是读代码推断的；兜不住就会漏出原始技术错误，等于 P2-5 白做 | `studio/+error.svelte` |
+| V-2 | `?preview=1` 不被上游 layout 截胡 | 待验证 | `?preview` 语义只在 `[project]/+page.ts` 实现；`+layout.ts` 的 `maybeRedirectToEditableDeployment` / branch / welcome 重定向都可能抢先跳走 | `[project]/+page.ts` |
+| V-3 | R1 全链路 docker-compose 人工走查 | 待验证 | R1-X 修复只在 unit test 层验证过；容器内 `USER stardata`(uid 1001) + `runtime_data` volume 的实际行为未确认。另需确认 publish/rollback 可靠触发 prod 重部署 | `repo_archive.go` |
+| V-4 | 发布门控 HTTP 层端到端 | 待验证 | P0-2 只有单元级验证；未用非治理账号实际访问未发布 explore/canvas/embed URL 确认 403/404 | `runtime/publishgate.go` 及三处接入点 |
+| V-5 | svelte-check 处理策略 | ✅ 已闭合 | **更正先前记录**：CI 跑的是 `--no-tsconfig`，只有 3 个既有错误（不是 585；585 来自本地 `npm run check` 的 `--tsconfig` 模式）。3 个已修复，web-admin / web-common 均 0 error | `CreateProjectForm.svelte`、`OrgUsersTable.svelte` |
+| V-6 | `build:i18n` 锁定 node ≥20 | ✅ 已闭合 | node 18 下 paraglide 报 `crypto is not defined` 静默失败 | `scripts/check-node-version.js`、`package.json` |
 
-> 原则：这些项在 Phase 4 收尾判定（§6）之前必须闭合 V-1 ~ V-4；V-5 / V-6 属工程化改进，可与 4c 并行。
+> 原则：这些项在 Phase 4 收尾判定（§6）之前必须闭合 V-1 ~ V-4。
 
 ## 5. 执行顺序与依赖
 
