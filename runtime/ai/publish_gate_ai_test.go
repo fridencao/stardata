@@ -169,6 +169,28 @@ func TestPublishGateRealLLM(t *testing.T) {
 	}
 }
 
+// TestRouterAgentRealLLM_DeepSeek verifies the DeepSeek phantom-tool-call fix:
+// the router agent's structured "agent choice" completion (no tools declared)
+// used to fail with `unknown tool "Agent choice"` because DeepSeek returned the
+// choice as a tool call. With normalizePhantomToolCalls it should route cleanly.
+func TestRouterAgentRealLLM_DeepSeek(t *testing.T) {
+	rt, instanceID := testruntime.NewInstanceWithOptions(t, testruntime.InstanceOptions{
+		AIConnector: "deepseek",
+		Files:       gatedProjectFiles,
+	})
+	testruntime.RequireReconcileState(t, rt, instanceID, 6, 0, 0)
+
+	s := newEval(t, rt, instanceID)
+
+	var res *ai.RouterAgentResult
+	_, err := s.CallTool(t.Context(), ai.RoleUser, ai.RouterAgentName, &res, ai.RouterAgentArgs{
+		Prompt: "Which country has the highest revenue? Answer with a single country name and nothing else.",
+	})
+	require.NoError(t, err)
+	require.Equal(t, ai.AnalystAgentName, res.Agent)
+	require.Contains(t, analystResponseBody(t, res.Response), "United States")
+}
+
 func listMetricsViewNames(res ai.ListMetricsViewsResult) []string {
 	var names []string
 	for _, m := range res.MetricsViews {
