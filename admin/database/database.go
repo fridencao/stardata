@@ -324,6 +324,9 @@ type DB interface {
 	FindProjectPublish(ctx context.Context, projectID string, version int) (*ProjectPublish, error)
 	InsertProjectPublish(ctx context.Context, opts *InsertProjectPublishOptions) (*ProjectPublish, error)
 
+	InsertAuditEvent(ctx context.Context, opts *InsertAuditEventOptions) error
+	ListAuditEventsForOrg(ctx context.Context, orgID string, filter *AuditEventFilter, limit int) ([]*AuditEvent, error)
+
 	FindOrganizationIDsWithBilling(ctx context.Context) ([]string, error)
 	FindOrganizationIDsWithoutBilling(ctx context.Context) ([]string, error)
 
@@ -1289,6 +1292,37 @@ type InsertProjectPublishOptions struct {
 	AssetID     string
 	Note        string
 	PublishedBy string
+}
+
+// AuditEvent is an append-only record of an administrative mutation (StarData).
+// It powers the compliance audit view and the operational tracing needed for
+// enterprise deployments. Payload is a small JSON blob with event-specific
+// details (e.g. rollback source version, previous role, published archive id).
+type AuditEvent struct {
+	ID          string    `db:"id"`
+	OrgID       string    `db:"org_id"`
+	ProjectID   *string   `db:"project_id"`
+	ActorUserID *string   `db:"actor_user_id"`
+	EventType   string    `db:"event_type"`
+	TargetID    string    `db:"target_id"`
+	Payload     []byte    `db:"payload"`
+	CreatedOn   time.Time `db:"created_on"`
+}
+
+// InsertAuditEventOptions defines the fields recorded on a new audit event.
+type InsertAuditEventOptions struct {
+	OrgID       string
+	ProjectID   *string
+	ActorUserID *string
+	EventType   string
+	TargetID    string
+	Payload     map[string]any
+}
+
+// AuditEventFilter narrows an audit-event listing. All fields are optional.
+type AuditEventFilter struct {
+	ProjectID *string
+	EventType string
 }
 
 // ProjectVariable represents a key-value variable for a project, possible for a specific environment (e.g. production or development).

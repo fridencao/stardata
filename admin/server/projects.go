@@ -1300,6 +1300,14 @@ func (s *Server) RemoveProjectMemberUser(ctx context.Context, req *adminv1.Remov
 		return nil, err
 	}
 
+	s.admin.RecordAudit(ctx, &admin.AuditEventOptions{
+		OrgID:       proj.OrganizationID,
+		ProjectID:   &proj.ID,
+		ActorUserID: auditActor(claims),
+		EventType:   admin.AuditEventMemberRemove,
+		TargetID:    user.ID,
+		Payload:     map[string]any{"scope": "project", "email": user.Email},
+	})
 	return &adminv1.RemoveProjectMemberUserResponse{}, nil
 }
 
@@ -1418,6 +1426,20 @@ func (s *Server) SetProjectMemberUserRole(ctx context.Context, req *adminv1.SetP
 	if err != nil {
 		return nil, err
 	}
+
+	s.admin.RecordAudit(ctx, &admin.AuditEventOptions{
+		OrgID:       proj.OrganizationID,
+		ProjectID:   &proj.ID,
+		ActorUserID: auditActor(claims),
+		EventType:   admin.AuditEventMemberRoleChange,
+		TargetID:    user.ID,
+		Payload: map[string]any{
+			"scope":              "project",
+			"email":              user.Email,
+			"role":               role.Name,
+			"restrict_resources": restrictResources,
+		},
+	})
 
 	return &adminv1.SetProjectMemberUserRoleResponse{}, nil
 }

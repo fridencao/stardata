@@ -13,6 +13,7 @@ import (
 	"strings"
 	"time"
 
+	admin "github.com/fridencao/stardata/admin"
 	"github.com/fridencao/stardata/admin/database"
 	"github.com/fridencao/stardata/admin/server/auth"
 	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
@@ -128,6 +129,18 @@ func (s *Server) rollbackForOrgAndProject(w http.ResponseWriter, r *http.Request
 		return httputil.Error(http.StatusInternalServerError, err)
 	}
 
+	s.admin.RecordAudit(ctx, &admin.AuditEventOptions{
+		OrgID:       proj.OrganizationID,
+		ProjectID:   &proj.ID,
+		ActorUserID: auditActor(claims),
+		EventType:   admin.AuditEventProjectRollback,
+		TargetID:    target.AssetID,
+		Payload: map[string]any{
+			"rolled_back_to_version": version,
+			"new_version":            pub.Version,
+		},
+	})
+
 	return writeJSON(w, publishItemFromDB(pub, true))
 }
 
@@ -188,6 +201,18 @@ func (s *Server) publishProject(w http.ResponseWriter, r *http.Request, proj *da
 	if err != nil {
 		return httputil.Error(http.StatusInternalServerError, err)
 	}
+
+	s.admin.RecordAudit(ctx, &admin.AuditEventOptions{
+		OrgID:       proj.OrganizationID,
+		ProjectID:   &proj.ID,
+		ActorUserID: auditActor(auth.GetClaims(ctx)),
+		EventType:   admin.AuditEventProjectPublish,
+		TargetID:    assetID,
+		Payload: map[string]any{
+			"version": pub.Version,
+			"note":    note,
+		},
+	})
 
 	return writeJSON(w, publishItemFromDB(pub, true))
 }

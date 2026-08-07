@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"strings"
 
+	admin "github.com/fridencao/stardata/admin"
 	"github.com/fridencao/stardata/admin/billing"
 	"github.com/fridencao/stardata/admin/database"
 	"github.com/fridencao/stardata/admin/pkg/publicemail"
@@ -518,6 +519,14 @@ func (s *Server) AddOrganizationMemberUser(ctx context.Context, req *adminv1.Add
 		return nil, status.Error(codes.AlreadyExists, "user is already a member of the organization")
 	}
 
+	s.admin.RecordAudit(ctx, &admin.AuditEventOptions{
+		OrgID:       org.ID,
+		ActorUserID: auditActor(claims),
+		EventType:   admin.AuditEventMemberAdd,
+		TargetID:    user.ID,
+		Payload:     map[string]any{"scope": "org", "email": user.Email, "role": role.Name},
+	})
+
 	err = s.admin.Email.SendOrganizationAddition(&email.OrganizationAddition{
 		ToEmail:       req.Email,
 		ToName:        "",
@@ -602,6 +611,14 @@ func (s *Server) RemoveOrganizationMemberUser(ctx context.Context, req *adminv1.
 		return nil, err
 	}
 
+	s.admin.RecordAudit(ctx, &admin.AuditEventOptions{
+		OrgID:       org.ID,
+		ActorUserID: auditActor(claims),
+		EventType:   admin.AuditEventMemberRemove,
+		TargetID:    user.ID,
+		Payload:     map[string]any{"scope": "org", "email": user.Email},
+	})
+
 	return &adminv1.RemoveOrganizationMemberUserResponse{}, nil
 }
 
@@ -664,6 +681,14 @@ func (s *Server) SetOrganizationMemberUserRole(ctx context.Context, req *adminv1
 	if err != nil {
 		return nil, err
 	}
+
+	s.admin.RecordAudit(ctx, &admin.AuditEventOptions{
+		OrgID:       org.ID,
+		ActorUserID: auditActor(claims),
+		EventType:   admin.AuditEventMemberRoleChange,
+		TargetID:    user.ID,
+		Payload:     map[string]any{"scope": "org", "email": user.Email, "role": role.Name},
+	})
 
 	return &adminv1.SetOrganizationMemberUserRoleResponse{}, nil
 }

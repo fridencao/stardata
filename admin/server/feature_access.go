@@ -4,12 +4,22 @@ import (
 	"context"
 
 	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
+	admin "github.com/fridencao/stardata/admin"
 	"github.com/fridencao/stardata/admin/server/auth"
 	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.opentelemetry.io/otel/attribute"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
+
+// auditActor extracts a user ID pointer from claims suitable for audit logging.
+func auditActor(claims auth.Claims) *string {
+	if claims.OwnerType() != auth.OwnerTypeUser {
+		return nil
+	}
+	id := claims.OwnerID()
+	return &id
+}
 
 // featureKeys are the features controlled by feature access.
 var featureKeys = []string{"chat", "dashboards", "reports", "alerts", "studio", "admin"}
@@ -66,6 +76,7 @@ func (s *Server) SetFeatureAccess(ctx context.Context, req *adminv1.SetFeatureAc
 	}
 
 	createdBy := claims.OwnerID()
+	changed := make(map[string]any, len(req.Features))
 	for _, f := range req.Features {
 		if !validFeatureKey(f.FeatureKey) {
 			return nil, status.Errorf(codes.InvalidArgument, "unknown feature_key %q", f.FeatureKey)
@@ -73,7 +84,21 @@ func (s *Server) SetFeatureAccess(ctx context.Context, req *adminv1.SetFeatureAc
 		if err := s.admin.DB.UpsertFeatureAccess(ctx, org.ID, projectID, req.SubjectType, req.SubjectId, f.FeatureKey, f.Granted, &createdBy); err != nil {
 			return nil, err
 		}
+		changed[f.FeatureKey] = f.Granted
 	}
+
+	s.admin.RecordAudit(ctx, &admin.AuditEventOptions{
+		OrgID:       org.ID,
+		ProjectID:   projectID,
+		ActorUserID: auditActor(claims),
+		EventType:   admin.AuditEventFeatureAccessSet,
+		TargetID:    req.SubjectId,
+		Payload: map[string]any{
+			"subject_type": req.SubjectType,
+			"features":     changed,
+		},
+	})
+
 	return &adminv1.SetFeatureAccessResponse{}, nil
 }
 
@@ -166,6 +191,7 @@ func (s *Server) SetOrgFeatureDefaults(ctx context.Context, req *adminv1.SetOrgF
 		return nil, status.Error(codes.PermissionDenied, "not allowed to manage feature access")
 	}
 
+	changed := make(map[string]any, len(req.Features))
 	for _, f := range req.Features {
 		if !validFeatureKey(f.FeatureKey) {
 			return nil, status.Errorf(codes.InvalidArgument, "unknown feature_key %q", f.FeatureKey)
@@ -173,6 +199,15 @@ func (s *Server) SetOrgFeatureDefaults(ctx context.Context, req *adminv1.SetOrgF
 		if err := s.admin.DB.SetOrgFeatureDefault(ctx, org.ID, f.FeatureKey, f.Granted); err != nil {
 			return nil, err
 		}
+		changed[f.FeatureKey] = f.Granted
 	}
+
+	s.admin.RecordAudit(ctx, &admin.AuditEventOptions{
+		OrgID:       org.ID,
+		ActorUserID: auditActor(claims),
+		EventType:   admin.AuditEventOrgFeatureDefaults,
+		Payload:     map[string]any{"features": changed},
+	})
+
 	return &adminv1.SetOrgFeatureDefaultsResponse{}, nil
 }
