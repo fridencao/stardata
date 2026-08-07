@@ -609,6 +609,14 @@ func (p *Parser) reparseExceptRillYAML(ctx context.Context, paths []string) (*Di
 // It also assumes that the caller has already removed any previous resources related to the paths,
 // enabling parsePaths to insert changed resources without conflicts.
 func (p *Parser) parsePaths(ctx context.Context, paths []string) error {
+	// Drop ignored paths.
+	// Reparse filters these before calling us, but the initial full parse (reload) does not,
+	// so without this a file like /publish.yaml would be parsed once at startup and reported
+	// as "resource type not specified" until the next reparse.
+	paths = slices.DeleteFunc(slices.Clone(paths), func(path string) bool {
+		return pathIsIgnored(normalizePath(path))
+	})
+
 	// Check limits
 	if len(paths) > maxFiles {
 		return fmt.Errorf("project exceeds file limit of %d", maxFiles)

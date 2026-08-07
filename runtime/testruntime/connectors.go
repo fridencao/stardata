@@ -338,6 +338,19 @@ var Connectors = map[string]ConnectorAcquireFunc{
 		require.NotEmpty(t, apiKey)
 		return map[string]string{"api_key": apiKey}
 	},
+	"deepseek": func(t TestingT) map[string]string {
+		loadDotEnv(t)
+		apiKey := os.Getenv("RILL_RUNTIME_DEEPSEEK_TEST_API_KEY")
+		require.NotEmpty(t, apiKey)
+		cfg := map[string]string{"api_key": apiKey}
+		if model := os.Getenv("RILL_RUNTIME_DEEPSEEK_TEST_MODEL"); model != "" {
+			cfg["model"] = model
+		}
+		if baseURL := os.Getenv("RILL_RUNTIME_DEEPSEEK_TEST_BASE_URL"); baseURL != "" {
+			cfg["base_url"] = baseURL
+		}
+		return cfg
+	},
 	"gemini": func(t TestingT) map[string]string {
 		loadDotEnv(t)
 		apiKey := os.Getenv("RILL_RUNTIME_GEMINI_TEST_API_KEY")

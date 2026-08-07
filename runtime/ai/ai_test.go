@@ -9,12 +9,12 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/google/uuid"
 	aiv1 "github.com/fridencao/stardata/proto/gen/stardata/ai/v1"
 	"github.com/fridencao/stardata/runtime"
 	"github.com/fridencao/stardata/runtime/ai"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/pkg/activity"
+	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 	"gopkg.in/yaml.v3"
 
@@ -31,7 +31,9 @@ func newSession(t *testing.T, rt *runtime.Runtime, instanceID string) *ai.Sessio
 	s, err := r.Session(t.Context(), &ai.SessionOptions{
 		InstanceID: instanceID,
 		Claims:     claims,
-		UserAgent:  "rill-evals",
+		// UserAgent must start with "stardata" for the router agent (and other
+		// portal-facing tools) to grant access. The upstream default was "rill-evals".
+		UserAgent: "stardata-evals",
 	})
 	require.NoError(t, err)
 	t.Cleanup(func() {
