@@ -36,6 +36,16 @@ func resolveMVAndSecurityFromAttributes(ctx context.Context, rt *runtime.Runtime
 		return nil, nil, err
 	}
 
+	// StarData publish gate: an unpublished metrics view is not queryable outside Studio,
+	// so a direct dashboard or embed link cannot reach draft data.
+	allowed, err := rt.CheckPublishGate(ctx, instanceID, claims, res)
+	if err != nil {
+		return nil, nil, err
+	}
+	if !allowed {
+		return nil, nil, ErrForbidden
+	}
+
 	resolvedSecurity, err := rt.ResolveSecurity(ctx, instanceID, claims, res)
 	if err != nil {
 		return nil, nil, err

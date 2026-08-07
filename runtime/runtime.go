@@ -50,6 +50,7 @@ type Runtime struct {
 	connCache      conncache.Cache
 	queryCache     *queryCache
 	securityEngine *securityEngine
+	publishGates   *publishGateCache
 	configReloader *configReloader
 }
 
@@ -59,12 +60,13 @@ func New(ctx context.Context, opts *Options, logger *zap.Logger, st *storage.Cli
 	}
 
 	rt := &Runtime{
-		Email:      emailClient,
-		opts:       opts,
-		Logger:     logger,
-		storage:    st,
-		activity:   ac,
-		queryCache: newQueryCache(opts.QueryCacheSizeBytes),
+		Email:        emailClient,
+		opts:         opts,
+		Logger:       logger,
+		storage:      st,
+		activity:     ac,
+		queryCache:   newQueryCache(opts.QueryCacheSizeBytes),
+		publishGates: newPublishGateCache(),
 	}
 	rt.securityEngine = newSecurityEngine(opts.SecurityEngineCacheSize, logger, rt)
 
