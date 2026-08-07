@@ -116,7 +116,6 @@
         role: row.original.roleName,
         isCurrentUser: row.original.userEmail === currentUserEmail,
         organizationPermissions,
-        isBillingContact: row.original.userEmail === billingContact,
         pendingAcceptance: "invitedBy" in row.original,
         onConvertToMember: () => onConvertToMember(row.original),
       }),

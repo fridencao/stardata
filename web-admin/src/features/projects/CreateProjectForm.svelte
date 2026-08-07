@@ -87,7 +87,9 @@
             `Project name '${$form.name}' is already taken. Please try a different name.`,
           ];
         } else {
-          const deployError = getPrettyDeployError(new Error(error));
+          // orgOnTrial is not available in this create-project context; pass false
+          // so trial-specific messaging is skipped (generic error message is used).
+          const deployError = getPrettyDeployError(new Error(error), false);
           if (deployError) onDeployError?.(deployError);
           $errors["name"] = [error];
         }
