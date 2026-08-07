@@ -22,7 +22,7 @@ func New(t *testing.T) Container {
 	container, err := testcontainers.GenericContainer(ctx, testcontainers.GenericContainerRequest{
 		Started: true,
 		ContainerRequest: testcontainers.ContainerRequest{
-			Image:        "postgres:14",
+			Image:        "postgres:15",
 			ExposedPorts: []string{"5432/tcp"},
 			WaitingFor:   wait.ForLog("database system is ready to accept connections").WithOccurrence(2).WithStartupTimeout(15 * time.Second),
 			Env: map[string]string{
