@@ -15,6 +15,15 @@
   // 需求清单后端：web-admin 注入 admin 通道（虚拟文件存在 Postgres，
   // runtime 的 /requests.yaml 读不到）；web-local 不传，读写 runtime 文件
   export let backend: RequestsBackend | null = null;
+  /**
+   * 独立需求列表页地址。传入时，嵌入版（总览/发布页）只展示前 limit 条并给出
+   * 「查看全部」入口，避免需求变多之后把宿主页面挤爆。
+   */
+  export let allHref: string | undefined = undefined;
+  /** 嵌入版展示上限；undefined 表示不限制（独立页使用）。 */
+  export let limit: number | undefined = undefined;
+  /** 独立页里隐藏区块标题，交由页面自己的标题承担。 */
+  export let showHeading = true;
 
   const runtimeClient = useRuntimeClient();
 
@@ -41,6 +50,8 @@
       ? []
       : parseRequestsYaml($fileQuery.data?.blob);
   $: openItems = items.filter((it) => it.status === "open");
+  $: displayItems = limit != null ? openItems.slice(0, limit) : openItems;
+  $: hasMore = limit != null && openItems.length > limit;
   $: doneItems = items.filter((it) => it.status === "done");
 
   let saving = false;
@@ -68,19 +79,21 @@
 </script>
 
 <section class="mt-8">
-  <h3 class="text-base font-bold text-gray-900">
-    {m.studio_requests_title()}
-    {#if openItems.length > 0}
-      <span
-        class="ml-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700"
-      >
-        {openItems.length}
-      </span>
-    {/if}
-  </h3>
-  <p class="mt-0.5 text-[13px] text-gray-400">
-    {m.studio_requests_desc()}
-  </p>
+  {#if showHeading}
+    <h3 class="text-base font-bold text-gray-900">
+      {m.studio_requests_title()}
+      {#if openItems.length > 0}
+        <span
+          class="ml-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-700"
+        >
+          {openItems.length}
+        </span>
+      {/if}
+    </h3>
+    <p class="mt-0.5 text-[13px] text-gray-400">
+      {m.studio_requests_desc()}
+    </p>
+  {/if}
 
   {#if openItems.length === 0}
     <div
@@ -90,7 +103,7 @@
     </div>
   {:else}
     <ul class="mt-3 flex flex-col gap-2">
-      {#each openItems as item (item.created_at + item.question)}
+      {#each displayItems as item (item.created_at + item.question)}
         <li
           class="flex items-start justify-between gap-3 rounded-xl border border-gray-200 bg-surface-card px-4 py-3"
         >
@@ -122,6 +135,14 @@
         </li>
       {/each}
     </ul>
+    {#if hasMore && allHref}
+      <a
+        href={allHref}
+        class="mt-2 inline-block text-sm font-medium text-primary-600 hover:text-primary-700"
+      >
+        {m.studio_requests_view_all({ count: openItems.length })} →
+      </a>
+    {/if}
   {/if}
 
   {#if doneItems.length > 0}

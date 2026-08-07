@@ -15,4 +15,5 @@
   {backend}
   {requestsBackend}
   semanticsBase={`${editBase}/studio/semantics`}
+  requestsPageHref={`${editBase}/studio/requests`}
 />

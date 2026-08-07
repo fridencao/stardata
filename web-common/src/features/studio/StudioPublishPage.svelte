@@ -30,6 +30,8 @@
   export let semanticsBase = "/studio/semantics";
   // 需求清单后端（web-admin 注入 admin 通道；web-local 不传则读写 runtime 文件）
   export let requestsBackend: RequestsBackend | null = null;
+  // 独立需求列表页地址（web-admin 传入；不传则嵌入版不显示「查看全部」）
+  export let requestsPageHref: string | undefined = undefined;
 
   const client = useRuntimeClient();
   const publishFile = usePublishFile(client);
@@ -333,4 +335,4 @@
   </div>
 {/if}
 
-<RequestsTodo semanticsHref={semanticsBase} backend={requestsBackend} />
+<RequestsTodo semanticsHref={semanticsBase} backend={requestsBackend} limit={3} allHref={requestsPageHref} />
