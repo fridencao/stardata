@@ -8,6 +8,7 @@
     Code2,
     Activity,
     Settings,
+    Eye,
   } from "lucide-svelte";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
@@ -22,6 +23,12 @@
   export let statusHref: string | undefined = undefined;
   /** 项目设置入口(StarData:收编自遗留控制台的 -/settings);不传则不显示 */
   export let settingsHref: string | undefined = undefined;
+  /**
+   * 业务视图预览入口(StarData):治理者默认落地 Studio,看不到业务用户的门户首页,
+   * 因而无法自验证"发布之后业务侧长什么样"。此入口在新标签页打开门户首页。
+   * 不传则不显示。
+   */
+  export let previewHref: string | undefined = undefined;
 
   $: tabs = [
     { label: m.studio_tabs_overview(), href: `${basePath}/studio`, icon: LayoutDashboard },
@@ -61,4 +68,17 @@
       {/if}
     </a>
   {/each}
+
+  {#if previewHref}
+    <a
+      href={previewHref}
+      target="_blank"
+      rel="noopener noreferrer"
+      title={m.studio_preview_business_view_hint()}
+      class="ml-auto flex items-center gap-1.5 rounded-lg bg-primary-50 px-3 py-1.5 text-xs font-medium text-primary-700 no-underline hover:bg-primary-100"
+    >
+      <Eye class="size-3.5" />
+      {m.studio_preview_business_view()}
+    </a>
+  {/if}
 </div>

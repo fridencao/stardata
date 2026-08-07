@@ -35,6 +35,7 @@
     ideHref={editBase || "/"}
     {ideActive}
     statusHref={`${portalBase}/-/status`}
+    previewHref={`${portalBase}?preview=1`}
   />
   <main class="w-full flex-1 overflow-y-auto p-8 xl:max-w-6xl xl:mx-auto">
     <slot />
