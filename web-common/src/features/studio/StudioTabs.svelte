@@ -14,6 +14,13 @@
 
   /** 路由前缀(web-local 为 "";web-admin 为 "/[org]/[project]/-/edit") */
   export let basePath = "";
+  /**
+   * Studio 区段根路径。传入时,各 Studio Tab 直接挂在其下
+   * (`${studioBase}`、`${studioBase}/sources` …);不传时回退到旧结构
+   * `${basePath}/studio`(供 -/edit 下的旧 Studio 布局复用)。
+   * 新版顶级路由 /studio/[domain] 传入 `/studio/[domain]`。
+   */
+  export let studioBase: string | undefined = undefined;
   /** 高级模式(IDE)入口;web-local 为 "/files",web-admin 为 edit 工作区根 */
   export let ideHref = "/files";
   /** IDE Tab 的激活判定(IDE 路由结构两端不同,由调用方决定) */
@@ -30,11 +37,13 @@
    */
   export let previewHref: string | undefined = undefined;
 
+  $: sBase = studioBase ?? `${basePath}/studio`;
+
   $: tabs = [
-    { label: m.studio_tabs_overview(), href: `${basePath}/studio`, icon: LayoutDashboard },
-    { label: m.studio_tabs_sources(), href: `${basePath}/studio/sources`, icon: Database },
-    { label: m.studio_tabs_semantics(), href: `${basePath}/studio/semantics`, icon: Network },
-    { label: m.studio_tabs_publish(), href: `${basePath}/studio/publish`, icon: Rocket },
+    { label: m.studio_tabs_overview(), href: sBase, icon: LayoutDashboard },
+    { label: m.studio_tabs_sources(), href: `${sBase}/sources`, icon: Database },
+    { label: m.studio_tabs_semantics(), href: `${sBase}/semantics`, icon: Network },
+    { label: m.studio_tabs_publish(), href: `${sBase}/publish`, icon: Rocket },
     ...(settingsHref
       ? [{ label: m.nav_tab_settings(), href: settingsHref, icon: Settings }]
       : []),
@@ -47,7 +56,7 @@
   $: pathname = $page.url.pathname;
 
   function isActive(href: string, path: string): boolean {
-    if (href === `${basePath}/studio`) return path === href;
+    if (href === sBase) return path === href;
     if (href === ideHref) return ideActive(path);
     return path.startsWith(href);
   }

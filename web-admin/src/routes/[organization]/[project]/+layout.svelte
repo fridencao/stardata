@@ -302,7 +302,7 @@
             <PortalNav
               brandHref={`/${organization}/${project}`}
               studioHref={runtime.projectPermissions?.accessStudio
-                ? `/${organization}/${project}/-/edit/studio`
+                ? `/studio/${project}`
                 : null}
               adminHref={(organizationPermissions?.accessAdmin ??
                 organizationPermissions?.manageOrg)

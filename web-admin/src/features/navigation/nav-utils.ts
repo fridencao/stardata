@@ -145,7 +145,10 @@ export function isPublicAlertPage(page: Page): boolean {
 }
 
 export function isEditPage({ route }: Pick<Page, "route">): boolean {
-  return !!route?.id?.startsWith("/[organization]/[project]/-/edit");
+  return (
+    !!route?.id?.startsWith("/[organization]/[project]/-/edit") ||
+    !!route?.id?.startsWith("/studio/[domain]")
+  );
 }
 
 /**
@@ -154,7 +157,10 @@ export function isEditPage({ route }: Pick<Page, "route">): boolean {
  * chrome (PortalNav + StudioTabs) instead of the technical ProjectHeader.
  */
 export function isStudioPage({ route }: Pick<Page, "route">): boolean {
-  return !!route?.id?.startsWith("/[organization]/[project]/-/edit/studio");
+  return (
+    !!route?.id?.startsWith("/[organization]/[project]/-/edit/studio") ||
+    !!route?.id?.startsWith("/studio/[domain]")
+  );
 }
 
 /**
