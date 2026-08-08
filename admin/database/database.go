@@ -365,6 +365,13 @@ type DB interface {
 	ListResourceVisibility(ctx context.Context, projectID string) ([]*ResourceVisibility, error)
 	UpsertResourceVisibility(ctx context.Context, opts *UpsertResourceVisibilityOptions) (*ResourceVisibility, error)
 
+	// Rollback requests (StarData Phase 5.3): dual-approval rollback.
+	InsertRollbackRequest(ctx context.Context, opts *InsertRollbackRequestOptions) (*RollbackRequest, error)
+	FindRollbackRequest(ctx context.Context, id string) (*RollbackRequest, error)
+	FindPendingRollbackRequest(ctx context.Context, projectID string) (*RollbackRequest, error)
+	ListRollbackRequests(ctx context.Context, projectID string, limit int) ([]*RollbackRequest, error)
+	ResolveRollbackRequest(ctx context.Context, id string, status RollbackRequestStatus, approvedByUserID *string) error
+
 	FindOrganizationIDsWithBilling(ctx context.Context) ([]string, error)
 	FindOrganizationIDsWithoutBilling(ctx context.Context) ([]string, error)
 
@@ -1494,6 +1501,37 @@ type UpsertResourceVisibilityOptions struct {
 	ResourceName    string
 	Visible         bool
 	UpdatedByUserID *string
+}
+
+// RollbackRequestStatus constrains the rollback_requests.status column.
+type RollbackRequestStatus string
+
+const (
+	RollbackRequestStatusPending  RollbackRequestStatus = "pending"
+	RollbackRequestStatusApproved RollbackRequestStatus = "approved"
+	RollbackRequestStatusRejected RollbackRequestStatus = "rejected"
+	RollbackRequestStatusExecuted RollbackRequestStatus = "executed"
+)
+
+// RollbackRequest is a request to roll a DB-mode project back to a previous version.
+type RollbackRequest struct {
+	ID                string                `db:"id"`
+	ProjectID         string                `db:"project_id"`
+	TargetVersion     int                   `db:"target_version"`
+	RequestedByUserID string                `db:"requested_by_user_id"`
+	ApprovedByUserID  *string               `db:"approved_by_user_id"`
+	Status            RollbackRequestStatus `db:"status"`
+	Reason            string                `db:"reason"`
+	RequestedOn       time.Time             `db:"requested_on"`
+	ResolvedOn        *time.Time            `db:"resolved_on"`
+}
+
+// InsertRollbackRequestOptions defines the input to open a rollback request.
+type InsertRollbackRequestOptions struct {
+	ProjectID         string
+	TargetVersion     int
+	RequestedByUserID string
+	Reason            string
 }
 
 // ProjectVariable represents a key-value variable for a project, possible for a specific environment (e.g. production or development).

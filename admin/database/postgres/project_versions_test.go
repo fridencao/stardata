@@ -189,3 +189,82 @@ func testResourceVisibility(t *testing.T, db database.DB) {
 	require.False(t, byName["Revenue_MV"])
 	require.True(t, byName["revenue_dash"])
 }
+
+// testRollbackRequests covers the two guardrails the schema carries rather than
+// leaving to the API: one pending request per project, and no self-approval.
+func testRollbackRequests(t *testing.T, db database.DB) {
+	ctx := context.Background()
+	_, proj := semanticTestProject(t, db, "rb")
+
+	userA, err := db.InsertUser(ctx, &database.InsertUserOptions{
+		Email:               "rb_a@example.com",
+		DisplayName:         "RB A",
+		QuotaSingleuserOrgs: -1,
+		QuotaTrialOrgs:      -1,
+	})
+	require.NoError(t, err)
+	userB, err := db.InsertUser(ctx, &database.InsertUserOptions{
+		Email:               "rb_b@example.com",
+		DisplayName:         "RB B",
+		QuotaSingleuserOrgs: -1,
+		QuotaTrialOrgs:      -1,
+	})
+	require.NoError(t, err)
+
+	// No pending request initially.
+	_, err = db.FindPendingRollbackRequest(ctx, proj.ID)
+	require.ErrorIs(t, err, database.ErrNotFound)
+
+	req, err := db.InsertRollbackRequest(ctx, &database.InsertRollbackRequestOptions{
+		ProjectID:         proj.ID,
+		TargetVersion:     1,
+		RequestedByUserID: userA.ID,
+		Reason:            "bad metric shipped",
+	})
+	require.NoError(t, err)
+	require.Equal(t, database.RollbackRequestStatusPending, req.Status)
+
+	// A second pending request for the same project must be refused — otherwise two
+	// governors could each get a different rollback approved and race.
+	_, err = db.InsertRollbackRequest(ctx, &database.InsertRollbackRequestOptions{
+		ProjectID:         proj.ID,
+		TargetVersion:     2,
+		RequestedByUserID: userB.ID,
+	})
+	require.Error(t, err)
+
+	found, err := db.FindPendingRollbackRequest(ctx, proj.ID)
+	require.NoError(t, err)
+	require.Equal(t, req.ID, found.ID)
+
+	// Self-approval is refused by the CHECK constraint even if the API let it slip.
+	err = db.ResolveRollbackRequest(ctx, req.ID, database.RollbackRequestStatusExecuted, &userA.ID)
+	require.Error(t, err, "self-approval must be rejected by the DB")
+
+	// A different approver succeeds.
+	require.NoError(t, db.ResolveRollbackRequest(ctx, req.ID, database.RollbackRequestStatusExecuted, &userB.ID))
+
+	resolved, err := db.FindRollbackRequest(ctx, req.ID)
+	require.NoError(t, err)
+	require.Equal(t, database.RollbackRequestStatusExecuted, resolved.Status)
+	require.NotNil(t, resolved.ApprovedByUserID)
+	require.Equal(t, userB.ID, *resolved.ApprovedByUserID)
+	require.NotNil(t, resolved.ResolvedOn)
+
+	// Re-resolving an already-handled request is refused, so two approvers clicking
+	// at once cannot both "win".
+	err = db.ResolveRollbackRequest(ctx, req.ID, database.RollbackRequestStatusRejected, &userB.ID)
+	require.Error(t, err)
+
+	// With the previous request resolved, a new one can be opened.
+	_, err = db.InsertRollbackRequest(ctx, &database.InsertRollbackRequestOptions{
+		ProjectID:         proj.ID,
+		TargetVersion:     1,
+		RequestedByUserID: userB.ID,
+	})
+	require.NoError(t, err)
+
+	history, err := db.ListRollbackRequests(ctx, proj.ID, 10)
+	require.NoError(t, err)
+	require.Len(t, history, 2)
+}
