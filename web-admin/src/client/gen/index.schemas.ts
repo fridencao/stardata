@@ -1176,6 +1176,9 @@ export interface V1Project {
   overrideDiskGb?: string;
   annotations?: V1ProjectAnnotations;
   prodVersion?: string;
+  /** semantic_layer_mode is "archive" (legacy file-based) or "db" (StarData Phase 5
+DB-versioned semantic layer). The frontend uses it to pick the editing flow. */
+  semanticLayerMode?: string;
   createdOn?: string;
   updatedOn?: string;
 }

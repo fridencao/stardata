@@ -130,7 +130,14 @@
   // a branchless studio URL) mints a JWT without ReadRepo, so mounting the
   // editor would only surface SSE PermissionDenied errors as a 500. Gate it —
   // `EditSessionGate` resumes the latest dev session by pinning its `@branch`.
-  $: isNotEditable = !!deployment && !deployment.editable;
+  //
+  // StarData Phase 5: DB-mode projects have no dev deployment to resume. Their
+  // draft lives in semantic_resources and is edited through the admin API, not
+  // through the runtime's repo store, so the prod deployment being non-editable
+  // is the expected steady state rather than a condition to recover from.
+  $: isDBSemanticLayer =
+    ($projectQuery.data?.project?.semanticLayerMode ?? "archive") === "db";
+  $: isNotEditable = !isDBSemanticLayer && !!deployment && !deployment.editable;
 
   // Invalidating this query refetches a fresh JWT; `runtimeClient.getJwt()`
   // reads the updated value on the next call. Branch must be part of the
@@ -232,10 +239,12 @@
             statusHref={`${portalBase}/-/status`}
             previewHref={`${portalBase}?preview=1`}
           />
-          <EditSessionTimeoutBanner
-            usedOn={deployment.usedOn}
-            {devTtlSeconds}
-          />
+          {#if !isDBSemanticLayer}
+            <EditSessionTimeoutBanner
+              usedOn={deployment.usedOn}
+              {devTtlSeconds}
+            />
+          {/if}
           <FileAndResourceWatcher
             lifecycle="none"
             {onBeforeReconnect}

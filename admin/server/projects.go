@@ -2076,6 +2076,7 @@ func (s *Server) projToDTO(p *database.Project, orgName string) *adminv1.Project
 		OverrideDiskGb:      safeInt64(p.OverrideDiskGB),
 		FrontendUrl:         s.admin.URLs.Project(orgName, p.Name),
 		Annotations:         p.Annotations,
+		SemanticLayerMode:   p.SemanticLayerMode,
 		CreatedOn:           timestamppb.New(p.CreatedOn),
 		UpdatedOn:           timestamppb.New(p.UpdatedOn),
 	}
