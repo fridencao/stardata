@@ -10,16 +10,19 @@ import (
 // Audit event types (StarData). Keep these stable — the compliance view and any
 // external audit tooling query on them.
 const (
-	AuditEventProjectPublish      = "project_publish"
-	AuditEventProjectRollback     = "project_rollback"
-	AuditEventFeatureAccessSet    = "feature_access_set"
-	AuditEventOrgFeatureDefaults  = "org_feature_defaults_set"
-	AuditEventOrgAIConfigSet      = "org_ai_config_set"
-	AuditEventMemberAdd           = "member_add"
-	AuditEventMemberRemove        = "member_remove"
-	AuditEventMemberRoleChange    = "member_role_change"
-	AuditEventUsergroupMemberAdd  = "usergroup_member_add"
-	AuditEventUsergroupMemberDrop = "usergroup_member_remove"
+	AuditEventProjectPublish         = "project_publish"
+	AuditEventProjectRollback        = "project_rollback"
+	AuditEventFeatureAccessSet       = "feature_access_set"
+	AuditEventOrgFeatureDefaults     = "org_feature_defaults_set"
+	AuditEventOrgAIConfigSet         = "org_ai_config_set"
+	AuditEventEditLockForceRelease   = "edit_lock_force_release"
+	AuditEventSemanticResourceSave   = "semantic_resource_save"
+	AuditEventSemanticResourceDelete = "semantic_resource_delete"
+	AuditEventMemberAdd              = "member_add"
+	AuditEventMemberRemove           = "member_remove"
+	AuditEventMemberRoleChange       = "member_role_change"
+	AuditEventUsergroupMemberAdd     = "usergroup_member_add"
+	AuditEventUsergroupMemberDrop    = "usergroup_member_remove"
 )
 
 // AuditEventOptions describes an audit event to record.

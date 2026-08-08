@@ -114,6 +114,7 @@ func New(ctx context.Context, dsn string, adm *admin.Service) (jobs.Client, erro
 	river.AddWorker(workers, &DeleteExpiredTokensWorker{admin: adm})
 	river.AddWorker(workers, &DeleteExpiredVirtualFilesWorker{admin: adm})
 	river.AddWorker(workers, &DeleteUnusedAssetsWorker{admin: adm})
+	river.AddWorker(workers, &DeleteExpiredEditingLocksWorker{admin: adm})
 	river.AddWorker(workers, &DeploymentsHealthCheckWorker{admin: adm, logger: adm.Logger})
 	river.AddWorker(workers, &HibernateExpiredDeploymentsWorker{admin: adm, logger: adm.Logger})
 	river.AddWorker(workers, &RunAutoscalerWorker{admin: adm, logger: adm.Logger})
@@ -134,6 +135,7 @@ func New(ctx context.Context, dsn string, adm *admin.Service) (jobs.Client, erro
 		{&DeleteExpiredTokensArgs{}, "0 */6 * * *", true},          // every 6 hours
 		{&DeleteExpiredVirtualFilesArgs{}, "0 */6 * * *", true},    // every 6 hours
 		{&DeleteUnusedAssetsArgs{}, "0 */6 * * *", true},           // every 6 hours
+		{&DeleteExpiredEditingLocksArgs{}, "*/10 * * * *", true},   // every 10 minutes
 		{&DeploymentsHealthCheckArgs{}, "0 */10 * * *", true},      // every 10 minutes
 		{&HibernateExpiredDeploymentsArgs{}, "*/15 * * * *", true}, // every 15 minutes
 	}
