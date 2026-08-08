@@ -85,6 +85,7 @@ import type {
   AdminServiceRequestProjectAccessBodyBody,
   AdminServiceRevokeAllUserAuthTokensParams,
   AdminServiceRevokeUserAuthTokenParams,
+  AdminServiceSaveSemanticResourceBody,
   AdminServiceSearchProjectNamesParams,
   AdminServiceSearchProjectUsersParams,
   AdminServiceSearchUsersParams,
@@ -107,6 +108,7 @@ import type {
   AdminServiceUpdateServiceBody,
   AdminServiceUpdateUsergroupBody,
   RpcStatus,
+  V1AcquireEditLockResponse,
   V1AddOrganizationMemberUserResponse,
   V1AddOrganizationMemberUsergroupResponse,
   V1AddProjectMemberUserResponse,
@@ -137,6 +139,7 @@ import type {
   V1DeletePersonalFileResponse,
   V1DeleteProjectResponse,
   V1DeleteReportResponse,
+  V1DeleteSemanticResourceResponse,
   V1DeleteServiceResponse,
   V1DeleteUserResponse,
   V1DeleteUsergroupResponse,
@@ -145,6 +148,7 @@ import type {
   V1EditAlertResponse,
   V1EditPersonalFileResponse,
   V1EditReportResponse,
+  V1ForceReleaseEditLockResponse,
   V1GenerateAlertYAMLResponse,
   V1GenerateReportYAMLResponse,
   V1GetAlertMetaResponse,
@@ -160,6 +164,7 @@ import type {
   V1GetDeploymentConfigResponse,
   V1GetDeploymentCredentialsResponse,
   V1GetDeploymentResponse,
+  V1GetEditLockResponse,
   V1GetIFrameResponse,
   V1GetOrgAIConfigResponse,
   V1GetOrganizationMemberUserResponse,
@@ -174,10 +179,12 @@ import type {
   V1GetProjectVariablesResponse,
   V1GetRepoMetaResponse,
   V1GetReportMetaResponse,
+  V1GetSemanticResourceResponse,
   V1GetServiceResponse,
   V1GetUserResponse,
   V1GetUsergroupResponse,
   V1GetVirtualFileResponse,
+  V1HeartbeatEditLockResponse,
   V1HibernateProjectResponse,
   V1IssueMagicAuthTokenResponse,
   V1IssueRepresentativeAuthTokenRequest,
@@ -207,6 +214,7 @@ import type {
   V1ListProjectsForUserByNameResponse,
   V1ListPublicBillingPlansResponse,
   V1ListRolesResponse,
+  V1ListSemanticResourcesResponse,
   V1ListServiceAuthTokensResponse,
   V1ListServicesResponse,
   V1ListSuperusersResponse,
@@ -221,6 +229,7 @@ import type {
   V1RecordEventsRequest,
   V1RecordEventsResponse,
   V1RedeployProjectResponse,
+  V1ReleaseEditLockResponse,
   V1RemoveBookmarkResponse,
   V1RemoveOrganizationMemberServiceResponse,
   V1RemoveOrganizationMemberUserResponse,
@@ -239,6 +248,7 @@ import type {
   V1RevokeRepresentativeAuthTokensResponse,
   V1RevokeServiceAuthTokenResponse,
   V1RevokeUserAuthTokenResponse,
+  V1SaveSemanticResourceResponse,
   V1SearchProjectNamesResponse,
   V1SearchProjectUsersResponse,
   V1SearchUsersResponse,
@@ -6191,6 +6201,497 @@ export const createAdminServiceCreateDeployment = <
   return createMutation(mutationOptions, queryClient);
 };
 /**
+ * @summary GetEditLock returns the current lock holder, if any.
+ */
+export const adminServiceGetEditLock = (
+  org: string,
+  project: string,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1GetEditLockResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/edit-lock`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getAdminServiceGetEditLockQueryKey = (
+  org?: string,
+  project?: string,
+) => {
+  return [`/v1/orgs/${org}/projects/${project}/edit-lock`] as const;
+};
+
+export const getAdminServiceGetEditLockQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceGetEditLock>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceGetEditLock>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getAdminServiceGetEditLockQueryKey(org, project);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminServiceGetEditLock>>
+  > = ({ signal }) => adminServiceGetEditLock(org, project, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(org && project),
+    ...queryOptions,
+  } as CreateQueryOptions<
+    Awaited<ReturnType<typeof adminServiceGetEditLock>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type AdminServiceGetEditLockQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceGetEditLock>>
+>;
+export type AdminServiceGetEditLockQueryError = RpcStatus;
+
+/**
+ * @summary GetEditLock returns the current lock holder, if any.
+ */
+
+export function createAdminServiceGetEditLock<
+  TData = Awaited<ReturnType<typeof adminServiceGetEditLock>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceGetEditLock>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getAdminServiceGetEditLockQueryOptions(
+    org,
+    project,
+    options,
+  );
+
+  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary AcquireEditLock takes (or refreshes) the project-level draft editing lock.
+ */
+export const adminServiceAcquireEditLock = (
+  org: string,
+  project: string,
+  adminServiceTriggerReconcileBodyBody: AdminServiceTriggerReconcileBodyBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1AcquireEditLockResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/edit-lock/acquire`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceTriggerReconcileBodyBody,
+    signal,
+  });
+};
+
+export const getAdminServiceAcquireEditLockMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceAcquireEditLock>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceTriggerReconcileBodyBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceAcquireEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceAcquireEditLock"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceAcquireEditLock>>,
+    { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServiceAcquireEditLock(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceAcquireEditLockMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceAcquireEditLock>>
+>;
+export type AdminServiceAcquireEditLockMutationBody =
+  AdminServiceTriggerReconcileBodyBody;
+export type AdminServiceAcquireEditLockMutationError = RpcStatus;
+
+/**
+ * @summary AcquireEditLock takes (or refreshes) the project-level draft editing lock.
+ */
+export const createAdminServiceAcquireEditLock = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceAcquireEditLock>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServiceTriggerReconcileBodyBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceAcquireEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceAcquireEditLockMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary ForceReleaseEditLock drops the lock regardless of holder (org admin recovery).
+ */
+export const adminServiceForceReleaseEditLock = (
+  org: string,
+  project: string,
+  adminServiceTriggerReconcileBodyBody: AdminServiceTriggerReconcileBodyBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1ForceReleaseEditLockResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/edit-lock/force-release`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceTriggerReconcileBodyBody,
+    signal,
+  });
+};
+
+export const getAdminServiceForceReleaseEditLockMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceForceReleaseEditLock>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceTriggerReconcileBodyBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceForceReleaseEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceForceReleaseEditLock"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceForceReleaseEditLock>>,
+    { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServiceForceReleaseEditLock(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceForceReleaseEditLockMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceForceReleaseEditLock>>
+>;
+export type AdminServiceForceReleaseEditLockMutationBody =
+  AdminServiceTriggerReconcileBodyBody;
+export type AdminServiceForceReleaseEditLockMutationError = RpcStatus;
+
+/**
+ * @summary ForceReleaseEditLock drops the lock regardless of holder (org admin recovery).
+ */
+export const createAdminServiceForceReleaseEditLock = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceForceReleaseEditLock>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServiceTriggerReconcileBodyBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceForceReleaseEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceForceReleaseEditLockMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary HeartbeatEditLock extends the caller's lock and flushes any pending autosave.
+ */
+export const adminServiceHeartbeatEditLock = (
+  org: string,
+  project: string,
+  adminServiceTriggerReconcileBodyBody: AdminServiceTriggerReconcileBodyBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1HeartbeatEditLockResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/edit-lock/heartbeat`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceTriggerReconcileBodyBody,
+    signal,
+  });
+};
+
+export const getAdminServiceHeartbeatEditLockMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceHeartbeatEditLock>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceTriggerReconcileBodyBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceHeartbeatEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceHeartbeatEditLock"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceHeartbeatEditLock>>,
+    { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServiceHeartbeatEditLock(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceHeartbeatEditLockMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceHeartbeatEditLock>>
+>;
+export type AdminServiceHeartbeatEditLockMutationBody =
+  AdminServiceTriggerReconcileBodyBody;
+export type AdminServiceHeartbeatEditLockMutationError = RpcStatus;
+
+/**
+ * @summary HeartbeatEditLock extends the caller's lock and flushes any pending autosave.
+ */
+export const createAdminServiceHeartbeatEditLock = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceHeartbeatEditLock>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServiceTriggerReconcileBodyBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceHeartbeatEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceHeartbeatEditLockMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary ReleaseEditLock releases the caller's lock.
+ */
+export const adminServiceReleaseEditLock = (
+  org: string,
+  project: string,
+  adminServiceTriggerReconcileBodyBody: AdminServiceTriggerReconcileBodyBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1ReleaseEditLockResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/edit-lock/release`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceTriggerReconcileBodyBody,
+    signal,
+  });
+};
+
+export const getAdminServiceReleaseEditLockMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceReleaseEditLock>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceTriggerReconcileBodyBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceReleaseEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceReleaseEditLock"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceReleaseEditLock>>,
+    { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServiceReleaseEditLock(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceReleaseEditLockMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceReleaseEditLock>>
+>;
+export type AdminServiceReleaseEditLockMutationBody =
+  AdminServiceTriggerReconcileBodyBody;
+export type AdminServiceReleaseEditLockMutationError = RpcStatus;
+
+/**
+ * @summary ReleaseEditLock releases the caller's lock.
+ */
+export const createAdminServiceReleaseEditLock = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceReleaseEditLock>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServiceTriggerReconcileBodyBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceReleaseEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceReleaseEditLockMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
  * @summary HibernateProject hibernates a project by tearing down its deployments.
  */
 export const adminServiceHibernateProject = (
@@ -8468,6 +8969,437 @@ export const createAdminServiceRequestProjectAccess = <
 > => {
   const mutationOptions =
     getAdminServiceRequestProjectAccessMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary ListSemanticResources lists the draft semantic resources of a project.
+ */
+export const adminServiceListSemanticResources = (
+  org: string,
+  project: string,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1ListSemanticResourcesResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/semantic-resources`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getAdminServiceListSemanticResourcesQueryKey = (
+  org?: string,
+  project?: string,
+) => {
+  return [`/v1/orgs/${org}/projects/${project}/semantic-resources`] as const;
+};
+
+export const getAdminServiceListSemanticResourcesQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceListSemanticResources>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListSemanticResources>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getAdminServiceListSemanticResourcesQueryKey(org, project);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminServiceListSemanticResources>>
+  > = ({ signal }) => adminServiceListSemanticResources(org, project, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(org && project),
+    ...queryOptions,
+  } as CreateQueryOptions<
+    Awaited<ReturnType<typeof adminServiceListSemanticResources>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type AdminServiceListSemanticResourcesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceListSemanticResources>>
+>;
+export type AdminServiceListSemanticResourcesQueryError = RpcStatus;
+
+/**
+ * @summary ListSemanticResources lists the draft semantic resources of a project.
+ */
+
+export function createAdminServiceListSemanticResources<
+  TData = Awaited<ReturnType<typeof adminServiceListSemanticResources>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListSemanticResources>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getAdminServiceListSemanticResourcesQueryOptions(
+    org,
+    project,
+    options,
+  );
+
+  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary SaveSemanticResource validates and stores a new draft version of a resource.
+Requires the caller to hold the project's editing lock.
+ */
+export const adminServiceSaveSemanticResource = (
+  org: string,
+  project: string,
+  adminServiceSaveSemanticResourceBody: AdminServiceSaveSemanticResourceBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1SaveSemanticResourceResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/semantic-resources`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceSaveSemanticResourceBody,
+    signal,
+  });
+};
+
+export const getAdminServiceSaveSemanticResourceMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceSaveSemanticResource>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceSaveSemanticResourceBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceSaveSemanticResource>>,
+  TError,
+  { org: string; project: string; data: AdminServiceSaveSemanticResourceBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceSaveSemanticResource"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceSaveSemanticResource>>,
+    { org: string; project: string; data: AdminServiceSaveSemanticResourceBody }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServiceSaveSemanticResource(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceSaveSemanticResourceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceSaveSemanticResource>>
+>;
+export type AdminServiceSaveSemanticResourceMutationBody =
+  AdminServiceSaveSemanticResourceBody;
+export type AdminServiceSaveSemanticResourceMutationError = RpcStatus;
+
+/**
+ * @summary SaveSemanticResource validates and stores a new draft version of a resource.
+Requires the caller to hold the project's editing lock.
+ */
+export const createAdminServiceSaveSemanticResource = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceSaveSemanticResource>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServiceSaveSemanticResourceBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceSaveSemanticResource>>,
+  TError,
+  { org: string; project: string; data: AdminServiceSaveSemanticResourceBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceSaveSemanticResourceMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary GetSemanticResource returns one draft semantic resource.
+ */
+export const adminServiceGetSemanticResource = (
+  org: string,
+  project: string,
+  resourceKind: string,
+  resourceName: string,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1GetSemanticResourceResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/semantic-resources/${resourceKind}/${resourceName}`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getAdminServiceGetSemanticResourceQueryKey = (
+  org?: string,
+  project?: string,
+  resourceKind?: string,
+  resourceName?: string,
+) => {
+  return [
+    `/v1/orgs/${org}/projects/${project}/semantic-resources/${resourceKind}/${resourceName}`,
+  ] as const;
+};
+
+export const getAdminServiceGetSemanticResourceQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceGetSemanticResource>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  resourceKind: string,
+  resourceName: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceGetSemanticResource>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getAdminServiceGetSemanticResourceQueryKey(
+      org,
+      project,
+      resourceKind,
+      resourceName,
+    );
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminServiceGetSemanticResource>>
+  > = ({ signal }) =>
+    adminServiceGetSemanticResource(
+      org,
+      project,
+      resourceKind,
+      resourceName,
+      signal,
+    );
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(org && project && resourceKind && resourceName),
+    ...queryOptions,
+  } as CreateQueryOptions<
+    Awaited<ReturnType<typeof adminServiceGetSemanticResource>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type AdminServiceGetSemanticResourceQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceGetSemanticResource>>
+>;
+export type AdminServiceGetSemanticResourceQueryError = RpcStatus;
+
+/**
+ * @summary GetSemanticResource returns one draft semantic resource.
+ */
+
+export function createAdminServiceGetSemanticResource<
+  TData = Awaited<ReturnType<typeof adminServiceGetSemanticResource>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  resourceKind: string,
+  resourceName: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceGetSemanticResource>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getAdminServiceGetSemanticResourceQueryOptions(
+    org,
+    project,
+    resourceKind,
+    resourceName,
+    options,
+  );
+
+  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary DeleteSemanticResource removes a resource's entire draft version chain.
+ */
+export const adminServiceDeleteSemanticResource = (
+  org: string,
+  project: string,
+  resourceKind: string,
+  resourceName: string,
+) => {
+  return httpClient<V1DeleteSemanticResourceResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/semantic-resources/${resourceKind}/${resourceName}`,
+    method: "DELETE",
+  });
+};
+
+export const getAdminServiceDeleteSemanticResourceMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceDeleteSemanticResource>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      resourceKind: string;
+      resourceName: string;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceDeleteSemanticResource>>,
+  TError,
+  { org: string; project: string; resourceKind: string; resourceName: string },
+  TContext
+> => {
+  const mutationKey = ["adminServiceDeleteSemanticResource"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceDeleteSemanticResource>>,
+    { org: string; project: string; resourceKind: string; resourceName: string }
+  > = (props) => {
+    const { org, project, resourceKind, resourceName } = props ?? {};
+
+    return adminServiceDeleteSemanticResource(
+      org,
+      project,
+      resourceKind,
+      resourceName,
+    );
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceDeleteSemanticResourceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceDeleteSemanticResource>>
+>;
+
+export type AdminServiceDeleteSemanticResourceMutationError = RpcStatus;
+
+/**
+ * @summary DeleteSemanticResource removes a resource's entire draft version chain.
+ */
+export const createAdminServiceDeleteSemanticResource = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceDeleteSemanticResource>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        resourceKind: string;
+        resourceName: string;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceDeleteSemanticResource>>,
+  TError,
+  { org: string; project: string; resourceKind: string; resourceName: string },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceDeleteSemanticResourceMutationOptions(options);
 
   return createMutation(mutationOptions, queryClient);
 };

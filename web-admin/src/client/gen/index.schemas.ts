@@ -72,6 +72,13 @@ export const Runtimev1Operation = {
   OPERATION_CAST: "OPERATION_CAST",
 } as const;
 
+export interface V1AcquireEditLockResponse {
+  lock?: V1EditLockInfo;
+  /** acquired is true if the caller obtained or refreshed the lock. False means
+someone else holds it, and the lock info shows who. */
+  acquired?: boolean;
+}
+
 export interface V1AddOrganizationMemberUserResponse {
   pendingSignup?: boolean;
 }
@@ -434,6 +441,10 @@ export interface V1DeleteReportResponse {
   [key: string]: unknown;
 }
 
+export interface V1DeleteSemanticResourceResponse {
+  [key: string]: unknown;
+}
+
 export interface V1DeleteServiceResponse {
   service?: V1Service;
 }
@@ -490,6 +501,15 @@ export interface V1EditAlertResponse {
   [key: string]: unknown;
 }
 
+export interface V1EditLockInfo {
+  projectId?: string;
+  lockedByUserId?: string;
+  lockedByUserEmail?: string;
+  lockedByUserName?: string;
+  lockedAt?: string;
+  expiresAt?: string;
+}
+
 export interface V1EditPersonalFileResponse {
   [key: string]: unknown;
 }
@@ -534,6 +554,10 @@ export interface V1FeatureAccessSubject {
   subjectId?: string;
   subjectName?: string;
   features?: V1FeatureAccessSubjectFeatures;
+}
+
+export interface V1ForceReleaseEditLockResponse {
+  [key: string]: unknown;
 }
 
 export interface V1GenerateAlertYAMLResponse {
@@ -661,6 +685,10 @@ export interface V1GetDeploymentResponse {
   ttlSeconds?: number;
 }
 
+export interface V1GetEditLockResponse {
+  lock?: V1EditLockInfo;
+}
+
 export interface V1GetIFrameResponse {
   iframeSrc?: string;
   runtimeHost?: string;
@@ -766,6 +794,10 @@ export interface V1GetReportMetaResponse {
   deliveryMeta?: V1GetReportMetaResponseDeliveryMeta;
 }
 
+export interface V1GetSemanticResourceResponse {
+  resource?: V1SemanticResourceInfo;
+}
+
 export interface V1GetServiceResponse {
   service?: V1OrganizationMemberService;
   projectMemberships?: V1ProjectMemberService[];
@@ -782,6 +814,10 @@ export interface V1GetUsergroupResponse {
 
 export interface V1GetVirtualFileResponse {
   file?: V1VirtualFile;
+}
+
+export interface V1HeartbeatEditLockResponse {
+  lock?: V1EditLockInfo;
 }
 
 export interface V1HibernateProjectResponse {
@@ -926,6 +962,10 @@ export interface V1ListPublicBillingPlansResponse {
 export interface V1ListRolesResponse {
   organizationRoles?: V1OrganizationRole[];
   projectRoles?: V1ProjectRole[];
+}
+
+export interface V1ListSemanticResourcesResponse {
+  resources?: V1SemanticResourceInfo[];
 }
 
 export interface V1ListServiceAuthTokensResponse {
@@ -1282,6 +1322,10 @@ export interface V1RedeployProjectResponse {
   [key: string]: unknown;
 }
 
+export interface V1ReleaseEditLockResponse {
+  [key: string]: unknown;
+}
+
 export interface V1RemoveBookmarkResponse {
   [key: string]: unknown;
 }
@@ -1388,6 +1432,12 @@ export interface V1RevokeUserAuthTokenResponse {
   [key: string]: unknown;
 }
 
+export interface V1SaveSemanticResourceResponse {
+  resource?: V1SemanticResourceInfo;
+  /** Validation errors discovered on save; empty means clean. */
+  validationErrors?: string[];
+}
+
 export interface V1SearchProjectNamesResponse {
   names?: string[];
   nextPageToken?: string;
@@ -1401,6 +1451,19 @@ export interface V1SearchProjectUsersResponse {
 export interface V1SearchUsersResponse {
   users?: V1User[];
   nextPageToken?: string;
+}
+
+export interface V1SemanticResourceInfo {
+  id?: string;
+  projectId?: string;
+  resourceKind?: string;
+  resourceName?: string;
+  definitionRaw?: string;
+  version?: number;
+  status?: string;
+  createdByUserId?: string;
+  createdOn?: string;
+  updatedOn?: string;
 }
 
 export type V1ServiceAttributes = { [key: string]: unknown };
@@ -2223,6 +2286,15 @@ export type AdminServiceEditPersonalFileBody = {
 
 export type AdminServiceRedeployProjectParams = {
   superuserForceAccess?: boolean;
+};
+
+export type AdminServiceSaveSemanticResourceBody = {
+  resourceKind?: string;
+  resourceName?: string;
+  /** The raw editor text (yaml or sql) — stored as definition->raw in the DB. */
+  definitionRaw?: string;
+  /** Optional "format" hint for models: "sql" means the raw body is bare SQL. */
+  format?: string;
 };
 
 export type AdminServiceListMagicAuthTokensParams = {
