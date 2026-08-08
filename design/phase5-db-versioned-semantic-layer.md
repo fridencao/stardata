@@ -563,20 +563,27 @@ rollback_completed
 
 ### Phase 5.2 — Publish Pipeline（约 3 周）
 
-**状态：4 / 6 子任务完成 + 前端发布页落地。**
+**状态：5 / 6 子任务完成 + 前端发布页落地。**
 
 | # | 任务 | 交付物 | 状态 |
 |---|---|---|---|
 | 1 | 版本快照逻辑 | `0103.sql` + `0104.sql` + `postgres/project_versions.go` + 事务化 `SnapshotDraftResources` | ✅ |
-| 2 | Dry-run 管线 | 临时 runtime 实例拉起 / reconcile / 报告 / 清理 | ⏳ 唯一硬骨头 |
-| 3 | 「预览」按钮 | 依赖 T2 | ⏳ |
+| 2 | Dry-run 门控 | **parser-only 实现**：`admin/dryrun.go` 把快照渲染到 tempdir → 用 `file` driver 开 repo → 跑 `runtime/parser` → 收集 ParseError | ✅ |
+| 3 | 「预览」按钮 | 待 UI 加发布前预览触发（可复用 T2 的机制）| ⏳ |
 | 4 | 「发布」按钮 | `admin.PublishProject` 六步管线 + `PublishSemanticProject` RPC + `ListSemanticVersions` + 前端发布页 | ✅ |
 | 5 | 资源可见性开关 | `0105.sql` + `resource_visibility` DB + `Set`/`ListResourceVisibility` RPC + Studio 逐条开关 + 合成 `publish.yaml` | ✅ |
 | 6 | 版本变更通知 | **意外收获**：既有 `TriggerParser` 就是通知原语，`PullVirtualRepo` 在下一次 pull 里重新渲染当前 DB 状态。无需新 gRPC | ✅ |
 
+**T2 实施选择（偏离设计稿）**：设计稿要求「临时 runtime 实例拉起 / reconcile」。核实后选了**更轻的 parser-only 实现**——渲染到 tempdir，用 `file` driver 开 repo，跑 `runtime/parser`，收集 `ParseError`。**不启动任何 runtime instance、不涉及 provisioner、不涉及 OLAP**。
+
+理由：
+1. 治理者实际会犯的错——YAML 语法、kind 拼错、引用不存在——parser 就能全部抓住
+2. 临时 instance 方案的最大坑是 **OLAP 隔离**：临时实例和生产共享 DuckDB/ClickHouse database 会污染真实数据；单独起一份 OLAP 存储是一整块 provisioner 工作
+3. 显式承认边界：model SQL 对真实数据的正确性（例如列名不存在）**dry-run 抓不住**，需要完整 reconcile + OLAP 存储，属 5.3 范围
+
 **T6 的意外简化**：设计稿写的 `NotifyVersionChange` 内部 gRPC 在乙方案下是多余的。既有 `TriggerParser` 让 runtime 做一次 `pull`，`PullVirtualRepo` 的 DB 分支自然渲染最新版本。发布/可见性变更调 `TriggerParser`（带 15s 超时、best-effort）即可。
 
-**5.2 已知局限（转 5.2-T2）**：发布**未经 dry-run 门控**，直接从 `validating` 提到 `published`。快照失败或 draft 集为空会标记 `rejected` 并写 report，避免留悬空版本，但 model SQL / metrics 语义错误在发布前不会被拦截。这正是 T2 dry-run 要补的门控。
+**发布安全网现状**：发布已经**通过 dry-run 门控**——语法错、kind 错、悬空引用被拒绝在业务侧之前；仅剩 model SQL 运行时正确性到 5.3 才能守住。
 
 ### Phase 5.3 — Full Coverage（约 3 周）
 
