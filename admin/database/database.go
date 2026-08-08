@@ -331,6 +331,21 @@ type DB interface {
 	UpsertOrgAIConfig(ctx context.Context, opts *UpsertOrgAIConfigOptions) (*OrgAIConfig, error)
 	DeleteOrgAIConfig(ctx context.Context, orgID string) error
 
+	// Semantic resources (StarData Phase 5): the DB-versioned replacement for yaml files.
+	FindSemanticResources(ctx context.Context, projectID string, status SemanticResourceStatus) ([]*SemanticResource, error)
+	FindSemanticResource(ctx context.Context, projectID, kind, name string, status SemanticResourceStatus) (*SemanticResource, error)
+	InsertSemanticResource(ctx context.Context, opts *InsertSemanticResourceOptions) (*SemanticResource, error)
+	DeleteSemanticResource(ctx context.Context, projectID, kind, name string) error
+	FindSemanticResourceFingerprint(ctx context.Context, projectID string, status SemanticResourceStatus) (string, error)
+
+	// Editing locks (StarData Phase 5): project-level draft lock.
+	FindEditingLock(ctx context.Context, projectID string) (*EditingLock, error)
+	AcquireEditingLock(ctx context.Context, projectID, userID string, ttl time.Duration) (*EditingLock, error)
+	HeartbeatEditingLock(ctx context.Context, projectID, userID string, ttl time.Duration) (*EditingLock, error)
+	ReleaseEditingLock(ctx context.Context, projectID, userID string) error
+	ForceReleaseEditingLock(ctx context.Context, projectID string) error
+	DeleteExpiredEditingLocks(ctx context.Context) (int, error)
+
 	FindOrganizationIDsWithBilling(ctx context.Context) ([]string, error)
 	FindOrganizationIDsWithoutBilling(ctx context.Context) ([]string, error)
 
@@ -527,6 +542,11 @@ type Project struct {
 	// Annotations are internally configured key-value metadata about the project.
 	// They propagate to the project's deployments and telemetry.
 	Annotations map[string]string `db:"annotations"`
+	// SemanticLayerMode selects between the legacy archive-based semantic layer
+	// (files in a tar.gz) and the Phase-5 DB-versioned semantic layer (rows in
+	// the semantic_resources table). New projects default to "archive" for
+	// backwards compatibility; DB mode is opt-in per project.
+	SemanticLayerMode string `db:"semantic_layer_mode"`
 	// CreatedOn is the time the project was created.
 	CreatedOn time.Time `db:"created_on"`
 	// UpdatedOn is the time the project was last updated.
@@ -1356,6 +1376,48 @@ type UpsertOrgAIConfigOptions struct {
 	APIKey          []byte
 	KeepExistingKey bool
 	UpdatedByUserID *string
+}
+
+// SemanticResourceStatus constrains the status column in semantic_resources.
+type SemanticResourceStatus string
+
+const (
+	SemanticResourceStatusDraft      SemanticResourceStatus = "draft"
+	SemanticResourceStatusPublished  SemanticResourceStatus = "published"
+	SemanticResourceStatusValidating SemanticResourceStatus = "validating"
+	SemanticResourceStatusRejected   SemanticResourceStatus = "rejected"
+)
+
+// SemanticResource is one version of a semantic definition stored in the DB.
+type SemanticResource struct {
+	ID              string                 `db:"id"`
+	ProjectID       string                 `db:"project_id"`
+	ResourceKind    string                 `db:"resource_kind"`
+	ResourceName    string                 `db:"resource_name"`
+	Definition      []byte                 `db:"definition"` // JSONB
+	Version         int                    `db:"version"`
+	Status          SemanticResourceStatus `db:"status"`
+	CreatedByUserID *string                `db:"created_by_user_id"`
+	CreatedOn       time.Time              `db:"created_on"`
+	UpdatedOn       time.Time              `db:"updated_on"`
+}
+
+// InsertSemanticResourceOptions defines the inputs for creating a new semantic resource version.
+type InsertSemanticResourceOptions struct {
+	ProjectID       string
+	ResourceKind    string
+	ResourceName    string
+	Definition      []byte // JSONB
+	CreatedByUserID *string
+}
+
+// EditingLock is a project-level editing lock row.
+type EditingLock struct {
+	ProjectID      string    `db:"project_id"`
+	LockedByUserID string    `db:"locked_by_user_id"`
+	LockedAt       time.Time `db:"locked_at"`
+	LastHeartbeat  time.Time `db:"last_heartbeat"`
+	ExpiresAt      time.Time `db:"expires_at"`
 }
 
 // ProjectVariable represents a key-value variable for a project, possible for a specific environment (e.g. production or development).
