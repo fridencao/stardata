@@ -193,6 +193,15 @@ func (s *Server) issueRuntimeToken(ctx context.Context, opts *issueRuntimeTokenO
 		runtime.ReadObjects,
 		runtime.UseAI,
 	}
+	// Tokens issued without project permissions (magic links, embeds, service
+	// attribute overrides) keep the pre-feature-matrix behaviour: all features open.
+	if opts.projectPermissions == nil {
+		instancePermissions = append(instancePermissions,
+			runtime.ReadDashboards,
+			runtime.ReadReports,
+			runtime.ReadAlerts,
+		)
+	}
 	if canReadStatus || canManage {
 		instancePermissions = append(
 			instancePermissions,
@@ -222,6 +231,27 @@ func (s *Server) issueRuntimeToken(ctx context.Context, opts *issueRuntimeTokenO
 				runtime.EditRepo,
 				runtime.ManageInstance,
 			)
+		}
+	}
+
+	// StarData feature-access permissions: grant per-feature runtime bits from the
+	// admin-layer feature matrix. Absence = denied (fail-closed). UseAI already
+	// gates ChatBI; ReadDashboards/ReadReports/ReadAlerts give the runtime a signal
+	// to enforce the feature matrix at the API layer — not just hide UI tabs.
+	if opts.projectPermissions != nil {
+		if opts.projectPermissions.AccessDashboards {
+			instancePermissions = append(instancePermissions, runtime.ReadDashboards)
+		}
+		if opts.projectPermissions.AccessReports {
+			instancePermissions = append(instancePermissions, runtime.ReadReports)
+		}
+		if opts.projectPermissions.AccessAlerts {
+			instancePermissions = append(instancePermissions, runtime.ReadAlerts)
+		}
+		// AccessChat already maps to UseAI (granted unconditionally above for backward
+		// compat); override: revoke UseAI when chat is disabled.
+		if !opts.projectPermissions.AccessChat {
+			instancePermissions = removePermission(instancePermissions, runtime.UseAI)
 		}
 	}
 
@@ -329,4 +359,16 @@ func securityRulesFromMagicAuthToken(mdl *database.MagicAuthToken) ([]*runtimev1
 	}
 
 	return rules, nil
+}
+
+// removePermission returns perms with p filtered out (used to revoke a default
+// permission when a feature-matrix bit is disabled).
+func removePermission(perms []runtime.Permission, p runtime.Permission) []runtime.Permission {
+	out := perms[:0]
+	for _, x := range perms {
+		if x != p {
+			out = append(out, x)
+		}
+	}
+	return out
 }

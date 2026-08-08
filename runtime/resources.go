@@ -199,6 +199,12 @@ func (r *Runtime) ApplySecurityPolicy(ctx context.Context, instID string, claims
 		return nil, false, nil
 	}
 
+	// StarData feature matrix: a feature switched off for this user/group must be
+	// enforced here, not just hidden in the UI.
+	if !r.CheckFeatureAccess(claims, res) {
+		return nil, false, nil
+	}
+
 	security, err := r.ResolveSecurity(ctx, instID, claims, res)
 	if err != nil {
 		return nil, false, err
