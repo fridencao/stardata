@@ -1,8 +1,8 @@
 # R1 端到端验证：Findings
 
 > 产出自 `design/phase4-review-and-hardening.md` P0-1 行动项
-> 日期：2026-08-07
-> 方法：unit test-driven verification（`repo_archive_test.go`）+ 代码审读
+> 日期：2026-08-07 ~ 2026-08-08
+> 方法：unit test-driven verification（`repo_archive_test.go`）+ 代码审读 + **真实 docker-compose 栈走查（V-3）**
 
 ---
 
@@ -13,21 +13,37 @@
 | R1-1 并发写入：publish 时是否可能打包 half-written 文件 | 代码审读 `publishProject → packageDevDraft` | 存在但概率极低，详见下文 |
 | R1-2 新 archive 覆盖 dev 草稿 | `TestEditableDraftClobberedByNewArchiveID` | **坐实** — clean extraction 行为设计如此 |
 | R1-3 rollback 后 dev 草稿丢失 | `TestEditableDraftClobberedByRollback` | **坐实** — rollback 改 archiveID → 同 R1-2 |
-| R1-X **新发现** 目录权限 bug（P0） | `TestEditableDraftSurvivesResyncOfSameArchive`（失败重现） | **已修复** |
+| R1-X **新发现** 目录权限 bug（P0） | `TestEditableDraftSurvivesResyncOfSameArchive`（失败重现） | **已修复（两层修复）** |
+| R1-Y **V-3 新发现** publish 链路 500 死锁 | 真实栈走查触发 | **已修复** (`admin/projects.go`) |
 
 ---
 
-## R1-X（已修复）：`syncEditable` + `CreateFromBlobs` 目录权限 bug
+## R1-X（已修复，两层）：目录权限 EACCES
+
+### 第一层（c30d97b）：`syncEditable` 顶层目录
+
+`syncEditable` 改为自行 `RemoveAll` + `MkdirAll(filesDir, 0755)` 预建可写顶层目录。
+
+### 第二层（e92ddaf）：`archive/untar` 嵌套目录
+
+真实栈 V-3 走查时，第二次 publish（产生新 assetID → dev re-sync → 重新 untar）失败：
+```
+open .../archive/files/dashboards/draft_explore.yaml: permission denied
+```
+
+仅预建顶层不够，`untar` 为嵌套路径调 `os.MkdirAll(filepath.Dir(target), header.FileInfo().Mode())` 用文件的 0644 建子目录。修复：`untar` 里 regular-file 分支的 `MkdirAll` 硬编码 0755；directory 分支 OR 上 0700。
+
+---
+
+## R1-Y（已修复）：publish 链路 UpdateProject 500 死锁
 
 ### 问题
 
-`publish` 打包流程（`packageDevDraft`）使用 `archive.CreateFromBlobs`，只写入 tar file entries（无目录 entries）。当 `syncEditable` 对一个新 archiveID 做 clean extraction 时，调用 `archive.Download(..., clean=true, ...)`：
+`UpdateProject` 开头**无条件**检查"目标分支上是否有非 prod 部署"。对 archive 项目，PrimaryBranch 恒为空串，空串过滤等于不过滤 → 查到发布本身刚用的 dev deployment → 触发守卫 → 500。
 
-1. `clean=true` → `os.RemoveAll(filesDir)` 删除旧目录
-2. `untar` 遇到嵌套文件（如 `metrics/sales.yaml`）→ 调用 `os.MkdirAll(filepath.Dir(target), header.FileInfo().Mode())`
-3. `header.FileInfo().Mode()` 来自 tar 中 file entry 的 mode 位 = `0644`（无 execute）
-4. 创建出 `filesDir/` 目录权限 = `drw-r--r--`
-5. 后续任何对该目录的写入操作（包括 Studio 编辑）→ `EACCES`
+### 修复 (`ca45ae390`)
+
+守卫加上 `if oldProj.PrimaryBranch != opts.PrimaryBranch` 条件——PrimaryBranch 未变时跳过。
 
 ### 修复（本次 commit）
 
