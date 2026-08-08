@@ -65,6 +65,22 @@ func (s *Service) RequestRollback(ctx context.Context, projectID string, targetV
 	if err != nil {
 		return nil, err
 	}
+
+	// Audit the request itself, not just the execution. A request that is never
+	// approved is still a signal worth keeping: someone thought a rollback was
+	// warranted, and a compliance review will want to see that.
+	s.RecordAudit(ctx, &AuditEventOptions{
+		OrgID:       proj.OrganizationID,
+		ProjectID:   &projectID,
+		ActorUserID: &requestedByUserID,
+		EventType:   AuditEventRollbackRequested,
+		TargetID:    req.ID,
+		Payload: map[string]any{
+			"target_version": targetVersion,
+			"reason":         reason,
+		},
+	})
+
 	return req, nil
 }
 
@@ -170,6 +186,20 @@ func (s *Service) RejectRollback(ctx context.Context, requestID, rejecterUserID 
 	rejecter := rejecterUserID
 	if err := s.DB.ResolveRollbackRequest(ctx, requestID, database.RollbackRequestStatusRejected, &rejecter); err != nil {
 		return nil, err
+	}
+
+	if proj, err := s.DB.FindProject(ctx, req.ProjectID); err == nil {
+		s.RecordAudit(ctx, &AuditEventOptions{
+			OrgID:       proj.OrganizationID,
+			ProjectID:   &req.ProjectID,
+			ActorUserID: &rejecterUserID,
+			EventType:   AuditEventRollbackRejected,
+			TargetID:    req.ID,
+			Payload: map[string]any{
+				"target_version": req.TargetVersion,
+				"requested_by":   req.RequestedByUserID,
+			},
+		})
 	}
 
 	updated, _ := s.DB.FindRollbackRequest(ctx, requestID)

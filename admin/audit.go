@@ -19,6 +19,8 @@ const (
 	AuditEventSemanticResourceSave   = "semantic_resource_save"
 	AuditEventSemanticResourceDelete = "semantic_resource_delete"
 	AuditEventResourceVisibilitySet  = "resource_visibility_set"
+	AuditEventRollbackRequested      = "rollback_requested"
+	AuditEventRollbackRejected       = "rollback_rejected"
 	AuditEventMemberAdd              = "member_add"
 	AuditEventMemberRemove           = "member_remove"
 	AuditEventMemberRoleChange       = "member_role_change"
