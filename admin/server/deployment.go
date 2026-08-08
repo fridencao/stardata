@@ -263,6 +263,14 @@ func (s *Server) CreateDeployment(ctx context.Context, req *adminv1.CreateDeploy
 	claims := auth.GetClaims(ctx)
 	permissions := claims.ProjectPermissions(ctx, proj.OrganizationID, proj.ID)
 
+	// StarData Phase 5: DB-mode projects have no dev-deployment concept. The draft
+	// lives in the semantic_resources table and Studio talks to the single prod
+	// runtime directly, so a dev deployment would be a stray environment that
+	// nothing drives. Refuse to create one rather than leaving it to leak.
+	if proj.SemanticLayerMode == "db" && req.Environment == "dev" {
+		return nil, status.Error(codes.FailedPrecondition, "dev deployments are not used by DB-mode projects")
+	}
+
 	if req.Environment == "dev" {
 		if !permissions.ManageDev {
 			return nil, status.Error(codes.PermissionDenied, "does not have permission to manage dev deployment")
