@@ -541,16 +541,25 @@ rollback_completed
 
 ### Phase 5.1 — Foundation（约 3 周）
 
-| # | 任务 | 交付物 |
-|---|---|---|
-| 1 | DB schema | `0100.sql`–`0105.sql`：6 张新表 + `projects` 两列 |
-| 2 | `DBRepoDriver` | `runtime/drivers/dbrepo/`，实现 `drivers.RepoStore`，读 `semantic_resources` → 虚拟文件供 parser 消费 |
-| 3 | 编辑锁 API | `AcquireLock` / `ReleaseLock` / `Heartbeat` / `ForceUnlock` 四个 RPC + 后台过期清理 worker |
-| 4 | 语义资源 CRUD RPC | `SaveSemanticResource`（存 draft）/ `ListSemanticResources` / `GetSemanticResource` / `DeleteSemanticResource` |
-| 5 | Studio UI 改造（PoC） | **仅 metrics_view** 从 file-based 编辑改为 API-based，验证端到端可行性 |
-| 6 | 移除 branch URL 段 | `hooks.ts` reroute 清理 + 停止创建 dev deployment（代码保留但不再触发） |
+**状态：已完成。** 实施中的两处偏离设计稿的决策记录如下。
 
-**退出条件**：能在 Studio 新建/编辑一个 metrics_view，存到 DB，runtime 通过 `DBRepoDriver` 读出并成功 reconcile，业务侧能查到数据。
+| # | 任务 | 交付物 | 状态 |
+|---|---|---|---|
+| 1 | DB schema | `0100.sql`–`0102.sql`：`semantic_resources` + `editing_locks` + `projects.semantic_layer_mode` | ✅ |
+| 2 | DB→文件渲染 | `admin/semantic_render.go` + `PullVirtualRepo` 的 DB 分支 | ✅ |
+| 3 | 编辑锁 API | `AcquireEditLock` / `Heartbeat` / `Release` / `Get` / `ForceRelease` + 过期清理 worker | ✅ |
+| 4 | 语义资源 CRUD RPC | `Save` / `List` / `Get` / `Delete` + 语法与引用校验 | ✅ |
+| 5 | Studio UI（PoC） | `StudioDBResourceEditor.svelte` + `/studio/[domain]/db-editor/[kind]/[name]` | ✅ |
+| 6 | 停止创建 dev deployment | `CreateDeployment` 对 DB 模式项目拒绝 `environment=dev` | ✅ |
+
+**实施决策 1（偏离设计稿）**：原计划新建独立的 `runtime/drivers/dbrepo` 包实现 `RepoStore`。核实后放弃——`RepoStore` 有 17 个方法，且 runtime **不直连 admin 的 Postgres**（既有架构是 runtime 经 gRPC 向 admin 要文件）。改为把 DB→文件的渲染边界画在 **admin 一侧**，复用既有的 `PullVirtualRepo` 传输通道：runtime / parser / reconciler / watcher **一行未改**。
+
+**实施决策 2**：`definition` JSONB 用 `{"raw": "<原始编辑器文本>"}` 存储并逐字回写，而非结构化字段再序列化。这样 parser 保真度是 100%，彻底避开 YAML 双向序列化漂移。结构化字段（供依赖查询）作为附加信息，永不作为渲染依据。
+
+**5.1 已知局限（转入 5.2）**：
+- draft 资源目前发给所有环境；published/draft 分流随发布管线落地
+- 删除资源不回收 runtime 上已物化的文件
+- 语义视图列表页仍链向文件版编辑器；DB 编辑器需直达 `/studio/[domain]/db-editor/[kind]/[name]`（完整编辑器移植在 5.3）
 
 ### Phase 5.2 — Publish Pipeline（约 3 周）
 
