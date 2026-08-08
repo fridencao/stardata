@@ -587,24 +587,39 @@ rollback_completed
 
 ### Phase 5.3 — Full Coverage（约 3 周）
 
-| # | 任务 | 交付物 |
-|---|---|---|
-| 1 | 全资源类型 DB 化 | model（Monaco SQL 编辑器）、source/connector、explore、canvas、theme、api、config |
-| 2 | 回滚双人审批流 | `rollback_requests` CRUD + 审批 UI + 90 天窗口校验 + 双人校验 |
-| 3 | 回滚重物化管线 | 异步全量物化 worker + `remateralizing` 状态 + 前端「数据正在更新中」banner |
-| 4 | 自动保存与锁体验 | 60 秒心跳 flush draft、TTL 配置项、强制解锁 UI + 孤儿草稿接管选择 |
-| 5 | 审计事件补齐 | §4 列出的 13 类新事件全部落地 + 系统审计日志页可查 |
+**状态：核心项完成（回滚 + 全资源类型列表 + 审计补齐）。回滚重物化管线与 Monaco SQL 编辑器留作后续 polish。**
 
-**退出条件**：§9 所有验收标准通过。
+| # | 任务 | 交付物 | 状态 |
+|---|---|---|---|
+| 1 | 全资源类型 DB 化 | `StudioDBResourceList`：8 种 kind 的创建/删除/浏览 + kind-specific 起始模板；通用编辑器（textarea）已覆盖所有 kind | ✅（Monaco 优化留 polish） |
+| 2 | 回滚双人审批流 | `0106.sql` + `rollback_requests` DB（partial unique index + CHECK 反自审批） + `admin/rollback.go`（Request/Approve+Execute/Reject）+ 4 个 RPC + 90 天窗口 + `TriggerParser` 通知 | ✅ |
+| 3 | 回滚重物化管线 | 依赖临时 OLAP 存储（同 5.2-T2 的 provisioner 障碍） | ⏳ 后续 |
+| 4 | 自动保存与锁体验 | 5.1 编辑器已带 60s 心跳；配置化 TTL 与孤儿草稿接管留作后续 | 部分 |
+| 5 | 审计事件补齐 | 8 个新事件类型（rollback 相关 2 个、语义资源 CRUD 2 个、可见性、锁强制释放）+ 系统日志页筛选下拉扩展 + 中英文文案 | ✅ |
+
+**5.3-T3 实施决策**：Monaco 编辑器留在 polish 阶段。当前 textarea + 内联校验错误已经能让治理者完成完整流程（写 SQL / YAML → 保存 → 校验失败即时提示）；Monaco 只是语法高亮 + 自动补全的锦上添花，不影响 tracer bullet 正确性。
+
+**5.3 已知局限**：
+- **回滚不重物化数据**：`SetProjectCurrentPublishedVersion` 只切定义指针，业务侧看到旧定义但底层物化表还是最新一次 reconcile 的产物。这个坑和 dry-run 的 OLAP 隔离是同一个 provisioner 障碍——正确路线是发布/回滚触发临时 instance 的物化管线，与 T2 一起在未来做
+- **一次只允许一个 pending 回滚**：这是刻意的（避免并发审批冲突），如果需要「多批次回滚」得先扩 schema
+- **锁 TTL 前端配置化**：目前是后端常量（2h），API 已经支持传参，UI 上暴露留作后续
 
 ### Phase 5.4 — Cleanup & Polish（约 2 周）
 
-| # | 任务 |
-|---|---|
-| 1 | 删除死代码：`repo_archive.go` 可编辑路径、branch UI 整目录、dev deployment 逻辑、`(workspace)` 路由组、`publish.yaml` 解析、~40 个 branch i18n 条目 |
-| 2 | E2E 测试：publish / preview / rollback / 编辑锁竞争 / 可见性切换 五条主流程 |
-| 3 | 性能调优：§2.1 各索引的实际 EXPLAIN 验证、dry-run 临时实例的连接池上限与排队策略 |
-| 4 | 文档更新：运维手册（回滚流程、锁排障）、治理者操作手册 |
+**状态：架构性 legacy 标注 + 文档收尾完成。真删除留待「所有 archive-mode 项目退役后」。**
+
+| # | 任务 | 交付物 | 状态 |
+|---|---|---|---|
+| 1 | 标注 legacy 死代码 | `web-admin/src/features/branches/README.md`：说明为何还在（老项目冻结期依赖）+ 何时可删 + grep marker `Phase 5.4 legacy-branch-shim` | ✅ |
+| 2 | 环境侧稳定化 | `deploy/docker-compose.admin.yml` keycloak 端口 8081→8083（避开常见占用），三处（ports/HOSTNAME_PORT/注释）一致 | ✅ |
+| 3 | E2E 测试 | publish / preview / rollback / 编辑锁竞争 / 可见性切换五条主流程 | ⏳ 依赖真实栈 |
+| 4 | 性能调优 | 各索引的 EXPLAIN 验证、dry-run 临时实例的连接池上限 | ⏳ 后续 |
+| 5 | 文档更新 | 本设计稿标注各阶段实际交付与偏差（T2 parser-only / T6 复用 TriggerParser / 回滚不重物化） | ✅ |
+
+**5.4 未做（明确列出）**：
+- **真删除 legacy 目录**：`web-admin/src/features/branches/` 及相关 i18n（30 条）保留，README 标注为 shim。删除时机应在最后一个 archive-mode 项目被删除之后
+- **E2E 测试**：需要跑得起 docker stack 才能跑，同时受既有的 host-gateway 网络问题影响；改造 CI 环境不在本轮 scope
+- **回滚数据重物化**：与 5.3-T3 记录一致，等到愿意付 OLAP 隔离的 provisioner 成本时统一做
 
 ---
 

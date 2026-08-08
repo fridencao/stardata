@@ -25,15 +25,17 @@ services:
   keycloak:
     image: quay.io/keycloak/keycloak:25.0
     restart: unless-stopped
-    # 发布到宿主 8081，使浏览器可直达 Keycloak 登录页。
-    # issuer 固定为 http://localhost:8081/realms/stardata：
-    #   - 浏览器走 localhost:8081（直连已发布端口，不依赖任何 DNS / DoH，绝对可达）；
-    #   - admin 容器经下方 extra_hosts 把 localhost 指向宿主网关(host-gateway)，同样可达 8081。
-    # 二者 issuer 一致，token 的 iss 校验才能通过。
-    # 注：早期用 host.docker.internal 因 Docker 内部 DNS 代理在睡眠/闲置后失联(返回 502/503)，
-    #     故改为 localhost，浏览器与容器均稳定可达。
+    # 发布到宿主 8083，使浏览器可直达 Keycloak 登录页。
+    # issuer 固定为 http://localhost:8083/realms/stardata（与 .env.admin 中的
+    # RILL_ADMIN_AUTH_ISSUER_URL 必须逐字一致，否则 token 的 iss 校验不过）：
+    #   - 浏览器走 localhost:8083（直连已发布端口，不依赖任何 DNS / DoH，绝对可达）；
+    #   - admin 容器经下方 extra_hosts 把 localhost 指向宿主网关(host-gateway)，同样可达。
+    # 注 1：早期用 host.docker.internal 因 Docker 内部 DNS 代理在睡眠/闲置后失联(返回 502/503)，
+    #      故改为 localhost，浏览器与容器均稳定可达。
+    # 注 2：选 8083 而非更自然的 8081/8082，是因为这两个端口常被本机其他服务占用；
+    #      改这里时必须同步改 .env.admin 的 issuer 与下方 KC_HOSTNAME_PORT，三处一致。
     ports:
-      - "8081:8080"
+      - "8083:8080"
     environment:
       KC_DB: postgres
       KC_DB_URL: jdbc:postgresql://postgres:5432/stardata
@@ -41,7 +43,7 @@ services:
       KC_DB_PASSWORD: "${STARDATA_DB_PASSWORD:-changeme}"
       KC_HEALTH_ENABLED: "true"
       KC_HOSTNAME: localhost
-      KC_HOSTNAME_PORT: "8081"
+      KC_HOSTNAME_PORT: "8083"
       KC_HOSTNAME_SCHEME: http
       # Keycloak 25 reads KEYCLOAK_ADMIN/KEYCLOAK_ADMIN_PASSWORD (KC_BOOTSTRAP_* is 26+).
       # Both are set so the bootstrap admin survives an image upgrade.
@@ -75,7 +77,7 @@ services:
     restart: unless-stopped
     env_file:
       - .env.admin
-    # 让容器内 localhost 指向宿主网关，使 admin 启动时对 http://localhost:8081 的 OIDC discovery
+    # 让容器内 localhost 指向宿主网关，使 admin 启动时对 http://localhost:8083 的 OIDC discovery
     # 能经已发布端口到达 keycloak（与浏览器使用同一 issuer，iss 校验一致）。
     extra_hosts:
       - "localhost:host-gateway"
