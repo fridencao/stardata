@@ -44,9 +44,10 @@ test.describe("Portal Home", () => {
     await adminPage.goto("/e2e/openrtb?preview=1");
     await expect(adminPage).toHaveURL(/\/e2e\/openrtb\?preview=1$/);
 
-    // Without the preview param, the redirect kicks in.
+    // Without the preview param, the redirect kicks in — governors land on the
+    // top-level Studio route (/studio/[domain]).
     await adminPage.goto("/e2e/openrtb");
-    await adminPage.waitForURL(/\/-\/edit\/studio(?:\/|$)/, {
+    await adminPage.waitForURL(/\/studio\/openrtb(?:\/|$|\?)/, {
       timeout: 15_000,
     });
   });

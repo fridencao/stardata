@@ -9,7 +9,7 @@ test.describe("Studio Publish", () => {
   test("publish page renders gate toggles, history, and publish action", async ({
     adminPage,
   }) => {
-    await adminPage.goto("/e2e/openrtb/-/edit/studio/publish");
+    await adminPage.goto("/studio/openrtb/publish");
 
     // The publish header is present (page-level i18n string).
     await expect(
@@ -32,7 +32,7 @@ test.describe("Studio Publish", () => {
   test("Preview business view button in Studio points to portal home", async ({
     adminPage,
   }) => {
-    await adminPage.goto("/e2e/openrtb/-/edit/studio");
+    await adminPage.goto("/studio/openrtb");
 
     // The preview affordance added in P2-5. i18n label is "Preview business view"
     // (or the Chinese equivalent). We assert its href, since Playwright can't
