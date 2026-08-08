@@ -83,10 +83,7 @@ Phase 4「双层角色化智能 BI」改造，整体完成度约 **80%**。核�
 
 ### P3+（Phase 4 之后）
 
-- `/settings/system` 审计日志 UI（读取 P1-3 埋的表）
-- `/settings/ai`：LLM 供应商 / 密钥 / 连通性测试可写
-- `/settings/domains` 独立化（业务概念完全脱离 project 术语）
-- Studio 路由从 `-/edit/studio` 迁到 `/studio/[domain]`，解耦 dev deployment 生命周期
+**已全部完成**（见 §4d）。
 
 ### 实施过程中新增并已完成的项
 
@@ -150,6 +147,39 @@ Phase 4「双层角色化智能 BI」改造，整体完成度约 **80%**。核�
 - `dashboards=true` → JWT `ins` = `[25,23,21,27,28,29,30]`；同一个 Explore → **200**，`ListResources` 出现 `Explore/published_explore`。
 
 单向翻转再翻回，确认因果关系是 feature flag 本身而非其他变量。单元测试 `runtime/featureaccess_test.go` 8 个 subtest 全绿。
+
+## 4d. P3+ 遗留项（已全部完成）
+
+原列为「Phase 4 之后」的四项，按用户要求在本轮全部实现。
+
+### P3-1 `/settings/system` 审计日志 UI（commit `284c0ac5b`）
+
+审计链路此前只有 DB 层（migration 0098 + `InsertAuditEvent` / `ListAuditEventsForOrg` + 9 个写入点），没有任何读取出口。补齐：
+
+- `ListAuditEvents` RPC（`GET /v1/orgs/{org}/audit-events`），`AuditEvent` 消息带反范式化的 `project_name` / `actor_user_email` / `actor_user_name`，避免前端为了显示人名再打一轮请求。
+- `admin/server/audit.go` handler 用 **`ManageOrg`** 门控（日志里含成员与权限变更，比 `ManageOrgMembers` 更严），limit 上限 200，payload 解成 protobuf Struct。
+- 前端可筛选表格（事件类型 / 数据域），列：时间 / 事件 / 操作人 / 数据域 / 详情。
+
+### P3-2 `/settings/ai` 可写化（commit `604d693f3`）
+
+此前 LLM 配置只来自 admin 进程 env，改配置要重新部署，且共享控制面上所有 org 被钉在同一供应商。
+
+- migration 0099 `org_ai_config`，API key 走**与 project variables 相同的 admin keyring 加密**；`UpsertOrgAIConfig` 支持 `KeepExistingKey`，让前端能只改模型而不重发密钥。
+- 4 个 RPC（Get / Set / Delete / Test），均 `ManageOrg` 门控。`GetOrgAIConfig` **永不返回密钥**（只返回 `has_api_key`），并附带部署默认值让 UI 说清「当前实际生效的是哪个」。`TestOrgAIConfig` 开一个一次性 driver 跑一条 `ping` completion——**保存前就能验证凭据**，不落库、不污染缓存。
+- **热生效**：`admin/ai_config.go` 加了 per-org AI resolver，按配置指纹缓存已打开的 driver handle；`Complete()` 改走 `AIForOrg(orgID)`（org 从 deployment claims 反查）。写入后失效缓存，下一次 completion 即生效，**无需重启**。坏配置降级到部署默认，而不是让该 org 的 ChatBI 直接瘫掉。
+- 新增审计事件 `org_ai_config_set`（记录 driver/model 与密钥是否轮换，**不记录密钥本身**）。
+
+### P3-3 `/settings/domains` 独立化（commit `284c0ac5b`）
+
+邮箱域白名单原先夹在 org 常规设置里，和名称/Logo 并列，读起来像装饰项而不是访问控制边界。拆成独立子页 + 导航项，并在页面注释里写清这个 "domain" 是**邮箱白名单**，不是业务概念「数据域」（后者映射到 project）——两者极易混淆。
+
+### P3-4 Studio 迁到 `/studio/[domain]`（commit `a6a1771d2`、E2E `bc832c889`）
+
+- 新顶层路由 `/studio/[domain]/`（`[domain]` = project 名），子页 overview / sources / semantics / semantics/[name] / publish / requests，与设计稿 §5 对齐。
+- `+layout.ts` 按设计稿 §3.1「org 段由默认值自动填充并对用户隐藏」解析活跃 org（自定义域 → localStorage activeOrg → 首个 org），`manageProject` fail-closed。
+- `+layout.svelte` 把原先分散在两层的东西合并：`-/edit` 的 edit-session 外壳（RuntimeProvider / FileAndResourceWatcher / dev deployment 生命周期）+ Studio chrome（PortalNav / StudioTabs）。`editorRoutePrefix` 指向 `/studio/[domain]/ide`，保证 `getFileHref` / `navigateToFile` 仍正确。
+- 旧 `/-/edit/studio` 改为 **308 永久重定向**，保留子路径与 query，老书签不失效。
+- 入口全部改指新路由：治理者落地重定向、PortalNav `studioHref`、`nav-utils` 的 `isEditPage` / `isStudioPage` 匹配器。E2E spec 同步更新。
 
 ## 5. 执行顺序与依赖
 
