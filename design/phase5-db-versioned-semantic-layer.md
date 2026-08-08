@@ -563,16 +563,20 @@ rollback_completed
 
 ### Phase 5.2 — Publish Pipeline（约 3 周）
 
-| # | 任务 | 交付物 |
-|---|---|---|
-| 1 | 版本快照逻辑 | `project_versions` + `project_version_resources` 写入的事务化实现 |
-| 2 | Dry-run 管线 | 临时 runtime 实例拉起/reconcile/结果收集/清理，含大表抽样（100K 行） |
-| 3 | 「预览」按钮 | Studio UI + 抽样 badge + 临时 schema 5 分钟交互查看 |
-| 4 | 「发布」按钮 | 版本创建 + 状态流转 + `validation_report` 展示 |
-| 5 | 资源可见性开关 | `resource_visibility` 表 CRUD + Studio 逐条/批量开关 UI |
-| 6 | 版本变更通知 | `NotifyVersionChange` 内部 gRPC + runtime 热加载（关旧 instance、开新 instance、全量 reconcile） |
+**状态：4 / 6 子任务完成 + 前端发布页落地。**
 
-**退出条件**：新建项目 → 建 metrics_view → 预览通过 → 发布 → 开放可见性 → 业务侧看到数据，全链路打通。
+| # | 任务 | 交付物 | 状态 |
+|---|---|---|---|
+| 1 | 版本快照逻辑 | `0103.sql` + `0104.sql` + `postgres/project_versions.go` + 事务化 `SnapshotDraftResources` | ✅ |
+| 2 | Dry-run 管线 | 临时 runtime 实例拉起 / reconcile / 报告 / 清理 | ⏳ 唯一硬骨头 |
+| 3 | 「预览」按钮 | 依赖 T2 | ⏳ |
+| 4 | 「发布」按钮 | `admin.PublishProject` 六步管线 + `PublishSemanticProject` RPC + `ListSemanticVersions` + 前端发布页 | ✅ |
+| 5 | 资源可见性开关 | `0105.sql` + `resource_visibility` DB + `Set`/`ListResourceVisibility` RPC + Studio 逐条开关 + 合成 `publish.yaml` | ✅ |
+| 6 | 版本变更通知 | **意外收获**：既有 `TriggerParser` 就是通知原语，`PullVirtualRepo` 在下一次 pull 里重新渲染当前 DB 状态。无需新 gRPC | ✅ |
+
+**T6 的意外简化**：设计稿写的 `NotifyVersionChange` 内部 gRPC 在乙方案下是多余的。既有 `TriggerParser` 让 runtime 做一次 `pull`，`PullVirtualRepo` 的 DB 分支自然渲染最新版本。发布/可见性变更调 `TriggerParser`（带 15s 超时、best-effort）即可。
+
+**5.2 已知局限（转 5.2-T2）**：发布**未经 dry-run 门控**，直接从 `validating` 提到 `published`。快照失败或 draft 集为空会标记 `rejected` 并写 report，避免留悬空版本，但 model SQL / metrics 语义错误在发布前不会被拦截。这正是 T2 dry-run 要补的门控。
 
 ### Phase 5.3 — Full Coverage（约 3 周）
 
