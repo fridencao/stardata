@@ -22,6 +22,7 @@
   import ExpandableOption from "@rilldata/web-common/features/chat/core/context/picker/ExpandableOption.svelte";
   import SimpleOption from "@rilldata/web-common/features/chat/core/context/picker/SimpleOption.svelte";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let selectedChatContext: InlineContext | null = null;
   export let searchText: string = "";
@@ -132,19 +133,20 @@
         />
       {/if}
     {:else}
-      <div class="contents-empty">No matches found</div>
+      <div class="contents-empty">{m.chat_context_no_matches()}</div>
     {/each}
   </div>
   <div class="inline-chat-navigation">
     <Kbd.Group>
       <Kbd.Root><ArrowUp size="12px" /></Kbd.Root>
       <Kbd.Root><ArrowDown size="12px" /></Kbd.Root>
-      <span>Navigate,</span>
+      <span>{m.chat_nav_navigate()}</span>
       <Kbd.Root><ArrowLeft size="12px" /></Kbd.Root>
       <Kbd.Root><ArrowRight size="12px" /></Kbd.Root>
-      <span>Open/Close,</span>
+      <span>{m.chat_nav_open_close()}</span>
+      <!-- i18n-ignore: keyboard key cap -->
       <Kbd.Root><span>Enter</span></Kbd.Root>
-      <span>Select</span>
+      <span>{m.chat_nav_select()}</span>
     </Kbd.Group>
   </div>
 </div>

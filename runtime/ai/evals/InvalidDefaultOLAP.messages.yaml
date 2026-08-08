@@ -57,7 +57,7 @@
   type: result
   tool: list_files
   content_type: json
-  content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+  content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
 - id: 7a0b393a-92af-48a1-ae56-2a72b841685d
   parent_id: 8120b2cb-9fcd-4952-b088-f5195b88f986
   session_id: 0318c76e-38a6-4e9f-ba7f-4aa458ced162
@@ -77,7 +77,7 @@
   type: result
   tool: project_status
   content_type: json
-  content: '{"default_olap_connector":"duckdb_missing","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+  content: '{"default_olap_connector":"duckdb_missing","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
 - id: a95212b1-2513-47ce-a39d-d86b3e05d681
   parent_id: 8120b2cb-9fcd-4952-b088-f5195b88f986
   session_id: 0318c76e-38a6-4e9f-ba7f-4aa458ced162
@@ -127,7 +127,7 @@
   type: result
   tool: list_files
   content_type: json
-  content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+  content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
 - id: 7839ca3a-590d-475c-b922-5dd0c43c2468
   parent_id: 22f518b0-a7f0-4ca8-8ceb-f3e0964224b8
   session_id: 0318c76e-38a6-4e9f-ba7f-4aa458ced162
@@ -147,7 +147,7 @@
   type: result
   tool: project_status
   content_type: json
-  content: '{"default_olap_connector":"duckdb_missing","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
+  content: '{"default_olap_connector":"duckdb_missing","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
 - id: 47ccb2a4-eea4-4a09-a026-c0c4f87879b8
   parent_id: 22f518b0-a7f0-4ca8-8ceb-f3e0964224b8
   session_id: 0318c76e-38a6-4e9f-ba7f-4aa458ced162
@@ -237,7 +237,7 @@
   type: result
   tool: project_status
   content_type: json
-  content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+  content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
 - id: 9fdb61ea-56f1-47e3-8575-962608a7079d
   parent_id: 8120b2cb-9fcd-4952-b088-f5195b88f986
   session_id: 0318c76e-38a6-4e9f-ba7f-4aa458ced162

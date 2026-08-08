@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/spf13/cobra"
 )
 
@@ -63,7 +63,7 @@ func SwitchCmd(ch *cmdutil.Helper) *cobra.Command {
 
 func SwitchSelectFlow(ch *cmdutil.Helper, orgs []*adminv1.Organization) (string, error) {
 	if len(orgs) < 1 {
-		fmt.Println("No organizations found, run `rill org create` first.")
+		fmt.Println("No organizations found, run `stardata org create` first.")
 		return "", nil
 	}
 

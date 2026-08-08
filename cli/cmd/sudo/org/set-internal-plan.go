@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/spf13/cobra"
 )
 
@@ -42,7 +42,7 @@ func SetInternalPlanCmd(ch *cmdutil.Helper) *cobra.Command {
 					return cmd.Context().Err()
 				case <-timeout:
 					ch.PrintfError("\nTimed out waiting for billing to be initialized\n")
-					ch.PrintfWarn("\nRun 'rill billing subscription edit --plan %s --force' to subscribe to the plan manually\n", plan)
+					ch.PrintfWarn("\nRun 'stardata billing subscription edit --plan %s --force' to subscribe to the plan manually\n", plan)
 					return err
 				case <-ticker.C:
 					res, err := client.UpdateBillingSubscription(cmd.Context(), &adminv1.UpdateBillingSubscriptionRequest{

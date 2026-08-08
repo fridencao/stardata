@@ -6,14 +6,14 @@ import (
 	"time"
 
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/pkg/activity"
 	"github.com/fridencao/stardata/runtime/storage"
 	"go.uber.org/zap"
 )
 
-// localAdminService implements drivers.AdminService by using user's admin token stored locally and calling Rill's admin API.
+// localAdminService implements drivers.AdminService by using user's admin token stored locally and calling StarData's admin API.
 type localAdminService struct {
 	ch          *cmdutil.Helper
 	root        string

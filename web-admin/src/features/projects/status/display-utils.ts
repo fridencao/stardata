@@ -65,20 +65,20 @@ export function getStatusLabel(status: V1DeploymentStatus): string {
 
 /**
  * Returns a color name for a resource kind tag.
- * @param kind - The fully qualified resource kind (e.g., "rill.runtime.v1.Model")
+ * @param kind - The fully qualified resource kind (e.g., "stardata.runtime.v1.Model")
  * @returns Color name for the tag (e.g., "blue", "green", "gray")
  */
 export function getResourceKindTagColor(kind: string) {
   switch (kind) {
-    case "rill.runtime.v1.MetricsView":
+    case "stardata.runtime.v1.MetricsView":
       return "blue";
-    case "rill.runtime.v1.Model":
+    case "stardata.runtime.v1.Model":
       return "green";
-    case "rill.runtime.v1.Report":
+    case "stardata.runtime.v1.Report":
       return "orange";
-    case "rill.runtime.v1.Source":
+    case "stardata.runtime.v1.Source":
       return "purple";
-    case "rill.runtime.v1.Theme":
+    case "stardata.runtime.v1.Theme":
       return "magenta";
     default:
       return "gray";

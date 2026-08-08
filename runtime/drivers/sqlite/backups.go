@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"go.uber.org/zap"
 	"gocloud.dev/blob"
@@ -264,7 +264,7 @@ func (c *connection) rewriteSnapshotForAnalytics(ctx context.Context, snapshotPa
 			return fmt.Errorf("failed to query catalog resource: %w", err)
 		}
 
-		// Convert data from protobuf message rill.runtime.v1.Resource to JSON.
+		// Convert data from protobuf message stardata.runtime.v1.Resource to JSON.
 		pb := &runtimev1.Resource{}
 		err = proto.Unmarshal(r.Data, pb)
 		if err != nil {

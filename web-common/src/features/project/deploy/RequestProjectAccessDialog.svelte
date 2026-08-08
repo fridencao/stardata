@@ -2,7 +2,7 @@
   import * as Alert from "@rilldata/web-common/components/alert-dialog/index.js";
   import { Button } from "@rilldata/web-common/components/button";
   import { getRequestProjectAccessUrl } from "@rilldata/web-common/features/project/selectors.ts";
-  import type { Project } from "@rilldata/web-common/proto/gen/rill/admin/v1/api_pb.ts";
+  import type { Project } from "@rilldata/web-common/proto/gen/stardata/admin/v1/api_pb.ts";
 
   export let open: boolean;
   export let project: Project;

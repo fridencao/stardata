@@ -11,13 +11,6 @@
   </p>
   <CLICommandDisplay command={apiUrl} />
   <p class="text-xs text-fg-secondary">
-    {m.mcp_oauth_auto()}
-    <a
-      href="https://docs.rilldata.com/guide/ai/mcp#connect-using-oauth-recommended"
-      target="_blank"
-      rel="noopener"
-    >
-      {m.mcp_learn_more()}
-    </a>
+    {m.mcp_oauth_auto()} {m.mcp_learn_more()}
   </p>
 </div>

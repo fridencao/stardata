@@ -120,9 +120,9 @@ export class DashboardFetchMocks {
   private async fetchMock(url: string, body: string | Uint8Array | undefined) {
     const u = new URL(url);
 
-    // ConnectRPC routes: POST to /rill.runtime.v1.{Service}/{Method}
+    // ConnectRPC routes: POST to /stardata.runtime.v1.{Service}/{Method}
     const connectMatch = u.pathname.match(
-      /^\/rill\.runtime\.v1\.(\w+)\/(\w+)$/,
+      /^\/stardata\.runtime\.v1\.(\w+)\/(\w+)$/,
     );
     if (connectMatch) {
       return this.handleConnectRequest(connectMatch[1], connectMatch[2], body);

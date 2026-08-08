@@ -2,7 +2,7 @@ package subscription
 
 import (
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/spf13/cobra"
 )
 
@@ -36,7 +36,7 @@ func RenewCmd(ch *cmdutil.Helper) *cobra.Command {
 
 				ch.PrintfWarn("\nSubscription renewal for %q will take place immediately.\n", ch.Org)
 				if ch.Interactive {
-					ch.PrintfWarn("\nTo edit the plan of non-cancelled subscription, run `rill billing subscription edit`.\n")
+					ch.PrintfWarn("\nTo edit the plan of non-cancelled subscription, run `stardata billing subscription edit`.\n")
 
 					if err := cmdutil.ConfirmPrompt("Do you want to continue?", false); err != nil {
 						return err

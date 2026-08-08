@@ -68,10 +68,10 @@ describe("build-resource-graph", () => {
 
       expect(nodes).toHaveLength(4);
       expect(nodes.map((n) => n.id)).toEqual([
-        "rill.runtime.v1.Source:source1",
-        "rill.runtime.v1.Model:model1",
-        "rill.runtime.v1.MetricsView:metrics1",
-        "rill.runtime.v1.Explore:explore1",
+        "stardata.runtime.v1.Source:source1",
+        "stardata.runtime.v1.Model:model1",
+        "stardata.runtime.v1.MetricsView:metrics1",
+        "stardata.runtime.v1.Explore:explore1",
       ]);
     });
 
@@ -94,7 +94,7 @@ describe("build-resource-graph", () => {
       const { nodes } = buildResourceGraph(resources);
 
       expect(nodes).toHaveLength(1);
-      expect(nodes[0].id).toBe("rill.runtime.v1.Model:visible");
+      expect(nodes[0].id).toBe("stardata.runtime.v1.Model:visible");
     });
 
     it("should create edges based on resource refs", () => {
@@ -117,8 +117,8 @@ describe("build-resource-graph", () => {
       const { edges } = buildResourceGraph(resources);
 
       expect(edges).toHaveLength(1);
-      expect(edges[0].source).toBe("rill.runtime.v1.Source:source1");
-      expect(edges[0].target).toBe("rill.runtime.v1.Model:model1");
+      expect(edges[0].source).toBe("stardata.runtime.v1.Source:source1");
+      expect(edges[0].target).toBe("stardata.runtime.v1.Model:model1");
     });
 
     it("should handle multiple refs per resource", () => {
@@ -151,8 +151,8 @@ describe("build-resource-graph", () => {
 
       expect(edges).toHaveLength(2);
       expect(edges.map((e) => e.source)).toEqual([
-        "rill.runtime.v1.Source:source1",
-        "rill.runtime.v1.Source:source2",
+        "stardata.runtime.v1.Source:source1",
+        "stardata.runtime.v1.Source:source2",
       ]);
     });
 
@@ -401,7 +401,7 @@ describe("build-resource-graph", () => {
       const { nodes } = buildResourceGraph(resources);
 
       expect(nodes).toHaveLength(1);
-      expect(nodes[0].id).toBe("rill.runtime.v1.Model:valid");
+      expect(nodes[0].id).toBe("stardata.runtime.v1.Model:valid");
     });
 
     it("should coerce model defined-as-source to Source kind", () => {
@@ -449,11 +449,11 @@ describe("build-resource-graph", () => {
       ];
 
       const groups = partitionResourcesBySeeds(resources, [
-        "rill.runtime.v1.Model:model1",
+        "stardata.runtime.v1.Model:model1",
       ]);
 
       expect(groups).toHaveLength(1);
-      expect(groups[0].id).toBe("rill.runtime.v1.Model:model1");
+      expect(groups[0].id).toBe("stardata.runtime.v1.Model:model1");
       expect(groups[0].resources).toHaveLength(2);
       expect(groups[0].label).toBe("model1");
     });
@@ -483,7 +483,7 @@ describe("build-resource-graph", () => {
       ];
 
       const groups = partitionResourcesBySeeds(resources, [
-        "rill.runtime.v1.MetricsView:metrics1",
+        "stardata.runtime.v1.MetricsView:metrics1",
       ]);
 
       expect(groups).toHaveLength(1);
@@ -519,7 +519,7 @@ describe("build-resource-graph", () => {
       ];
 
       const groups = partitionResourcesBySeeds(resources, [
-        "rill.runtime.v1.Source:source1",
+        "stardata.runtime.v1.Source:source1",
       ]);
 
       expect(groups).toHaveLength(1);
@@ -557,8 +557,8 @@ describe("build-resource-graph", () => {
       ];
 
       const groups = partitionResourcesBySeeds(resources, [
-        "rill.runtime.v1.Model:model1",
-        "rill.runtime.v1.Model:model2",
+        "stardata.runtime.v1.Model:model1",
+        "stardata.runtime.v1.Model:model2",
       ]);
 
       expect(groups).toHaveLength(2);
@@ -611,7 +611,7 @@ describe("build-resource-graph", () => {
       ];
 
       const groups = partitionResourcesBySeeds(resources, [
-        "rill.runtime.v1.Model:nonexistent",
+        "stardata.runtime.v1.Model:nonexistent",
       ]);
 
       // Should create empty group or no group depending on implementation
@@ -629,8 +629,8 @@ describe("build-resource-graph", () => {
       ];
 
       const groups = partitionResourcesBySeeds(resources, [
-        "rill.runtime.v1.Model:model1",
-        "rill.runtime.v1.Model:model1", // Duplicate
+        "stardata.runtime.v1.Model:model1",
+        "stardata.runtime.v1.Model:model1", // Duplicate
       ]);
 
       expect(groups).toHaveLength(1);
@@ -654,7 +654,7 @@ describe("build-resource-graph", () => {
       ];
 
       const groups = partitionResourcesBySeeds(resources, [
-        "rill.runtime.v1.Model:model1",
+        "stardata.runtime.v1.Model:model1",
       ]);
 
       expect(groups).toHaveLength(1);

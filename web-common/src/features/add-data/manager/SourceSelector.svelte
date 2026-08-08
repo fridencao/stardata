@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import {
     connectorClassMapping,
     connectorIconMapping,
@@ -34,7 +35,7 @@
 
 <div class="source-selector">
   <div class="source-selector-header">
-    <div class="source-selector-header-text">Where is your data?</div>
+    <div class="source-selector-header-text">{m.add_data_where_is_data()}</div>
     <div class="grow"></div>
     <div class="w-64">
       <Search bind:value={searchText} />
@@ -62,13 +63,13 @@
           <ChevronRightIcon size="16px" />
         </svelte:element>
       {:else}
-        <div class="source-selector-no-matches">No matches found</div>
+        <div class="source-selector-no-matches">{m.add_data_no_matches()}</div>
       {/each}
     </div>
   </div>
   {#if config.welcomeScreen}
     <div class="source-selector-footer">
-      <Button type="secondary" onClick={onBack}>Back</Button>
+      <Button type="secondary" onClick={onBack}>{m.common_back()}</Button>
     </div>
   {/if}
 </div>

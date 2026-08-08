@@ -10,7 +10,7 @@ import {
   type MetricsViewSpecMeasure,
 } from "@rilldata/web-common/runtime-client";
 import { SortType } from "../proto-state/derived-types";
-import { DashboardState_LeaderboardSortType } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+import { DashboardState_LeaderboardSortType } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import { URI_DIMENSION_SUFFIX } from "@rilldata/web-common/features/dashboards/dashboard-utils";
 
 export type LeaderboardItemData = {

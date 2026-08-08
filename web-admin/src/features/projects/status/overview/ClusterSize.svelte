@@ -5,7 +5,7 @@
 </script>
 
 <span>
-  {slots * 4} GiB RAM, {slots} vCPU
+  {m.status_cluster_size({ ram: slots * 4, cpu: slots })}
   <span class="text-fg-tertiary text-xs ml-1">
     ({m.status_compute_units({ count: slots })})
   </span>

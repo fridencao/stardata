@@ -34,7 +34,7 @@ import {
   TimeRangePreset,
 } from "@rilldata/web-common/lib/time/types";
 import { copyParamsToTarget } from "@rilldata/web-common/lib/url-utils";
-import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import {
   type V1ExploreSpec,
   type V1MetricsViewSpec,

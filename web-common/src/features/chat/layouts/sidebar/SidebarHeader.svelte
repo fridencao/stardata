@@ -86,7 +86,7 @@
     justify-content: space-between;
     padding: 1rem;
     font-weight: 500;
-    font-size: 0.875rem;
+    @apply text-sm;
     min-height: 1.5rem;
   }
 

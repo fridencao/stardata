@@ -8,6 +8,7 @@
     getAllowedTimeGrains,
     isGrainBigger,
   } from "@rilldata/web-common/lib/time/grains";
+  import { translateGrainName } from "@rilldata/web-common/lib/time/new-grains";
   import { V1TimeGrain } from "@rilldata/web-common/runtime-client";
 
   import type { SearchableFilterSelectableGroup } from "@rilldata/web-common/components/searchable-filter-menu/SearchableFilterSelectableItem";
@@ -44,7 +45,7 @@
   ).map((tgo) => {
     return {
       id: tgo.grain,
-      title: tgo.label,
+      title: translateGrainName(tgo.label),
       type: PivotChipType.Time,
     };
   });

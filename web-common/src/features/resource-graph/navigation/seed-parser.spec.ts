@@ -81,9 +81,9 @@ describe("seed-utils", () => {
     });
 
     it("should handle fully qualified kind", () => {
-      const result = normalizeSeed("rill.runtime.v1.Model:orders");
+      const result = normalizeSeed("stardata.runtime.v1.Model:orders");
       expect(result).toEqual({
-        kind: "rill.runtime.v1.Model",
+        kind: "stardata.runtime.v1.Model",
         name: "orders",
       });
     });
@@ -207,10 +207,10 @@ describe("seed-utils", () => {
     });
 
     it("should handle fully qualified kind strings", () => {
-      expect(tokenForKind("rill.runtime.v1.Source")).toBe("sources");
-      expect(tokenForKind("rill.runtime.v1.Model")).toBe("models");
-      expect(tokenForKind("rill.runtime.v1.MetricsView")).toBe("metrics");
-      expect(tokenForKind("rill.runtime.v1.Explore")).toBe("dashboards");
+      expect(tokenForKind("stardata.runtime.v1.Source")).toBe("sources");
+      expect(tokenForKind("stardata.runtime.v1.Model")).toBe("models");
+      expect(tokenForKind("stardata.runtime.v1.MetricsView")).toBe("metrics");
+      expect(tokenForKind("stardata.runtime.v1.Explore")).toBe("dashboards");
     });
 
     it("should return null for undefined kind", () => {
@@ -286,7 +286,7 @@ describe("seed-utils", () => {
     });
 
     it("should handle fully qualified kinds in seeds", () => {
-      expect(tokenForSeedString("rill.runtime.v1.Model:orders")).toBe("models");
+      expect(tokenForSeedString("stardata.runtime.v1.Model:orders")).toBe("models");
     });
 
     it("should be case-insensitive", () => {
@@ -550,7 +550,7 @@ describe("seed-utils", () => {
         {
           meta: {
             name: {
-              kind: "rill.runtime.v1.Component" as ResourceKind,
+              kind: "stardata.runtime.v1.Component" as ResourceKind,
               name: "button",
             },
             hidden: false,
@@ -824,10 +824,10 @@ describe("seed-utils", () => {
 
     it("should parse expanded parameter", () => {
       const url = new URL(
-        "http://localhost/graph?resource=orders&expanded=rill.runtime.v1.Model:orders",
+        "http://localhost/graph?resource=orders&expanded=stardata.runtime.v1.Model:orders",
       );
       const result = parseGraphUrlParams(url);
-      expect(result.expanded).toBe("rill.runtime.v1.Model:orders");
+      expect(result.expanded).toBe("stardata.runtime.v1.Model:orders");
     });
 
     it("should handle empty URL", () => {
@@ -915,10 +915,10 @@ describe("seed-utils", () => {
     it("should build URL with resource and expanded", () => {
       const result = buildGraphUrlNew({
         resources: ["model:orders"],
-        expanded: "rill.runtime.v1.Model:orders",
+        expanded: "stardata.runtime.v1.Model:orders",
       });
       expect(result).toBe(
-        "/graph?resource=model%3Aorders&expanded=rill.runtime.v1.Model%3Aorders",
+        "/graph?resource=model%3Aorders&expanded=stardata.runtime.v1.Model%3Aorders",
       );
     });
 

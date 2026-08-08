@@ -10,7 +10,7 @@
   import type { V1Resource } from "@rilldata/web-common/runtime-client";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import { useGetExploresForMetricsView } from "../dashboards/selectors";
-  import { allowPrimary } from "../dashboards/workspace/DeployProjectCTA.svelte";
+  import { allowPrimary } from "../dashboards/workspace/allow-primary";
   import {
     createCanvasDashboardFromMetricsView,
     createCanvasDashboardFromMetricsViewWithAgent,

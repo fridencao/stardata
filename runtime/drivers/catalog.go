@@ -56,6 +56,7 @@ type CatalogStore interface {
 	FindAISession(ctx context.Context, sessionID string) (*AISession, error)
 	InsertAISession(ctx context.Context, s *AISession) error
 	UpdateAISession(ctx context.Context, s *AISession) error
+	DeleteAISession(ctx context.Context, sessionID string) error
 	FindAIMessages(ctx context.Context, sessionID string) ([]*AIMessage, error)
 	InsertAIMessage(ctx context.Context, m *AIMessage) error
 }

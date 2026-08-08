@@ -547,29 +547,30 @@
   --color-stone-dark-900: oklch(0.936 0.002 58.321);
   --color-stone-dark-950: oklch(0.982 0.001 59.038);
   /* PRIMARY */
-  --color-primary-light-50: oklch(0.96 0.019 273.047);
-  --color-primary-light-100: oklch(0.92 0.038 274.1);
-  --color-primary-light-200: oklch(0.86 0.069 274.935);
-  --color-primary-light-300: oklch(0.76 0.122 275.41);
-  --color-primary-light-400: oklch(0.65 0.188 276.794);
-  --color-primary-light-500: oklch(0.56 0.244 275.39);
-  --color-primary-light-600: oklch(0.5 0.266 275.04);
-  --color-primary-light-700: oklch(0.42 0.232 274.45);
-  --color-primary-light-800: oklch(0.39 0.203 275.31);
-  --color-primary-light-900: oklch(0.35 0.157 277.12);
-  --color-primary-light-950: oklch(0.25 0.102 280.81);
+  /* StarData: 主题色由紫色(indigo)改为蓝色,直接别名到 blue 色板 */
+  --color-primary-light-50: var(--color-blue-light-50);
+  --color-primary-light-100: var(--color-blue-light-100);
+  --color-primary-light-200: var(--color-blue-light-200);
+  --color-primary-light-300: var(--color-blue-light-300);
+  --color-primary-light-400: var(--color-blue-light-400);
+  --color-primary-light-500: var(--color-blue-light-500);
+  --color-primary-light-600: var(--color-blue-light-600);
+  --color-primary-light-700: var(--color-blue-light-700);
+  --color-primary-light-800: var(--color-blue-light-800);
+  --color-primary-light-900: var(--color-blue-light-900);
+  --color-primary-light-950: var(--color-blue-light-950);
 
-  --color-primary-dark-50: oklch(0.256 0.099 276.039);
-  --color-primary-dark-100: oklch(0.316 0.122 276.039);
-  --color-primary-dark-200: oklch(0.387 0.149 276.039);
-  --color-primary-dark-300: oklch(0.46 0.177 276.039);
-  --color-primary-dark-400: oklch(0.513 0.197 276.039);
-  --color-primary-dark-500: oklch(0.567 0.218 276.039);
-  --color-primary-dark-600: oklch(0.66 0.182 275.863);
-  --color-primary-dark-700: oklch(0.782 0.111 275.025);
-  --color-primary-dark-800: oklch(0.884 0.057 273.734);
-  --color-primary-dark-900: oklch(0.925 0.036 273.826);
-  --color-primary-dark-950: oklch(0.967 0.016 274.624);
+  --color-primary-dark-50: var(--color-blue-dark-50);
+  --color-primary-dark-100: var(--color-blue-dark-100);
+  --color-primary-dark-200: var(--color-blue-dark-200);
+  --color-primary-dark-300: var(--color-blue-dark-300);
+  --color-primary-dark-400: var(--color-blue-dark-400);
+  --color-primary-dark-500: var(--color-blue-dark-500);
+  --color-primary-dark-600: var(--color-blue-dark-600);
+  --color-primary-dark-700: var(--color-blue-dark-700);
+  --color-primary-dark-800: var(--color-blue-dark-800);
+  --color-primary-dark-900: var(--color-blue-dark-900);
+  --color-primary-dark-950: var(--color-blue-dark-950);
   /* SECONDARY */
   --color-secondary-light-50: oklch(0.98 0.013 223.713);
   --color-secondary-light-100: oklch(0.95 0.028 232.66);

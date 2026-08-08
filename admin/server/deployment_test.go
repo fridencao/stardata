@@ -11,7 +11,7 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 	"github.com/fridencao/stardata/admin/testadmin"
 	"github.com/fridencao/stardata/cli/testcli"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/fridencao/stardata/runtime"
 	"github.com/fridencao/stardata/runtime/testruntime/testmode"
 	"github.com/stretchr/testify/require"

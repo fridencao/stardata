@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import Lock from "@rilldata/web-common/components/icons/Lock.svelte";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
   import CreatePersonalCanvasDialog from "@rilldata/web-admin/features/personal-files/canvas/CreatePersonalCanvasDialog.svelte";
@@ -68,8 +69,10 @@
     <header class="flex items-center justify-between">
       <div class="flex items-center gap-2">
         <Lock size="16px" />
-        <h2 class="text-lg font-medium">My dashboards</h2>
-        <span class="text-sm text-fg-secondary">Only visible to you</span>
+        <h2 class="text-lg font-medium">{m.personal_my_dashboards()}</h2>
+        <span class="text-sm text-fg-secondary"
+          >{m.personal_only_visible_to_you()}</span
+        >
       </div>
       <CreatePersonalCanvasDialog {org} {project} />
     </header>
@@ -89,10 +92,10 @@
           <ResourceListEmptyState
             slot="empty"
             icon={ExploreIcon}
-            message="You don't have any personal canvases yet."
+            message={m.personal_empty_state_message()}
           >
             <span slot="action">
-              Create one to explore the project's data your way.
+              {m.personal_empty_state_action()}
             </span>
           </ResourceListEmptyState>
         </ResourceList>

@@ -21,11 +21,7 @@
   export let role: string;
   export let isCurrentUser: boolean;
   export let organizationPermissions: V1OrganizationPermissions;
-  export let isBillingContact: boolean;
   export let pendingAcceptance: boolean = false;
-  // Changing billing contact is not an action for this user. So handle it upstream
-  // This also avoids rendering the modal per row.
-  export let onAttemptRemoveBillingContactUser: () => void;
   export let onConvertToMember: () => void;
 
   let isDropdownOpen = false;
@@ -42,10 +38,7 @@
     createAdminServiceRemoveOrganizationMemberUser();
 
   function onRemoveClick() {
-    if (isBillingContact) {
-      // If the user is a billing contact we cannot remove without update contact to a different user 1st.
-      onAttemptRemoveBillingContactUser();
-    } else if (isGuest) {
+    if (isGuest) {
       void handleRemove(email);
     } else {
       // Else show the confirmation for remove

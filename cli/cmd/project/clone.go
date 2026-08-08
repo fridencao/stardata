@@ -9,7 +9,7 @@ import (
 
 	"github.com/fridencao/stardata/cli/cmd/env"
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"github.com/spf13/cobra"
 )
@@ -89,7 +89,7 @@ func CloneCmd(ch *cmdutil.Helper) *cobra.Command {
 				return fmt.Errorf("failed to download variables: %w", err)
 			}
 
-			ch.Printf("Start Rill with: rill start %s\n", subpath)
+			ch.Printf("Start StarData with: stardata start %s\n", subpath)
 
 			return nil
 		},

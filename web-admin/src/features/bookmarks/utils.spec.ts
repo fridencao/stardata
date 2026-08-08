@@ -26,7 +26,7 @@ AD_BIDS_STAR_DATA_DEFAULT_EXPLORE_STATE,
 import { getTimeControlState } from "@rilldata/web-common/features/dashboards/time-controls/time-control-store.ts";
 import { convertPartialExploreStateToUrlParams } from "@rilldata/web-common/features/dashboards/url-state/convert-partial-explore-state-to-url-params.ts";
 import type { DashboardTimeControls } from "@rilldata/web-common/lib/time/types.ts";
-import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb.ts";
+import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb.ts";
 import { V1TimeGrain } from "@rilldata/web-common/runtime-client";
 import { describe, it, expect, vi, beforeEach } from "vitest";
 

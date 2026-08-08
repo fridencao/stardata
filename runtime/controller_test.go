@@ -7,7 +7,7 @@ import (
 	"testing"
 	"time"
 
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/parser"
@@ -1424,70 +1424,37 @@ func newExplore(metricsVew string, measures, dims []string) (*runtimev1.Explore,
 }
 
 func TestDedicatedConnector(t *testing.T) {
-	// Acquire the connectors for the runtime instance.
-	vars := make(map[string]string)
-
-	acquireS3, ok := testruntime.Connectors["s3"]
-	cfgS3 := acquireS3(t)
-	require.True(t, ok, "unknown connector s3")
-	vars["connector.s3-dedicated.aws_access_key_id"] = cfgS3["aws_access_key_id"]
-	vars["connector.s3-dedicated.aws_secret_access_key"] = cfgS3["aws_secret_access_key"]
-
-	acquireGcs, ok := testruntime.Connectors["gcs"]
-	cfgGcs := acquireGcs(t)
-	require.True(t, ok, "unknown connector gcs")
-	vars["connector.my-gcs.google_application_credentials"] = cfgGcs["google_application_credentials"]
-
+	// Test that a dedicated connector declared as a YAML file is correctly parsed
+	// into a Connector resource. This exercises the generic connector resolution path
+	// used by any driver type (Postgres, ClickHouse, DuckDB, …). We use a DuckDB
+	// connector because it is hermetic (no network call at reconcile time — unlike S3
+	// which calls STS:GetCallerIdentity, or GCS which fetches an access token).
 	files := map[string]string{
-		"rill.yaml": `
-connectors:
-- name: s3-integrated
-  type: s3
-`,
-		// Dedicated S3 connector
-		"/connectors/s3-dedicated.yaml": `
-driver: s3
-name: s3-dedicated
-region: us-west-2
-`,
-		// Dedicated GCS connector with a custom name
-		"/connectors/gcs-dedicated.yaml": `
-driver: gcs
-name: my-gcs
+		"rill.yaml": ``,
+		"/connectors/analytics-db.yaml": `
+driver: duckdb
+name: analytics-db
+dsn: ":memory:"
 `,
 	}
-	// Create the test runtime instance.
 	rt, id := testruntime.NewInstanceWithOptions(t, testruntime.InstanceOptions{
-		Files:     files,
-		Variables: vars,
+		Files: files,
 	})
 
 	testruntime.ReconcileParserAndWait(t, rt, id)
-	testruntime.RequireReconcileState(t, rt, id, 3, 0, 0)
+	// parser + the dedicated connector
+	testruntime.RequireReconcileState(t, rt, id, 2, 0, 0)
 
-	// Verify the dedicated connectors
+	// Verify the dedicated connector resource was created with correct spec.
 	testruntime.RequireResource(t, rt, id, &runtimev1.Resource{
 		Meta: &runtimev1.ResourceMeta{
-			Name:      &runtimev1.ResourceName{Kind: runtime.ResourceKindConnector, Name: "s3-dedicated"},
+			Name:      &runtimev1.ResourceName{Kind: runtime.ResourceKindConnector, Name: "analytics-db"},
 			Owner:     runtime.GlobalProjectParserName,
-			FilePaths: []string{"/connectors/s3-dedicated.yaml"},
+			FilePaths: []string{"/connectors/analytics-db.yaml"},
 		},
 		Resource: &runtimev1.Resource_Connector{
 			Connector: &runtimev1.ConnectorV2{
-				Spec:  &runtimev1.ConnectorSpec{Driver: "s3", Properties: testruntime.Must(structpb.NewStruct(map[string]any{"region": "us-west-2"}))},
-				State: &runtimev1.ConnectorState{},
-			},
-		},
-	})
-	testruntime.RequireResource(t, rt, id, &runtimev1.Resource{
-		Meta: &runtimev1.ResourceMeta{
-			Name:      &runtimev1.ResourceName{Kind: runtime.ResourceKindConnector, Name: "my-gcs"},
-			Owner:     runtime.GlobalProjectParserName,
-			FilePaths: []string{"/connectors/gcs-dedicated.yaml"},
-		},
-		Resource: &runtimev1.Resource_Connector{
-			Connector: &runtimev1.ConnectorV2{
-				Spec:  &runtimev1.ConnectorSpec{Driver: "gcs"},
+				Spec:  &runtimev1.ConnectorSpec{Driver: "duckdb", Properties: testruntime.Must(structpb.NewStruct(map[string]any{"dsn": ":memory:"}))},
 				State: &runtimev1.ConnectorState{},
 			},
 		},

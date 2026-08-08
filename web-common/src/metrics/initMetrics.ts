@@ -6,7 +6,7 @@ import { BehaviourEventFactory } from "@rilldata/web-common/metrics/service/Beha
 import { MetricsService } from "@rilldata/web-common/metrics/service/MetricsService";
 import { ProductHealthEventFactory } from "@rilldata/web-common/metrics/service/ProductHealthEventFactory";
 import { StarDataIntakeClient } from "@rilldata/web-common/metrics/service/StarDataIntakeClient";
-import { GetMetadataResponse } from "@rilldata/web-common/proto/gen/rill/local/v1/api_pb";
+import { GetMetadataResponse } from "@rilldata/web-common/proto/gen/stardata/local/v1/api_pb";
 import { get } from "svelte/store";
 import { ActiveEventHandler } from "./ActiveEventHandler";
 import { collectCommonUserFields } from "./collectCommonUserFields";

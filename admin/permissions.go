@@ -5,7 +5,7 @@ import (
 	"errors"
 
 	"github.com/fridencao/stardata/admin/database"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 )
 
 // OrganizationPermissionsForUser resolves organization permissions for a user.
@@ -19,6 +19,13 @@ func (s *Service) OrganizationPermissionsForUser(ctx context.Context, orgID, use
 	for _, role := range roles {
 		composite = UnionOrgRoles(composite, role)
 	}
+
+	// Feature access: 平台管理 visibility. Requires manage_org to actually function.
+	orgFeatureAccess, err := s.DB.ResolveSubjectFeatureAccess(ctx, orgID, "", "user", userID, []string{"admin"})
+	if err != nil {
+		return nil, err
+	}
+	composite.AccessAdmin = orgFeatureAccess["admin"] && composite.ManageOrg
 
 	// If the org has a public project, all users get read access to it.
 	if !composite.ReadOrg {
@@ -125,6 +132,11 @@ func (s *Service) ProjectPermissionsForUser(ctx context.Context, projectID, user
 			ManageAlerts:               true,
 			CreateBookmarks:            true,
 			ManageBookmarks:            true,
+			AccessChat:                 true,
+			AccessDashboards:           true,
+			AccessReports:              true,
+			AccessAlerts:               true,
+			AccessStudio:               true,
 		}, nil
 	}
 
@@ -141,6 +153,22 @@ func (s *Service) ProjectPermissionsForUser(ctx context.Context, projectID, user
 	for _, role := range roles {
 		composite = UnionProjectRoles(composite, role)
 	}
+
+	// Feature access: visibility of portal/workspace features, resolved per user/group.
+	proj, err := s.DB.FindProject(ctx, projectID)
+	if err != nil {
+		return nil, err
+	}
+	featureAccess, err := s.DB.ResolveSubjectFeatureAccess(ctx, proj.OrganizationID, projectID, "user", userID, []string{"chat", "dashboards", "reports", "alerts", "studio"})
+	if err != nil {
+		return nil, err
+	}
+	composite.AccessChat = featureAccess["chat"]
+	composite.AccessDashboards = featureAccess["dashboards"]
+	composite.AccessReports = featureAccess["reports"]
+	composite.AccessAlerts = featureAccess["alerts"]
+	// Studio (data governance) requires manage_project to actually function.
+	composite.AccessStudio = featureAccess["studio"] && composite.ManageProject
 
 	return composite, nil
 }
@@ -173,6 +201,11 @@ func (s *Service) ProjectPermissionsForService(ctx context.Context, projectID, s
 			ManageAlerts:               true,
 			CreateBookmarks:            true,
 			ManageBookmarks:            true,
+			AccessChat:                 true,
+			AccessDashboards:           true,
+			AccessReports:              true,
+			AccessAlerts:               true,
+			AccessStudio:               true,
 		}, nil
 	}
 

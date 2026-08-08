@@ -50,11 +50,23 @@ type OIDCConfig struct {
 
 // LocalUser is a static local account.
 type LocalUser struct {
-	Username     string `yaml:"username"`
-	PasswordHash string `yaml:"password_hash"` // bcrypt hash
-	Role         string `yaml:"role"`           // admin | editor | viewer
-	Email        string `yaml:"email"`
-	Name         string `yaml:"name"`
+	Username     string   `yaml:"username"`
+	PasswordHash string   `yaml:"password_hash"` // bcrypt hash
+	Role         string   `yaml:"role"`           // admin | editor | viewer (permissions)
+	Spaces       []string `yaml:"spaces"`        // business | tech (page visibility)
+	Email        string   `yaml:"email"`
+	Name         string   `yaml:"name"`
+}
+
+// SpacesOrDefault returns the user's declared spaces, defaulting to both
+// (business + tech, i.e. full visibility) when none are configured. This
+// keeps accounts that only set `role` backward-compatible instead of locking
+// them out of every page.
+func (u LocalUser) SpacesOrDefault() []string {
+	if len(u.Spaces) == 0 {
+		return []string{"business", "tech"}
+	}
+	return u.Spaces
 }
 
 // Normalize returns the resolved Provider, defaulting to local.

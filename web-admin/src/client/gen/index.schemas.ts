@@ -11,17 +11,6 @@ export interface GetAlertMetaResponseURLs {
   unsubscribeUrl?: string;
 }
 
-export type GetGithubPullRequestResponseState =
-  (typeof GetGithubPullRequestResponseState)[keyof typeof GetGithubPullRequestResponseState];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const GetGithubPullRequestResponseState = {
-  STATE_UNSPECIFIED: "STATE_UNSPECIFIED",
-  STATE_OPEN: "STATE_OPEN",
-  STATE_CLOSED_UNMERGED: "STATE_CLOSED_UNMERGED",
-  STATE_MERGED: "STATE_MERGED",
-} as const;
-
 export type GetReportMetaResponseDeliveryMetaUserAttrs = {
   [key: string]: unknown;
 };
@@ -33,14 +22,6 @@ export interface GetReportMetaResponseDeliveryMeta {
   unsubscribeUrl?: string;
   userId?: string;
   userAttrs?: GetReportMetaResponseDeliveryMetaUserAttrs;
-}
-
-export interface ListGithubUserReposResponseRepo {
-  name?: string;
-  owner?: string;
-  description?: string;
-  remote?: string;
-  defaultBranch?: string;
 }
 
 export interface ProtobufAny {
@@ -91,6 +72,13 @@ export const Runtimev1Operation = {
   OPERATION_CAST: "OPERATION_CAST",
 } as const;
 
+export interface V1AcquireEditLockResponse {
+  lock?: V1EditLockInfo;
+  /** acquired is true if the caller obtained or refreshed the lock. False means
+someone else holds it, and the lock info shows who. */
+  acquired?: boolean;
+}
+
 export interface V1AddOrganizationMemberUserResponse {
   pendingSignup?: boolean;
 }
@@ -139,6 +127,26 @@ export interface V1AlertOptions {
 
 export interface V1ApproveProjectAccessResponse {
   [key: string]: unknown;
+}
+
+export type V1AuditEventPayload = { [key: string]: unknown };
+
+/**
+ * AuditEvent is a single audit-log entry (StarData).
+ */
+export interface V1AuditEvent {
+  id?: string;
+  orgId?: string;
+  projectId?: string;
+  actorUserId?: string;
+  eventType?: string;
+  targetId?: string;
+  payload?: V1AuditEventPayload;
+  createdOn?: string;
+  /** Denormalized for display; empty if unresolvable. */
+  projectName?: string;
+  actorUserEmail?: string;
+  actorUserName?: string;
 }
 
 export interface V1BillingIssue {
@@ -330,10 +338,6 @@ export interface V1Condition {
   exprs?: V1Expression[];
 }
 
-export interface V1ConnectProjectToGithubResponse {
-  [key: string]: unknown;
-}
-
 export interface V1ContentBlock {
   text?: string;
   toolCall?: V1ToolCall;
@@ -369,18 +373,6 @@ export interface V1CreateBookmarkResponse {
 
 export interface V1CreateDeploymentResponse {
   deployment?: V1Deployment;
-}
-
-export interface V1CreateGithubPullRequestResponse {
-  prUrl?: string;
-}
-
-export interface V1CreateManagedGitRepoResponse {
-  remote?: string;
-  username?: string;
-  password?: string;
-  defaultBranch?: string;
-  passwordExpiresAt?: string;
 }
 
 export interface V1CreateOrganizationRequest {
@@ -429,6 +421,10 @@ export interface V1DeleteDeploymentResponse {
   deploymentId?: string;
 }
 
+export interface V1DeleteOrgAIConfigResponse {
+  [key: string]: unknown;
+}
+
 export interface V1DeleteOrganizationResponse {
   [key: string]: unknown;
 }
@@ -442,6 +438,10 @@ export interface V1DeleteProjectResponse {
 }
 
 export interface V1DeleteReportResponse {
+  [key: string]: unknown;
+}
+
+export interface V1DeleteSemanticResourceResponse {
   [key: string]: unknown;
 }
 
@@ -501,6 +501,15 @@ export interface V1EditAlertResponse {
   [key: string]: unknown;
 }
 
+export interface V1EditLockInfo {
+  projectId?: string;
+  lockedByUserId?: string;
+  lockedByUserEmail?: string;
+  lockedByUserName?: string;
+  lockedAt?: string;
+  expiresAt?: string;
+}
+
 export interface V1EditPersonalFileResponse {
   [key: string]: unknown;
 }
@@ -525,6 +534,30 @@ export interface V1Expression {
   val?: unknown;
   cond?: V1Condition;
   subquery?: V1Subquery;
+}
+
+/**
+ * FeatureAccessEntry is a single feature grant/deny.
+ */
+export interface V1FeatureAccessEntry {
+  featureKey?: string;
+  granted?: boolean;
+}
+
+export type V1FeatureAccessSubjectFeatures = { [key: string]: boolean };
+
+/**
+ * FeatureAccessSubject holds the effective feature access for a single subject (user or group).
+ */
+export interface V1FeatureAccessSubject {
+  subjectType?: string;
+  subjectId?: string;
+  subjectName?: string;
+  features?: V1FeatureAccessSubjectFeatures;
+}
+
+export interface V1ForceReleaseEditLockResponse {
+  [key: string]: unknown;
 }
 
 export interface V1GenerateAlertYAMLResponse {
@@ -652,30 +685,8 @@ export interface V1GetDeploymentResponse {
   ttlSeconds?: number;
 }
 
-export interface V1GetGithubPullRequestResponse {
-  prUrl?: string;
-  prState?: GetGithubPullRequestResponseState;
-}
-
-export interface V1GetGithubRepoStatusResponse {
-  hasAccess?: boolean;
-  grantAccessUrl?: string;
-  defaultBranch?: string;
-}
-
-export type V1GetGithubUserStatusResponseOrganizationInstallationPermissions = {
-  [key: string]: V1GithubPermission;
-};
-
-export interface V1GetGithubUserStatusResponse {
-  hasAccess?: boolean;
-  grantAccessUrl?: string;
-  accessToken?: string;
-  account?: string;
-  userInstallationPermission?: V1GithubPermission;
-  organizationInstallationPermissions?: V1GetGithubUserStatusResponseOrganizationInstallationPermissions;
-  /** DEPRECATED: Use organization_installation_permissions instead. */
-  orgs?: string[];
+export interface V1GetEditLockResponse {
+  lock?: V1EditLockInfo;
 }
 
 export interface V1GetIFrameResponse {
@@ -684,6 +695,13 @@ export interface V1GetIFrameResponse {
   instanceId?: string;
   accessToken?: string;
   ttlSeconds?: number;
+}
+
+export interface V1GetOrgAIConfigResponse {
+  config?: V1OrgAIConfig;
+  /** Effective driver/model when no override is set — reflects the deployment env. */
+  defaultDriver?: string;
+  defaultModel?: string;
 }
 
 export interface V1GetOrganizationMemberUserResponse {
@@ -776,6 +794,10 @@ export interface V1GetReportMetaResponse {
   deliveryMeta?: V1GetReportMetaResponseDeliveryMeta;
 }
 
+export interface V1GetSemanticResourceResponse {
+  resource?: V1SemanticResourceInfo;
+}
+
 export interface V1GetServiceResponse {
   service?: V1OrganizationMemberService;
   projectMemberships?: V1ProjectMemberService[];
@@ -794,15 +816,9 @@ export interface V1GetVirtualFileResponse {
   file?: V1VirtualFile;
 }
 
-export type V1GithubPermission =
-  (typeof V1GithubPermission)[keyof typeof V1GithubPermission];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const V1GithubPermission = {
-  GITHUB_PERMISSION_UNSPECIFIED: "GITHUB_PERMISSION_UNSPECIFIED",
-  GITHUB_PERMISSION_READ: "GITHUB_PERMISSION_READ",
-  GITHUB_PERMISSION_WRITE: "GITHUB_PERMISSION_WRITE",
-} as const;
+export interface V1HeartbeatEditLockResponse {
+  lock?: V1EditLockInfo;
+}
 
 export interface V1HibernateProjectResponse {
   [key: string]: unknown;
@@ -835,6 +851,10 @@ export interface V1LeaveOrganizationResponse {
   [key: string]: unknown;
 }
 
+export interface V1ListAuditEventsResponse {
+  events?: V1AuditEvent[];
+}
+
 export interface V1ListBookmarksResponse {
   bookmarks?: V1Bookmark[];
 }
@@ -843,8 +863,9 @@ export interface V1ListDeploymentsResponse {
   deployments?: V1Deployment[];
 }
 
-export interface V1ListGithubUserReposResponse {
-  repos?: ListGithubUserReposResponseRepo[];
+export interface V1ListFeatureAccessResponse {
+  orgDefaults?: V1FeatureAccessEntry[];
+  subjects?: V1FeatureAccessSubject[];
 }
 
 export interface V1ListMagicAuthTokensResponse {
@@ -938,9 +959,23 @@ export interface V1ListPublicBillingPlansResponse {
   plans?: V1BillingPlan[];
 }
 
+export interface V1ListResourceVisibilityResponse {
+  /** Only resources with an explicit row appear. Anything absent is not visible
+(fail-closed). */
+  visibility?: V1ResourceVisibilityInfo[];
+}
+
 export interface V1ListRolesResponse {
   organizationRoles?: V1OrganizationRole[];
   projectRoles?: V1ProjectRole[];
+}
+
+export interface V1ListSemanticResourcesResponse {
+  resources?: V1SemanticResourceInfo[];
+}
+
+export interface V1ListSemanticVersionsResponse {
+  versions?: V1SemanticVersionInfo[];
 }
 
 export interface V1ListServiceAuthTokensResponse {
@@ -1018,6 +1053,19 @@ export interface V1MemberUsergroup {
   resources?: V1ResourceName[];
 }
 
+/**
+ * OrgAIConfig describes an org-scoped LLM configuration. api_key is intentionally
+never returned by the server; the boolean flag lets the UI tell whether one is set.
+ */
+export interface V1OrgAIConfig {
+  orgId?: string;
+  driver?: string;
+  baseUrl?: string;
+  model?: string;
+  hasApiKey?: boolean;
+  updatedOn?: string;
+}
+
 export interface V1Organization {
   id?: string;
   name?: string;
@@ -1086,6 +1134,7 @@ export interface V1OrganizationPermissions {
   readOrgMembers?: boolean;
   manageOrgMembers?: boolean;
   manageOrgAdmins?: boolean;
+  accessAdmin?: boolean;
 }
 
 export interface V1OrganizationQuotas {
@@ -1107,6 +1156,11 @@ export interface V1OrganizationRole {
 export interface V1PingResponse {
   version?: string;
   time?: string;
+}
+
+export interface V1PreviewSemanticProjectResponse {
+  ok?: boolean;
+  errors?: string[];
 }
 
 export type V1ProjectAnnotations = { [key: string]: string };
@@ -1137,6 +1191,9 @@ export interface V1Project {
   overrideDiskGb?: string;
   annotations?: V1ProjectAnnotations;
   prodVersion?: string;
+  /** semantic_layer_mode is "archive" (legacy file-based) or "db" (StarData Phase 5
+DB-versioned semantic layer). The frontend uses it to pick the editing flow. */
+  semanticLayerMode?: string;
   createdOn?: string;
   updatedOn?: string;
 }
@@ -1202,6 +1259,11 @@ export interface V1ProjectPermissions {
   manageAlerts?: boolean;
   createBookmarks?: boolean;
   manageBookmarks?: boolean;
+  accessChat?: boolean;
+  accessDashboards?: boolean;
+  accessReports?: boolean;
+  accessAlerts?: boolean;
+  accessStudio?: boolean;
 }
 
 export interface V1ProjectRole {
@@ -1245,6 +1307,10 @@ export interface V1ProvisionerResource {
   config?: V1ProvisionerResourceConfig;
 }
 
+export interface V1PublishSemanticProjectResponse {
+  version?: V1SemanticVersionInfo;
+}
+
 export interface V1PullVirtualRepoResponse {
   /** List of virtual files ordered by update time, most recent last. */
   files?: V1VirtualFile[];
@@ -1275,6 +1341,10 @@ export interface V1RecordEventsResponse {
 }
 
 export interface V1RedeployProjectResponse {
+  [key: string]: unknown;
+}
+
+export interface V1ReleaseEditLockResponse {
   [key: string]: unknown;
 }
 
@@ -1359,6 +1429,14 @@ export interface V1ResourceName {
   name?: string;
 }
 
+export interface V1ResourceVisibilityInfo {
+  resourceKind?: string;
+  resourceName?: string;
+  visible?: boolean;
+  updatedByUserId?: string;
+  updatedOn?: string;
+}
+
 export interface V1RevokeAllUserAuthTokensResponse {
   /** Number of tokens revoked. */
   tokensRevoked?: number;
@@ -1384,6 +1462,12 @@ export interface V1RevokeUserAuthTokenResponse {
   [key: string]: unknown;
 }
 
+export interface V1SaveSemanticResourceResponse {
+  resource?: V1SemanticResourceInfo;
+  /** Validation errors discovered on save; empty means clean. */
+  validationErrors?: string[];
+}
+
 export interface V1SearchProjectNamesResponse {
   names?: string[];
   nextPageToken?: string;
@@ -1397,6 +1481,39 @@ export interface V1SearchProjectUsersResponse {
 export interface V1SearchUsersResponse {
   users?: V1User[];
   nextPageToken?: string;
+}
+
+export interface V1SemanticResourceInfo {
+  id?: string;
+  projectId?: string;
+  resourceKind?: string;
+  resourceName?: string;
+  definitionRaw?: string;
+  version?: number;
+  status?: string;
+  createdByUserId?: string;
+  createdOn?: string;
+  updatedOn?: string;
+}
+
+/**
+ * Structured dry-run failure detail; only set for rejected versions.
+ */
+export type V1SemanticVersionInfoValidationReport = { [key: string]: unknown };
+
+export interface V1SemanticVersionInfo {
+  id?: string;
+  version?: number;
+  status?: string;
+  publishedByUserId?: string;
+  publishedByUserEmail?: string;
+  publishedOn?: string;
+  note?: string;
+  /** Structured dry-run failure detail; only set for rejected versions. */
+  validationReport?: V1SemanticVersionInfoValidationReport;
+  createdOn?: string;
+  /** is_current is true for the version the runtime is serving right now. */
+  isCurrent?: boolean;
 }
 
 export type V1ServiceAttributes = { [key: string]: unknown };
@@ -1416,6 +1533,18 @@ export interface V1ServiceToken {
   prefix?: string;
   createdOn?: string;
   expiresOn?: string;
+}
+
+export interface V1SetFeatureAccessResponse {
+  [key: string]: unknown;
+}
+
+export interface V1SetOrgAIConfigResponse {
+  config?: V1OrgAIConfig;
+}
+
+export interface V1SetOrgFeatureDefaultsResponse {
+  [key: string]: unknown;
 }
 
 export interface V1SetOrganizationMemberServiceRoleResponse {
@@ -1440,6 +1569,10 @@ export interface V1SetProjectMemberUserRoleResponse {
 
 export interface V1SetProjectMemberUsergroupRoleResponse {
   [key: string]: unknown;
+}
+
+export interface V1SetResourceVisibilityResponse {
+  visibility?: V1ResourceVisibilityInfo;
 }
 
 export interface V1SetSuperuserRequest {
@@ -1609,6 +1742,12 @@ export interface V1SudoUpdateUserQuotasRequest {
 
 export interface V1SudoUpdateUserQuotasResponse {
   user?: V1User;
+}
+
+export interface V1TestOrgAIConfigResponse {
+  ok?: boolean;
+  message?: string;
+  provider?: string;
 }
 
 export type V1ToolMeta = { [key: string]: unknown };
@@ -1860,10 +1999,6 @@ export type AdminServiceTriggerRefreshSourcesBody = {
   sources?: string[];
 };
 
-export type AdminServiceGetGithubRepoStatusParams = {
-  remote?: string;
-};
-
 export type AdminServiceListOrganizationsParams = {
   pageSize?: number;
   pageToken?: string;
@@ -1883,6 +2018,29 @@ export type AdminServiceUpdateOrganizationBody = {
   thumbnailAssetId?: string;
   defaultProjectRole?: string;
   billingEmail?: string;
+};
+
+export type AdminServiceSetOrgAIConfigBody = {
+  driver?: string;
+  baseUrl?: string;
+  model?: string;
+  /** Plaintext API key. Leave empty to preserve the currently-stored key. */
+  apiKey?: string;
+};
+
+export type AdminServiceTestOrgAIConfigBody = {
+  /** If any of these are set, the test uses the given values instead of the
+stored config. Handy for "test before save". */
+  driver?: string;
+  baseUrl?: string;
+  model?: string;
+  apiKey?: string;
+};
+
+export type AdminServiceListAuditEventsParams = {
+  project?: string;
+  eventType?: string;
+  limit?: number;
 };
 
 export type AdminServiceGetBillingCreditBalanceParams = {
@@ -1910,19 +2068,31 @@ export type AdminServiceCancelBillingSubscriptionParams = {
   superuserForceAccess?: boolean;
 };
 
-export type AdminServiceCreateManagedGitRepoBody = {
-  /** name of the repo to create. 
-Note: The final name will be suffixed with a random string to ensure uniqueness. */
-  name?: string;
-  autoInit?: boolean;
-};
-
 export type AdminServiceCreateAssetBody = {
   type?: string;
   name?: string;
   extension?: string;
   public?: boolean;
   estimatedSizeBytes?: string;
+};
+
+export type AdminServiceListFeatureAccessParams = {
+  project?: string;
+  subjectType?: string;
+};
+
+/**
+ * SetFeatureAccessRequest sets feature access overrides for a user or user group.
+ */
+export type AdminServiceSetFeatureAccessBody = {
+  project?: string;
+  subjectType?: string;
+  subjectId?: string;
+  features?: V1FeatureAccessEntry[];
+};
+
+export type AdminServiceSetOrgFeatureDefaultsBody = {
+  features?: V1FeatureAccessEntry[];
 };
 
 export type AdminServiceListOrganizationInvitesParams = {
@@ -2041,10 +2211,6 @@ export type AdminServiceGetCloneCredentialsParams = {
   superuserForceAccess?: boolean;
 };
 
-export type AdminServiceConnectProjectToGithubBody = {
-  remote?: string;
-};
-
 /**
  * If set, will use the provided attributes outright.
  */
@@ -2087,12 +2253,6 @@ Can't be set for `prod` deployments. */
   editable?: boolean;
 };
 
-export type AdminServiceCreateGithubPullRequestBody = {
-  branch?: string;
-  title?: string;
-  body?: string;
-};
-
 export type AdminServiceHibernateProjectParams = {
   superuserForceAccess?: boolean;
 };
@@ -2124,7 +2284,7 @@ export type AdminServiceGetIFrameBody = {
   /** Optional ID for the external end user of the iframe. If set, the access token enables per-user state, such as AI chat history.
 Cannot be combined with `user_id`. If `user_email` matches a Rill Cloud user, their attributes are used, but this ID takes precedence for per-user state. */
   externalUserId?: string;
-  /** Type of resource to embed. If not set, defaults to "rill.runtime.v1.Explore". */
+  /** Type of resource to embed. If not set, defaults to "stardata.runtime.v1.Explore". */
   type?: string;
   /** Deprecated: Alias for `type`. */
   kind?: string;
@@ -2182,6 +2342,29 @@ export type AdminServiceRedeployProjectParams = {
   superuserForceAccess?: boolean;
 };
 
+export type AdminServiceSetResourceVisibilityBody = {
+  resourceKind?: string;
+  resourceName?: string;
+  visible?: boolean;
+};
+
+export type AdminServicePublishSemanticProjectBody = {
+  note?: string;
+};
+
+export type AdminServiceSaveSemanticResourceBody = {
+  resourceKind?: string;
+  resourceName?: string;
+  /** The raw editor text (yaml or sql) — stored as definition->raw in the DB. */
+  definitionRaw?: string;
+  /** Optional "format" hint for models: "sql" means the raw body is bare SQL. */
+  format?: string;
+};
+
+export type AdminServiceListSemanticVersionsParams = {
+  limit?: number;
+};
+
 export type AdminServiceListMagicAuthTokensParams = {
   pageSize?: number;
   pageToken?: string;
@@ -2189,7 +2372,7 @@ export type AdminServiceListMagicAuthTokensParams = {
 
 /**
  * Optional metrics view to filter mapping to apply as row filters in queries.
-This will be translated to a rill.runtime.v1.SecurityRuleRowFilter with the metrics view in the condition_resources, which currently applies to metric views queries.
+This will be translated to a stardata.runtime.v1.SecurityRuleRowFilter with the metrics view in the condition_resources, which currently applies to metric views queries.
  */
 export type AdminServiceIssueMagicAuthTokenBodyMetricsViewFilters = {
   [key: string]: V1Expression;
@@ -2203,10 +2386,10 @@ export type AdminServiceIssueMagicAuthTokenBody = {
   /** Name of the resource to grant access to. */
   resourceName?: string;
   /** Optional metrics view to filter mapping to apply as row filters in queries.
-This will be translated to a rill.runtime.v1.SecurityRuleRowFilter with the metrics view in the condition_resources, which currently applies to metric views queries. */
+This will be translated to a stardata.runtime.v1.SecurityRuleRowFilter with the metrics view in the condition_resources, which currently applies to metric views queries. */
   metricsViewFilters?: AdminServiceIssueMagicAuthTokenBodyMetricsViewFilters;
   /** Optional list of fields to limit access to. If empty, no field access rule will be added.
-This will be translated to a rill.runtime.v1.SecurityRuleFieldAccess, which currently applies to dimension and measure names for explores and metrics views. */
+This will be translated to a stardata.runtime.v1.SecurityRuleFieldAccess, which currently applies to dimension and measure names for explores and metrics views. */
   fields?: string[];
   /** Optional state to store with the token. Can be fetched with GetCurrentMagicAuthToken. */
   state?: string;

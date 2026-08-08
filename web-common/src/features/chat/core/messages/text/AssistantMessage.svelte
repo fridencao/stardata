@@ -8,6 +8,8 @@
   import type { Conversation } from "../../conversation";
   import FeedbackButtons from "../../feedback/FeedbackButtons.svelte";
   import RequestDialog from "../../../requests/RequestDialog.svelte";
+  import { getRequestSubmitter } from "../../../requests/request-submitter";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { extractFollowUps, extractMessageText } from "../../utils";
   import type { TextBlock } from "./text-block";
 
@@ -37,8 +39,9 @@
     ),
   );
 
-  // Only show in local (web-local), not cloud (organization param present)
-  $: canRequest = !$page.params.organization;
+  // Shown in web-local (no organization param) and in cloud apps that registered
+  // an admin-side request submitter (web-admin portal).
+  $: canRequest = !$page.params.organization || getRequestSubmitter() !== null;
 
   function findPrecedingUserQuestion(
     messages: V1Message[],
@@ -95,7 +98,7 @@
         class="follow-up-chip"
         onclick={() => (requestOpen = true)}
       >
-        ✋ 提需求
+        {m.chat_request_cta()}
       </button>
       <RequestDialog bind:open={requestOpen} {defaultQuestion} />
     {/if}
@@ -109,7 +112,7 @@
 
   .chat-message-content {
     @apply py-2;
-    @apply text-sm leading-relaxed break-words;
+    @apply text-base leading-relaxed break-words;
     @apply text-fg-primary;
   }
 

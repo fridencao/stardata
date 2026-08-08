@@ -12,7 +12,7 @@ import (
 	"github.com/hashicorp/go-version"
 	"github.com/fridencao/stardata/admin/database"
 	"github.com/fridencao/stardata/admin/provisioner"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
 	"github.com/fridencao/stardata/runtime/client"
 	"github.com/fridencao/stardata/runtime/pkg/observability"
@@ -268,7 +268,7 @@ func (s *Service) StartDeploymentInner(ctx context.Context, depl *database.Deplo
 
 	// Prepare connectors
 	adminConfig, err := structpb.NewStruct(map[string]any{
-		"admin_url":    s.opts.ExternalURL,
+		"admin_url":    s.opts.ExternalGRPCURL, // NOTE: the runtime's admin connector speaks gRPC
 		"access_token": dat.Token().String(),
 		"project_id":   depl.ProjectID,
 	})
@@ -456,20 +456,6 @@ func (s *Service) DeleteDeploymentInner(ctx context.Context, depl *database.Depl
 		err = s.DB.DeleteProvisionerResource(ctx, pr.ID)
 		if err != nil {
 			return err
-		}
-	}
-
-	// delete the deployment's branch if it is an editable deployment
-	if depl.Editable {
-		proj, err := s.DB.FindProject(ctx, depl.ProjectID)
-		if err != nil {
-			return err
-		}
-		if depl.Branch != "" && depl.Branch != proj.PrimaryBranch && proj.GithubInstallationID != nil && proj.GithubRepoID != nil && proj.GitRemote != nil {
-			err = s.Github.DeleteBranch(ctx, *proj.GithubInstallationID, *proj.GithubRepoID, *proj.GitRemote, depl.Branch)
-			if err != nil && !errors.Is(err, ErrBranchNotFound) {
-				return err
-			}
 		}
 	}
 

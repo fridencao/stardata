@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/fridencao/stardata/admin/database"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.uber.org/multierr"
 	"go.uber.org/zap"
@@ -179,14 +179,23 @@ func (s *Service) TeardownProject(ctx context.Context, p *database.Project) erro
 // UpdateProject updates a project and any impacted deployments.
 // It runs a reconcile if deployment parameters (like branch or variables) have been changed and reconcileDeployment is set.
 func (s *Service) UpdateProject(ctx context.Context, oldProj *database.Project, opts *database.UpdateProjectOptions) (*database.Project, error) {
-	// check if there is an existing dev deployment for the new primary branch
-	depls, err := s.DB.FindDeploymentsForProject(ctx, oldProj.ID, "", opts.PrimaryBranch)
-	if err != nil {
-		return nil, err
-	}
-	for _, d := range depls {
-		if d.Environment != "prod" {
-			return nil, fmt.Errorf("cannot change primary branch to %q as there is an existing non-production deployment for this branch. Delete that deployment first", opts.PrimaryBranch)
+	// If the primary branch is actually changing, refuse when a non-production deployment
+	// already occupies the target branch (it would be left pointing at the wrong ref).
+	//
+	// This check must be conditional on the branch changing. Publishing an archive project
+	// calls UpdateProject with PrimaryBranch unchanged (empty for archive projects) while an
+	// edit-session dev deployment is open — and publishing *requires* that dev deployment.
+	// Running the check unconditionally therefore made every publish fail with
+	// "cannot change primary branch to \"\"".
+	if oldProj.PrimaryBranch != opts.PrimaryBranch {
+		depls, err := s.DB.FindDeploymentsForProject(ctx, oldProj.ID, "", opts.PrimaryBranch)
+		if err != nil {
+			return nil, err
+		}
+		for _, d := range depls {
+			if d.Environment != "prod" {
+				return nil, fmt.Errorf("cannot change primary branch to %q as there is an existing non-production deployment for this branch. Delete that deployment first", opts.PrimaryBranch)
+			}
 		}
 	}
 
@@ -214,6 +223,10 @@ func (s *Service) UpdateProject(ctx context.Context, oldProj *database.Project, 
 
 	// if there is an existing prod deployment for the new branch then update the project use that as its primary deployment
 	if oldProj.PrimaryBranch != opts.PrimaryBranch {
+		depls, err := s.DB.FindDeploymentsForProject(ctx, proj.ID, "", opts.PrimaryBranch)
+		if err != nil {
+			return nil, err
+		}
 		for _, d := range depls {
 			if d.Environment != "prod" {
 				continue

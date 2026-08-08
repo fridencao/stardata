@@ -7,6 +7,7 @@
   import { extractErrorMessage } from "@rilldata/web-common/lib/errors";
   import { createRuntimeServiceGitStatus } from "@rilldata/web-common/runtime-client";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { GitBranch } from "lucide-svelte";
   import CommitPopover from "./CommitPopover.svelte";
   import CloudRemoteChangeManager from "./CloudRemoteChangeManager.svelte";
@@ -85,10 +86,10 @@
       onClick={() => $gitStatusQuery.refetch()}
     >
       <GitBranch size="14" />
-      Git unavailable
+      {m.edit_git_unavailable()}
     </Button>
     <TooltipContent slot="tooltip-content" maxWidth="220px">
-      <span class="text-xs">{gitStatusErrorMessage} Click to retry.</span>
+      <span class="text-xs">{gitStatusErrorMessage} {m.edit_click_to_retry()}</span>
     </TooltipContent>
   </Tooltip>
 {/if}

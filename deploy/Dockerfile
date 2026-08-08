@@ -5,30 +5,10 @@
 #
 # 如需使用本机 DuckDB 数据: 挂载 /data 卷
 #
-# Stage 1: 前端构建
-FROM node:20-alpine AS frontend
-
-WORKDIR /build
-
-# 先装依赖 (利用 Docker 缓存)
-COPY package.json package-lock.json ./
-COPY web-common/package.json web-common/
-COPY web-local/package.json web-local/
-COPY web-admin/package.json web-admin/
-COPY web-integration/package.json web-integration/
-COPY docs/package.json docs/
-
-# npm ci 确保锁定版本
-RUN npm ci --registry=https://registry.npmmirror.com
-
-# 复制源码
-COPY . .
-
-# 构建前端 (输出到 web-local/build/)
-RUN npm run build:i18n && npm run build -w web-local
-
-# Stage 2: Go 构建
-FROM golang:1.23-alpine AS builder
+# 注: web-local 已移除, CLI 不再嵌入前端; 企业端前端由 deploy/Dockerfile.web-admin 独立构建托管。
+#
+# Stage 1: Go 构建
+FROM golang:1.26-alpine AS builder
 
 WORKDIR /build
 
@@ -39,9 +19,6 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-
-# 复制前端构建产物到嵌入目录
-COPY --from=frontend /build/web-local/build /build/cli/pkg/web/embed/dist
 
 # 嵌入 DuckDB 扩展
 RUN go run scripts/embed_duckdb_ext/main.go
@@ -54,7 +31,7 @@ RUN CGO_ENABLED=0 go build \
     -o stardata \
     cli/main.go
 
-# Stage 3: 运行镜像
+# Stage 2: 运行镜像
 FROM alpine:3.20
 
 # 安装运行时依赖

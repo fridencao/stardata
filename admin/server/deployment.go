@@ -15,8 +15,8 @@ import (
 	"github.com/fridencao/stardata/admin/database"
 	"github.com/fridencao/stardata/admin/provisioner"
 	"github.com/fridencao/stardata/admin/server/auth"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
 	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.opentelemetry.io/otel/attribute"
@@ -262,6 +262,14 @@ func (s *Server) CreateDeployment(ctx context.Context, req *adminv1.CreateDeploy
 
 	claims := auth.GetClaims(ctx)
 	permissions := claims.ProjectPermissions(ctx, proj.OrganizationID, proj.ID)
+
+	// StarData Phase 5: DB-mode projects have no dev-deployment concept. The draft
+	// lives in the semantic_resources table and Studio talks to the single prod
+	// runtime directly, so a dev deployment would be a stray environment that
+	// nothing drives. Refuse to create one rather than leaving it to leak.
+	if proj.SemanticLayerMode == "db" && req.Environment == "dev" {
+		return nil, status.Error(codes.FailedPrecondition, "dev deployments are not used by DB-mode projects")
+	}
 
 	if req.Environment == "dev" {
 		if !permissions.ManageDev {

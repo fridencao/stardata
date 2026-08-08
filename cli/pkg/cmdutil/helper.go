@@ -17,23 +17,17 @@ import (
 	"github.com/fridencao/stardata/cli/pkg/dotrill"
 	"github.com/fridencao/stardata/cli/pkg/printer"
 	"github.com/fridencao/stardata/cli/pkg/version"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	runtimeclient "github.com/fridencao/stardata/runtime/client"
 	"github.com/fridencao/stardata/runtime/pkg/activity"
 	"github.com/fridencao/stardata/runtime/pkg/fileutil"
 	"github.com/fridencao/stardata/runtime/pkg/gitutil"
-	"go.uber.org/zap"
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/term"
 )
 
 const (
 	defaultAdminURL = "https://admin.rilldata.com"
-
-	telemetryServiceName    = "cli"
-	telemetryIntakeURL      = "https://intake.rilldata.io/events/data-modeler-metrics"
-	telemetryIntakeUser     = "data-modeler"
-	telemetryIntakePassword = "lkh8T90ozWJP/KxWnQ81PexRzpdghPdzuB0ly2/86TeUU8q/bKiVug==" // nolint:gosec // secret is safe for public use
 )
 
 var ErrInferProjectFailed = fmt.Errorf("could not infer project")
@@ -50,10 +44,9 @@ type Helper struct {
 	AdminTokenDefault  string
 	AdminTokenOverride string
 
-	adminClient        *client.Client
-	adminClientHash    string
-	activityClient     *activity.Client
-	activityClientHash string
+	adminClient     *client.Client
+	adminClientHash string
+	activityClient  *activity.Client
 
 	gitHelper   *GitHelper
 	gitHelperMu sync.Mutex
@@ -205,74 +198,12 @@ func (h *Helper) Client() (*client.Client, error) {
 }
 
 // Telemetry returns a client for recording events.
-// Note: It should only be used for parts of the CLI that run on users' local computer because:
-// a) it accesses ~/.rill and adds information about the current user,
-// b) it sends events to the public intake endpoint instead of directly to Kafka.
-func (h *Helper) Telemetry(ctx context.Context) *activity.Client {
-	// If the admin token or URL changes, the user ID of the telemetry client may have changed.
-	// We compute and cache a hash of these values to detect changes.
-	// If the hash has changed, we refetch the current user and update the client.
-	hash := hashStr(h.AdminToken(), h.AdminURL())
-
-	// Return the client if it's already created and the hash hasn't changed.
-	if h.activityClient != nil && h.activityClientHash == hash {
-		return h.activityClient
-	}
-
-	// Now we can update the hash. The user ID will be refetched below.
-	h.activityClientHash = hash
-
-	// Load telemetry config
-	installID, analyticsEnabled, err := h.DotRill.AnalyticsInfo()
-	if err != nil {
-		analyticsEnabled = false
-	}
-
-	// Create a client if there isn't one
+// StarData is deployed on-premise, so telemetry reporting to the public intake
+// endpoint is disabled and this always returns a no-op client that discards all events.
+func (h *Helper) Telemetry(_ context.Context) *activity.Client {
 	if h.activityClient == nil {
-		// If analytics are disabled, we'll use a no-op client.
-		// We can set it and return early here.
-		if !analyticsEnabled {
-			h.activityClient = activity.NewNoopClient()
-			return h.activityClient
-		}
-
-		// Create a sink that sends events to the intake server.
-		intakeSink := activity.NewIntakeSink(zap.NewNop(), activity.IntakeSinkOptions{
-			IntakeURL:      telemetryIntakeURL,
-			IntakeUser:     telemetryIntakeUser,
-			IntakePassword: telemetryIntakePassword,
-			BufferSize:     50,
-			SinkInterval:   time.Second,
-		})
-
-		// Wrap the intake sink in a filter sink that omits events we don't want to send from local.
-		// (Remember, this telemetry client will only be used on local.)
-		sink := activity.NewFilterSink(intakeSink, func(e activity.Event) bool {
-			// Omit metrics events (since they are quite chatty and potentially sensitive).
-			return e.EventType != activity.EventTypeMetric
-		})
-
-		// Create the telemetry client with metadata about the current environment.
-		h.activityClient = activity.NewClient(sink, zap.NewNop())
-		h.activityClient = h.activityClient.WithServiceName(telemetryServiceName)
-		if h.Version.Number != "" || h.Version.Commit != "" {
-			h.activityClient = h.activityClient.WithServiceVersion(h.Version.Number, h.Version.Commit)
-		}
-		if h.Version.IsDev() {
-			h.activityClient = h.activityClient.WithIsDev()
-		}
-		h.activityClient = h.activityClient.WithInstallID(installID)
+		h.activityClient = activity.NewNoopClient()
 	}
-
-	// Fetch the current user ID and set it on the telemetry client.
-	// We do this outside of the client creation block to reset the user ID if the hash changes.
-	var userID string
-	if h.AdminToken() != "" {
-		userID, _ = h.CurrentUserID(ctx)
-	}
-	h.activityClient = h.activityClient.WithUserID(userID)
-
 	return h.activityClient
 }
 
@@ -467,7 +398,7 @@ func (h *Helper) InferProjects(ctx context.Context, org, path string) ([]*adminv
 func (h *Helper) OpenRuntimeClient(ctx context.Context, org, project, branch string, local bool) (*runtimeclient.Client, string, error) {
 	var host, instanceID, jwt string
 	if local {
-		// This is the default port that Rill localhost uses for gRPC.
+		// This is the default port that StarData localhost uses for gRPC.
 		// TODO: In the future, we should capture the gRPC port in ~/.rill and use it here.
 		host = "http://localhost:49009"
 		instanceID = "default"
@@ -518,12 +449,12 @@ func (h *Helper) GitHelper(org, project, localPath string) *GitHelper {
 	return h.gitHelper
 }
 
-// GitSignature returns the author to attribute Rill's git commits to.
+// GitSignature returns the author to attribute StarData's git commits to.
 //
 // The path must be the root of the git working tree (the directory that contains .git), not a
 // subpath within it. Callers working from a monorepo subpath must resolve the root first, e.g.
 // via gitutil.InferRepoRootAndSubpath. This matters because the local git identity is only read
-// when .git is found directly at path: a subpath would silently fall back to the Rill user even
+// when .git is found directly at path: a subpath would silently fall back to the StarData user even
 // when a local identity is configured.
 func (h *Helper) GitSignature(ctx context.Context, path string) (gitutil.Signature, error) {
 	// Only read the user's git config when path is an existing repo: without this exact-path
@@ -534,10 +465,10 @@ func (h *Helper) GitSignature(ctx context.Context, path string) (gitutil.Signatu
 		if err == nil {
 			return sig, nil
 		}
-		// git identity not configured: fall through to the Rill user
+		// git identity not configured: fall through to the StarData user
 	}
 
-	// use email of rill user
+	// use email of stardata user
 	c, err := h.Client()
 	if err != nil {
 		return gitutil.Signature{}, err
@@ -656,7 +587,7 @@ func (h *Helper) CommitAndSafePush(ctx context.Context, root string, config *git
 	}
 }
 
-// IsLocalRillRunning checks whether rill start is listening on the default HTTP port (9009).
+// IsLocalRillRunning checks whether stardata start is listening on the default HTTP port (9009).
 // This is a best-effort check that assumes the default port.
 func IsLocalRillRunning(ctx context.Context) bool {
 	d := net.Dialer{Timeout: time.Second}

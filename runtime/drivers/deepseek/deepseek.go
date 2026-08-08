@@ -12,7 +12,7 @@ import (
 	"github.com/openai/openai-go/v3/azure"
 	"github.com/openai/openai-go/v3/option"
 	"github.com/openai/openai-go/v3/shared"
-	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
+	aiv1 "github.com/fridencao/stardata/proto/gen/stardata/ai/v1"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/pkg/activity"
 	"github.com/fridencao/stardata/runtime/storage"
@@ -360,6 +360,17 @@ func (o *openaiHandle) Complete(ctx context.Context, opts *drivers.CompleteOptio
 	if err != nil {
 		return nil, fmt.Errorf("failed to convert response message: %w", err)
 	}
+
+	// DeepSeek sometimes answers a structured-output request by emitting a tool call
+	// even though the request declared no tools (it treats the output schema as a
+	// function to invoke). The framework would then try to execute that phantom tool
+	// and fail with `unknown tool "..."`. Normalize it: when no tools were offered,
+	// a returned tool call is really the structured answer, so surface its arguments
+	// as a text block for the caller's schema parsing.
+	if len(opts.Tools) == 0 {
+		resMsgs = normalizePhantomToolCalls(resMsgs)
+	}
+
 	// OpenAI's PromptTokens already includes cached tokens; CachedInputTokens is the cache-read subset.
 	result := &drivers.CompleteResult{
 		Message:           resMsgs,
@@ -369,6 +380,42 @@ func (o *openaiHandle) Complete(ctx context.Context, opts *drivers.CompleteOptio
 		OutputTokens:      int(res.Usage.CompletionTokens),
 	}
 	return result, nil
+}
+
+// normalizePhantomToolCalls rewrites tool-call blocks into text blocks holding the
+// call's JSON arguments. It is only safe to call when the request offered no tools,
+// in which case any tool call the model produced cannot be a real invocation.
+// If the message already contains text, the phantom calls are dropped instead.
+func normalizePhantomToolCalls(msg *aiv1.CompletionMessage) *aiv1.CompletionMessage {
+	var hasText bool
+	for _, block := range msg.Content {
+		if _, ok := block.BlockType.(*aiv1.ContentBlock_Text); ok {
+			hasText = true
+			break
+		}
+	}
+
+	out := make([]*aiv1.ContentBlock, 0, len(msg.Content))
+	for _, block := range msg.Content {
+		call, ok := block.BlockType.(*aiv1.ContentBlock_ToolCall)
+		if !ok {
+			out = append(out, block)
+			continue
+		}
+		if hasText || call.ToolCall.GetInput() == nil {
+			continue // Text already carries the answer, or there are no arguments to salvage.
+		}
+		argsJSON, err := json.Marshal(call.ToolCall.Input.AsMap())
+		if err != nil {
+			continue
+		}
+		out = append(out, &aiv1.ContentBlock{
+			BlockType: &aiv1.ContentBlock_Text{Text: string(argsJSON)},
+		})
+	}
+
+	msg.Content = out
+	return msg
 }
 
 // messageToOpenAI converts a single Rill CompletionMessage to one or more OpenAI ChatCompletionMessages.

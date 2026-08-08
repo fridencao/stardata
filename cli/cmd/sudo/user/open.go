@@ -36,7 +36,7 @@ func OpenCmd(ch *cmdutil.Helper) *cobra.Command {
 				}
 			}
 			if email == "" {
-				return errors.New("no user specified; you must specify a user's email or separately assume a user with `rill sudo user assume`")
+				return errors.New("no user specified; you must specify a user's email or separately assume a user with `stardata sudo user assume`")
 			}
 
 			qry := map[string]string{

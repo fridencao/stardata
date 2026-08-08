@@ -37,12 +37,9 @@
   >;
   export let currentUserEmail: string;
   export let organizationPermissions: V1OrganizationPermissions;
-  export let billingContact: string | undefined;
   export let scrollToTopTrigger: any = null;
   export let guestOnly: boolean;
 
-  export let onAttemptRemoveBillingContactUser: () => void;
-  export let onAttemptChangeBillingContactUserRole: () => void;
   export let onEditUserGroup: (groupName: string) => void;
   export let onConvertToMember: (user: V1OrganizationMemberUser) => void;
 
@@ -74,8 +71,6 @@
         role: row.original.roleName,
         isCurrentUser: row.original.userEmail === currentUserEmail,
         organizationPermissions,
-        isBillingContact: row.original.userEmail === billingContact,
-        onAttemptChangeBillingContactUserRole,
       }),
     meta: {
       widthPercent: 40,
@@ -121,9 +116,7 @@
         role: row.original.roleName,
         isCurrentUser: row.original.userEmail === currentUserEmail,
         organizationPermissions,
-        isBillingContact: row.original.userEmail === billingContact,
         pendingAcceptance: "invitedBy" in row.original,
-        onAttemptRemoveBillingContactUser,
         onConvertToMember: () => onConvertToMember(row.original),
       }),
     meta: {
@@ -149,7 +142,7 @@
   const headerIcons = {
     roleName: {
       icon: ExternalLinkIcon,
-      href: "https://docs.rilldata.com/guide/administration/users-and-access/roles-permissions#organization-level-permissions",
+      href: undefined,
     },
   };
 </script>

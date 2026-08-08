@@ -1,4 +1,5 @@
 import type { V1ConnectorDriver } from "../../../runtime-client";
+import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
 import type {
   ConnectorCategory,
   MultiStepFormSchema,
@@ -190,7 +191,9 @@ export function toConnectorDriver(
   return {
     name: backendName,
     displayName: schema.title ?? schemaName,
-    docsUrl: `https://docs.rilldata.com/developers/build/connectors/${getDocsCategory(category)}/${backendName}`,
+    docsUrl: docsUrl(
+      `/developers/build/connectors/${getDocsCategory(category)}/${backendName}`,
+    ),
     implementsObjectStore: category === "objectStore",
     implementsOlap: category === "olap",
     implementsSqlStore: category === "sqlStore",

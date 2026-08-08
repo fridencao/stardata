@@ -1,5 +1,6 @@
 <script lang="ts">
   import Select from "@rilldata/web-common/components/forms/Select.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import FormattingRulesEditor from "./FormattingRulesEditor.svelte";
   import {
     getSchemeStops,
@@ -21,10 +22,10 @@
   const DEFAULT_SCHEME = "theme-sequential";
 
   const modeOptions = [
-    { value: "none", label: "None" },
-    { value: "heatmap", label: "Heatmap" },
-    { value: "data_bar", label: "Data bar" },
-    { value: "rules", label: "Rules" },
+    { value: "none", label: m.dashboard_format_mode_none() },
+    { value: "heatmap", label: m.dashboard_format_mode_heatmap() },
+    { value: "data_bar", label: m.dashboard_format_mode_data_bar() },
+    { value: "rules", label: m.dashboard_format_mode_rules() },
   ];
 
   const schemeOptions = PIVOT_FORMATTING_SCHEMES.map((s) => ({
@@ -69,7 +70,7 @@
 
 <div class="flex flex-col gap-y-1.5">
   <div class="flex items-center justify-between gap-x-2">
-    <span class="text-xs font-semibold">Format style</span>
+    <span class="text-xs font-semibold">{m.dashboard_format_style()}</span>
     <Select
       id="pivot-format-mode-{id}"
       value={mode}

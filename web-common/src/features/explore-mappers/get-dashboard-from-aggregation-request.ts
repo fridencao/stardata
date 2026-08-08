@@ -36,7 +36,7 @@ import {
   fillTimeRange,
 } from "@rilldata/web-common/features/explore-mappers/utils";
 import { TIME_GRAIN } from "@rilldata/web-common/lib/time/config.ts";
-import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import {
   type V1ExploreSpec,
   type V1Expression,

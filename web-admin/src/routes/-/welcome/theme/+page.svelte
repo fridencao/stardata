@@ -1,6 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import StarDataLogoSquareNegative from "@rilldata/web-common/components/icons/StarDataLogoSquareNegative.svelte";
+  import StarDataLogoWordmark from "@rilldata/web-common/components/icons/StarDataLogoWordmark.svelte";
   import { Button } from "@rilldata/web-common/components/button/index.ts";
   import {
     themeControl,
@@ -16,10 +16,10 @@
     value: ThemeMode;
     image: string;
   }[] = [
-    { label: "Light", value: "light", image: "/img/theme/light-mode.svg" },
-    { label: "Dark", value: "dark", image: "/img/theme/dark-mode.svg" },
+    { label: m.theme_light(), value: "light", image: "/img/theme/light-mode.svg" },
+    { label: m.theme_dark(), value: "dark", image: "/img/theme/dark-mode.svg" },
     {
-      label: "System",
+      label: m.theme_system(),
       value: "system",
       image: "/img/theme/system-mode.svg",
     },
@@ -40,10 +40,10 @@
   }
 </script>
 
-<div class="flex flex-col gap-4 justify-center">
-  <StarDataLogoSquareNegative size="36px" />
-  <div class="text-2xl font-extrabold text-fg-accent text-center">
-    Pick your color mode
+<div class="flex flex-col items-center gap-4 justify-center">
+  <StarDataLogoWordmark size="lg" />
+  <div class="auth-title text-center">
+    {m.theme_pick_color_mode()}
   </div>
   <div class="flex flex-row gap-8 pt-6 mx-auto">
     {#each ThemeOptions as themeOption (themeOption.value)}
@@ -51,14 +51,14 @@
       <button
         class="flex flex-col gap-4"
         onclick={() => handleThemeChange(themeOption.value)}
-        aria-label="Select {themeOption.label} theme"
+        aria-label={m.theme_select_aria({ label: themeOption.label })}
       >
         <div
           class="border rounded-md transition-transform duration-200 hover:scale-110"
           class:shadow-lg={isSelected}
           class:border-ring-focus={isSelected}
         >
-          <img src={themeOption.image} alt="{themeOption.value} image" />
+          <img src={themeOption.image} alt={m.theme_image_alt({ value: themeOption.value })} />
         </div>
         <div class="text-sm font-semibold text-fg-primary">
           {themeOption.label}

@@ -73,14 +73,8 @@
   >
     <span slot="action">
       {@html m.alerts_empty_action({
-        alertsLink:
-          '<a href="https://docs.rilldata.com/guide/alerts" target="_blank" rel="noopener noreferrer">' +
-          m.alerts_link_text() +
-          "</a>",
-        codeLink:
-          '<a href="https://docs.rilldata.com/reference/project-files/alerts" target="_blank" rel="noopener noreferrer">' +
-          m.alerts_via_code() +
-          "</a>",
+        alertsLink: m.alerts_link_text(),
+        codeLink: m.alerts_via_code(),
       })}
     </span>
   </ResourceListEmptyState>

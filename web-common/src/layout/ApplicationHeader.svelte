@@ -6,6 +6,8 @@
     PathOptions,
   } from "@rilldata/web-common/components/navigation/breadcrumbs/types";
   import LocalAvatarButton from "@rilldata/web-common/features/authentication/LocalAvatarButton.svelte";
+  import StardataUserMenu from "@rilldata/web-common/features/authentication/StardataUserMenu.svelte";
+  import { getStardataToken } from "@rilldata/web-common/runtime-client/auth-token";
   import CanvasPreviewCTAs from "@rilldata/web-common/features/canvas/CanvasPreviewCTAs.svelte";
   import ChatToggle from "@rilldata/web-common/features/chat/layouts/sidebar/ChatToggle.svelte";
   import {
@@ -18,7 +20,6 @@
     useValidCanvases,
     useValidExplores,
   } from "@rilldata/web-common/features/dashboards/selectors.js";
-  import DeployProjectCTA from "@rilldata/web-common/features/dashboards/workspace/DeployProjectCTA.svelte";
   import ExplorePreviewCTAs from "@rilldata/web-common/features/explores/ExplorePreviewCTAs.svelte";
   import { featureFlags } from "@rilldata/web-common/features/feature-flags.ts";
   import { useProjectTitle } from "@rilldata/web-common/features/project/selectors";
@@ -32,12 +33,12 @@
   import * as Tooltip from "@rilldata/web-common/components/tooltip-v2";
   import { parseDocument } from "yaml";
   import InputWithConfirm from "../components/forms/InputWithConfirm.svelte";
-  import Tag from "../components/tag/Tag.svelte";
   import { fileArtifacts } from "../features/entity-management/file-artifacts";
   import { ResourceKind } from "@rilldata/web-common/features/entity-management/resource-selectors.ts";
   import { addLeadingSlash } from "@rilldata/web-common/features/entity-management/entity-mappers.ts";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
-  const { deploy, developerChat, stickyDashboardState } = featureFlags;
+  const { developerChat, stickyDashboardState } = featureFlags;
   const runtimeClient = useRuntimeClient();
 
   export let mode: string;
@@ -52,7 +53,6 @@
   $: ({ unsavedFiles } = fileArtifacts);
   $: ({ size: unsavedFileCount } = $unsavedFiles);
   $: onDeployPage = isDeployPage($page);
-  $: showDeployCTA = $deploy && !onDeployPage;
   $: showDeveloperChat = $developerChat && !onDeployPage;
 
   $: fileArtifact = file
@@ -70,10 +70,6 @@
 
   $: explores = $exploresQuery?.data ?? [];
   $: canvases = $canvasQuery?.data ?? [];
-
-  $: defaultDashboard = explores[0] ?? canvases[0] ?? null;
-
-  $: hasValidDashboard = Boolean(defaultDashboard);
 
   $: dashboardOptions = {
     options: getBreadcrumbOptions(explores, canvases),
@@ -115,15 +111,13 @@
   }
 
   function gotoAI() {
-    void goto("/chat");
+    void goto("/");
   }
 </script>
 
 <Header borderBottom={!onDeployPage && mode !== "Preview"}>
   {#if !onDeployPage}
     <HeaderLogo href={mode === "Preview" ? "/" : "/files"} />
-
-    <Tag text={mode} color="gray"></Tag>
 
     {#if mode === "Preview" || onVizRoute}
       {#if $exploresQuery?.data}
@@ -155,19 +149,20 @@
         <ChatToggle open={developerChatOpen} actions={developerChatActions} />
       {/if}
     {/if}
-    {#if showDeployCTA}
-      <DeployProjectCTA {hasValidDashboard} />
-    {/if}
     <Tooltip.Root>
       <Tooltip.Trigger>
         {#snippet child({ props })}
           <Button {...props} compact type="secondary" onclick={gotoAI}>
-            智能问数
+            {m.app_header_home()}
           </Button>
         {/snippet}
       </Tooltip.Trigger>
-      <Tooltip.Content side="bottom">智能问数 / Ask AI</Tooltip.Content>
+      <Tooltip.Content side="bottom">{m.app_header_home()}</Tooltip.Content>
     </Tooltip.Root>
-    <LocalAvatarButton />
+    {#if getStardataToken()}
+      <StardataUserMenu />
+    {:else}
+      <LocalAvatarButton />
+    {/if}
   </div>
 </Header>

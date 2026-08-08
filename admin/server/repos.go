@@ -2,15 +2,18 @@ package server
 
 import (
 	"context"
-	"fmt"
+	"crypto/sha256"
+	"encoding/hex"
+	"strings"
 	"time"
 
+	admin "github.com/fridencao/stardata/admin"
 	"github.com/fridencao/stardata/admin/database"
 	"github.com/fridencao/stardata/admin/server/auth"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
-	"github.com/fridencao/stardata/runtime/pkg/gitutil"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.opentelemetry.io/otel/attribute"
+	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
@@ -32,6 +35,16 @@ func (s *Server) GetRepoMeta(ctx context.Context, req *adminv1.GetRepoMetaReques
 		return nil, status.Error(codes.PermissionDenied, "does not have permission to read project repo")
 	}
 
+	// If the caller is a deployment, resolve it to determine editability (used by both the archive and git branches below).
+	var depl *database.Deployment
+	if claims.OwnerType() == auth.OwnerTypeDeployment {
+		var err error
+		depl, err = s.admin.DB.FindDeployment(ctx, claims.OwnerID())
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	if proj.ArchiveAssetID != nil {
 		asset, err := s.admin.DB.FindAsset(ctx, *proj.ArchiveAssetID)
 		if err != nil {
@@ -48,52 +61,12 @@ func (s *Server) GetRepoMeta(ctx context.Context, req *adminv1.GetRepoMetaReques
 			ArchiveId:          asset.ID,
 			ArchiveDownloadUrl: downloadURL,
 			ArchiveCreatedOn:   timestamppb.New(asset.CreatedOn),
+			// Editable enables the runtime to maintain a writable draft copy of the archive (dev deployments).
+			Editable: depl != nil && depl.Editable,
 		}, nil
 	}
 
-	if proj.GitRemote == nil || proj.GithubInstallationID == nil {
-		return nil, status.Error(codes.FailedPrecondition, "project does not have a github integration")
-	}
-
-	var depl *database.Deployment
-	if claims.OwnerType() == auth.OwnerTypeDeployment {
-		var err error
-		depl, err = s.admin.DB.FindDeployment(ctx, claims.OwnerID())
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	repoID, err := s.githubRepoIDForProject(ctx, proj)
-	if err != nil {
-		return nil, err
-	}
-
-	token, expiresAt, err := s.admin.Github.InstallationToken(ctx, *proj.GithubInstallationID, repoID)
-	if err != nil {
-		return nil, err
-	}
-
-	cfg := &gitutil.Config{
-		Remote:   *proj.GitRemote,
-		Username: "x-access-token",
-		Password: token,
-	}
-	gitURL, err := cfg.FullyQualifiedRemote()
-	if err != nil {
-		return nil, fmt.Errorf("failed to build git url from %q: %w", *proj.GitRemote, err)
-	}
-
-	return &adminv1.GetRepoMetaResponse{
-		ExpiresOn:      timestamppb.New(expiresAt),
-		LastUpdatedOn:  timestamppb.New(proj.UpdatedOn),
-		GitUrl:         gitURL,
-		GitSubpath:     proj.Subpath,
-		GitBranch:      depl.Branch,
-		Editable:       depl.Editable,
-		PrimaryBranch:  proj.PrimaryBranch,
-		ManagedGitRepo: proj.ManagedGitRepoID != nil,
-	}, nil
+	return nil, status.Error(codes.FailedPrecondition, "project does not have an uploaded archive")
 }
 
 func (s *Server) PullVirtualRepo(ctx context.Context, req *adminv1.PullVirtualRepoRequest) (*adminv1.PullVirtualRepoResponse, error) {
@@ -134,6 +107,15 @@ func (s *Server) PullVirtualRepo(ctx context.Context, req *adminv1.PullVirtualRe
 		return nil, err
 	}
 	pageSize := validPageSize(req.PageSize)
+
+	// StarData Phase 5: DB-mode projects keep their semantic definitions as rows in
+	// semantic_resources rather than files in an archive. Rather than teach the
+	// runtime a second repo driver, admin renders those rows back into the files the
+	// parser already knows how to read and ships them over the existing virtual-file
+	// transport. The runtime side needs no changes.
+	if proj.SemanticLayerMode == "db" {
+		return s.pullSemanticResourcesAsVirtualFiles(ctx, proj.ID, pageToken.Str)
+	}
 
 	vfs, err := s.admin.DB.FindVirtualFiles(ctx, proj.ID, environment, pageToken.Ts.AsTime(), pageToken.Str, pageSize)
 	if err != nil {
@@ -247,4 +229,124 @@ func virtualFileToDTO(vf *database.VirtualFile) *adminv1.VirtualFile {
 		Deleted:   vf.Deleted,
 		UpdatedOn: timestamppb.New(vf.UpdatedOn),
 	}
+}
+
+// pullSemanticResourcesAsVirtualFiles renders a DB-mode project's semantic resources
+// into files and returns them over the virtual-file transport.
+//
+// Sync protocol: the caller's page token carries the fingerprint of the resource set
+// it last received. When the fingerprint still matches, nothing has changed and we
+// return an empty page (which is how the runtime's watcher decides to stop polling
+// and idle). When it differs, we return the full set again. Full resend rather than
+// incremental diffing is deliberate — a project has tens of resources, not
+// thousands, so the simplicity is worth more than the bytes saved.
+//
+// Phase 5.1 scope: draft resources are served to every environment because the
+// published/draft split arrives with the publish pipeline in 5.2. Deleting a
+// resource also does not yet retract the already-materialized file on the runtime;
+// both are tracked as 5.2 work.
+func (s *Server) pullSemanticResourcesAsVirtualFiles(ctx context.Context, projectID, lastFingerprint string) (*adminv1.PullVirtualRepoResponse, error) {
+	resourceFP, err := s.admin.DB.FindSemanticResourceFingerprint(ctx, projectID, database.SemanticResourceStatusDraft)
+	if err != nil {
+		return nil, err
+	}
+
+	// The publish gate is derived from resource_visibility, so a visibility toggle
+	// without any resource edit must also invalidate the runtime's cached files.
+	// Fold both into a single fingerprint the transport can compare.
+	visibilities, err := s.admin.DB.ListResourceVisibility(ctx, projectID)
+	if err != nil {
+		return nil, err
+	}
+	fingerprint := combineFingerprints(resourceFP, visibilityFingerprint(visibilities))
+
+	// Unchanged since the caller's last pull: return an empty page, same token.
+	if lastFingerprint != "" && lastFingerprint == fingerprint {
+		return &adminv1.PullVirtualRepoResponse{
+			NextPageToken: marshalStringTimestampPageToken(fingerprint, time.Time{}),
+		}, nil
+	}
+
+	resources, err := s.admin.DB.FindSemanticResources(ctx, projectID, database.SemanticResourceStatusDraft)
+	if err != nil {
+		return nil, err
+	}
+
+	files := make([]*adminv1.VirtualFile, 0, len(resources))
+	for _, r := range resources {
+		p, data, err := admin.RenderSemanticResource(r)
+		if err != nil {
+			// A single malformed row must not blank out the whole project. Skip it and
+			// let the resource simply be absent; the save path validates on write, so
+			// reaching here means the row was written before validation existed.
+			s.logger.Warn("skipping unrenderable semantic resource",
+				zap.String("project_id", projectID),
+				zap.String("kind", r.ResourceKind),
+				zap.String("name", r.ResourceName),
+				zap.Error(err),
+			)
+			continue
+		}
+		files = append(files, &adminv1.VirtualFile{
+			Path:      p,
+			Data:      data,
+			UpdatedOn: timestamppb.New(r.UpdatedOn),
+		})
+	}
+
+	// Append the synthesized publish.yaml so the runtime's existing gate logic works
+	// without modification. The gate's content = the list of resource names opted
+	// into visibility by the governor.
+	files = appendPublishGateFile(visibilities, files)
+
+	return &adminv1.PullVirtualRepoResponse{
+		Files:         files,
+		NextPageToken: marshalStringTimestampPageToken(fingerprint, time.Time{}),
+	}, nil
+}
+
+// appendPublishGateFile renders the project's resource_visibility rows into the
+// publish.yaml the runtime's gate already reads.
+//
+// Emitting the file unconditionally for DB-mode projects is what makes visibility
+// fail-closed: the runtime treats a present publish.yaml as an allowlist, so any
+// resource the governor has not opted in stays hidden from business users. If the
+// file were omitted when nothing is visible yet, the gate would fall back to
+// "no gating" and expose everything.
+func appendPublishGateFile(visibilities []*database.ResourceVisibility, files []*adminv1.VirtualFile) []*adminv1.VirtualFile {
+	visible := make([]string, 0, len(visibilities))
+	for _, r := range visibilities {
+		if r.Visible {
+			visible = append(visible, r.ResourceName)
+		}
+	}
+
+	return append(files, &adminv1.VirtualFile{
+		Path:      admin.PublishGatePath,
+		Data:      admin.RenderPublishGate(visible),
+		UpdatedOn: timestamppb.New(time.Now()),
+	})
+}
+
+// visibilityFingerprint summarizes the visibility table so a toggle changes the
+// combined fingerprint even when no resource was edited.
+func visibilityFingerprint(rows []*database.ResourceVisibility) string {
+	var b strings.Builder
+	for _, r := range rows {
+		b.WriteString(r.ResourceKind)
+		b.WriteByte('/')
+		b.WriteString(strings.ToLower(r.ResourceName))
+		if r.Visible {
+			b.WriteString("=1;")
+		} else {
+			b.WriteString("=0;")
+		}
+	}
+	sum := sha256.Sum256([]byte(b.String()))
+	return hex.EncodeToString(sum[:])
+}
+
+func combineFingerprints(parts ...string) string {
+	sum := sha256.Sum256([]byte(strings.Join(parts, "|")))
+	return hex.EncodeToString(sum[:])
 }

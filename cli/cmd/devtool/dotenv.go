@@ -112,7 +112,7 @@ func downloadDotenv(ctx context.Context, preset string) error {
 
 	err := exec.CommandContext(ctx, "gcloud", "storage", "cp", dotenvURLs[preset], ".env").Run()
 	if err != nil {
-		return fmt.Errorf("error syncing '.env' file from GCS (you must be a Rill team member and have authenticated `gcloud`): %w", err)
+		return fmt.Errorf("error syncing '.env' file from GCS (you must be a StarData team member and have authenticated `gcloud`): %w", err)
 	}
 	return nil
 }

@@ -47,12 +47,12 @@
 
   .chat-message-content {
     @apply px-4 py-2 rounded-2xl;
-    @apply text-sm leading-relaxed break-words;
+    @apply text-base leading-relaxed break-words;
     @apply text-fg-primary rounded-br-lg;
   }
 
   :global(.chat-message-content .tiptap) {
     @apply p-0 min-h-4 outline-none;
-    @apply text-sm leading-relaxed;
+    @apply text-base leading-relaxed;
   }
 </style>

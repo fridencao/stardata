@@ -8,6 +8,7 @@
   import StackingWord from "@rilldata/web-common/components/tooltip/StackingWord.svelte";
   import TooltipContent from "@rilldata/web-common/components/tooltip/TooltipContent.svelte";
   import TooltipShortcutContainer from "@rilldata/web-common/components/tooltip/TooltipShortcutContainer.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import {
     formatBigNumberPercentage,
     formatInteger,
@@ -43,21 +44,27 @@
         style="grid-template-columns: auto max-content;"
       >
         <div>
-          {#if zooming}<span>Zoomed</span>{:else}<span>Zooming</span>{/if}
-          to {formatInteger(zoomedRows)} row{#if zoomedRows !== 1}s{/if}
+          {#if zooming}<span>{m.graphic_zoomed()}</span>{:else}<span
+              >{m.graphic_zooming()}</span
+            >{/if}
+          {m.graphic_to_n_rows({
+            count: zoomedRows,
+            countStr: formatInteger(zoomedRows),
+          })}
         </div>
         <div class="text-right text-gray-300 font-normal not-italic">
           {formatBigNumberPercentage(zoomedRows / totalRows)}
         </div>
       </div>
     {:else}
-      Showing all {formatInteger(totalRows)} rows
+      {m.graphic_showing_all_rows({ countStr: formatInteger(totalRows) })}
     {/if}
   </div>
   <TooltipShortcutContainer>
     {#if isClipboardApiSupported()}
       <div>
-        <StackingWord key="shift">Copy</StackingWord> to clipboard
+        <StackingWord key="shift">{m.graphic_copy()}</StackingWord>
+        {m.graphic_to_clipboard()}
       </div>
       <Shortcut>
         <span
@@ -65,15 +72,20 @@
           font-family: var(--system); 
           font-size: 11.5px;
         ">⇧</span
-        > + Click
+        >
+        <!-- i18n-ignore: keyboard shortcut -->
+        + Click
       </Shortcut>
     {/if}
     <div>
-      <div style:transform="translateX({tooltipPanShakeAmount}px)">Pan</div>
+      <div style:transform="translateX({tooltipPanShakeAmount}px)">
+        {m.graphic_pan()}
+      </div>
     </div>
+    <!-- i18n-ignore: keyboard shortcut -->
     <Shortcut>Click + Drag</Shortcut>
     <div>
-      Zoom
+      {m.graphic_zoom()}
       <div style:display="inline-grid">
         <TimestampSpark
           {data}
@@ -89,6 +101,7 @@
         />
       </div>
     </div>
+    <!-- i18n-ignore: keyboard shortcut -->
     <Shortcut>Ctrl + Click + Drag</Shortcut>
   </TooltipShortcutContainer>
 </TooltipContent>

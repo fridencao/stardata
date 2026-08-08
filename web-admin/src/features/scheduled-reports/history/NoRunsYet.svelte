@@ -20,7 +20,7 @@
     <!-- <div>
       <span style="text-fg-secondary font-normal"
         >Learn how to deploy a dashboard in our
-      </span><a href="https://docs.rilldata.com/" target="_blank">docs</a>
+      </span>docs
     </div> -->
   </div>
 </div>

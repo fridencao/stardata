@@ -174,6 +174,8 @@
     @apply text-base font-medium text-fg-muted;
   }
   .count {
-    @apply text-3xl font-semibold leading-tight text-fg-primary;
+    /* display numeral: intentionally larger than the compact type scale */
+    font-size: 30px;
+    @apply font-semibold leading-tight text-fg-primary;
   }
 </style>

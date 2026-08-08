@@ -20,8 +20,8 @@ import { getInitExploreStateForTest } from "@rilldata/web-common/features/dashbo
 import {
   MetricsViewFilter,
   MetricsViewFilter_Cond,
-} from "@rilldata/web-common/proto/gen/rill/runtime/v1/queries_pb";
-import { DashboardState } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+} from "@rilldata/web-common/proto/gen/stardata/runtime/v1/queries_pb";
+import { DashboardState } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import { V1TimeGrain } from "@rilldata/web-common/runtime-client";
 import { describe, expect, it } from "vitest";
 

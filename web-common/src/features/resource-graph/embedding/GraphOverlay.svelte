@@ -135,7 +135,9 @@
   }
 
   .close-btn {
-    @apply absolute right-4 top-4 z-[52] flex h-8 w-8 items-center justify-center rounded-md border bg-surface-background text-2xl font-light text-fg-secondary;
+    @apply absolute right-4 top-4 z-[52] flex h-8 w-8 items-center justify-center rounded-md border bg-surface-background font-light text-fg-secondary;
+    /* glyph button (×): fixed display size, not part of the type scale */
+    font-size: 24px;
     line-height: 1;
   }
 

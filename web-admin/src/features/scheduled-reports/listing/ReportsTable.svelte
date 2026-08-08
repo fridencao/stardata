@@ -75,10 +75,7 @@
   >
     <span slot="action">
       {@html m.reports_empty_action({
-        reportsLink:
-          '<a href="https://docs.rilldata.com/guide/reports/exports" target="_blank" rel="noopener noreferrer">' +
-          m.reports_link_text() +
-          "</a>",
+        reportsLink: m.reports_link_text(),
       })}
     </span>
   </ResourceListEmptyState>

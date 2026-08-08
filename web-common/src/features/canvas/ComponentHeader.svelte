@@ -115,7 +115,7 @@
   }
 
   .description {
-    font-size: 13px;
+    @apply text-lg;
     @apply flex-shrink-0;
     @apply text-fg-secondary font-normal leading-none;
   }

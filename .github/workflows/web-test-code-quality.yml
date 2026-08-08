@@ -7,7 +7,6 @@ on:
       - "scripts/web-test-code-quality.sh"
       - "web-admin/**"
       - "web-common/**"
-      - "web-local/**"
 jobs:
   build:
     runs-on: ubuntu-22.04
@@ -23,9 +22,6 @@ jobs:
             admin:
               - ".github/workflows/web-test.yml"
               - "web-admin/**"
-            local:
-              - ".github/workflows/web-test.yml"
-              - "web-local/**"
             common:
               - ".github/workflows/web-test.yml"
               - "web-common/**"
@@ -40,5 +36,4 @@ jobs:
         run: bash ./scripts/web-test-code-quality.sh
         env:
           ADMIN: ${{ steps.filter.outputs.admin }}
-          LOCAL: ${{ steps.filter.outputs.local }}
           COMMON: ${{ steps.filter.outputs.common }}

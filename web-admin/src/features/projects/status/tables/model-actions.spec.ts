@@ -9,7 +9,7 @@ function makeModel(opts?: {
   partitionsHaveErrors?: boolean;
 }): V1Resource {
   return {
-    meta: { name: { kind: "rill.runtime.v1.Model", name: "test_model" } },
+    meta: { name: { kind: "stardata.runtime.v1.Model", name: "test_model" } },
     model: {
       spec: {
         incremental: opts?.incremental,

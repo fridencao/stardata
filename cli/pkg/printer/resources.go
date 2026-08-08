@@ -4,7 +4,6 @@ import (
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
-	"path/filepath"
 	"slices"
 	"sort"
 	"strconv"
@@ -13,8 +12,8 @@ import (
 	"unicode/utf8"
 
 	"github.com/lensesio/tableprinter"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime/metricsview"
 )
 
@@ -72,18 +71,9 @@ func toProjectTable(projects []*adminv1.Project) []*project {
 }
 
 func toProjectRow(o *adminv1.Project) *project {
-	var githubURL string
-	if o.ManagedGitId == "" {
-		githubURL = strings.TrimSuffix(o.GitRemote, ".git")
-		if o.Subpath != "" {
-			githubURL = filepath.Join(githubURL, "tree", o.PrimaryBranch, o.Subpath)
-		}
-	}
-
 	return &project{
 		Name:         o.Name,
 		Public:       o.Public,
-		GithubURL:    githubURL,
 		Organization: o.OrgName,
 	}
 }
@@ -91,7 +81,6 @@ func toProjectRow(o *adminv1.Project) *project {
 type project struct {
 	Name         string `header:"name" json:"name"`
 	Public       bool   `header:"public" json:"public"`
-	GithubURL    string `header:"github" json:"github"`
 	Organization string `header:"organization" json:"organization"`
 }
 

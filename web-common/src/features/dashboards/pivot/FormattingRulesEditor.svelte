@@ -1,6 +1,7 @@
 <script lang="ts">
   import * as DropdownMenu from "@rilldata/web-common/components/dropdown-menu";
   import Select from "@rilldata/web-common/components/forms/Select.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { ChevronDown, ChevronUp, Plus, X } from "lucide-svelte";
   import {
     PIVOT_RULE_COLORS,
@@ -23,7 +24,7 @@
     { value: "lt", label: "<" },
     { value: "lte", label: "≤" },
     { value: "eq", label: "=" },
-    { value: "between", label: "between" },
+    { value: "between", label: m.dashboard_format_between() },
   ];
 
   function updateRule(index: number, patch: Partial<PivotFormatRule>) {
@@ -77,7 +78,7 @@
           type="button"
           class="reorder-btn"
           disabled={index === 0}
-          aria-label="Move rule up"
+          aria-label={m.dashboard_format_move_rule_up()}
           onclick={() => moveRule(index, -1)}
         >
           <ChevronUp size="10px" />
@@ -86,7 +87,7 @@
           type="button"
           class="reorder-btn"
           disabled={index === rules.length - 1}
-          aria-label="Move rule down"
+          aria-label={m.dashboard_format_move_rule_down()}
           onclick={() => moveRule(index, 1)}
         >
           <ChevronDown size="10px" />
@@ -107,17 +108,17 @@
         type="number"
         class="value-input"
         value={rule.value}
-        aria-label="Rule value"
+        aria-label={m.dashboard_format_rule_value()}
         onchange={(e) =>
           handleValueInput(index, "value", e.currentTarget.value)}
       />
       {#if rule.operator === "between"}
-        <span class="text-fg-secondary text-xs flex-none">and</span>
+        <span class="text-fg-secondary text-xs flex-none">{m.dashboard_format_and()}</span>
         <input
           type="number"
           class="value-input"
           value={rule.value2 ?? rule.value}
-          aria-label="Rule upper value"
+          aria-label={m.dashboard_format_rule_upper_value()}
           onchange={(e) =>
             handleValueInput(index, "value2", e.currentTarget.value)}
         />
@@ -131,7 +132,7 @@
               type="button"
               class="color-swatch flex-none"
               style:background={resolveRuleColor(rule.color).fill}
-              aria-label="Rule color"
+              aria-label={m.dashboard_format_rule_color()}
             ></button>
           {/snippet}
         </DropdownMenu.Trigger>
@@ -149,8 +150,8 @@
             {/each}
             <label
               class="color-swatch custom-color"
-              title="Custom color"
-              aria-label="Custom color"
+              title={m.dashboard_format_custom_color()}
+              aria-label={m.dashboard_format_custom_color()}
             >
               <input
                 type="color"
@@ -167,7 +168,7 @@
       <button
         type="button"
         class="remove-btn flex-none"
-        aria-label="Remove rule"
+        aria-label={m.dashboard_format_remove_rule()}
         onclick={() => removeRule(index)}
       >
         <X size="12px" />
@@ -177,7 +178,7 @@
 
   <button type="button" class="add-rule-btn" onclick={addRule}>
     <Plus size="12px" />
-    Add rule
+    {m.dashboard_format_add_rule()}
   </button>
 </div>
 

@@ -45,7 +45,7 @@
       {title !== "" ? title : name}
     </span>
     {#if error}
-      <Tag color="red">Error</Tag>
+      <Tag color="red">{m.common_error()}</Tag>
     {/if}
   </div>
   <div

@@ -16,9 +16,10 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/fridencao/stardata/admin"
 	"github.com/fridencao/stardata/admin/database"
+	"github.com/fridencao/stardata/admin/pkg/assetstore"
 	"github.com/fridencao/stardata/admin/server/auth"
 	"github.com/fridencao/stardata/admin/server/cookies"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/fridencao/stardata/runtime/pkg/activity"
 	"github.com/fridencao/stardata/runtime/pkg/graceful"
 	"github.com/fridencao/stardata/runtime/pkg/httputil"
@@ -43,10 +44,10 @@ var favicon []byte
 var (
 	_minCliVersion         = version.Must(version.NewVersion("0.20.0"))
 	_minCliVersionByMethod = map[string]*version.Version{
-		"/rill.admin.v1.AdminService/UpdateProject":          version.Must(version.NewVersion("0.28.0")),
-		"/rill.admin.v1.AdminService/UpdateOrganization":     version.Must(version.NewVersion("0.28.0")),
-		"/rill.admin.v1.AdminService/UpdateProjectVariables": version.Must(version.NewVersion("0.51.0")),
-		"/rill.admin.v1.AdminService/CreateService":          version.Must(version.NewVersion("0.67.0")),
+		"/stardata.admin.v1.AdminService/UpdateProject":          version.Must(version.NewVersion("0.28.0")),
+		"/stardata.admin.v1.AdminService/UpdateOrganization":     version.Must(version.NewVersion("0.28.0")),
+		"/stardata.admin.v1.AdminService/UpdateProjectVariables": version.Must(version.NewVersion("0.51.0")),
+		"/stardata.admin.v1.AdminService/CreateService":          version.Must(version.NewVersion("0.67.0")),
 	}
 )
 
@@ -59,11 +60,9 @@ type Options struct {
 	AuthDomain             string
 	AuthClientID           string
 	AuthClientSecret       string
-	GithubAppName          string
-	GithubAppWebhookSecret string
-	GithubClientID         string
-	GithubClientSecret     string
-	GithubManagedAccount   string
+	// AuthIssuerURL is the full OIDC issuer URL (e.g. http://keycloak:8080/realms/stardata).
+	// When set, the authenticator uses it verbatim; when empty, AuthDomain is used (Auth0-compatible).
+	AuthIssuerURL          string
 	// AssetsBucket is the path on gcs where rill managed project artifacts are stored.
 	AssetsBucket string
 	// PylonIdentitySecret is an optional secret for Pylon identity verification.
@@ -122,6 +121,7 @@ func New(logger *zap.Logger, adm *admin.Service, issuer *runtimeauth.Issuer, lim
 	cookieStore.Options.SameSite = http.SameSiteLaxMode
 
 	authenticator, err := auth.NewAuthenticator(logger, adm, cookieStore, &auth.AuthenticatorOptions{
+		AuthIssuerURL:    opts.AuthIssuerURL,
 		AuthDomain:       opts.AuthDomain,
 		AuthClientID:     opts.AuthClientID,
 		AuthClientSecret: opts.AuthClientSecret,
@@ -193,7 +193,7 @@ func (s *Server) HTTPHandler(ctx context.Context) (http.Handler, error) {
 	runtimeProxyCORSMiddleware := cors.New(newCORSOptions([]string{"*"}, false)).Handler      // Allow any origin but no cookies. In the longer term, we should add explicit domain allowlisting per org or project.
 
 	// Add gRPC and gRPC-to-REST transcoder.
-	// This will be the fallback for REST routes like `/v1/ping` and GPRC routes like `/rill.admin.v1.AdminService/Ping`.
+	// This will be the fallback for REST routes like `/v1/ping` and GPRC routes like `/stardata.admin.v1.AdminService/Ping`.
 	var transcoder http.Handler
 	transcoder, err := vanguardgrpc.NewTranscoder(grpcServer)
 	if err != nil {
@@ -206,9 +206,9 @@ func (s *Server) HTTPHandler(ctx context.Context) (http.Handler, error) {
 	mux.Handle("/v1/users/current", s.authenticator.CookieRefreshMiddleware(transcoder))
 
 	mux.Handle("/v1/", transcoder)
-	mux.Handle("/rill.admin.v1.AdminService/", transcoder)
-	mux.Handle("/rill.admin.v1.AIService/", transcoder)
-	mux.Handle("/rill.admin.v1.TelemetryService/", transcoder)
+	mux.Handle("/stardata.admin.v1.AdminService/", transcoder)
+	mux.Handle("/stardata.admin.v1.AIService/", transcoder)
+	mux.Handle("/stardata.admin.v1.TelemetryService/", transcoder)
 
 	// Add runtime proxy.
 	proxyHandler := observability.Middleware(
@@ -219,6 +219,31 @@ func (s *Server) HTTPHandler(ctx context.Context) (http.Handler, error) {
 	observability.MuxHandle(mux, "/v1/orgs/{org}/projects/{project}/runtime/{path...}", proxyHandler)
 	observability.MuxHandle(mux, "/v1/organizations/{org}/projects/{project}/runtime/{path...}", proxyHandler)        // Backwards compatibility
 	observability.MuxHandle(mux, "/v1/orgs/{org}/projects/{project}/branch/{branch}/runtime/{path...}", proxyHandler) // Branch-specific deployment
+
+	// Add data-requests endpoint (StarData).
+	// Lets business users submit data requirements from the portal chat (persisted as a dev-environment virtual file).
+	dataRequestsHandler := observability.Middleware(
+		"admin",
+		s.logger,
+		transcoderCORSMiddleware(s.authenticator.HTTPMiddleware(httputil.Handler(s.dataRequestsForOrgAndProject))),
+	)
+	observability.MuxHandle(mux, "/v1/orgs/{org}/projects/{project}/data-requests", dataRequestsHandler)
+
+	// Add publish model endpoints (StarData).
+	// Publishing packages the Studio (dev) draft into an archive asset and points production at it;
+	// history and rollback operate on the recorded publish versions.
+	publishesHandler := observability.Middleware(
+		"admin",
+		s.logger,
+		transcoderCORSMiddleware(s.authenticator.HTTPMiddleware(httputil.Handler(s.publishesForOrgAndProject))),
+	)
+	observability.MuxHandle(mux, "/v1/orgs/{org}/projects/{project}/publishes", publishesHandler)
+	rollbackHandler := observability.Middleware(
+		"admin",
+		s.logger,
+		transcoderCORSMiddleware(s.authenticator.HTTPMiddleware(httputil.Handler(s.rollbackForOrgAndProject))),
+	)
+	observability.MuxHandle(mux, "/v1/orgs/{org}/projects/{project}/publishes/{version}/rollback", rollbackHandler)
 
 	// Add backwards compatibility alias for iframe endpoint
 	observability.MuxHandle(mux, "/v1/organizations/{org}/projects/{project}/iframe", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -247,11 +272,12 @@ func (s *Server) HTTPHandler(ctx context.Context) (http.Handler, error) {
 	// Add auth endpoints (not gRPC handlers, just regular endpoints on /auth/*)
 	s.authenticator.RegisterEndpoints(mux, s.limiter, s.issuer)
 
-	// Add Github-related endpoints (not gRPC handlers, just regular endpoints on /github/*)
-	s.registerGithubEndpoints(mux)
-
 	// Add project assets endpoint.
 	mux.Handle("/v1/assets/{asset_id}/download", observability.Middleware("assets", s.logger, s.authenticator.HTTPMiddleware(httputil.Handler(s.assetHandler))))
+
+	// Add local asset store endpoints (signed-URL upload/download; auth via HMAC token, not the auth middleware).
+	mux.Handle("PUT "+assetstore.LocalUploadPath, observability.Middleware("assets", s.logger, httputil.Handler(s.assetUploadHandler)))
+	mux.Handle("GET "+assetstore.LocalDownloadPath, observability.Middleware("assets", s.logger, httputil.Handler(s.assetSignedDownloadHandler)))
 
 	// Add biller webhook handler if any
 	if s.admin.Biller != nil {
@@ -347,7 +373,7 @@ func (s *Server) checkRateLimit(ctx context.Context) (context.Context, error) {
 	}
 
 	limit := ratelimit.Default
-	if strings.HasPrefix(method, "/rill.admin.v1.AIService") {
+	if strings.HasPrefix(method, "/stardata.admin.v1.AIService") {
 		limit = ratelimit.Sensitive
 	}
 
@@ -411,11 +437,11 @@ func (s *Server) jwtAttributesForService(ctx context.Context, serviceID string, 
 }
 
 func timeoutSelector(fullMethodName string) time.Duration {
-	if strings.HasPrefix(fullMethodName, "/rill.admin.v1.AIService") {
+	if strings.HasPrefix(fullMethodName, "/stardata.admin.v1.AIService") {
 		// NOTE: The runtime usually sets a lower timeout through its AILLMTimeoutSeconds config, so this is more of a hard upper bound.
 		return time.Minute * 10
 	}
-	if fullMethodName == "/rill.admin.v1.AdminService/DeleteProject" {
+	if fullMethodName == "/stardata.admin.v1.AdminService/DeleteProject" {
 		return time.Minute * 4
 	}
 	return time.Minute

@@ -46,7 +46,7 @@ func LoggingUnaryServerInterceptor(logger *zap.Logger) grpc.UnaryServerIntercept
 		// Log pings at debug level
 		// TODO: Change when we move to standard gRPC health checks
 		lvl := zap.InfoLevel
-		if info.FullMethod == "/rill.admin.v1.AdminService/Ping" || info.FullMethod == "/rill.runtime.v1.RuntimeService/Ping" {
+		if info.FullMethod == "/stardata.admin.v1.AdminService/Ping" || info.FullMethod == "/stardata.runtime.v1.RuntimeService/Ping" {
 			lvl = zap.DebugLevel
 		}
 

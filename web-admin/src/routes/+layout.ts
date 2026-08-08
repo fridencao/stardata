@@ -54,7 +54,7 @@ export const load = async ({ params, url, route, depends }) => {
   } catch (e) {
     // If the user's auth token has expired, we automatically redirect to the login page
     if (isAxiosError<RpcStatus>(e) && e.response?.status === 401) {
-      redirectToLogin();
+      redirectToLogin(url.pathname + url.search);
     }
   }
 

@@ -11,6 +11,7 @@
     type V1Resource,
   } from "@rilldata/web-common/runtime-client";
   import { useRuntimeClient } from "../../../runtime-client/v2";
+  import { featureFlags } from "../../feature-flags";
   import { useGetMetricsViewsForModel } from "../../dashboards/selectors";
   import ExportMenu from "../../exports/ExportMenu.svelte";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
@@ -27,6 +28,7 @@
   export let connector: string;
 
   const runtimeClient = useRuntimeClient();
+  const { exports } = featureFlags;
 
   $: ({ instanceId } = runtimeClient);
   $: isModelIdle =
@@ -51,20 +53,22 @@
 
 <ModelRefreshButton {resource} {hasUnsavedChanges} />
 
-<ExportMenu
-  label="Export model data"
-  disabled={!hasResultTable || !isModelIdle}
-  workspace
-  getQuery={() => {
-    return {
-      tableRowsRequest: {
-        instanceId,
-        connector,
-        tableName: modelName,
-      },
-    };
-  }}
-/>
+{#if $exports}
+  <ExportMenu
+    label="Export model data"
+    disabled={!hasResultTable || !isModelIdle}
+    workspace
+    getQuery={() => {
+      return {
+        tableRowsRequest: {
+          instanceId,
+          connector,
+          tableName: modelName,
+        },
+      };
+    }}
+  />
+{/if}
 
 {#if availableMetricsViews?.length === 0}
   <CreateDashboardButton {collapse} {hasResultTable} {modelName} />

@@ -50,7 +50,7 @@
     - role: tool
       content_type: tool_response
       id: e10971efffe24fc6
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
   response:
     - role: assistant
       content_type: tool_call
@@ -3257,7 +3257,7 @@
     - role: tool
       content_type: tool_response
       id: 003cd59e24734645
-      content: '{"diff":"--- /connectors/clickhouse_play.yaml\n+++ /connectors/clickhouse_play.yaml\n@@ -1 +1,7 @@\n+type: connector\n+driver: clickhouse\n+host: play.clickhouse.com\n+port: 9440\n+username: play\n+ssl: true\n \n","is_new_file":true,"resources":[{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
+      content: '{"diff":"--- /connectors/clickhouse_play.yaml\n+++ /connectors/clickhouse_play.yaml\n@@ -1 +1,7 @@\n+type: connector\n+driver: clickhouse\n+host: play.clickhouse.com\n+port: 9440\n+username: play\n+ssl: true\n \n","is_new_file":true,"resources":[{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
   response:
     - role: assistant
       content_type: text
@@ -3305,7 +3305,7 @@
     - role: tool
       content_type: tool_response
       id: e10971efffe24fc6
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 9b235e8d22a14cde
@@ -3482,7 +3482,7 @@
     - role: tool
       content_type: tool_response
       id: e10971efffe24fc6
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 9b235e8d22a14cde
@@ -3536,7 +3536,7 @@
     - role: tool
       content_type: tool_response
       id: e10971efffe24fc6
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 9b235e8d22a14cde
@@ -3563,7 +3563,7 @@
     - role: tool
       content_type: tool_response
       id: dabc4be7189645ab
-      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
   response:
     - role: assistant
       content_type: tool_call
@@ -3599,7 +3599,7 @@
     - role: tool
       content_type: tool_response
       id: e10971efffe24fc6
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 9b235e8d22a14cde
@@ -3626,7 +3626,7 @@
     - role: tool
       content_type: tool_response
       id: dabc4be7189645ab
-      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 59dfe1076d9746a1
@@ -3671,7 +3671,7 @@
     - role: tool
       content_type: tool_response
       id: e10971efffe24fc6
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 9b235e8d22a14cde
@@ -3698,7 +3698,7 @@
     - role: tool
       content_type: tool_response
       id: dabc4be7189645ab
-      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 59dfe1076d9746a1
@@ -3815,7 +3815,7 @@
     - role: tool
       content_type: tool_response
       id: 2492b6b9ae74426c
-      content: '{"diff":"--- /metrics/covid.yaml\n+++ /metrics/covid.yaml\n@@ -1 +1,33 @@\n+type: metrics_view\n \n+# ClickHouse playground (default OLAP connector)\n+database: default\n+model: covid\n+\n+timeseries: date\n+smallest_time_grain: day\n+\n+dimensions:\n+  - name: date\n+    column: date\n+    type: time\n+  - name: location_key\n+    column: location_key\n+\n+measures:\n+  - name: new_confirmed\n+    display_name: New Confirmed\n+    expression: sum(new_confirmed)\n+  - name: new_deceased\n+    display_name: New Deceased\n+    expression: sum(new_deceased)\n+  - name: new_tested\n+    display_name: New Tested\n+    expression: sum(new_tested)\n+  - name: cumulative_confirmed\n+    display_name: Cumulative Confirmed\n+    expression: max(cumulative_confirmed)\n+  - name: cumulative_deceased\n+    display_name: Cumulative Deceased\n+    expression: max(cumulative_deceased)\n+\n","is_new_file":true,"resources":[{"kind":"rill.runtime.v1.MetricsView","name":"covid","reconcile_error":"database cannot be set for clickHouse, set database_schema instead\ninvalid measure \"new_confirmed\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"new_deceased\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"new_tested\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"cumulative_confirmed\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"cumulative_deceased\": measures cannot have the same name as a column in the underlying table when backed by clickhouse","reconcile_status":"RECONCILE_STATUS_IDLE"},{"kind":"rill.runtime.v1.Explore","name":"covid","reconcile_error":"dependency error: resource \"covid\" (rill.runtime.v1.MetricsView) has an error","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
+      content: '{"diff":"--- /metrics/covid.yaml\n+++ /metrics/covid.yaml\n@@ -1 +1,33 @@\n+type: metrics_view\n \n+# ClickHouse playground (default OLAP connector)\n+database: default\n+model: covid\n+\n+timeseries: date\n+smallest_time_grain: day\n+\n+dimensions:\n+  - name: date\n+    column: date\n+    type: time\n+  - name: location_key\n+    column: location_key\n+\n+measures:\n+  - name: new_confirmed\n+    display_name: New Confirmed\n+    expression: sum(new_confirmed)\n+  - name: new_deceased\n+    display_name: New Deceased\n+    expression: sum(new_deceased)\n+  - name: new_tested\n+    display_name: New Tested\n+    expression: sum(new_tested)\n+  - name: cumulative_confirmed\n+    display_name: Cumulative Confirmed\n+    expression: max(cumulative_confirmed)\n+  - name: cumulative_deceased\n+    display_name: Cumulative Deceased\n+    expression: max(cumulative_deceased)\n+\n","is_new_file":true,"resources":[{"kind":"stardata.runtime.v1.MetricsView","name":"covid","reconcile_error":"database cannot be set for clickHouse, set database_schema instead\ninvalid measure \"new_confirmed\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"new_deceased\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"new_tested\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"cumulative_confirmed\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"cumulative_deceased\": measures cannot have the same name as a column in the underlying table when backed by clickhouse","reconcile_status":"RECONCILE_STATUS_IDLE"},{"kind":"stardata.runtime.v1.Explore","name":"covid","reconcile_error":"dependency error: resource \"covid\" (stardata.runtime.v1.MetricsView) has an error","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
   response:
     - role: assistant
       content_type: tool_call
@@ -3869,7 +3869,7 @@
     - role: tool
       content_type: tool_response
       id: 2492b6b9ae74426c
-      content: '{"diff":"--- /metrics/covid.yaml\n+++ /metrics/covid.yaml\n@@ -1 +1,33 @@\n+type: metrics_view\n \n+# ClickHouse playground (default OLAP connector)\n+database: default\n+model: covid\n+\n+timeseries: date\n+smallest_time_grain: day\n+\n+dimensions:\n+  - name: date\n+    column: date\n+    type: time\n+  - name: location_key\n+    column: location_key\n+\n+measures:\n+  - name: new_confirmed\n+    display_name: New Confirmed\n+    expression: sum(new_confirmed)\n+  - name: new_deceased\n+    display_name: New Deceased\n+    expression: sum(new_deceased)\n+  - name: new_tested\n+    display_name: New Tested\n+    expression: sum(new_tested)\n+  - name: cumulative_confirmed\n+    display_name: Cumulative Confirmed\n+    expression: max(cumulative_confirmed)\n+  - name: cumulative_deceased\n+    display_name: Cumulative Deceased\n+    expression: max(cumulative_deceased)\n+\n","is_new_file":true,"resources":[{"kind":"rill.runtime.v1.MetricsView","name":"covid","reconcile_error":"database cannot be set for clickHouse, set database_schema instead\ninvalid measure \"new_confirmed\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"new_deceased\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"new_tested\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"cumulative_confirmed\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"cumulative_deceased\": measures cannot have the same name as a column in the underlying table when backed by clickhouse","reconcile_status":"RECONCILE_STATUS_IDLE"},{"kind":"rill.runtime.v1.Explore","name":"covid","reconcile_error":"dependency error: resource \"covid\" (rill.runtime.v1.MetricsView) has an error","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
+      content: '{"diff":"--- /metrics/covid.yaml\n+++ /metrics/covid.yaml\n@@ -1 +1,33 @@\n+type: metrics_view\n \n+# ClickHouse playground (default OLAP connector)\n+database: default\n+model: covid\n+\n+timeseries: date\n+smallest_time_grain: day\n+\n+dimensions:\n+  - name: date\n+    column: date\n+    type: time\n+  - name: location_key\n+    column: location_key\n+\n+measures:\n+  - name: new_confirmed\n+    display_name: New Confirmed\n+    expression: sum(new_confirmed)\n+  - name: new_deceased\n+    display_name: New Deceased\n+    expression: sum(new_deceased)\n+  - name: new_tested\n+    display_name: New Tested\n+    expression: sum(new_tested)\n+  - name: cumulative_confirmed\n+    display_name: Cumulative Confirmed\n+    expression: max(cumulative_confirmed)\n+  - name: cumulative_deceased\n+    display_name: Cumulative Deceased\n+    expression: max(cumulative_deceased)\n+\n","is_new_file":true,"resources":[{"kind":"stardata.runtime.v1.MetricsView","name":"covid","reconcile_error":"database cannot be set for clickHouse, set database_schema instead\ninvalid measure \"new_confirmed\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"new_deceased\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"new_tested\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"cumulative_confirmed\": measures cannot have the same name as a column in the underlying table when backed by clickhouse\ninvalid measure \"cumulative_deceased\": measures cannot have the same name as a column in the underlying table when backed by clickhouse","reconcile_status":"RECONCILE_STATUS_IDLE"},{"kind":"stardata.runtime.v1.Explore","name":"covid","reconcile_error":"dependency error: resource \"covid\" (stardata.runtime.v1.MetricsView) has an error","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
     - role: assistant
       content_type: tool_call
       id: 589220ea9d604e27
@@ -3878,7 +3878,7 @@
     - role: tool
       content_type: tool_response
       id: 589220ea9d604e27
-      content: '{"diff":"--- /metrics/covid.yaml\n+++ /metrics/covid.yaml\n@@ -1,7 +1,7 @@\n type: metrics_view\n \n # ClickHouse playground (default OLAP connector)\n-database: default\n+database_schema: default\n model: covid\n \n timeseries: date\n@@ -15,19 +15,19 @@\n     column: location_key\n \n measures:\n-  - name: new_confirmed\n+  - name: new_confirmed_sum\n     display_name: New Confirmed\n     expression: sum(new_confirmed)\n-  - name: new_deceased\n+  - name: new_deceased_sum\n     display_name: New Deceased\n     expression: sum(new_deceased)\n-  - name: new_tested\n+  - name: new_tested_sum\n     display_name: New Tested\n     expression: sum(new_tested)\n-  - name: cumulative_confirmed\n+  - name: cumulative_confirmed_max\n     display_name: Cumulative Confirmed\n     expression: max(cumulative_confirmed)\n-  - name: cumulative_deceased\n+  - name: cumulative_deceased_max\n     display_name: Cumulative Deceased\n     expression: max(cumulative_deceased)\n \n","resources":[{"kind":"rill.runtime.v1.Explore","name":"covid","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"},{"kind":"rill.runtime.v1.MetricsView","name":"covid","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
+      content: '{"diff":"--- /metrics/covid.yaml\n+++ /metrics/covid.yaml\n@@ -1,7 +1,7 @@\n type: metrics_view\n \n # ClickHouse playground (default OLAP connector)\n-database: default\n+database_schema: default\n model: covid\n \n timeseries: date\n@@ -15,19 +15,19 @@\n     column: location_key\n \n measures:\n-  - name: new_confirmed\n+  - name: new_confirmed_sum\n     display_name: New Confirmed\n     expression: sum(new_confirmed)\n-  - name: new_deceased\n+  - name: new_deceased_sum\n     display_name: New Deceased\n     expression: sum(new_deceased)\n-  - name: new_tested\n+  - name: new_tested_sum\n     display_name: New Tested\n     expression: sum(new_tested)\n-  - name: cumulative_confirmed\n+  - name: cumulative_confirmed_max\n     display_name: Cumulative Confirmed\n     expression: max(cumulative_confirmed)\n-  - name: cumulative_deceased\n+  - name: cumulative_deceased_max\n     display_name: Cumulative Deceased\n     expression: max(cumulative_deceased)\n \n","resources":[{"kind":"stardata.runtime.v1.Explore","name":"covid","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"},{"kind":"stardata.runtime.v1.MetricsView","name":"covid","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
   response:
     - role: assistant
       content_type: text
@@ -3954,7 +3954,7 @@
     - role: tool
       content_type: tool_response
       id: e10971efffe24fc6
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 9b235e8d22a14cde
@@ -3981,7 +3981,7 @@
     - role: tool
       content_type: tool_response
       id: dabc4be7189645ab
-      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 59dfe1076d9746a1
@@ -4901,7 +4901,7 @@
     - role: tool
       content_type: tool_response
       id: 30ab9449a1924544
-      content: '{"diff":"--- /dashboards/covid.yaml\n+++ /dashboards/covid.yaml\n@@ -1 +1,18 @@\n+type: explore\n+metrics_view: covid\n+display_name: \"COVID\"\n+dimensions: \"*\"\n+measures:\n+  - new_confirmed_sum\n+  - new_deceased_sum\n \n+time_ranges:\n+  - P7D\n+  - P30D\n+  - P90D\n+  - P180D\n+  - P365D\n+\n+defaults:\n+  time_range: P90D\n+\n","is_new_file":true,"resources":[{"kind":"rill.runtime.v1.Explore","name":"covid","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
+      content: '{"diff":"--- /dashboards/covid.yaml\n+++ /dashboards/covid.yaml\n@@ -1 +1,18 @@\n+type: explore\n+metrics_view: covid\n+display_name: \"COVID\"\n+dimensions: \"*\"\n+measures:\n+  - new_confirmed_sum\n+  - new_deceased_sum\n \n+time_ranges:\n+  - P7D\n+  - P30D\n+  - P90D\n+  - P180D\n+  - P365D\n+\n+defaults:\n+  time_range: P90D\n+\n","is_new_file":true,"resources":[{"kind":"stardata.runtime.v1.Explore","name":"covid","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
   response:
     - role: assistant
       content_type: text
@@ -4943,7 +4943,7 @@
     - role: tool
       content_type: tool_response
       id: e10971efffe24fc6
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 9b235e8d22a14cde
@@ -4970,7 +4970,7 @@
     - role: tool
       content_type: tool_response
       id: dabc4be7189645ab
-      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 59dfe1076d9746a1
@@ -5063,7 +5063,7 @@
     - role: tool
       content_type: tool_response
       id: dabc4be7189645ab
-      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 59dfe1076d9746a1
@@ -5108,7 +5108,7 @@
     - role: tool
       content_type: tool_response
       id: 517f9106dc3e4dd9
-      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.MetricsView","name":"covid","path":"/metrics/covid.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play"}],"status":"OK"},{"kind":"rill.runtime.v1.Explore","name":"covid","path":"/dashboards/covid.yaml","refs":[{"kind":"rill.runtime.v1.MetricsView","name":"covid"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.MetricsView","name":"covid","path":"/metrics/covid.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play"}],"status":"OK"},{"kind":"stardata.runtime.v1.Explore","name":"covid","path":"/dashboards/covid.yaml","refs":[{"kind":"stardata.runtime.v1.MetricsView","name":"covid"}],"status":"OK"}],"parse_errors":[]}'
   response:
     - role: assistant
       content_type: tool_call
@@ -5156,7 +5156,7 @@
     - role: tool
       content_type: tool_response
       id: dabc4be7189645ab
-      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 59dfe1076d9746a1
@@ -5201,7 +5201,7 @@
     - role: tool
       content_type: tool_response
       id: 517f9106dc3e4dd9
-      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.MetricsView","name":"covid","path":"/metrics/covid.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play"}],"status":"OK"},{"kind":"rill.runtime.v1.Explore","name":"covid","path":"/dashboards/covid.yaml","refs":[{"kind":"rill.runtime.v1.MetricsView","name":"covid"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.MetricsView","name":"covid","path":"/metrics/covid.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play"}],"status":"OK"},{"kind":"stardata.runtime.v1.Explore","name":"covid","path":"/dashboards/covid.yaml","refs":[{"kind":"stardata.runtime.v1.MetricsView","name":"covid"}],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 1558e08b5908454b
@@ -5249,7 +5249,7 @@
     - role: tool
       content_type: tool_response
       id: dabc4be7189645ab
-      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 59dfe1076d9746a1
@@ -5294,7 +5294,7 @@
     - role: tool
       content_type: tool_response
       id: 517f9106dc3e4dd9
-      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.MetricsView","name":"covid","path":"/metrics/covid.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play"}],"status":"OK"},{"kind":"rill.runtime.v1.Explore","name":"covid","path":"/dashboards/covid.yaml","refs":[{"kind":"rill.runtime.v1.MetricsView","name":"covid"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.MetricsView","name":"covid","path":"/metrics/covid.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play"}],"status":"OK"},{"kind":"stardata.runtime.v1.Explore","name":"covid","path":"/dashboards/covid.yaml","refs":[{"kind":"stardata.runtime.v1.MetricsView","name":"covid"}],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 1558e08b5908454b
@@ -5387,7 +5387,7 @@
     - role: tool
       content_type: tool_response
       id: 517f9106dc3e4dd9
-      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.MetricsView","name":"covid","path":"/metrics/covid.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"clickhouse_play"}],"status":"OK"},{"kind":"rill.runtime.v1.Explore","name":"covid","path":"/dashboards/covid.yaml","refs":[{"kind":"rill.runtime.v1.MetricsView","name":"covid"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"clickhouse_play","env":["connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play","path":"/connectors/clickhouse_play.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.MetricsView","name":"covid","path":"/metrics/covid.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"clickhouse_play"}],"status":"OK"},{"kind":"stardata.runtime.v1.Explore","name":"covid","path":"/dashboards/covid.yaml","refs":[{"kind":"stardata.runtime.v1.MetricsView","name":"covid"}],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 1558e08b5908454b

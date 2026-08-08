@@ -1,16 +1,9 @@
 import { ProjectUserRoles } from "@rilldata/web-common/features/users/roles.ts";
-import type { Project } from "@rilldata/web-common/proto/gen/rill/admin/v1/api_pb.ts";
-import {
-  createLocalServiceGetProjectRequest,
-  getLocalServiceGithubRepoStatusQueryOptions,
-} from "@rilldata/web-common/runtime-client/local-service.ts";
-import { createQuery } from "@tanstack/svelte-query";
+import type { Project } from "@rilldata/web-common/proto/gen/stardata/admin/v1/api_pb.ts";
+import { createLocalServiceGetProjectRequest } from "@rilldata/web-common/runtime-client/local-service.ts";
 import { derived } from "svelte/store";
 import { parse } from "yaml";
-import {
-  createRuntimeServiceGetFile,
-  createRuntimeServiceGitStatus,
-} from "../../runtime-client";
+import { createRuntimeServiceGetFile } from "../../runtime-client";
 import type { RuntimeClient } from "../../runtime-client/v2";
 
 export function useProjectTitle(client: RuntimeClient) {
@@ -71,21 +64,4 @@ export function getRequestProjectAccessUrl(project: Project) {
   url.searchParams.set("auto_request", "true");
   url.searchParams.set("role", ProjectUserRoles.Admin);
   return url.toString();
-}
-
-export function getLocalGitRepoStatus(runtimeClient: RuntimeClient) {
-  const gitRepoOptions = derived(
-    createRuntimeServiceGitStatus(runtimeClient, {}),
-    (gitStatus) =>
-      getLocalServiceGithubRepoStatusQueryOptions(
-        gitStatus.data?.githubUrl ?? "",
-        {
-          query: {
-            enabled: !!gitStatus.data?.githubUrl && !gitStatus.data?.managedGit,
-          },
-        },
-      ),
-  );
-
-  return createQuery(gitRepoOptions);
 }

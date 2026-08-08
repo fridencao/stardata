@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev": "vite dev",
+    "dev:3002": "vite dev --port 3002 --strictPort",
     "build": "npm run generate:sveltekit -w web-common && vite build && cp _redirects build",
     "preview": "vite preview",
     "test": "playwright test",

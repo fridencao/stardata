@@ -1,5 +1,6 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { EntityStatus } from "@rilldata/web-common/features/entity-management/types.ts";
   import Spinner from "@rilldata/web-common/features/entity-management/Spinner.svelte";
   import LoadingSpinner from "@rilldata/web-common/components/icons/LoadingSpinner.svelte";
@@ -143,7 +144,7 @@
   </div>
   <div class="flex flex-col gap-y-2">
     <div class="text-center font-semibold text-[18px]">
-      Creating your dashboard
+      {m.add_data_creating_dashboard()}
     </div>
     <div class="flex flex-col gap-y-1 w-fit mx-auto">
       {#each steps as s (s.step)}
@@ -183,7 +184,7 @@
   >
     {#if hasErrored}
       <Button type="secondary" noStroke onClick={cleanupAndBack} large gray>
-        Back
+        {m.common_back()}
       </Button>
       <div class="grow"></div>
     {/if}
@@ -193,10 +194,10 @@
       onClick={skipAndViewProject}
       large
     >
-      Skip and view project
+      {m.add_data_skip_view_project()}
     </Button>
     {#if hasErrored}
-      <Button type="primary" onClick={rerunImport} large>Try again</Button>
+      <Button type="primary" onClick={rerunImport} large>{m.add_data_try_again()}</Button>
     {/if}
   </div>
 </div>

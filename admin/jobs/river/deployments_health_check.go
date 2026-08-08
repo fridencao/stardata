@@ -10,7 +10,7 @@ import (
 
 	"github.com/fridencao/stardata/admin"
 	"github.com/fridencao/stardata/admin/database"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"github.com/riverqueue/river"
 	"go.opentelemetry.io/otel/attribute"

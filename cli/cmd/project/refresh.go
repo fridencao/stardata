@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
@@ -28,7 +28,7 @@ func RefreshCmd(ch *cmdutil.Helper) *cobra.Command {
 			}
 			if !local && project == "" {
 				var err error
-				project, err = ch.InferProjectName(cmd.Context(), path, "use --project to specify the name or --local to target a local Rill process")
+				project, err = ch.InferProjectName(cmd.Context(), path, "use --project to specify the name or --local to target a local StarData process")
 				if err != nil {
 					return err
 				}
@@ -134,7 +134,7 @@ func RefreshCmd(ch *cmdutil.Helper) *cobra.Command {
 			if local {
 				ch.Printf("Refresh initiated. Check the project logs for status updates.\n")
 			} else {
-				ch.Printf("Refresh initiated. To check the status, run `rill project status` or `rill project logs`.\n")
+				ch.Printf("Refresh initiated. To check the status, run `stardata project status` or `stardata project logs`.\n")
 			}
 
 			return nil
@@ -145,7 +145,7 @@ func RefreshCmd(ch *cmdutil.Helper) *cobra.Command {
 	refreshCmd.Flags().StringVar(&project, "project", "", "Project name")
 	refreshCmd.Flags().StringVar(&path, "path", ".", "Project directory")
 	refreshCmd.Flags().StringVar(&branch, "branch", "", "Target deployment by Git branch (default: primary deployment)")
-	refreshCmd.Flags().BoolVar(&local, "local", false, "Target locally running Rill")
+	refreshCmd.Flags().BoolVar(&local, "local", false, "Target locally running StarData")
 	refreshCmd.Flags().BoolVar(&all, "all", false, "Refresh all resources except alerts and reports (default)")
 	refreshCmd.Flags().BoolVar(&full, "full", false, "Fully reload the targeted models (use with --all or --model)")
 	refreshCmd.Flags().StringSliceVar(&models, "model", nil, "Refresh a model")
@@ -157,7 +157,7 @@ func RefreshCmd(ch *cmdutil.Helper) *cobra.Command {
 	refreshCmd.Flags().StringSliceVar(&alerts, "alert", nil, "Refresh an alert")
 	refreshCmd.Flags().StringSliceVar(&reports, "report", nil, "Refresh a report")
 	refreshCmd.Flags().StringSliceVar(&connectors, "connector", nil, "Re-validate a connector")
-	refreshCmd.Flags().BoolVar(&parser, "parser", false, "Refresh the parser (forces a pull from Github)")
+	refreshCmd.Flags().BoolVar(&parser, "parser", false, "Refresh the parser (forces a re-pull of the project files)")
 
 	return refreshCmd
 }

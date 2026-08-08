@@ -18,6 +18,7 @@ import (
 	"github.com/fridencao/stardata/admin/billing"
 	"github.com/fridencao/stardata/admin/billing/payment"
 	"github.com/fridencao/stardata/admin/jobs/river"
+	"github.com/fridencao/stardata/admin/pkg/assetstore"
 	"github.com/fridencao/stardata/admin/server"
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
 	"github.com/fridencao/stardata/runtime/drivers"
@@ -76,17 +77,13 @@ type Config struct {
 	AuthDomain                string                 `split_words:"true"`
 	AuthClientID              string                 `split_words:"true"`
 	AuthClientSecret          string                 `split_words:"true"`
-	GithubAppID               int64                  `split_words:"true"`
-	GithubAppName             string                 `split_words:"true"`
-	GithubAppPrivateKey       string                 `split_words:"true"`
-	GithubAppWebhookSecret    string                 `split_words:"true"`
-	GithubClientID            string                 `split_words:"true"`
-	GithubClientSecret        string                 `split_words:"true"`
-	GithubManagedAccount      string                 `split_words:"true"`
+	AuthIssuerURL             string                 `split_words:"true"`
 	AssetsBucket              string                 `split_words:"true"`
 	// AssetsBucketGoogleCredentialsJSON is only required to be set for local development.
 	// For production use cases the service account will be directly attached to pods which is the recommended way of setting credentials.
 	AssetsBucketGoogleCredentialsJSON string `split_words:"true"`
+	// AssetsDir enables local disk asset storage when AssetsBucket is not configured (private deployments).
+	AssetsDir                         string `split_words:"true"`
 	EmailSMTPHost                     string `split_words:"true"`
 	EmailSMTPPort                     int    `split_words:"true"`
 	EmailSMTPUsername                 string `split_words:"true"`
@@ -96,8 +93,13 @@ type Config struct {
 	EmailBCC                          string `split_words:"true"`
 	AIDriver                          string `default:"" split_words:"true"`
 	OpenAIAPIKey                      string `envconfig:"openai_api_key"`
+	OpenAIBaseURL                     string `envconfig:"openai_base_url"`
+	OpenAIModel                       string `envconfig:"openai_model"`
 	ClaudeAPIKey                      string `envconfig:"claude_api_key"`
 	GeminiAPIKey                      string `envconfig:"gemini_api_key"`
+	DeepSeekAPIKey                    string `envconfig:"deepseek_api_key"`
+	DeepSeekBaseURL                   string `envconfig:"deepseek_base_url"`
+	DeepSeekModel                     string `envconfig:"deepseek_model"`
 	ActivitySinkType                  string `default:"" split_words:"true"`
 	ActivitySinkKafkaBrokers          string `default:"" split_words:"true"`
 	ActivityUISinkKafkaTopic          string `default:"" split_words:"true"`
@@ -237,12 +239,6 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 			}
 			emailClient := email.New(sender)
 
-			// Init github client
-			gh, err := admin.NewGithub(cmd.Context(), conf.GithubAppID, conf.GithubAppPrivateKey, conf.GithubManagedAccount, logger)
-			if err != nil {
-				logger.Fatal("error creating github client", zap.Error(err))
-			}
-
 			// Init AI service
 			aiDriver := conf.AIDriver
 			aiConfig := map[string]any{}
@@ -252,6 +248,23 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 					logger.Fatal("RILL_ADMIN_OPENAI_API_KEY is required when AI driver is 'openai'")
 				}
 				aiConfig["api_key"] = conf.OpenAIAPIKey
+				if conf.OpenAIBaseURL != "" {
+					aiConfig["base_url"] = conf.OpenAIBaseURL
+				}
+				if conf.OpenAIModel != "" {
+					aiConfig["model"] = conf.OpenAIModel
+				}
+			case "deepseek":
+				if conf.DeepSeekAPIKey == "" {
+					logger.Fatal("RILL_ADMIN_DEEPSEEK_API_KEY is required when AI driver is 'deepseek'")
+				}
+				aiConfig["api_key"] = conf.DeepSeekAPIKey
+				if conf.DeepSeekBaseURL != "" {
+					aiConfig["base_url"] = conf.DeepSeekBaseURL
+				}
+				if conf.DeepSeekModel != "" {
+					aiConfig["model"] = conf.DeepSeekModel
+				}
 			case "claude":
 				if conf.ClaudeAPIKey == "" {
 					logger.Fatal("RILL_ADMIN_CLAUDE_API_KEY is required when AI driver is 'claude'")
@@ -283,16 +296,33 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 				logger.Fatal("AI driver does not implement AI interface", zap.String("driver", aiHandle.Driver()))
 			}
 
-			// Init AssetsBucket handle
-			var clientOpts []option.ClientOption
-			if conf.AssetsBucketGoogleCredentialsJSON != "" {
-				clientOpts = append(clientOpts, option.WithCredentialsJSON([]byte(conf.AssetsBucketGoogleCredentialsJSON)))
+			// Init asset storage (optional in private deployments).
+			// Priority: GCS bucket if configured, else local disk dir, else nil
+			// (admin.New will not configure asset storage; the server returns codes.Unimplemented for asset operations).
+			var assets assetstore.Store
+			if conf.AssetsBucket != "" {
+				var clientOpts []option.ClientOption
+				if conf.AssetsBucketGoogleCredentialsJSON != "" {
+					clientOpts = append(clientOpts, option.WithCredentialsJSON([]byte(conf.AssetsBucketGoogleCredentialsJSON)))
+				}
+				storageClient, err := storage.NewClient(cmd.Context(), clientOpts...)
+				if err != nil {
+					logger.Fatal("failed to create assets bucket handle", zap.Error(err))
+				}
+				assets = assetstore.NewGCS(storageClient.Bucket(conf.AssetsBucket))
+			} else if conf.AssetsDir != "" {
+				if len(conf.SessionKeyPairs) == 0 {
+					logger.Fatal("RILL_ADMIN_SESSION_KEY_PAIRS is required when RILL_ADMIN_ASSETS_DIR is set (used to sign asset URLs)")
+				}
+				secret, err := hex.DecodeString(conf.SessionKeyPairs[0])
+				if err != nil {
+					logger.Fatal("failed to parse session key from hex string to bytes")
+				}
+				assets, err = assetstore.NewLocal(conf.AssetsDir, conf.ExternalURL, secret)
+				if err != nil {
+					logger.Fatal("failed to create local asset store", zap.Error(err))
+				}
 			}
-			storageClient, err := storage.NewClient(cmd.Context(), clientOpts...)
-			if err != nil {
-				logger.Fatal("failed to create assets bucket handle", zap.Error(err))
-			}
-			assetsBucket := storageClient.Bucket(conf.AssetsBucket)
 
 			// Parse metrics project name
 			var metricsProjectOrg, metricsProjectName string
@@ -324,7 +354,8 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 				DatabaseDriver:             conf.DatabaseDriver,
 				DatabaseDSN:                conf.DatabaseURL,
 				DatabaseEncryptionKeyring:  conf.DatabaseEncryptionKeyring,
-				ExternalURL:                conf.ExternalGRPCURL, // NOTE: using gRPC url
+				ExternalURL:                conf.ExternalURL,
+				ExternalGRPCURL:            conf.ExternalGRPCURL, // the runtime's admin connector needs a direct gRPC address (a plain HTTP reverse proxy can't carry gRPC)
 				FrontendURL:                conf.FrontendURL,
 				ProvisionerSetJSON:         conf.ProvisionerSetJSON,
 				DefaultProvisioner:         conf.DefaultProvisioner,
@@ -335,8 +366,9 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 				ScaleDownConstraint:        conf.ScaleDownConstraint,
 				AllowMockBilling:           conf.AllowMockBilling,
 				StoppedDeploymentRetention: conf.StoppedDeploymentRetention,
+				AIDriver:                   aiDriver,
 			}
-			adm, err := admin.New(cmd.Context(), admOpts, logger, issuer, emailClient, gh, aiService, assetsBucket, biller, p)
+			adm, err := admin.New(cmd.Context(), admOpts, logger, issuer, emailClient, aiService, assets, biller, p)
 			if err != nil {
 				logger.Fatal("error creating service", zap.Error(err))
 			}
@@ -403,11 +435,7 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 					AuthDomain:             conf.AuthDomain,
 					AuthClientID:           conf.AuthClientID,
 					AuthClientSecret:       conf.AuthClientSecret,
-					GithubAppName:          conf.GithubAppName,
-					GithubAppWebhookSecret: conf.GithubAppWebhookSecret,
-					GithubClientID:         conf.GithubClientID,
-					GithubClientSecret:     conf.GithubClientSecret,
-					GithubManagedAccount:   conf.GithubManagedAccount,
+				AuthIssuerURL:          conf.AuthIssuerURL,
 					AssetsBucket:           conf.AssetsBucket,
 					PylonIdentitySecret:    pylonIdentitySecret,
 				})

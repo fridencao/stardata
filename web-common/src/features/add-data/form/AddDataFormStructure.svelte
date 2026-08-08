@@ -1,5 +1,6 @@
 <script lang="ts">
   import { Button } from "@rilldata/web-common/components/button";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { defaultFormLabels } from "@rilldata/web-common/features/add-data/form/form-labels.ts";
   import SubmissionError from "@rilldata/web-common/components/forms/SubmissionError.svelte";
   import type { createConnectorForm } from "@rilldata/web-common/features/sources/modal/FormValidation.ts";
@@ -225,7 +226,7 @@
         onClick={() => void handleBack()}
         type="tertiary"
       >
-        Back
+        {m.common_back()}
       </Button>
 
       {#if testResult}
@@ -256,7 +257,7 @@
             type="secondary"
             onClick={() => void handleTestConnection()}
           >
-            Test connection
+            {m.connector_test_connection()}
           </Button>
         {/if}
 
@@ -266,9 +267,9 @@
             type="secondary"
             noStroke
             onClick={onSave}
-            label="Save connector"
+            label={m.add_data_save_connector()}
           >
-            Save and exit
+            {m.add_data_save_and_exit()}
           </Button>
         {/if}
 

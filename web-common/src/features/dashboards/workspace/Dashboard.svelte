@@ -15,7 +15,7 @@
   import { onDestroy } from "svelte";
   import { readable, type Readable } from "svelte/store";
   import { useExploreState } from "web-common/src/features/dashboards/stores/dashboard-stores";
-  import { DashboardState_ActivePage } from "../../../proto/gen/rill/ui/v1/dashboard_pb";
+  import { DashboardState_ActivePage } from "../../../proto/gen/stardata/ui/v1/dashboard_pb";
   import { useRuntimeClient } from "../../../runtime-client/v2";
   import { activeDashboardTheme } from "../../themes/active-dashboard-theme";
   import { createResolvedThemeStore } from "../../themes/selectors";

@@ -2,7 +2,7 @@ import { getSortType } from "@rilldata/web-common/features/dashboards/leaderboar
 import { SortDirection } from "@rilldata/web-common/features/dashboards/proto-state/derived-types";
 import type { TransformerArgs } from "@rilldata/web-common/features/explore-mappers/types";
 import { fillTimeRange } from "@rilldata/web-common/features/explore-mappers/utils";
-import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import {
   V1MetricsViewComparisonMeasureType,
   type V1MetricsViewComparisonRequest,

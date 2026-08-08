@@ -37,7 +37,7 @@
   import { Button } from "../../../components/button";
   import Pivot from "../../../components/icons/Pivot.svelte";
   import { TIME_GRAIN } from "../../../lib/time/config";
-  import { DashboardState_ActivePage } from "../../../proto/gen/rill/ui/v1/dashboard_pb";
+  import { DashboardState_ActivePage } from "../../../proto/gen/stardata/ui/v1/dashboard_pb";
   import Spinner from "../../entity-management/Spinner.svelte";
   import { featureFlags } from "../../feature-flags";
   import MeasureBigNumber from "../big-number/MeasureBigNumber.svelte";

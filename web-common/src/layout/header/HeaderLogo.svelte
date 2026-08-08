@@ -1,5 +1,5 @@
 <script lang="ts">
-  import StarDataLogo from "@rilldata/web-common/components/icons/StarDataLogo.svelte";
+  import StarDataLogoWordmark from "@rilldata/web-common/components/icons/StarDataLogoWordmark.svelte";
 
   export let href: string = "/";
   export let logoUrl: string | undefined = undefined;
@@ -12,6 +12,7 @@
   {#if logoUrl}
     <img src={logoUrl} alt="logo" class="h-7" />
   {:else}
-    <StarDataLogo />
+    <!-- StarData brand mark, consistent with PortalNav -->
+    <StarDataLogoWordmark size="md" />
   {/if}
 </a>

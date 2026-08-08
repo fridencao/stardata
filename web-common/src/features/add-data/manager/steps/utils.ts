@@ -1,4 +1,5 @@
 import type { V1ConnectorDriver } from "@rilldata/web-common/runtime-client";
+import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
 import {
   connectorInfoMap,
   getBackendConnectorName,
@@ -26,7 +27,9 @@ export function getConnectorDriverForSchema(
   return {
     name: backendName,
     displayName: schema?.title ?? connectorInfo.displayName ?? schemaName,
-    docsUrl: `https://docs.rilldata.com/developers/build/connectors/${getDocsCategory(category)}/${backendName}`,
+    docsUrl: docsUrl(
+      `/developers/build/connectors/${getDocsCategory(category)}/${backendName}`,
+    ),
     implementsObjectStore: category === "objectStore",
     implementsOlap: category === "olap",
     implementsSqlStore: category === "sqlStore",

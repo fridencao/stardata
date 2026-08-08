@@ -6,6 +6,7 @@
     PopoverTrigger,
   } from "@rilldata/web-common/components/popover";
   import { Palette } from "lucide-svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import MeasureFormattingControls from "./MeasureFormattingControls.svelte";
   import PivotChip from "./PivotChip.svelte";
   import type { PivotChipData, PivotMeasureFormatting } from "./types";
@@ -69,9 +70,11 @@
         {item.title}
       </span>
       <span class="text-xs text-fg-secondary">
-        Conditional formatting{#if fmt?.mode === "rules"}
+        {m.dashboard_conditional_formatting()}{#if fmt?.mode === "rules"}
           · {fmt.rules.length}
-          {fmt.rules.length === 1 ? "rule" : "rules"}{/if}
+          {fmt.rules.length === 1
+            ? m.dashboard_format_rule_singular()
+            : m.dashboard_format_rule_plural()}{/if}
       </span>
     </div>
     <hr class="border-gray-200" />

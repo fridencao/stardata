@@ -498,8 +498,8 @@ function updateGroupingCaches(groups: ResourceGraphGrouping[]): void {
  * @example
  * // View graphs for specific metrics
  * const groups = partitionResourcesBySeeds(allResources, [
- *   "rill.runtime.v1.MetricsView:revenue",
- *   "rill.runtime.v1.Model:users"
+ *   "stardata.runtime.v1.MetricsView:revenue",
+ *   "stardata.runtime.v1.Model:users"
  * ]);
  *
  * @example

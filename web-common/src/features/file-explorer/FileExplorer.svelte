@@ -1,5 +1,6 @@
 <script lang="ts">
   import { page } from "$app/stores";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import RenameAssetModal from "@rilldata/web-common/features/entity-management/actions/RenameAssetModal.svelte";
   import {
     navigateToFile,
@@ -260,7 +261,7 @@
       {/each}
     </div>
   {:else if $getFileTree.isError}
-    <div class="px-2 py-3 text-xs text-fg-muted">Failed to load files</div>
+    <div class="px-2 py-3 text-xs text-fg-muted">{m.file_failed_to_load()}</div>
   {/if}
 </ul>
 

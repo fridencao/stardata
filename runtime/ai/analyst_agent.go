@@ -10,8 +10,8 @@ import (
 
 	"github.com/google/jsonschema-go/jsonschema"
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	aiv1 "github.com/fridencao/stardata/proto/gen/stardata/ai/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
 	"github.com/fridencao/stardata/runtime/ai/instructions"
 	"github.com/fridencao/stardata/runtime/metricsview"
@@ -111,6 +111,15 @@ func parseAnalystAnswer(raw string) *AnalystAnswer {
 		}
 	}
 
+	// Last resort: repair unescaped inner double quotes (LLMs occasionally emit
+	// e.g. "是绝对的"黄金客群"" inside a JSON string), which otherwise makes the
+	// whole answer unparseable and leaks raw JSON to the user.
+	for _, c := range candidates {
+		if r := repairJSONStringQuotes(c); r != c {
+			candidates = append(candidates, r)
+		}
+	}
+
 	for _, c := range candidates {
 		if c == "" {
 			continue
@@ -125,6 +134,49 @@ func parseAnalystAnswer(raw string) *AnalystAnswer {
 
 	// Could not parse a structured answer; treat the raw text as the narrative body.
 	return &AnalystAnswer{Body: raw}
+}
+
+// repairJSONStringQuotes escapes unescaped double quotes that appear *inside*
+// JSON string values. It walks the document tracking string boundaries: a
+// quote inside a string only terminates it if the next non-space character is
+// structural (one of `,:}]`); otherwise it is an inner quote the LLM forgot to
+// escape and gets rewritten as `\"`. Best-effort — the result is only used as
+// an extra parse candidate.
+func repairJSONStringQuotes(s string) string {
+	var b strings.Builder
+	b.Grow(len(s))
+	inString := false
+	for i := 0; i < len(s); i++ {
+		c := s[i]
+		if inString && c == '\\' && i+1 < len(s) {
+			// Preserve existing escape sequences verbatim.
+			b.WriteByte(c)
+			b.WriteByte(s[i+1])
+			i++
+			continue
+		}
+		if c != '"' {
+			b.WriteByte(c)
+			continue
+		}
+		if !inString {
+			inString = true
+			b.WriteByte(c)
+			continue
+		}
+		// Quote while inside a string: closing quote or unescaped inner quote?
+		j := i + 1
+		for j < len(s) && (s[j] == ' ' || s[j] == '\t' || s[j] == '\n' || s[j] == '\r') {
+			j++
+		}
+		if j >= len(s) || s[j] == ',' || s[j] == ':' || s[j] == '}' || s[j] == ']' {
+			inString = false
+			b.WriteByte(c)
+		} else {
+			b.WriteString(`\"`)
+		}
+	}
+	return b.String()
 }
 
 // collectCharts gathers the charts created during the analyst loop from the

@@ -63,12 +63,7 @@
             domain: `<b>@${escapeHtml($userDomain.data)}</b>`,
             role: `<b>${escapeHtml(m.role_viewer())}</b>`,
           })}
-          <a
-            target="_blank"
-            href="https://docs.rilldata.com/reference/cli/user/whitelist"
-          >
-            {m.settings_learn_more()}
-          </a>
+          <span>{m.settings_learn_more()}</span>
         </Label>
         <div class="grow"></div>
         <DelayedCircleOutlineSpinner
@@ -82,13 +77,7 @@
           />
         </DelayedCircleOutlineSpinner>
       {:else}
-        {m.settings_domain_not_allowed_public()}
-        <a
-          target="_blank"
-          href="https://docs.rilldata.com/reference/cli/user/whitelist"
-        >
-          {m.settings_learn_more()}
-        </a>
+        {m.settings_domain_not_allowed_public()} <span>{m.settings_learn_more()}</span>
       {/if}
     </div>
 

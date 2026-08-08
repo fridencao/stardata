@@ -9,6 +9,7 @@
     AlertDialogTrigger,
   } from "@rilldata/web-common/components/alert-dialog/index.js";
   import { Button } from "@rilldata/web-common/components/button/index.js";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   let {
     open = $bindable(false),
@@ -31,18 +32,18 @@
   </AlertDialogTrigger>
   <AlertDialogContent>
     <AlertDialogHeader>
-      <AlertDialogTitle>Delete this branch?</AlertDialogTitle>
+      <AlertDialogTitle>{m.branch_delete_confirm_title()}</AlertDialogTitle>
       <AlertDialogDescription>
         <div class="mt-1">
-          The branch <span class="font-mono text-xs font-medium">{branch}</span>
-          will be deleted.
+          {m.branch_delete_confirm_prefix()}
+          <span class="font-mono text-xs font-medium">{branch}</span>
+          {m.branch_delete_confirm_suffix()}
           {#if editable}
-            This will also delete its associated remote branch. Any unpushed
-            changes will be lost.
+            {m.branch_delete_remote_warning()}
           {/if}
         </div>
         <div class="mt-2 font-medium text-fg-primary">
-          This action cannot be undone.
+          {m.branch_delete_cannot_undo()}
         </div>
       </AlertDialogDescription>
     </AlertDialogHeader>
@@ -53,14 +54,14 @@
           open = false;
         }}
       >
-        Cancel
+        {m.common_cancel()}
       </Button>
       <Button
         type="destructive"
         onClick={() => {
           open = false;
           onConfirm();
-        }}>Yes, delete</Button
+        }}>{m.branch_delete_confirm_yes()}</Button
       >
     </AlertDialogFooter>
   </AlertDialogContent>

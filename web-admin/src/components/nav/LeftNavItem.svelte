@@ -12,7 +12,7 @@
   a {
     @apply p-2 flex gap-x-1 items-center;
     @apply rounded-sm;
-    @apply text-sm font-medium;
+    @apply text-base font-medium;
   }
 
   .selected {

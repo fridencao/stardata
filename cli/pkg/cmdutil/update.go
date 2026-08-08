@@ -47,7 +47,7 @@ func (h *Helper) CheckVersion(ctx context.Context) error {
 
 	if v1.LessThan(v2) {
 		fmt.Printf("%s %s → %s\n\n",
-			color.YellowString("A new version of rill is available (run `rill upgrade`):"),
+			color.YellowString("A new version of rill is available (run `stardata upgrade`):"),
 			color.CyanString(h.Version.Number),
 			color.CyanString(latestVersion))
 		return nil
@@ -56,7 +56,7 @@ func (h *Helper) CheckVersion(ctx context.Context) error {
 	return nil
 }
 
-// LatestVersion returns the latest available version of Rill (cached for up to 24 hours).
+// LatestVersion returns the latest available version of StarData (cached for up to 24 hours).
 func (h *Helper) LatestVersion(ctx context.Context) (string, error) {
 	cachedVersion, err := h.DotRill.GetVersion()
 	if err != nil {
@@ -107,7 +107,7 @@ type githubReleaseInfo struct {
 	PublishedAt time.Time `json:"published_at"`
 }
 
-// fetchLatestVersion fetches the latest version of Rill from Github releases.
+// fetchLatestVersion fetches the latest version of StarData from Github releases.
 func fetchLatestVersion(ctx context.Context) (*githubReleaseInfo, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, versionCheckURI, http.NoBody)
 	if err != nil {

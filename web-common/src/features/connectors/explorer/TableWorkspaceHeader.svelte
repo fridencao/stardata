@@ -13,6 +13,7 @@
   import { ResourceKind } from "../../entity-management/resource-selectors";
   import { featureFlags } from "../../feature-flags";
   import { useCreateMetricsViewFromTableUIAction } from "../../metrics-views/ai-generation/generateMetricsView";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let connector: string;
   export let database: string = "";
@@ -57,8 +58,8 @@
             <Add />
           </IconSpaceFixer>
           <ResponsiveButtonText {collapse}>
-            Generate metrics {#if $ai}
-              with AI
+            {m.connector_generate_metrics()} {#if $ai}
+              {m.add_data_with_ai()}
             {/if}
           </ResponsiveButtonText>
         </Button>

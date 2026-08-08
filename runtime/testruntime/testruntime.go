@@ -13,7 +13,7 @@ import (
 
 	"github.com/c2h5oh/datasize"
 	"github.com/joho/godotenv"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/drivers/clickhouse/testclickhouse"
@@ -33,6 +33,7 @@ import (
 	_ "github.com/fridencao/stardata/runtime/drivers/claude"
 	_ "github.com/fridencao/stardata/runtime/drivers/clickhouse"
 	_ "github.com/fridencao/stardata/runtime/drivers/databricks"
+	_ "github.com/fridencao/stardata/runtime/drivers/deepseek"
 	_ "github.com/fridencao/stardata/runtime/drivers/druid"
 	_ "github.com/fridencao/stardata/runtime/drivers/duckdb"
 	_ "github.com/fridencao/stardata/runtime/drivers/file"
@@ -105,7 +106,7 @@ type InstanceOptions struct {
 	WatchRepo         bool
 	StageChanges      bool
 	DisableHostAccess bool
-	AIConnector       string // Options: "" (none), "openai", "claude"
+	AIConnector       string // Options: "" (none), "openai", "claude", "deepseek", "gemini"
 	TestConnectors    []string
 	FrontendURL       string
 }

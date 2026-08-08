@@ -40,7 +40,7 @@ import {
   V1TimeGrainToDateTimeUnit,
 } from "@rilldata/web-common/lib/time/new-grains";
 import { getAggregationGrain } from "@rilldata/web-common/lib/time/stardata-time-grains";
-import { DashboardState } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+import { DashboardState } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import {
   type MetricsViewSpecDimension,
   type MetricsViewSpecMeasure,

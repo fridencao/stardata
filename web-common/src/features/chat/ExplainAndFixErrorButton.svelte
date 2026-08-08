@@ -1,6 +1,7 @@
 <script lang="ts">
   import Button from "@rilldata/web-common/components/button/Button.svelte";
   import { SparklesIcon } from "lucide-svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import { developerChatActions } from "./layouts/sidebar/sidebar-store";
 
   export let filePath: string;
@@ -15,17 +16,17 @@
 {#if variant === "cta"}
   <Button type="secondary" onClick={handleClick}>
     <SparklesIcon size="16px" />
-    <span>Explain and fix</span>
+    <span>{m.chat_explain_fix()}</span>
   </Button>
 {:else}
   <button
     class={large ? "explain-error-btn large" : "explain-error-btn"}
     on:click|stopPropagation={handleClick}
-    aria-label="Explain and fix this error with AI"
-    title="Explain and fix"
+    aria-label={m.chat_explain_fix_aria()}
+    title={m.chat_explain_fix()}
   >
     <SparklesIcon size={large ? "16px" : "14px"} />
-    <span>Explain and fix</span>
+    <span>{m.chat_explain_fix()}</span>
   </button>
 {/if}
 

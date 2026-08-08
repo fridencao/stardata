@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import CanvasInitialization from "@rilldata/web-common/features/canvas/CanvasInitialization.svelte";
   import WorkspaceEditorContainer from "@rilldata/web-common/layout/workspace/WorkspaceEditorContainer.svelte";
   import {
@@ -118,13 +119,23 @@
               saving={$saving}
             />
           {/if}
-          <Button label="Delete" type="secondary" compact onClick={onDelete}>
+          <Button
+            label={m.common_delete()}
+            type="secondary"
+            compact
+            onClick={onDelete}
+          >
             <Trash size={14} />
-            Delete
+            {m.common_delete()}
           </Button>
-          <Button label="Preview" type="secondary" compact onClick={onPreview}>
+          <Button
+            label={m.common_preview()}
+            type="secondary"
+            compact
+            onClick={onPreview}
+          >
             <Play size={14} />
-            Preview
+            {m.common_preview()}
           </Button>
         </div>
       {/snippet}

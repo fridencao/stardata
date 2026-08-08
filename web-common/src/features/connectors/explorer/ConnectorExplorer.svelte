@@ -5,6 +5,7 @@
   import ConnectorEntry from "./ConnectorEntry.svelte";
   import type { ConnectorExplorerStore } from "./connector-explorer-store";
   import { getAnalyzedConnectors } from "@rilldata/web-common/features/connectors/selectors.ts";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let store: ConnectorExplorerStore;
   export let olapOnly: boolean = false;
@@ -46,7 +47,7 @@
     </span>
   {:else if data?.connectors}
     {#if data.connectors.length === 0}
-      <span class="message"> No data found. Add data to get started! </span>
+      <span class="message"> {m.connector_explorer_empty()} </span>
     {:else}
       <ol transition:slide={{ duration }}>
         {#each data.connectors as connector (connector.name)}

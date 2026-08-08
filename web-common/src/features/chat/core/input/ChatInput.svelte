@@ -179,7 +179,7 @@
 
   :global(.tiptap) {
     @apply outline-none;
-    @apply text-sm leading-relaxed;
+    @apply text-base leading-relaxed;
   }
 
   .chat-input-container {

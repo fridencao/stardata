@@ -8,17 +8,13 @@
   import { getName } from "@rilldata/web-common/features/entity-management/name-utils.ts";
   import { EntityStatus } from "@rilldata/web-common/features/entity-management/types.ts";
   import Spinner from "@rilldata/web-common/features/entity-management/Spinner.svelte";
-  import StarDataLogoSquareNegative from "@rilldata/web-common/components/icons/StarDataLogoSquareNegative.svelte";
+  import StarDataLogoWordmark from "@rilldata/web-common/components/icons/StarDataLogoWordmark.svelte";
   import {
     type DeployError,
     isQuotaDeployError,
   } from "@rilldata/web-common/features/project/deploy/deploy-errors.ts";
   import { Button } from "@rilldata/web-common/components/button";
   import CTAHeader from "@rilldata/web-common/components/calls-to-action/CTAHeader.svelte";
-  import ChoosePlanDialog from "@rilldata/web-admin/features/billing/plans/dialog/ChoosePlanDialog.svelte";
-  import type { TeamPlanDialogTypes } from "@rilldata/web-admin/features/billing/plans/types.ts";
-  import { projectWelcomeStatus } from "@rilldata/web-admin/features/welcome/project/welcome-status.ts";
-  import { CreateProjectBranchName } from "@rilldata/web-admin/features/projects/publish-project.ts";
 
   let organization = $derived(page.params.organization);
 
@@ -35,47 +31,34 @@
   );
 
   let deployError: DeployError | undefined = $state(undefined);
-  let showStartTeamPlanDialog = $state(false);
-  let startTeamPlanType: TeamPlanDialogTypes = $state("base");
 
-  async function handleCreate(projectName: string, frontendUrl: string) {
-    projectWelcomeStatus.setProjectWelcomeStep(projectName, true);
-    return goto(`${frontendUrl}/@${CreateProjectBranchName}/-/edit/welcome`);
+  async function handleCreate(projectName: string) {
+    return goto(`/${organization}/${projectName}`);
   }
 </script>
 
 <div class="background">
-  <div class="flex flex-col gap-4 mx-auto w-fit pt-48">
+  <div class="flex flex-col items-center gap-4 mx-auto w-fit pt-48">
     {#if deployError && isQuotaDeployError(deployError)}
       <CTAHeader variant="bold">{deployError.title}</CTAHeader>
       <p class="text-base text-fg-secondary text-left w-[500px]">
         {deployError.message}
       </p>
-      <Button
-        type="primary"
-        onClick={() => {
-          showStartTeamPlanDialog = true;
-        }}
-      >
-        Upgrade
-      </Button>
       <Button type="secondary" noStroke href="/{organization}"
         >{m.common_back()}</Button
       >
     {:else}
-      <StarDataLogoSquareNegative size="36px" />
-      <div class="text-2xl font-extrabold text-fg-accent text-center">
+      <StarDataLogoWordmark size="lg" />
+      <div class="auth-title text-center">
         {hasProjects ? m.project_create_first() : m.project_create_new()}
       </div>
 
-      <div
-        class="flex flex-col gap-6 text-left p-6 border rounded-md bg-surface-overlay"
-      >
+      <div class="flex flex-col gap-6 text-left auth-card">
         <div>
-          <div class="text-base font-semibold">
+          <div class="auth-card__title">
             {hasProjects ? m.project_name_first() : m.project_name_new()}
           </div>
-          <div class="text-sm text-fg-muted">
+          <div class="auth-card__subtitle">
             {m.project_rename_anytime()}
           </div>
         </div>
@@ -96,12 +79,6 @@
     {/if}
   </div>
 </div>
-
-<ChoosePlanDialog
-  bind:open={showStartTeamPlanDialog}
-  type={startTeamPlanType}
-  {organization}
-/>
 
 <style lang="postcss">
   .background {

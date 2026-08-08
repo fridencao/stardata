@@ -34,8 +34,9 @@
 
 <div class="flex flex-row gap-2 items-center truncate">
   <button
-    class="hover:bg-surface-hover rounded-sm p-0.5 flex-none"
+    class="hover:bg-surface-hover rounded-sm p-0.5 flex-none border-0 outline-none focus:outline-none"
     onclick={toggleShowValue}
+    aria-label={showValue ? 'Hide value' : 'Show value'}
   >
     <svelte:component this={showValue ? EyeInvisible : Eye} size="18px" />
   </button>

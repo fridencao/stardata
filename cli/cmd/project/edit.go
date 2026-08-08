@@ -4,12 +4,12 @@ import (
 	"fmt"
 
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/spf13/cobra"
 )
 
 func EditCmd(ch *cmdutil.Helper) *cobra.Command {
-	var name, description, primaryBranch, subpath, path, provisioner, gitRemote string
+	var name, description, primaryBranch, subpath, path, provisioner string
 	var public bool
 	var prodTTL, devTTL int64
 	var prodSlots, devSlots int
@@ -67,10 +67,6 @@ func EditCmd(ch *cmdutil.Helper) *cobra.Command {
 				flagSet = true
 				req.DevTtlSeconds = &devTTL
 			}
-			if cmd.Flags().Changed("remote-url") {
-				flagSet = true
-				req.GitRemote = &gitRemote
-			}
 			if cmd.Flags().Changed("prod-slots") {
 				if prodSlots <= 0 {
 					return fmt.Errorf("--prod-slots must be greater than zero")
@@ -110,7 +106,6 @@ func EditCmd(ch *cmdutil.Helper) *cobra.Command {
 	editCmd.Flags().StringVar(&primaryBranch, "primary-branch", "", "Primary branch name")
 	editCmd.Flags().BoolVar(&public, "public", false, "Make dashboards publicly accessible")
 	editCmd.Flags().StringVar(&path, "path", ".", "Project directory")
-	editCmd.Flags().StringVar(&gitRemote, "remote-url", "", "Github remote URL")
 	editCmd.Flags().StringVar(&subpath, "subpath", "", "Relative path to project in the repository (for monorepos)")
 	editCmd.Flags().StringVar(&provisioner, "provisioner", "", "Project provisioner (default: current provisioner)")
 	editCmd.Flags().Int64Var(&prodTTL, "prod-ttl-seconds", 0, "Time-to-live in seconds for production deployment (0 means no expiration)")

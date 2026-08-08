@@ -19,6 +19,11 @@ const (
 
 // AuthenticatorOptions provides options for Authenticator
 type AuthenticatorOptions struct {
+	// AuthIssuerURL is the full OIDC issuer URL (e.g. http://keycloak:8080/realms/stardata).
+	// When set, it is used verbatim (supports http for private/internal deployments and the
+	// /realms/<realm> path). When empty, AuthDomain is used with the Auth0-compatible
+	// "https://<AuthDomain>/" fallback.
+	AuthIssuerURL    string
 	AuthDomain       string
 	AuthClientID     string
 	AuthClientSecret string
@@ -38,7 +43,11 @@ type Authenticator struct {
 
 // NewAuthenticator creates an Authenticator.
 func NewAuthenticator(logger *zap.Logger, adm *admin.Service, cookieStore *cookies.Store, opts *AuthenticatorOptions) (*Authenticator, error) {
-	oidcProvider, err := oidc.NewProvider(context.Background(), "https://"+opts.AuthDomain+"/")
+	// Resolve the OIDC issuer URL. Prefer the explicit AuthIssuerURL (supports http for private
+	// Keycloak deployments with a /realms/<realm> path); fall back to the Auth0-compatible
+	// "https://<AuthDomain>/" construction when AuthIssuerURL is empty.
+	issuerURL := resolveIssuerURL(opts)
+	oidcProvider, err := oidc.NewProvider(context.Background(), issuerURL)
 	if err != nil {
 		return nil, err
 	}
@@ -61,4 +70,14 @@ func NewAuthenticator(logger *zap.Logger, adm *admin.Service, cookieStore *cooki
 	}
 
 	return a, nil
+}
+
+// resolveIssuerURL returns the OIDC issuer URL to use for discovery.
+// It prefers the explicit AuthIssuerURL (which supports http for private Keycloak deployments and
+// the /realms/<realm> path), and falls back to the Auth0-compatible "https://<AuthDomain>/" form.
+func resolveIssuerURL(opts *AuthenticatorOptions) string {
+	if opts.AuthIssuerURL != "" {
+		return opts.AuthIssuerURL
+	}
+	return "https://" + opts.AuthDomain + "/"
 }

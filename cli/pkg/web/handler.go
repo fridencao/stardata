@@ -14,13 +14,15 @@ import (
 //go:embed all:embed
 var distFS embed.FS
 
-// Handler serves an web-local UI.
+// Handler serves the embedded local UI assets.
+// Since web-local was removed, no frontend build is embedded anymore and this
+// falls back to the static placeholder page in embed/index.html.
 func StaticHandler() http.Handler {
 	uiAssetFS := newUIAssetFS()
 	return gziphandler.GzipHandler(http.FileServer(uiAssetFS))
 }
 
-// Check if web-local dist static UI is exists, If not server the default index.html page.
+// Check if an embedded dist UI exists. If not, serve the default index.html placeholder.
 func newUIAssetFS() http.FileSystem {
 	_, err := distFS.ReadFile("embed/dist/index.html")
 	if os.IsNotExist(err) {

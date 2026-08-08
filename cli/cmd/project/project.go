@@ -6,7 +6,7 @@ import (
 
 	"github.com/fridencao/stardata/cli/cmd/project/deployment"
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/spf13/cobra"
 )
 
@@ -32,7 +32,6 @@ func ProjectCmd(ch *cmdutil.Helper) *cobra.Command {
 	projectCmd.AddCommand(RefreshCmd(ch))
 	projectCmd.AddCommand(JwtCmd(ch))
 	projectCmd.AddCommand(CloneCmd(ch))
-	projectCmd.AddCommand(GitPushCmd(ch))
 	projectCmd.AddCommand(TablesCmd(ch))
 	projectCmd.AddCommand(deployment.DeploymentCmd(ch))
 

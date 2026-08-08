@@ -46,14 +46,7 @@
   <div class="flex flex-col gap-y-3 min-w-0">
     <h4 class="text-sm font-medium text-fg-primary">{m.mcp_configuration()}</h4>
     <p class="text-sm text-fg-secondary">
-      {m.mcp_add_to_config()}
-      <a
-        href="https://docs.rilldata.com/guide/ai/mcp#manual-configuration-alternative-method"
-        target="_blank"
-        rel="noopener"
-      >
-        {m.mcp_learn_more()}
-      </a>
+      {m.mcp_add_to_config()} {m.mcp_learn_more()}
     </p>
     <div class="overflow-x-auto">
       <CodeBlock

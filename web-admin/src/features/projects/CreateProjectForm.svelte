@@ -4,11 +4,9 @@
 
 <script lang="ts">
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
+  import { page } from "$app/state";
   import {
-    createAdminServiceCreateDeployment,
-    createAdminServiceCreateManagedGitRepo,
     createAdminServiceCreateProject,
-    getAdminServiceListDeploymentsQueryKey,
     getAdminServiceListProjectsForOrganizationQueryKey,
     type RpcStatus,
   } from "@rilldata/web-admin/client";
@@ -22,9 +20,7 @@
     type DeployError,
     getPrettyDeployError,
   } from "@rilldata/web-common/features/project/deploy/deploy-errors.ts";
-  import { useCategorisedOrganizationBillingIssues } from "@rilldata/web-admin/features/billing/selectors.ts";
   import { queryClient } from "@rilldata/web-common/lib/svelte-query/globalQueryClient.ts";
-  import { CreateProjectBranchName } from "@rilldata/web-admin/features/projects/publish-project.ts";
 
   const {
     organization,
@@ -51,16 +47,7 @@
     }),
   );
 
-  const createManagedGitRepo = createAdminServiceCreateManagedGitRepo();
   const createProjectMutation = createAdminServiceCreateProject();
-  const createDeployMutation = createAdminServiceCreateDeployment();
-
-  let billingIssueMessage = $derived(
-    useCategorisedOrganizationBillingIssues(organization),
-  );
-  let isOrgOnTrial = $derived(!!$billingIssueMessage.data?.trial);
-
-  let createdGitRepo = $state("");
 
   // No need to be reactive to default name. It is derived from list of projects that wont change during the form creation.
   // svelte-ignore state_referenced_locally
@@ -73,50 +60,18 @@
         if (!form.valid) return;
         const project = form.data.name;
 
-        // Step 1: Create the git repo.
-
-        // As an optimization, we only create the git repo once.
-        // Note that this is not really persisted across page reloads.
-        // We dont really need it since the orphaned repos are deleted eventually.
-        if (!createdGitRepo) {
-          const createManagedGitRepoResult =
-            await $createManagedGitRepo.mutateAsync({
-              org: organization,
-              data: { name: project, autoInit: true },
-            });
-          createdGitRepo = createManagedGitRepoResult.remote ?? "";
-        }
-
-        // Step 2: Create the project.
+        // Create the project without a source (private deployments have no
+        // GitHub integration; project files can be uploaded/connected later).
         const resp = await $createProjectMutation.mutateAsync({
           org: organization,
           data: {
             project,
-            gitRemote: createdGitRepo,
             skipDeploy: true,
           },
         });
         void queryClient.invalidateQueries({
           queryKey:
             getAdminServiceListProjectsForOrganizationQueryKey(organization),
-        });
-
-        // Step 3: Create the editable dev deployment.
-        // TODO: Handle deployment creation failure. Project would be created leading to possible duplicate project error on retry.
-        await $createDeployMutation.mutateAsync({
-          org: organization,
-          project,
-          data: {
-            environment: "dev",
-            branch: CreateProjectBranchName,
-            editable: true,
-          },
-        });
-        void queryClient.invalidateQueries({
-          queryKey: getAdminServiceListDeploymentsQueryKey(
-            organization,
-            project,
-          ),
         });
 
         return onCreate(project, resp.project?.frontendUrl ?? "/");
@@ -132,10 +87,9 @@
             `Project name '${$form.name}' is already taken. Please try a different name.`,
           ];
         } else {
-          const deployError = getPrettyDeployError(
-            new Error(error),
-            isOrgOnTrial,
-          );
+          // orgOnTrial is not available in this create-project context; pass false
+          // so trial-specific messaging is skipped (generic error message is used).
+          const deployError = getPrettyDeployError(new Error(error), false);
           if (deployError) onDeployError?.(deployError);
           $errors["name"] = [error];
         }
@@ -163,7 +117,7 @@
     alwaysShowError
     width="500px"
     size="xl"
-    textInputPrefix="https://ui.rilldata.com/{organization}/"
+    textInputPrefix="{page.url.origin}/{organization}/"
   />
   <div class="w-full flex justify-end">
     <Button

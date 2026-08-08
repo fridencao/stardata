@@ -129,7 +129,7 @@ export function invalidateConversationsList(instanceId: string) {
   const listConversationsKey = getRuntimeServiceListConversationsQueryKey(
     instanceId,
     {
-      userAgentPattern: "rill%",
+      userAgentPattern: "stardata%",
     },
   );
   return queryClient.invalidateQueries({ queryKey: listConversationsKey });
@@ -141,8 +141,8 @@ export function invalidateConversationsList(instanceId: string) {
 export function getLatestConversationQueryOptions(client: RuntimeClient) {
   const listConversationsQueryOptions =
     getRuntimeServiceListConversationsQueryOptions(client, {
-      // Filter to only show Rill client conversations, excluding MCP conversations
-      userAgentPattern: "rill%",
+      // Filter to only show StarData client conversations, excluding MCP conversations
+      userAgentPattern: "stardata%",
     });
   const lastConversationId = derived(
     createQuery(listConversationsQueryOptions, queryClient),

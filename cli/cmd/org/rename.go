@@ -2,7 +2,7 @@ package org
 
 import (
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -26,7 +26,7 @@ func RenameCmd(ch *cmdutil.Helper) *cobra.Command {
 			resp, err := client.GetOrganization(ctx, &adminv1.GetOrganizationRequest{Org: name})
 			if err != nil {
 				if st, ok := status.FromError(err); ok && st.Code() == codes.NotFound {
-					ch.PrintfError("org %q doesn't exist, run 'rill org list' to see available orgs", name)
+					ch.PrintfError("org %q doesn't exist, run 'stardata org list' to see available orgs", name)
 					return nil
 				}
 				return err

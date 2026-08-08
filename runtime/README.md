@@ -59,9 +59,9 @@ The runtime server is configured using environment variables parsed in `cli/cmd/
 We define our APIs using gRPC and use [gRPC-Gateway](https://grpc-ecosystem.github.io/grpc-gateway/) to map the RPCs to a RESTful API. See `proto/README.md` for details.
 
 To add a new endpoint:
-1. Describe the endpoint in `proto/rill/runtime/v1/api.proto`
+1. Describe the endpoint in `proto/stardata/runtime/v1/api.proto`
 2. Re-generate gRPC and OpenAPI interfaces by running `make proto.generate`
-3. Copy the new handler signature from the `RuntimeServiceServer` interface in `proto/gen/rill/runtime/v1/api_grpc_pb.go`
+3. Copy the new handler signature from the `RuntimeServiceServer` interface in `proto/gen/stardata/runtime/v1/api_grpc_pb.go`
 4. Paste the handler signature and implement it in a relevant file in `runtime/server/`
 
 ## Adding a new analytical query endpoint

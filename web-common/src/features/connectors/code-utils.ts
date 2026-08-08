@@ -30,10 +30,11 @@ import {
 } from "@rilldata/web-common/features/templates/schemas/ducklake-utils.ts";
 import { filterSchemaValuesForSubmit } from "@rilldata/web-common/features/templates/schema-utils.ts";
 import type { MultiStepFormSchema } from "@rilldata/web-common/features/templates/schemas/types.ts";
+import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
 
 function yamlModelTemplate(driverName: string) {
   return `# Model YAML
-# Reference documentation: https://docs.rilldata.com/developers/build/connectors/data-source/${driverName}
+# Reference documentation: ${docsUrl(`/developers/build/connectors/data-source/${driverName}`)}
 
 type: model
 materialize: true
@@ -197,7 +198,7 @@ export function generateYAML(
       ? "olap"
       : undefined;
   const topOfFile = `# Connector YAML
-# Reference documentation: https://docs.rilldata.com/developers/build/connectors/${getDocsCategory(category)}/${driverName}
+# Reference documentation: ${docsUrl(`/developers/build/connectors/${getDocsCategory(category)}/${driverName}`)}
 
 type: connector
 
@@ -524,7 +525,7 @@ export async function createSqlModelFromTable(
   );
 
   // Create model — OLAP models use the same connector for both source and output
-  const topComments = `-- Model SQL\n-- Reference documentation: https://docs.rilldata.com/developers/build/connectors/data-source/${driverName}`;
+  const topComments = `-- Model SQL\n-- Reference documentation: ${docsUrl(`/developers/build/connectors/data-source/${driverName}`)}`;
   const connectorLine = `-- @connector: ${connector}`;
   const outputConnectorLine = `-- @output.connector: ${connector}`;
   const selectStatement = isNonStandardIdentifier(

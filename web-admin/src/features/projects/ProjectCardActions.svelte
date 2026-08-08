@@ -42,7 +42,7 @@
       {m.project_rename()}
     </Dropdown.Item>
     <Dropdown.Item
-      href="/{organization}/{project}/-/dashboards?share=true"
+      href="/{organization}/{project}/-/status?share=true"
       class="text-sm"
     >
       <ShareIcon size={14} />

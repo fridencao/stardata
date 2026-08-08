@@ -33,7 +33,8 @@
     {
       label: m.settings_nav_public_urls(),
       route: "/public-urls",
-      hasPermission: true,
+      // StarData: public magic links are a multi-tenant cloud feature; hidden in the enterprise deployment
+      hasPermission: false,
     },
     {
       label: m.settings_nav_token_mgmt(),

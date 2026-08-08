@@ -6,7 +6,7 @@ import (
 	"net/url"
 	"strings"
 
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
@@ -27,7 +27,7 @@ const retryPolicy = `{"methodConfig": [{
 }]}`
 
 // Client connects to an admin server.
-// It's a thin wrapper around the generated gRPC client for proto/rill/admin/v1.
+// It's a thin wrapper around the generated gRPC client for proto/stardata/admin/v1.
 type Client struct {
 	adminv1.AdminServiceClient
 	adminv1.AIServiceClient

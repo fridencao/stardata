@@ -8,8 +8,8 @@ import (
 	"strings"
 
 	"github.com/google/jsonschema-go/jsonschema"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
-	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
+	aiv1 "github.com/fridencao/stardata/proto/gen/stardata/ai/v1"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/pkg/observability"
 	"go.opentelemetry.io/otel/attribute"
@@ -45,8 +45,10 @@ func (s *Server) Complete(ctx context.Context, req *adminv1.CompleteRequest) (*a
 		}
 	}
 
-	// Pass messages and tools to the AI service
-	res, err := s.admin.AI.Complete(ctx, &drivers.CompleteOptions{
+	// Pass messages and tools to the AI service. Org-level config (if any) wins
+	// over the deployment-wide env-var config; see admin/ai_config.go.
+	aiService := s.admin.AIForOrg(ctx, s.orgIDForAIRequest(ctx))
+	res, err := aiService.Complete(ctx, &drivers.CompleteOptions{
 		Messages:     messages,
 		Tools:        req.Tools,
 		OutputSchema: outputSchema,

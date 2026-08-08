@@ -11,12 +11,12 @@
 <script lang="ts">
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
-  // `title` is the stable, non-localized section identifier. It doubles as the
-  // drag `zone` key (DragList compares zone === "Time"/"Measures"/"Dimensions"),
+  // `section` is the stable, non-localized section identifier. It doubles as
+  // the drag `zone` key (DragList compares zone === "Time"/"Measures"/"Dimensions"),
   // so it must NOT be localized. `label` is the localized header shown to the
-  // user and defaults to `title` when omitted.
-  export let title: PivotSidebarSection;
-  export let label: string = title;
+  // user and defaults to `section` when omitted.
+  export let section: PivotSidebarSection;
+  export let label: string = section;
   export let items: PivotChipData[];
   export let collapsed = false;
   export let tableMode: PivotTableMode = "nest";
@@ -40,7 +40,7 @@
   {#if !collapsed}
     <div class="w-full h-fit overflow-x-hidden px-[2px] mt-2">
       {#if items.length}
-        <DragList {items} zone={title} {tableMode} />
+        <DragList {items} zone={section} {tableMode} />
       {:else}
         <p class="text-fg-secondary my-1">
           {m.dashboard_no_available_fields()}

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import * as Popover from "@rilldata/web-common/components/popover";
   import * as Tooltip from "@rilldata/web-common/components/tooltip-v2";
   import Button from "web-common/src/components/button/Button.svelte";
@@ -56,7 +57,9 @@
 
       eventBus.emit("notification", {
         type: "success",
-        message: `Dashboard ${share ? "shared" : "hidden"} successfully`,
+        message: share
+          ? m.personal_shared_success()
+          : m.personal_hidden_success(),
       });
     } catch (e) {
       console.error("Error sharing dashboard:", e);
@@ -77,18 +80,18 @@
             selected={open}
             loading={isPending}
           >
-            Share
+            {m.common_share()}
           </Button>
         </Tooltip.Trigger>
-        <Tooltip.Content>Share dashboard</Tooltip.Content>
+        <Tooltip.Content>{m.personal_share_dashboard()}</Tooltip.Content>
       </Tooltip.Root>
     {/snippet}
   </Popover.Trigger>
   <Popover.Content align="end">
     {#if shared}
-      This dashboard is shared with all users in the project.
+      {m.personal_shared_with_all()}
     {:else}
-      Share this dashboard with other users in the project?
+      {m.personal_share_confirm()}
     {/if}
 
     <div class="flex pt-2">
@@ -99,7 +102,7 @@
         {loading}
         disabled={loading}
       >
-        {shared ? "Hide" : "Share"}
+        {shared ? m.common_hide() : m.common_share()}
       </Button>
     </div>
   </Popover.Content>

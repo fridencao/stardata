@@ -2,7 +2,7 @@ import { PivotChipType } from "@rilldata/web-common/features/dashboards/pivot/ty
 import { getProtoFromDashboardState } from "@rilldata/web-common/features/dashboards/proto-state/toProto";
 import { getAllIdentifiers } from "@rilldata/web-common/features/dashboards/stores/filter-utils";
 import type { ExploreState } from "@rilldata/web-common/features/dashboards/stores/explore-state";
-import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+import { DashboardState_ActivePage } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import type {
   MetricsViewSpecDimension,
   MetricsViewSpecMeasure,

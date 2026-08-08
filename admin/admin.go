@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"time"
 
-	"cloud.google.com/go/storage"
 	lru "github.com/hashicorp/golang-lru"
 	"github.com/fridencao/stardata/admin/billing"
 	"github.com/fridencao/stardata/admin/billing/payment"
 	"github.com/fridencao/stardata/admin/database"
 	"github.com/fridencao/stardata/admin/jobs"
+	"github.com/fridencao/stardata/admin/pkg/assetstore"
 	"github.com/fridencao/stardata/admin/provisioner"
 	"github.com/fridencao/stardata/cli/pkg/version"
 	"github.com/fridencao/stardata/runtime/drivers"
@@ -25,6 +25,7 @@ type Options struct {
 	DatabaseDSN                string
 	DatabaseEncryptionKeyring  string
 	ExternalURL                string
+	ExternalGRPCURL            string // Defaults to ExternalURL. Set separately when gRPC is served on a different host/port (e.g. behind an HTTP-only reverse proxy).
 	FrontendURL                string
 	ProvisionerSetJSON         string
 	DefaultProvisioner         string
@@ -35,6 +36,9 @@ type Options struct {
 	ScaleDownConstraint        int
 	AllowMockBilling           bool
 	StoppedDeploymentRetention time.Duration
+	// AIDriver is the deployment-wide LLM driver name resolved from env vars. Kept
+	// for display only: it tells an org admin what applies when no org override exists.
+	AIDriver string
 }
 
 type Service struct {
@@ -43,9 +47,8 @@ type Service struct {
 	URLs                       *URLs
 	ProvisionerSet             map[string]provisioner.Provisioner
 	Email                      *email.Client
-	Github                     Github
 	AI                         drivers.AIService
-	Assets                     *storage.BucketHandle
+	Assets                     assetstore.Store
 	Used                       *usedFlusher
 	Logger                     *zap.Logger
 	opts                       *Options
@@ -59,9 +62,15 @@ type Service struct {
 	StoppedDeploymentRetention time.Duration
 	Biller                     billing.Biller
 	PaymentProvider            payment.Provider
+	aiResolver                 *aiResolver
 }
 
-func New(ctx context.Context, opts *Options, logger *zap.Logger, issuer *auth.Issuer, emailClient *email.Client, github Github, aiService drivers.AIService, assets *storage.BucketHandle, biller billing.Biller, p payment.Provider) (*Service, error) {
+func New(ctx context.Context, opts *Options, logger *zap.Logger, issuer *auth.Issuer, emailClient *email.Client, aiService drivers.AIService, assets assetstore.Store, biller billing.Biller, p payment.Provider) (*Service, error) {
+	// Default the external gRPC URL to the external (HTTP) URL when not set separately.
+	if opts.ExternalGRPCURL == "" {
+		opts.ExternalGRPCURL = opts.ExternalURL
+	}
+
 	// Init db
 	db, err := database.Open(opts.DatabaseDriver, opts.DatabaseDSN, opts.DatabaseEncryptionKeyring)
 	if err != nil {
@@ -128,7 +137,6 @@ func New(ctx context.Context, opts *Options, logger *zap.Logger, issuer *auth.Is
 		URLs:                       urls,
 		ProvisionerSet:             provSet,
 		Email:                      emailClient,
-		Github:                     github,
 		AI:                         aiService,
 		Assets:                     assets,
 		Used:                       newUsedFlusher(logger, db),
@@ -144,10 +152,13 @@ func New(ctx context.Context, opts *Options, logger *zap.Logger, issuer *auth.Is
 		StoppedDeploymentRetention: opts.StoppedDeploymentRetention,
 		Biller:                     biller,
 		PaymentProvider:            p,
+		aiResolver:                 newAIResolver(),
 	}, nil
 }
 
 func (s *Service) Close() error {
+	s.closeAIResolver()
+
 	var allErrs error
 	for _, p := range s.ProvisionerSet {
 		err := p.Close()

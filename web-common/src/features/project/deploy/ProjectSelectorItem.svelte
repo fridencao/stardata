@@ -1,8 +1,7 @@
 <script lang="ts">
   import ExternalLink from "@rilldata/web-common/components/icons/ExternalLink.svelte";
-  import Github from "@rilldata/web-common/components/icons/Github.svelte";
   import StarDataLogoFilled from "@rilldata/web-common/components/icons/StarDataLogoFilled.svelte";
-  import type { Project } from "@rilldata/web-common/proto/gen/rill/admin/v1/api_pb";
+  import type { Project } from "@rilldata/web-common/proto/gen/stardata/admin/v1/api_pb";
   import * as Tooltip from "@rilldata/web-common/components/tooltip-v2";
 
   export let project: Project;
@@ -10,7 +9,6 @@
   export let onClick: () => void = () => {};
 
   let hovered = false;
-  $: isManaged = !project.gitRemote || !!project.managedGitId;
 </script>
 
 <button
@@ -22,16 +20,12 @@
   onmouseleave={() => (hovered = false)}
 >
   <div class="flex flex-row items-center gap-x-2 w-full">
-    {#if isManaged}
-      <Tooltip.Root>
-        <Tooltip.Trigger>
-          <StarDataLogoFilled size="14" />
-        </Tooltip.Trigger>
-        <Tooltip.Content side="bottom">StarData-managed</Tooltip.Content>
-      </Tooltip.Root>
-    {:else}
-      <Github size="14" />
-    {/if}
+    <Tooltip.Root>
+      <Tooltip.Trigger>
+        <StarDataLogoFilled size="14" />
+      </Tooltip.Trigger>
+      <Tooltip.Content side="bottom">StarData-managed</Tooltip.Content>
+    </Tooltip.Root>
     <span class="w-full">{project.orgName}/{project.name}</span>
   </div>
   {#if hovered}

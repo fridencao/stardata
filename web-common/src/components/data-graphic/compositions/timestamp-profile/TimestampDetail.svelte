@@ -6,6 +6,7 @@ Uses index-based scales and TimeSeriesChart for rendering.
 <script lang="ts">
   import TimeSeriesChart from "@rilldata/web-common/components/time-series-chart/TimeSeriesChart.svelte";
   import Tooltip from "@rilldata/web-common/components/tooltip/Tooltip.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import type {
     ChartScales,
     ChartSeries,
@@ -507,7 +508,7 @@ Uses index-based scales and TimeSeriesChart for rendering.
           onkeydown={() => {}}
           onclick={clearZoom}
         >
-          clear zoom &#x2716;
+          {m.graphic_clear_zoom()}
         </text>
       {/if}
     </svg>
@@ -541,13 +542,13 @@ Uses index-based scales and TimeSeriesChart for rendering.
       grain={rollupTimeGrain}
       align="left"
       value={zoomMinDate}
-      label="Min"
+      label={m.graphic_min()}
     />
     <TimestampBound
       grain={rollupTimeGrain}
       align="right"
       value={zoomMaxDate}
-      label="Max"
+      label={m.graphic_max()}
     />
   </div>
 </div>

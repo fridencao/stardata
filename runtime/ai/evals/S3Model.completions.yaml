@@ -41,7 +41,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: assistant
       content_type: tool_call
       id: 4c95fa608a0a4a63
@@ -50,7 +50,7 @@
     - role: tool
       content_type: tool_response
       id: 4c95fa608a0a4a63
-      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
   response:
     - role: assistant
       content_type: tool_call
@@ -3255,7 +3255,7 @@
     - role: tool
       content_type: tool_response
       id: 956724c94cef4222
-      content: '{"diff":"--- /connectors/s3.yaml\n+++ /connectors/s3.yaml\n@@ -1 +1,6 @@\n+type: connector\n+driver: s3\n+aws_access_key_id: \"{{ .env.connector.s3.aws_access_key_id }}\"\n+aws_secret_access_key: \"{{ .env.connector.s3.aws_secret_access_key }}\"\n+region: us-east-1\n \n","is_new_file":true,"resources":[{"kind":"rill.runtime.v1.Connector","name":"s3","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
+      content: '{"diff":"--- /connectors/s3.yaml\n+++ /connectors/s3.yaml\n@@ -1 +1,6 @@\n+type: connector\n+driver: s3\n+aws_access_key_id: \"{{ .env.connector.s3.aws_access_key_id }}\"\n+aws_secret_access_key: \"{{ .env.connector.s3.aws_secret_access_key }}\"\n+region: us-east-1\n \n","is_new_file":true,"resources":[{"kind":"stardata.runtime.v1.Connector","name":"s3","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
   response:
     - role: assistant
       content_type: text
@@ -3289,7 +3289,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: assistant
       content_type: tool_call
       id: 4c95fa608a0a4a63
@@ -3298,7 +3298,7 @@
     - role: tool
       content_type: tool_response
       id: 4c95fa608a0a4a63
-      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 0596544bc1ba4153
@@ -3396,7 +3396,7 @@
     - role: tool
       content_type: tool_response
       id: bc70b8f5ffec4c18
-      content: '{"diff":"--- /models/glob_test_csv.yaml\n+++ /models/glob_test_csv.yaml\n@@ -1 +1,11 @@\n+type: model\n+materialize: true\n \n+# Use DuckDB as the execution engine and rely on the project''s S3 connector\n+# credentials being mounted as DuckDB secrets.\n+create_secrets_from_connectors: s3\n+\n+sql: |\n+  SELECT *\n+  FROM read_csv_auto(''s3://integration-test.rilldata.com/glob_test/y=*/*.csv'')\n+\n","is_new_file":true,"resources":[{"kind":"rill.runtime.v1.Model","name":"glob_test_csv","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
+      content: '{"diff":"--- /models/glob_test_csv.yaml\n+++ /models/glob_test_csv.yaml\n@@ -1 +1,11 @@\n+type: model\n+materialize: true\n \n+# Use DuckDB as the execution engine and rely on the project''s S3 connector\n+# credentials being mounted as DuckDB secrets.\n+create_secrets_from_connectors: s3\n+\n+sql: |\n+  SELECT *\n+  FROM read_csv_auto(''s3://integration-test.rilldata.com/glob_test/y=*/*.csv'')\n+\n","is_new_file":true,"resources":[{"kind":"stardata.runtime.v1.Model","name":"glob_test_csv","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
   response:
     - role: assistant
       content_type: text
@@ -3426,7 +3426,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: assistant
       content_type: tool_call
       id: 4c95fa608a0a4a63
@@ -3435,7 +3435,7 @@
     - role: tool
       content_type: tool_response
       id: 4c95fa608a0a4a63
-      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 0596544bc1ba4153
@@ -3480,7 +3480,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: assistant
       content_type: tool_call
       id: 4c95fa608a0a4a63
@@ -3489,7 +3489,7 @@
     - role: tool
       content_type: tool_response
       id: 4c95fa608a0a4a63
-      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 0596544bc1ba4153
@@ -3543,7 +3543,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: assistant
       content_type: tool_call
       id: 4c95fa608a0a4a63
@@ -3552,7 +3552,7 @@
     - role: tool
       content_type: tool_response
       id: 4c95fa608a0a4a63
-      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 0596544bc1ba4153
@@ -3588,7 +3588,7 @@
     - role: tool
       content_type: tool_response
       id: 03b850e545234d2b
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
   response:
     - role: assistant
       content_type: tool_call
@@ -3615,7 +3615,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: assistant
       content_type: tool_call
       id: 4c95fa608a0a4a63
@@ -3624,7 +3624,7 @@
     - role: tool
       content_type: tool_response
       id: 4c95fa608a0a4a63
-      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 0596544bc1ba4153
@@ -3660,7 +3660,7 @@
     - role: tool
       content_type: tool_response
       id: 03b850e545234d2b
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 7e577b581aeb4cf4
@@ -3696,7 +3696,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: assistant
       content_type: tool_call
       id: 4c95fa608a0a4a63
@@ -3705,7 +3705,7 @@
     - role: tool
       content_type: tool_response
       id: 4c95fa608a0a4a63
-      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 0596544bc1ba4153
@@ -3741,7 +3741,7 @@
     - role: tool
       content_type: tool_response
       id: 03b850e545234d2b
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 7e577b581aeb4cf4
@@ -3786,7 +3786,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: assistant
       content_type: tool_call
       id: 4c95fa608a0a4a63
@@ -3795,7 +3795,7 @@
     - role: tool
       content_type: tool_response
       id: 4c95fa608a0a4a63
-      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 0596544bc1ba4153
@@ -3831,7 +3831,7 @@
     - role: tool
       content_type: tool_response
       id: 03b850e545234d2b
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 7e577b581aeb4cf4
@@ -3885,7 +3885,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: system
       content_type: text
       content: '... [2 messages omitted for brevity] ...'
@@ -3924,7 +3924,7 @@
     - role: tool
       content_type: tool_response
       id: 03b850e545234d2b
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 7e577b581aeb4cf4
@@ -3987,7 +3987,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: system
       content_type: text
       content: '... [4 messages omitted for brevity] ...'
@@ -4017,7 +4017,7 @@
     - role: tool
       content_type: tool_response
       id: 03b850e545234d2b
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 7e577b581aeb4cf4
@@ -7269,7 +7269,7 @@
     - role: tool
       content_type: tool_response
       id: efe61d6adebb475b
-      content: '{"resources":[{"kind":"rill.runtime.v1.Connector","name":"s3","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
+      content: '{"resources":[{"kind":"stardata.runtime.v1.Connector","name":"s3","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
   response:
     - role: assistant
       content_type: text
@@ -7303,7 +7303,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: system
       content_type: text
       content: '... [6 messages omitted for brevity] ...'
@@ -7324,7 +7324,7 @@
     - role: tool
       content_type: tool_response
       id: 03b850e545234d2b
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 7e577b581aeb4cf4
@@ -7463,7 +7463,7 @@
     - role: tool
       content_type: tool_response
       id: 2be04a10f8d342f5
-      content: '{"diff":"--- /models/glob_test_csv.yaml\n+++ /models/glob_test_csv.yaml\n@@ -1,8 +1,7 @@\n type: model\n materialize: true\n \n-# Use DuckDB as the execution engine and rely on the project''s S3 connector\n-# credentials being mounted as DuckDB secrets.\n+# Ensure DuckDB can access S3 using credentials from the `s3` connector\n create_secrets_from_connectors: s3\n \n sql: |\n","resources":[{"kind":"rill.runtime.v1.Model","name":"glob_test_csv","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
+      content: '{"diff":"--- /models/glob_test_csv.yaml\n+++ /models/glob_test_csv.yaml\n@@ -1,8 +1,7 @@\n type: model\n materialize: true\n \n-# Use DuckDB as the execution engine and rely on the project''s S3 connector\n-# credentials being mounted as DuckDB secrets.\n+# Ensure DuckDB can access S3 using credentials from the `s3` connector\n create_secrets_from_connectors: s3\n \n sql: |\n","resources":[{"kind":"stardata.runtime.v1.Model","name":"glob_test_csv","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]}'
   response:
     - role: assistant
       content_type: text
@@ -7499,7 +7499,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: system
       content_type: text
       content: '... [8 messages omitted for brevity] ...'
@@ -7511,7 +7511,7 @@
     - role: tool
       content_type: tool_response
       id: 03b850e545234d2b
-      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.openai.api_key","connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 7e577b581aeb4cf4
@@ -7601,7 +7601,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: system
       content_type: text
       content: '... [10 messages omitted for brevity] ...'
@@ -7703,7 +7703,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: system
       content_type: text
       content: '... [12 messages omitted for brevity] ...'
@@ -7778,7 +7778,7 @@
     - role: tool
       content_type: tool_response
       id: 8b4f9651ba5c4def
-      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
   response:
     - role: assistant
       content_type: tool_call
@@ -7805,7 +7805,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: system
       content_type: text
       content: '... [14 messages omitted for brevity] ...'
@@ -7871,7 +7871,7 @@
     - role: tool
       content_type: tool_response
       id: 8b4f9651ba5c4def
-      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 398742055e44403c
@@ -7907,7 +7907,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: system
       content_type: text
       content: '... [16 messages omitted for brevity] ...'
@@ -7964,7 +7964,7 @@
     - role: tool
       content_type: tool_response
       id: 8b4f9651ba5c4def
-      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 398742055e44403c
@@ -8009,7 +8009,7 @@
     - role: tool
       content_type: tool_response
       id: 3c169dbb99384df4
-      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"rill.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
+      content: '{"files":[{"path":"/connectors/duckdb.yaml","resources":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb","reconcile_error":"","reconcile_status":"RECONCILE_STATUS_IDLE"}]},{"path":"/rill.yaml"}]}'
     - role: system
       content_type: text
       content: '... [18 messages omitted for brevity] ...'
@@ -8057,7 +8057,7 @@
     - role: tool
       content_type: tool_response
       id: 8b4f9651ba5c4def
-      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"rill.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"rill.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"rill.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
+      content: '{"default_olap_connector":"duckdb","env":["connector.s3.aws_access_key_id","connector.s3.aws_secret_access_key","connector.openai.api_key"],"resources":[{"kind":"stardata.runtime.v1.ProjectParser","name":"parser","path":"","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"duckdb","path":"/connectors/duckdb.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Connector","name":"s3","path":"/connectors/s3.yaml","refs":[],"status":"OK"},{"kind":"stardata.runtime.v1.Model","name":"glob_test_csv","path":"/models/glob_test_csv.yaml","refs":[{"kind":"stardata.runtime.v1.Connector","name":"duckdb"}],"status":"OK"}],"parse_errors":[]}'
     - role: assistant
       content_type: tool_call
       id: 398742055e44403c

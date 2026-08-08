@@ -95,12 +95,7 @@
             domain: `<b>@${escapeHtml($userDomain.data)}</b>`,
             role: `<b>${escapeHtml(m.role_viewer())}</b>`,
           })}
-          <a
-            target="_blank"
-            href="https://docs.rilldata.com/reference/cli/user/whitelist"
-          >
-            {m.common_learn_more()}
-          </a>
+          <span>{m.common_learn_more()}</span>
         </Label>
       </div>
     </div>

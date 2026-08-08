@@ -219,15 +219,5 @@
       padding-left: 1rem;
       padding-right: 1rem;
     }
-
-    .chat-messages.fullpage .chat-empty-title {
-      font-size: 1.25rem;
-      line-height: 1.75rem;
-    }
-
-    .chat-messages.fullpage .chat-empty-subtitle {
-      font-size: 0.875rem;
-      line-height: 1.25rem;
-    }
   }
 </style>

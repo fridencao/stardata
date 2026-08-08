@@ -84,7 +84,6 @@ type DB interface {
 	FindProjectsForOrgAndUser(ctx context.Context, orgID, userID string, includePublic, includeGroups bool, afterProjectName string, limit int) ([]*Project, error)
 	FindPublicProjectsInOrganization(ctx context.Context, orgID, afterProjectName string, limit int) ([]*Project, error)
 	FindProjectsByGitRemote(ctx context.Context, remote string) ([]*Project, error)
-	FindProjectsByGithubInstallationID(ctx context.Context, id int64) ([]*Project, error)
 	FindProject(ctx context.Context, id string) (*Project, error)
 	FindProjectByName(ctx context.Context, orgName string, name string) (*Project, error)
 	FindProjectsByNameAndUser(ctx context.Context, name, userID string) ([]*Project, error)
@@ -321,6 +320,58 @@ type DB interface {
 	InsertAsset(ctx context.Context, id string, organizationID, path, ownerID string, public bool) (*Asset, error)
 	DeleteAssets(ctx context.Context, ids []string) error
 
+	FindProjectPublishes(ctx context.Context, projectID string, limit int) ([]*ProjectPublish, error)
+	FindProjectPublish(ctx context.Context, projectID string, version int) (*ProjectPublish, error)
+	InsertProjectPublish(ctx context.Context, opts *InsertProjectPublishOptions) (*ProjectPublish, error)
+
+	InsertAuditEvent(ctx context.Context, opts *InsertAuditEventOptions) error
+	ListAuditEventsForOrg(ctx context.Context, orgID string, filter *AuditEventFilter, limit int) ([]*AuditEvent, error)
+
+	FindOrgAIConfig(ctx context.Context, orgID string) (*OrgAIConfig, error)
+	UpsertOrgAIConfig(ctx context.Context, opts *UpsertOrgAIConfigOptions) (*OrgAIConfig, error)
+	DeleteOrgAIConfig(ctx context.Context, orgID string) error
+
+	// Semantic resources (StarData Phase 5): the DB-versioned replacement for yaml files.
+	FindSemanticResources(ctx context.Context, projectID string, status SemanticResourceStatus) ([]*SemanticResource, error)
+	FindSemanticResource(ctx context.Context, projectID, kind, name string, status SemanticResourceStatus) (*SemanticResource, error)
+	InsertSemanticResource(ctx context.Context, opts *InsertSemanticResourceOptions) (*SemanticResource, error)
+	DeleteSemanticResource(ctx context.Context, projectID, kind, name string) error
+	FindSemanticResourceFingerprint(ctx context.Context, projectID string, status SemanticResourceStatus) (string, error)
+
+	// Editing locks (StarData Phase 5): project-level draft lock.
+	FindEditingLock(ctx context.Context, projectID string) (*EditingLock, error)
+	AcquireEditingLock(ctx context.Context, projectID, userID string, ttl time.Duration) (*EditingLock, error)
+	HeartbeatEditingLock(ctx context.Context, projectID, userID string, ttl time.Duration) (*EditingLock, error)
+	ReleaseEditingLock(ctx context.Context, projectID, userID string) error
+	ForceReleaseEditingLock(ctx context.Context, projectID string) error
+	DeleteExpiredEditingLocks(ctx context.Context) (int, error)
+
+	// Project versions (StarData Phase 5.2): atomic publish snapshots.
+	InsertProjectVersion(ctx context.Context, opts *InsertProjectVersionOptions) (*ProjectVersion, error)
+	FindProjectVersion(ctx context.Context, id string) (*ProjectVersion, error)
+	FindLatestProjectVersion(ctx context.Context, projectID string, status ProjectVersionStatus) (*ProjectVersion, error)
+	ListProjectVersions(ctx context.Context, projectID string, limit int) ([]*ProjectVersion, error)
+	UpdateProjectVersionStatus(ctx context.Context, id string, status ProjectVersionStatus, report []byte) error
+	// SnapshotDraftResources atomically associates the latest draft resources with a
+	// version. It returns the number of resources snapshotted. If the project has no
+	// draft resources, it returns 0 (no error).
+	SnapshotDraftResources(ctx context.Context, projectVersionID, projectID string) (int, error)
+	// FindProjectVersionResources returns the resource rows frozen into a version.
+	FindProjectVersionResources(ctx context.Context, projectVersionID string) ([]*SemanticResource, error)
+	// SetProjectCurrentPublishedVersion updates projects.current_published_version_id.
+	SetProjectCurrentPublishedVersion(ctx context.Context, projectID, versionID string) error
+
+	// Resource visibility (StarData Phase 5.2): per-resource business visibility.
+	ListResourceVisibility(ctx context.Context, projectID string) ([]*ResourceVisibility, error)
+	UpsertResourceVisibility(ctx context.Context, opts *UpsertResourceVisibilityOptions) (*ResourceVisibility, error)
+
+	// Rollback requests (StarData Phase 5.3): dual-approval rollback.
+	InsertRollbackRequest(ctx context.Context, opts *InsertRollbackRequestOptions) (*RollbackRequest, error)
+	FindRollbackRequest(ctx context.Context, id string) (*RollbackRequest, error)
+	FindPendingRollbackRequest(ctx context.Context, projectID string) (*RollbackRequest, error)
+	ListRollbackRequests(ctx context.Context, projectID string, limit int) ([]*RollbackRequest, error)
+	ResolveRollbackRequest(ctx context.Context, id string, status RollbackRequestStatus, approvedByUserID *string) error
+
 	FindOrganizationIDsWithBilling(ctx context.Context) ([]string, error)
 	FindOrganizationIDsWithoutBilling(ctx context.Context) ([]string, error)
 
@@ -351,15 +402,13 @@ type DB interface {
 	UpdateProvisionerResource(ctx context.Context, id string, opts *UpdateProvisionerResourceOptions) (*ProvisionerResource, error)
 	DeleteProvisionerResource(ctx context.Context, id string) error
 
-	FindManagedGitRepos(ctx context.Context, afterRemote string, limit int) ([]*ManagedGitRepo, error)
-	FindManagedGitRepo(ctx context.Context, remote string) (*ManagedGitRepo, error)
-	FindUnusedManagedGitRepos(ctx context.Context, limit int) ([]*ManagedGitRepo, error)
-	CountManagedGitRepos(ctx context.Context, orgID string) (int, error)
-	InsertManagedGitRepo(ctx context.Context, opts *InsertManagedGitRepoOptions) (*ManagedGitRepo, error)
-	DeleteManagedGitRepos(ctx context.Context, ids []string) error
-
-	FindGitRepoTransfer(ctx context.Context, remote string) (*GitRepoTransfer, error)
-	InsertGitRepoTransfer(ctx context.Context, fromRemote, toRemote string) (*GitRepoTransfer, error)
+	// Feature access control
+	UpsertFeatureAccess(ctx context.Context, orgID string, projectID *string, subjectType, subjectID, featureKey string, granted bool, createdBy *string) error
+	DeleteFeatureAccess(ctx context.Context, orgID string, projectID *string, subjectType, subjectID, featureKey string) error
+	ListFeatureAccessRows(ctx context.Context, orgID string, projectID *string, subjectType *string, subjectID *string) ([]*FeatureAccessRow, error)
+	GetOrgFeatureDefaults(ctx context.Context, orgID string) (map[string]bool, error)
+	SetOrgFeatureDefault(ctx context.Context, orgID, featureKey string, granted bool) error
+	ResolveSubjectFeatureAccess(ctx context.Context, orgID, projectID, subjectType, subjectID string, features []string) (map[string]bool, error)
 }
 
 // Tx represents a database transaction. It can only be used to commit and rollback transactions.
@@ -519,6 +568,14 @@ type Project struct {
 	// Annotations are internally configured key-value metadata about the project.
 	// They propagate to the project's deployments and telemetry.
 	Annotations map[string]string `db:"annotations"`
+	// SemanticLayerMode selects between the legacy archive-based semantic layer
+	// (files in a tar.gz) and the Phase-5 DB-versioned semantic layer (rows in
+	// the semantic_resources table). New projects default to "archive" for
+	// backwards compatibility; DB mode is opt-in per project.
+	SemanticLayerMode string `db:"semantic_layer_mode"`
+	// CurrentPublishedVersionID points to the project_versions row that the
+	// runtime is currently serving to business users. NULL until first publish.
+	CurrentPublishedVersionID *string `db:"current_published_version_id"`
 	// CreatedOn is the time the project was created.
 	CreatedOn time.Time `db:"created_on"`
 	// UpdatedOn is the time the project was last updated.
@@ -848,6 +905,19 @@ type MagicAuthToken struct {
 type ResourceName struct {
 	Type string `json:"type"`
 	Name string `json:"name"`
+}
+
+// FeatureAccessRow represents a per-user / per-user-group feature access override.
+// ProjectID is nil when the override is org-scoped.
+type FeatureAccessRow struct {
+	ID          string    `db:"id"`
+	OrgID       string    `db:"org_id"`
+	ProjectID   *string   `db:"project_id"`
+	SubjectType string    `db:"subject_type"`
+	SubjectID   string    `db:"subject_id"`
+	FeatureKey  string    `db:"feature_key"`
+	Granted     bool      `db:"granted"`
+	CreatedOn   time.Time `db:"created_on"`
 }
 
 // MagicAuthTokenWithUser is a MagicAuthToken with additional information about the user who created it.
@@ -1256,6 +1326,214 @@ type Asset struct {
 	CreatedOn      time.Time `db:"created_on"`
 }
 
+// ProjectPublish is a versioned snapshot of a project's files, packaged as an archive asset (StarData).
+// It records the publish history that powers the publish page and rollback.
+type ProjectPublish struct {
+	ID          string    `db:"id"`
+	ProjectID   string    `db:"project_id"`
+	AssetID     string    `db:"asset_id"`
+	Version     int       `db:"version"`
+	Note        string    `db:"note"`
+	PublishedBy string    `db:"published_by"`
+	CreatedOn   time.Time `db:"created_on"`
+}
+
+// InsertProjectPublishOptions defines options for inserting a ProjectPublish.
+// Version is assigned automatically as the next value for the project.
+type InsertProjectPublishOptions struct {
+	ProjectID   string
+	AssetID     string
+	Note        string
+	PublishedBy string
+}
+
+// AuditEvent is an append-only record of an administrative mutation (StarData).
+// It powers the compliance audit view and the operational tracing needed for
+// enterprise deployments. Payload is a small JSON blob with event-specific
+// details (e.g. rollback source version, previous role, published archive id).
+type AuditEvent struct {
+	ID          string    `db:"id"`
+	OrgID       string    `db:"org_id"`
+	ProjectID   *string   `db:"project_id"`
+	ActorUserID *string   `db:"actor_user_id"`
+	EventType   string    `db:"event_type"`
+	TargetID    string    `db:"target_id"`
+	Payload     []byte    `db:"payload"`
+	CreatedOn   time.Time `db:"created_on"`
+}
+
+// InsertAuditEventOptions defines the fields recorded on a new audit event.
+type InsertAuditEventOptions struct {
+	OrgID       string
+	ProjectID   *string
+	ActorUserID *string
+	EventType   string
+	TargetID    string
+	Payload     map[string]any
+}
+
+// AuditEventFilter narrows an audit-event listing. All fields are optional.
+type AuditEventFilter struct {
+	ProjectID *string
+	EventType string
+}
+
+// OrgAIConfig is an org-scoped LLM provider configuration (StarData). When present
+// it overrides the deployment-wide env-var AI config for that org's completions.
+// APIKey is already decrypted when read back via FindOrgAIConfig.
+type OrgAIConfig struct {
+	OrgID           string    `db:"org_id"`
+	Driver          string    `db:"driver"`
+	BaseURL         string    `db:"base_url"`
+	Model           string    `db:"model"`
+	APIKey          []byte    `db:"api_key"`
+	APIKeyEncKeyID  string    `db:"api_key_encryption_key_id"`
+	UpdatedByUserID *string   `db:"updated_by_user_id"`
+	CreatedOn       time.Time `db:"created_on"`
+	UpdatedOn       time.Time `db:"updated_on"`
+}
+
+// UpsertOrgAIConfigOptions defines the fields written when saving an org AI config.
+// APIKey is the plaintext key; the postgres layer encrypts it with the keyring.
+// If APIKey is nil the existing stored key is preserved (so the UI need not
+// re-send the secret on every edit).
+type UpsertOrgAIConfigOptions struct {
+	OrgID           string
+	Driver          string
+	BaseURL         string
+	Model           string
+	APIKey          []byte
+	KeepExistingKey bool
+	UpdatedByUserID *string
+}
+
+// SemanticResourceStatus constrains the status column in semantic_resources.
+type SemanticResourceStatus string
+
+const (
+	SemanticResourceStatusDraft      SemanticResourceStatus = "draft"
+	SemanticResourceStatusPublished  SemanticResourceStatus = "published"
+	SemanticResourceStatusValidating SemanticResourceStatus = "validating"
+	SemanticResourceStatusRejected   SemanticResourceStatus = "rejected"
+)
+
+// SemanticResource is one version of a semantic definition stored in the DB.
+type SemanticResource struct {
+	ID              string                 `db:"id"`
+	ProjectID       string                 `db:"project_id"`
+	ResourceKind    string                 `db:"resource_kind"`
+	ResourceName    string                 `db:"resource_name"`
+	Definition      []byte                 `db:"definition"` // JSONB
+	Version         int                    `db:"version"`
+	Status          SemanticResourceStatus `db:"status"`
+	CreatedByUserID *string                `db:"created_by_user_id"`
+	CreatedOn       time.Time              `db:"created_on"`
+	UpdatedOn       time.Time              `db:"updated_on"`
+}
+
+// InsertSemanticResourceOptions defines the inputs for creating a new semantic resource version.
+type InsertSemanticResourceOptions struct {
+	ProjectID       string
+	ResourceKind    string
+	ResourceName    string
+	Definition      []byte // JSONB
+	CreatedByUserID *string
+}
+
+// EditingLock is a project-level editing lock row.
+type EditingLock struct {
+	ProjectID      string    `db:"project_id"`
+	LockedByUserID string    `db:"locked_by_user_id"`
+	LockedAt       time.Time `db:"locked_at"`
+	LastHeartbeat  time.Time `db:"last_heartbeat"`
+	ExpiresAt      time.Time `db:"expires_at"`
+}
+
+// ProjectVersionStatus constrains the status column in project_versions.
+type ProjectVersionStatus string
+
+const (
+	ProjectVersionStatusDraft      ProjectVersionStatus = "draft"
+	ProjectVersionStatusValidating ProjectVersionStatus = "validating"
+	ProjectVersionStatusPublished  ProjectVersionStatus = "published"
+	ProjectVersionStatusRejected   ProjectVersionStatus = "rejected"
+)
+
+// ProjectVersion is an atomic snapshot of a project's semantic resources.
+type ProjectVersion struct {
+	ID                string               `db:"id"`
+	ProjectID         string               `db:"project_id"`
+	Version           int                  `db:"version"`
+	Status            ProjectVersionStatus `db:"status"`
+	PublishedByUserID *string              `db:"published_by_user_id"`
+	PublishedOn       *time.Time           `db:"published_on"`
+	Note              string               `db:"note"`
+	ValidationReport  []byte               `db:"validation_report"` // JSONB, may be nil
+	CreatedOn         time.Time            `db:"created_on"`
+	UpdatedOn         time.Time            `db:"updated_on"`
+}
+
+// InsertProjectVersionOptions defines the inputs for opening a new version.
+// A version starts in 'validating' because the dry-run gate runs before it can be
+// published; it never appears as published without passing that gate.
+type InsertProjectVersionOptions struct {
+	ProjectID         string
+	Note              string
+	PublishedByUserID *string
+}
+
+// ResourceVisibility is the per-resource business-visibility flag. Absent rows and
+// visible=false mean the same thing (fail-closed).
+type ResourceVisibility struct {
+	ID              string    `db:"id"`
+	ProjectID       string    `db:"project_id"`
+	ResourceKind    string    `db:"resource_kind"`
+	ResourceName    string    `db:"resource_name"`
+	Visible         bool      `db:"visible"`
+	UpdatedByUserID *string   `db:"updated_by_user_id"`
+	UpdatedOn       time.Time `db:"updated_on"`
+}
+
+// UpsertResourceVisibilityOptions defines the write for toggling a resource on or off.
+type UpsertResourceVisibilityOptions struct {
+	ProjectID       string
+	ResourceKind    string
+	ResourceName    string
+	Visible         bool
+	UpdatedByUserID *string
+}
+
+// RollbackRequestStatus constrains the rollback_requests.status column.
+type RollbackRequestStatus string
+
+const (
+	RollbackRequestStatusPending  RollbackRequestStatus = "pending"
+	RollbackRequestStatusApproved RollbackRequestStatus = "approved"
+	RollbackRequestStatusRejected RollbackRequestStatus = "rejected"
+	RollbackRequestStatusExecuted RollbackRequestStatus = "executed"
+)
+
+// RollbackRequest is a request to roll a DB-mode project back to a previous version.
+type RollbackRequest struct {
+	ID                string                `db:"id"`
+	ProjectID         string                `db:"project_id"`
+	TargetVersion     int                   `db:"target_version"`
+	RequestedByUserID string                `db:"requested_by_user_id"`
+	ApprovedByUserID  *string               `db:"approved_by_user_id"`
+	Status            RollbackRequestStatus `db:"status"`
+	Reason            string                `db:"reason"`
+	RequestedOn       time.Time             `db:"requested_on"`
+	ResolvedOn        *time.Time            `db:"resolved_on"`
+}
+
+// InsertRollbackRequestOptions defines the input to open a rollback request.
+type InsertRollbackRequestOptions struct {
+	ProjectID         string
+	TargetVersion     int
+	RequestedByUserID string
+	Reason            string
+}
+
 // ProjectVariable represents a key-value variable for a project, possible for a specific environment (e.g. production or development).
 type ProjectVariable struct {
 	ID                   string    `db:"id"`
@@ -1474,22 +1752,6 @@ type UpdateProvisionerResourceOptions struct {
 	Config        map[string]any
 }
 
-// ManagedGitRepo represents metadata about a Rill managed Git repository for projects deployed on Rill Cloud.
-type ManagedGitRepo struct {
-	ID        string    `db:"id"`
-	OrgID     *string   `db:"org_id"`
-	Remote    string    `db:"remote"`
-	OwnerID   string    `db:"owner_id"`
-	CreatedOn time.Time `db:"created_on"`
-	UpdatedOn time.Time `db:"updated_on"`
-}
-
-type InsertManagedGitRepoOptions struct {
-	OrgID   string `validate:"required"`
-	Remote  string `validate:"required"`
-	OwnerID string `validate:"required"`
-}
-
 type OrganizationMemberService struct {
 	ID              string
 	Name            string
@@ -1520,11 +1782,4 @@ type ProjectMemberServiceWithProject struct {
 	Attributes  map[string]any `db:"attributes"`
 	CreatedOn   time.Time      `db:"created_on"`
 	UpdatedOn   time.Time      `db:"updated_on"`
-}
-
-// GitRepoTransfer tracks a transfer of a project between two Git repositories.
-// This is set when a user switches a rill managed repo to self hosted Git repo.
-type GitRepoTransfer struct {
-	From string `db:"from_git_remote"`
-	To   string `db:"to_git_remote"`
 }

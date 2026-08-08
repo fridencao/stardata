@@ -3,14 +3,10 @@
   import { page } from "$app/stores";
   import type { V1OrganizationInvite } from "@rilldata/web-admin/client";
   import { createAdminServiceGetCurrentUser } from "@rilldata/web-admin/client";
-  import ChangeBillingContactDialog from "@rilldata/web-admin/features/billing/contact/ChangeBillingContactDialog.svelte";
-  import { getOrganizationBillingContactUser } from "@rilldata/web-admin/features/billing/contact/selectors";
   import AddUsersDialog from "@rilldata/web-admin/features/organizations/user-management/dialogs/AddUsersDialog.svelte";
-  import ChangingBillingContactRoleDialog from "@rilldata/web-admin/features/organizations/user-management/dialogs/ChangingBillingContactRoleDialog.svelte";
   import EditUserGroupDialog from "@rilldata/web-admin/features/organizations/user-management/dialogs/EditUserGroupDialog.svelte";
   import OrgUsersFilters from "@rilldata/web-admin/features/organizations/user-management/OrgUsersFilters.svelte";
   import OrgUsersTable from "@rilldata/web-admin/features/organizations/user-management/table/users/OrgUsersTable.svelte";
-  import RemovingBillingContactDialog from "@rilldata/web-admin/features/organizations/user-management/dialogs/RemovingBillingContactDialog.svelte";
   import {
     getOrgUserInvites,
     getOrgUserMembers,
@@ -30,9 +26,6 @@
   let isSuperUser = false;
 
   let isAddUserDialogOpen = false;
-  let isRemovingBillingContactDialogOpen = false;
-  let isChangingBillingContactRoleDialogOpen = false;
-  let isUpdateBillingContactDialogOpen = false;
   let isEditUserGroupDialogOpen = false;
   let editingUserGroupName = "";
 
@@ -122,7 +115,6 @@
     });
 
   const currentUser = createAdminServiceGetCurrentUser();
-  $: billingContactUser = getOrganizationBillingContactUser(organization);
 </script>
 
 <div class="flex flex-col w-full">
@@ -164,13 +156,8 @@
           invitesQuery={$orgInvitesInfiniteQuery}
           currentUserEmail={$currentUser.data?.user.email}
           {organizationPermissions}
-          billingContact={$billingContactUser?.email}
           {scrollToTopTrigger}
           guestOnly={false}
-          onAttemptRemoveBillingContactUser={() =>
-            (isRemovingBillingContactDialogOpen = true)}
-          onAttemptChangeBillingContactUserRole={() =>
-            (isChangingBillingContactRoleDialogOpen = true)}
           onEditUserGroup={(groupName) => {
             editingUserGroupName = groupName;
             isEditUserGroupDialogOpen = true;
@@ -187,22 +174,6 @@
   email={userEmail}
   role={userRole}
   {isSuperUser}
-/>
-
-<RemovingBillingContactDialog
-  bind:open={isRemovingBillingContactDialogOpen}
-  onChange={() => (isUpdateBillingContactDialogOpen = true)}
-/>
-
-<ChangingBillingContactRoleDialog
-  bind:open={isChangingBillingContactRoleDialogOpen}
-  onChange={() => (isUpdateBillingContactDialogOpen = true)}
-/>
-
-<ChangeBillingContactDialog
-  bind:open={isUpdateBillingContactDialogOpen}
-  {organization}
-  currentBillingContact={$billingContactUser?.email}
 />
 
 {#if editingUserGroupName}

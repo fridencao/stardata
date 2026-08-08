@@ -13,7 +13,7 @@ import (
 	"sync"
 
 	"github.com/hashicorp/golang-lru/simplelru"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/drivers/slack"
 	"github.com/fridencao/stardata/runtime/parser"
@@ -46,6 +46,14 @@ const (
 	ReadAPI        Permission = 0x19
 	ReadResolvers  Permission = 0x1A
 	UseAI          Permission = 0x1B
+
+	// StarData feature-access permissions. These back the per-user/per-group feature
+	// matrix (see design/feature-access-control.md) so that turning a feature off is
+	// enforced server-side, not just hidden in the UI.
+	// NOTE: absence means denied, so the admin service must grant them explicitly.
+	ReadDashboards Permission = 0x1C
+	ReadReports    Permission = 0x1D
+	ReadAlerts     Permission = 0x1E
 )
 
 // AllPermissions is a list of all valid Permission values.
@@ -63,6 +71,9 @@ var AllPermissions = []Permission{
 	ReadAPI,
 	ReadResolvers,
 	UseAI,
+	ReadDashboards,
+	ReadReports,
+	ReadAlerts,
 }
 
 // SecurityClaims represents contextual information for the enforcement of security rules.

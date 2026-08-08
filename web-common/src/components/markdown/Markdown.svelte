@@ -18,7 +18,7 @@
   }
 
   :global(.chat-markdown h1) {
-    @apply text-lg font-semibold mb-2;
+    @apply text-xl font-semibold mb-2;
     margin-top: 1rem;
   }
 
@@ -27,7 +27,7 @@
   }
 
   :global(.chat-markdown h2) {
-    @apply text-base font-semibold mb-2;
+    @apply text-lg font-semibold mb-2;
     margin-top: 0.75rem;
   }
 
@@ -36,7 +36,7 @@
   }
 
   :global(.chat-markdown h3) {
-    @apply text-sm font-semibold;
+    @apply text-base font-semibold;
     margin-top: 0.75rem;
     margin-bottom: 0.25rem;
   }
@@ -48,7 +48,7 @@
   :global(.chat-markdown h4),
   :global(.chat-markdown h5),
   :global(.chat-markdown h6) {
-    @apply text-sm font-medium;
+    @apply text-base font-medium;
     margin-top: 0.5rem;
     margin-bottom: 0.25rem;
   }
@@ -60,7 +60,7 @@
   }
 
   :global(.chat-markdown p) {
-    @apply text-sm;
+    @apply text-base;
     margin-bottom: 0.5rem;
   }
 
@@ -69,7 +69,7 @@
   }
 
   :global(.chat-markdown ul) {
-    @apply text-sm;
+    @apply text-base;
     list-style-type: disc;
     padding-left: 1.5rem;
     margin-bottom: 0.5rem;
@@ -80,7 +80,7 @@
   }
 
   :global(.chat-markdown ol) {
-    @apply text-sm;
+    @apply text-base;
     list-style-type: decimal;
     padding-left: 1.5rem;
     margin-bottom: 0.5rem;
@@ -99,7 +99,7 @@
   }
 
   :global(.chat-markdown blockquote) {
-    @apply border-l-2 border-gray-300 italic text-fg-secondary text-sm;
+    @apply border-l-2 border-gray-300 italic text-fg-secondary text-base;
     padding-left: 0.75rem;
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;

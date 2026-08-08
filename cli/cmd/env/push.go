@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/fridencao/stardata/runtime/parser"
 	"github.com/spf13/cobra"
 )
@@ -38,7 +38,7 @@ func PushCmd(ch *cmdutil.Helper) *cobra.Command {
 				return fmt.Errorf("failed to parse project: %w", err)
 			}
 			if p.RillYAML == nil {
-				return fmt.Errorf("not a valid Rill project (missing a rill.yaml file)")
+				return fmt.Errorf("not a valid StarData project (missing a rill.yaml file)")
 			}
 
 			// Find the cloud project name

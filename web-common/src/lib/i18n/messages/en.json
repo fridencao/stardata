@@ -1,5 +1,28 @@
 {
   "$schema": "https://inlang.com/schema/inlang-message-format",
+  "add_data_connect_your_data": "Connect your data",
+  "add_data_creating_dashboard": "Creating your dashboard",
+  "add_data_generate_dashboard": "Generate dashboard",
+  "add_data_generate_sample": "Generate sample data",
+  "add_data_import_failed": "Data import failed",
+  "add_data_import_success": "Data imported successfully!",
+  "add_data_import_table_form_aria": "Import Table Form",
+  "add_data_ingested_next": "has been ingested. What would you like to do next?",
+  "add_data_ingesting": "Ingesting data...",
+  "add_data_ingesting_detail": "Processing may take several minutes depending on file size. The upload continues in the background, and you'll receive a notification when it's complete. You can safely close this window — the import will continue in the background.",
+  "add_data_no_matches": "No matches found",
+  "add_data_pick_table": "Pick a table to power your first dashboard",
+  "add_data_pick_table_or_sql": "Pick a table or input your SQL to power your first dashboard",
+  "add_data_safe_to_close": "Safe to close this window, we'll notify you when complete.",
+  "add_data_save_and_exit": "Save and exit",
+  "add_data_save_connector": "Save connector",
+  "add_data_see_more_connectors": "See more connectors",
+  "add_data_skip_view_project": "Skip and view project",
+  "add_data_try_again": "Try again",
+  "add_data_view_source": "View this source",
+  "add_data_view_yaml": "View YAML",
+  "add_data_where_is_data": "Where is your data?",
+  "add_data_with_ai": "with AI",
   "alert_context_menu_aria": "Alert context menu",
   "alert_create_alert": "Create alert",
   "alert_created_by": "Created by {name}",
@@ -101,6 +124,8 @@
   "alerts_empty_message": "You don't have any alerts yet",
   "alerts_link_text": "alerts",
   "alerts_via_code": "via code",
+  "app_header_ask_ai": "Ask AI",
+  "app_header_home": "Home",
   "auth_access_requested": "Access requested",
   "auth_allow_domain_access": "Allow domain access",
   "auth_authenticating_as": "You are authenticating into StarData as {email}.",
@@ -111,6 +136,7 @@
   "auth_confirm_code": "Confirm code",
   "auth_confirm_code_displayed": "Please confirm this is the code displayed in the StarData CLI.",
   "auth_continue": "Continue",
+  "auth_create_org_title": "Create an organization",
   "auth_denying_access": "Denying {email} access to {project}",
   "auth_device_code_confirmation_failed": "User code confirmation failed",
   "auth_device_code_confirmed": "User code confirmed, this page can be closed now",
@@ -123,14 +149,19 @@
   "auth_invite_by_email": "Invite by email",
   "auth_invite_teammates": "Invite teammates to your project",
   "auth_log_in_sign_up": "Log In / Sign Up",
+  "auth_org_name_subtitle": "You can change the name in organization settings.",
+  "auth_org_name_title": "Name your organization",
   "auth_request_access": "Request access",
   "auth_request_access_description": "You can view {project} once your request is approved.",
   "auth_request_access_title": "Request access to this project",
   "auth_request_sent": "Your request has been sent to the project admin. You'll get an email when it's approved.",
+  "auth_signin_subtitle": "Sign in with your StarData account to continue.",
+  "auth_signin_title": "Sign in to StarData",
   "auth_skip_for_now": "Skip for now",
   "auth_thanks_for_signing_up": "Thanks for signing up!",
   "auth_user_added_to_project": "{email} has been added to {project} as a {role}",
   "auth_user_denied_access": "{email} has been denied access to {project}",
+  "auth_welcome_back": "Welcome back",
   "avatar_contact_support": "Contact StarData support",
   "avatar_copied_url": "Copied URL",
   "avatar_copy_url": "Copy URL",
@@ -293,15 +324,19 @@
   "bookmark_edit": "Edit bookmark",
   "bookmark_filters": "Filters",
   "bookmark_filters_inherited": "Inherited from underlying dashboard view.",
+  "bookmark_filters_only_label": "Filters only",
   "bookmark_filters_only_tooltip": "Toggling this on will only save the filter set above, not the full dashboard layout and state.",
   "bookmark_go_to_home": "Go to Home",
+  "bookmark_go_to_home_label": "Go to home bookmark",
   "bookmark_home_created": "Home bookmark created",
-  "bookmark_filters_only_label": "Filters only",
   "bookmark_home_description": "This will be everyone’s main view for this dashboard.",
+  "bookmark_home_dropdown_label": "Home bookmark dropdown",
+  "bookmark_home_entry_label": "Home Bookmark Entry",
   "bookmark_label": "Label",
   "bookmark_managed_bookmarks": "Managed bookmarks",
   "bookmark_no_bookmarks": "You have no bookmarks for this dashboard.",
   "bookmark_no_shared": "There are no shared bookmarks for this dashboard.",
+  "bookmark_other_dropdown_label": "Other bookmark dropdown",
   "bookmark_return_to_home": "Return to dashboard home",
   "bookmark_save": "Save",
   "bookmark_save_filters_only": "Save filters only",
@@ -312,7 +347,13 @@
   "branch_branch": "Branch",
   "branch_branches": "Branches",
   "branch_current": "Current",
+  "branch_delete_cannot_undo": "This action cannot be undone.",
+  "branch_delete_confirm_prefix": "The branch",
+  "branch_delete_confirm_suffix": "will be deleted.",
+  "branch_delete_confirm_title": "Delete this branch?",
+  "branch_delete_confirm_yes": "Yes, delete",
   "branch_delete_failed": "Failed to delete branch: {error}",
+  "branch_delete_remote_warning": "This will also delete its associated remote branch. Any unpushed changes will be lost.",
   "branch_error_loading": "Error loading branches: {error}",
   "branch_hibernate": "Hibernate",
   "branch_hibernate_failed": "Failed to hibernate branch: {error}",
@@ -453,8 +494,13 @@
   "canvas_see_less": "See less",
   "canvas_see_more_values": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "See {count} more value",
         "countPlural=other": "See {count} more values"
@@ -505,9 +551,14 @@
   "chart_adaptive": "Adaptive",
   "chart_adaptive_tooltip": "Adaptive: Line chart by default. Switches to bar when there are few data points, and stacked bar when comparing dimension",
   "chart_add_comparison_to_use": "Add comparison values to use {chartType} chart",
+  "chart_annotation_marker_aria": "annotation marker",
   "chart_bar": "Bar",
   "chart_copy_to_clipboard": "Copy",
+  "chart_explain_button": "Explain (E)",
   "chart_line": "Line",
+  "chart_main_value_aria": "main value",
+  "chart_no_data": "No data available",
+  "chart_primary_time_label_aria": "{measureName} primary time label",
   "chart_stacked_area": "Stacked area",
   "chart_stacked_bar": "Stacked bar",
   "chart_undo_zoom": "Undo zoom",
@@ -518,18 +569,28 @@
   "chat_ai_disclaimer": "AI can make mistakes. Consider your dashboard the source of truth.",
   "chat_cancel_streaming": "Cancel streaming",
   "chat_close": "Close chat",
+  "chat_collapse_sidebar": "Collapse sidebar",
   "chat_connect_client": "Connect your own client",
   "chat_connect_client_description": "Query your StarData metrics from your favorite AI client.",
   "chat_connect_client_other": "Other client",
+  "chat_context_current": "Current",
+  "chat_context_no_matches": "No matches found",
+  "chat_context_recently_asked": "Recently asked",
   "chat_conversation_history": "Conversation history",
+  "chat_current_chat": "Current chat",
   "chat_diff_new_badge": "new",
   "chat_downvote_aria": "Downvote response",
   "chat_downvote_tooltip": "This response needs improvement",
   "chat_duration_less_than_second": "less than a second",
   "chat_duration_minutes": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} minute",
         "countPlural=other": "{count} minutes"
@@ -538,8 +599,13 @@
   ],
   "chat_duration_seconds": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} second",
         "countPlural=other": "{count} seconds"
@@ -547,6 +613,10 @@
     }
   ],
   "chat_empty_label": "Happy to help explore your data",
+  "chat_error_loading_conversations": "Error loading conversations",
+  "chat_expand_sidebar": "Expand sidebar",
+  "chat_explain_fix": "Explain and fix",
+  "chat_explain_fix_aria": "Explain and fix this error with AI",
   "chat_failed_to_generate": "Failed to generate response",
   "chat_feedback_analyzing": "Analyzing feedback...",
   "chat_feedback_comments": "Comments",
@@ -561,22 +631,54 @@
   "chat_group_yesterday": "Yesterday",
   "chat_happy_to_explore": "Happy to help explore your data",
   "chat_how_can_i_help": "How can I help you today?",
+  "chat_loading_conversations": "Loading conversations...",
+  "chat_nav_navigate": "Navigate,",
+  "chat_nav_open_close": "Open/Close,",
+  "chat_nav_select": "Select",
   "chat_new_conversation": "New conversation",
   "chat_no_conversations": "No conversations yet.",
+  "chat_pin_board_file_invalid": "Board file is malformed and cannot be written",
+  "chat_pin_board_file_missing": "Board file not found",
+  "chat_pin_cta": "📌 Pin to board",
+  "chat_pin_default_board_name": "My board",
+  "chat_pin_dialog_title": "Pin to board",
+  "chat_pin_new_board_name": "New board name",
+  "chat_pin_new_board_option": "＋ New board…",
+  "chat_pin_new_board_placeholder": "e.g. Weekly business review",
+  "chat_pin_select_board": "Choose a board",
+  "chat_pin_success": "Pinned to board",
+  "chat_pin_view_board": "View board",
+  "chat_pin_write_failed": "Write failed, please retry",
   "chat_placeholder_analyst": "Type a question, or press @ to insert a metric, dimension, or measure.",
+  "chat_request_cta": "✋ Request data",
+  "chat_request_dialog_desc": "Didn't get the answer you wanted? Send the question to the data team — once it's configured you can ask it directly.",
+  "chat_request_dialog_title": "Request data",
+  "chat_request_error_empty": "Please enter the question you want to ask",
+  "chat_request_failed": "Submission failed, please retry",
+  "chat_request_note_label": "Notes (optional)",
+  "chat_request_note_placeholder": "e.g. needed for the monthly meeting",
+  "chat_request_question_label": "Question you want to ask",
+  "chat_request_submit": "Submit request",
+  "chat_request_submitted": "Request submitted — the data team will handle it in Studio",
   "chat_send_message": "Send message",
   "chat_share_conversation": "Share conversation",
   "chat_share_copied": "Copied!",
   "chat_share_create_link": "Create link",
   "chat_share_creating": "Creating link...",
-  "chat_share_description": "Share this conversation with other project members. They can view and continue the conversation.",
+  "chat_share_description": "Share this conversation with other members of this data domain. They can view and continue the conversation.",
   "chat_share_start_first": "Start a conversation to share",
   "chat_show_details": "Show details",
   "chat_thinking": "Thinking",
   "chat_thought_for": "Thought for {duration}",
+  "chat_toggle_tooltip": "Open Conversational AI {shortcut} + J",
+  "chat_tool_tab_error": "Error",
+  "chat_tool_tab_request": "Request",
+  "chat_tool_tab_response": "Response",
+  "chat_tool_waiting": "Waiting for response...",
   "chat_unable_to_load": "Unable to load conversation",
   "chat_upvote_aria": "Upvote response",
   "chat_upvote_tooltip": "This response was helpful",
+  "coming_soon": "Coming Soon",
   "common_all": "All",
   "common_allow_domain_access": "Allow domain access",
   "common_allow_domain_join_project": "Allow existing and new StarData users with a {domain} email address to join this project as a {role}.",
@@ -588,11 +690,16 @@
   "common_confirmation_label": "confirmation",
   "common_contact_us": "Contact us",
   "common_continue": "Continue",
+  "common_create": "Create",
   "common_delete": "Delete",
   "common_deselect_all": "Deselect all",
+  "common_edit": "Edit",
+  "common_error": "Error",
   "common_got_it": "Got it",
+  "common_hide": "Hide",
   "common_learn_more": "Learn more",
   "common_loading": "Loading...",
+  "common_more_actions": "More actions",
   "common_must_be_number": "Value must be a valid number",
   "common_name": "Name",
   "common_no_changes_detected": "No changes detected",
@@ -601,8 +708,13 @@
   "common_none": "None",
   "common_other_values_selected": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} other value selected",
         "countPlural=other": "{count} other values selected"
@@ -615,19 +727,57 @@
   "common_search_ellipsis": "Search...",
   "common_search_list": "Search list",
   "common_select_all": "Select all",
+  "common_share": "Share",
   "common_sort_by": "Sort by {label}",
   "common_status": "Status",
   "common_type": "Type",
   "common_type_to_confirm": "Type {text} in the box below to confirm:",
   "common_undo": "Undo",
+  "connector_actions_menu_label": "{name} actions menu trigger",
+  "connector_add": "Add Data Source",
+  "connector_ai_add_title": "Add AI connector",
+  "connector_ai_api_key": "API Key",
+  "connector_ai_model": "Model",
+  "connector_ai_provider": "Provider",
+  "connector_ai_replace_warning": "This will replace your existing AI connector ({name}).",
+  "connector_ai_select_provider": "Select a provider",
+  "connector_ai_view_docs": "View documentation",
+  "connector_create_model": "Create model",
+  "connector_empty": "No data sources configured",
+  "connector_error_message": "Error: {message}",
+  "connector_explorer_empty": "No data found. Add data to get started!",
+  "connector_fix_errors_first": "Fix connector errors first",
+  "connector_generate_metrics": "Generate metrics",
+  "connector_import_data": "Import data",
+  "connector_load_more_failed": "Failed to load more tables.",
+  "connector_loading_schemas": "Loading schemas...",
+  "connector_no_columns": "No columns found",
+  "connector_no_schemas": "No schemas found",
+  "connector_no_tables": "No tables found",
+  "connector_not_found": "Connector not found",
+  "connector_refresh_label": "Refresh Connector",
+  "connector_refresh_tooltip": "Refresh connector",
+  "connector_refreshing": "Refreshing",
+  "connector_retry": "Retry",
+  "connector_save_changes_first": "Save your changes first",
+  "connector_save_to_refresh": "Save your changes to refresh",
+  "connector_schema_error": "Error loading schema: {message}",
+  "connector_schema_loading": "Loading schema...",
+  "connector_status_connected": "Connected",
+  "connector_status_error": "Error",
+  "connector_status_unknown": "Unknown",
+  "connector_table_columns": "Table columns",
+  "connector_test_connection": "Test Connection",
+  "connector_test_failed": "Connection failed",
+  "connector_test_success": "Connection successful",
   "dashboard_add_all_dims_rows": "Add all dimensions in {name} to rows",
   "dashboard_add_all_to_columns": "Add all to columns",
   "dashboard_add_all_to_columns_tag": "Add all in {name} to columns",
   "dashboard_add_all_to_rows": "Add all to rows",
   "dashboard_add_column": "Add Column",
+  "dashboard_add_favourite": "Add to favourites",
   "dashboard_add_filter": "Add filter",
   "dashboard_add_filter_button": "Add filter button",
-  "dashboard_add_favourite": "Add to favourites",
   "dashboard_add_filter_button_aria": "Add filter button",
   "dashboard_add_mock_user": "Add mock user",
   "dashboard_add_row": "Add Row",
@@ -642,12 +792,14 @@
   "dashboard_as_of_ref": "as of",
   "dashboard_auto_arrange": "Auto-arrange",
   "dashboard_auto_arrange_tag": "Auto-arrange {name}: dimensions to rows, measures to columns",
+  "dashboard_browser_time": "Browser Time",
   "dashboard_cancel": "Cancel",
   "dashboard_change_over_comparison": "Change over comparison period",
   "dashboard_clear": "Clear",
   "dashboard_clear_filters": "Clear filters",
   "dashboard_clear_recents": "Clear recents",
   "dashboard_clear_view": "Clear view",
+  "dashboard_click_to_edit_dimension_filters": "Click to edit the filters in this dimension",
   "dashboard_click_to_edit_values": "Click to edit the values",
   "dashboard_cmd_click_replace": "Click to replace",
   "dashboard_collapse_all": "Collapse All",
@@ -656,6 +808,7 @@
   "dashboard_comparison_select_tooltip": "Select a comparison for the dashboard",
   "dashboard_complete_data": "complete data",
   "dashboard_complete_data_description": "Timestamp prior to which data frames are considered complete, also known as the watermark",
+  "dashboard_conditional_formatting": "Conditional formatting",
   "dashboard_connect_sparse_data": "Connect sparse data",
   "dashboard_contains": "Contains",
   "dashboard_copied_error_clipboard": "Copied error to clipboard",
@@ -668,14 +821,21 @@
   "dashboard_currently_flat": "Currently showing flat view",
   "dashboard_currently_pivot": "Currently showing pivot view",
   "dashboard_custom": "Custom",
+  "dashboard_deploy": "Deploy",
+  "dashboard_deploy_tooltip": "Deploy this project to StarData",
   "dashboard_deselect_all": "Deselect all",
   "dashboard_deselect_all_selections": "Deselect all selections",
+  "dashboard_dim_filter_error": "error",
+  "dashboard_dim_filter_list_too_long": "List is too long. Please remove some values.",
+  "dashboard_dim_filter_no_results": "no results",
+  "dashboard_dimension": "dimension",
   "dashboard_dimension_display_aria": "Dimension Display",
   "dashboard_dimension_search_results_aria": "Dimension search results",
   "dashboard_dimension_table_aria": "Dimension table",
   "dashboard_dimensions": "Dimensions",
   "dashboard_dimensions_count": "{count} dimensions",
   "dashboard_dimensions_label": "DIMENSIONS",
+  "dashboard_docs": "docs",
   "dashboard_download_as_png": "Download as PNG",
   "dashboard_download_png": "Download PNG",
   "dashboard_drag_dimensions": "Drag dimensions here",
@@ -704,12 +864,30 @@
   "dashboard_filter_dimension_value": "Filter dimension value",
   "dashboard_filter_required_set_value": "This filter is required. Set a value to load the dashboard.",
   "dashboard_flat": "Flat",
+  "dashboard_format_add_rule": "Add rule",
+  "dashboard_format_and": "and",
+  "dashboard_format_between": "between",
+  "dashboard_format_custom_color": "Custom color",
+  "dashboard_format_mode_data_bar": "Data bar",
+  "dashboard_format_mode_heatmap": "Heatmap",
+  "dashboard_format_mode_none": "None",
+  "dashboard_format_mode_rules": "Rules",
+  "dashboard_format_move_rule_down": "Move rule down",
+  "dashboard_format_move_rule_up": "Move rule up",
+  "dashboard_format_remove_rule": "Remove rule",
+  "dashboard_format_rule_color": "Rule color",
+  "dashboard_format_rule_plural": "rules",
+  "dashboard_format_rule_singular": "rule",
+  "dashboard_format_rule_upper_value": "Rule upper value",
+  "dashboard_format_rule_value": "Rule value",
+  "dashboard_format_style": "Format style",
   "dashboard_generated": "Generated {time}",
   "dashboard_generating": "Generating…",
   "dashboard_grain": "Grain",
   "dashboard_hide_panels": "Hide panels",
   "dashboard_in_list": "In list",
   "dashboard_include_exclude_toggle": "Include exclude toggle",
+  "dashboard_invalid_interval": "Invalid Interval",
   "dashboard_invalid_time_range": "Invalid time range",
   "dashboard_last_refreshed_ago": "Last refreshed {time}",
   "dashboard_last_used_ago": "Last used {time}",
@@ -725,6 +903,8 @@
   "dashboard_measures_count": "{count} measures",
   "dashboard_measures_label": "MEASURES",
   "dashboard_menu_all_dimensions": "All Dimensions",
+  "dashboard_model_data": "Model Data",
+  "dashboard_model_data_selected_cell": "Model data for selected cell",
   "dashboard_no_additional_details": "No additional details available.",
   "dashboard_no_available_fields": "No available fields",
   "dashboard_no_comparison_dimension": "No comparison dimension selected",
@@ -733,6 +913,7 @@
   "dashboard_no_matching_tags": "No matching tags",
   "dashboard_no_mock_users": "No mock users",
   "dashboard_no_options_found": "No options found",
+  "dashboard_no_results_to_show": "No results to show",
   "dashboard_no_search_results": "No search results to show",
   "dashboard_no_timezones_configured": "No timezones configured",
   "dashboard_no_valid_grains": "No valid grains available.",
@@ -740,8 +921,13 @@
   "dashboard_open_dimension_details_aria": "Open dimension details",
   "dashboard_others": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "+{count} other",
         "countPlural=other": "+{count} others"
@@ -754,12 +940,14 @@
   "dashboard_percentage_change": "Percentage change over comparison period",
   "dashboard_pivot": "Pivot",
   "dashboard_pivot_add_measure": "Add a measure to complete your table.",
+  "dashboard_pivot_auto": "Auto",
   "dashboard_pivot_building_table": "Hang tight! We're building your table...",
   "dashboard_pivot_give_data": "Give it some data to keep it company.",
   "dashboard_pivot_keep_it_up": "Keep it up!",
   "dashboard_pivot_learn_more": "Learn more about tables in our",
   "dashboard_pivot_need_help_discord": "Need help? Reach out to us on",
   "dashboard_pivot_no_data": "No data to show for the selected filters.",
+  "dashboard_pivot_show_more": "Show more ...",
   "dashboard_pivot_table_lonely": "Your table looks lonely",
   "dashboard_readonly_filter_chips_aria": "Readonly Filter Chips",
   "dashboard_recent": "Recent",
@@ -776,10 +964,12 @@
   "dashboard_replace_rows_cols_tag": "Replace rows and columns with this tag",
   "dashboard_replace_rows_tag": "Replace rows with dimensions in {name}",
   "dashboard_replace_rows_tag_dims": "Replace rows with this tag's dimensions",
+  "dashboard_required_dimension": "required dimension",
   "dashboard_required_measure": "required measure",
   "dashboard_row_limit": "Row limit",
   "dashboard_row_limit_tooltip": "Only up to top N child rows are shown under each dimension",
   "dashboard_rows": "Rows",
+  "dashboard_rows_count": "{filtered} of {total} rows",
   "dashboard_search_dimension": "Search Dimension",
   "dashboard_search_dimensions": "Search dimensions",
   "dashboard_search_results": "Search Results",
@@ -806,6 +996,8 @@
   "dashboard_sort_name": "Name",
   "dashboard_start": "start",
   "dashboard_start_pivot": "Start Pivot",
+  "dashboard_step_time_back": "Step time back",
+  "dashboard_step_time_forward": "Step time forward",
   "dashboard_switch_flat": "Switch to flat view",
   "dashboard_switch_pivot": "Switch to pivot view",
   "dashboard_table_mode": "Table mode",
@@ -818,6 +1010,7 @@
   "dashboard_tdd_time": "Time",
   "dashboard_time": "Time",
   "dashboard_time_axis": "Time axis",
+  "dashboard_time_dimension_display_aria": "{name} Time Dimension Display",
   "dashboard_time_label": "TIME",
   "dashboard_time_zone": "Time zone",
   "dashboard_timezone_selector": "Timezone selector",
@@ -832,6 +1025,8 @@
   "dashboard_view_as": "View as",
   "dashboard_view_as_disabled": "Not available during editing project",
   "dashboard_viewing_as": "Viewing as <b>{email}</b>",
+  "date_invalid_reset": "Date is invalid. Click to reset.",
+  "date_out_of_range_reset": "Date is out of range. Click to reset.",
   "dialog_close_without_saving_alert_desc": "You haven’t saved changes to this alert yet, so closing this window will lose your work.",
   "dialog_close_without_saving_cancel": "Keep editing",
   "dialog_close_without_saving_confirm": "Close",
@@ -843,8 +1038,13 @@
   "edit_changes_discard_all": "Discard all",
   "edit_changes_file_count": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} file",
         "countPlural=other": "{count} files"
@@ -853,8 +1053,13 @@
   ],
   "edit_changes_files_changed": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} file changed",
         "countPlural=other": "{count} files changed"
@@ -867,8 +1072,13 @@
   "edit_changes_revert": "Revert",
   "edit_changes_revert_confirm_body": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "This permanently discards local changes to {count} file and cannot be undone.",
         "countPlural=other": "This permanently discards local changes to {count} files and cannot be undone."
@@ -879,8 +1089,13 @@
   "edit_changes_revert_failed": "Failed to revert changes",
   "edit_changes_revert_selected": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Revert {count} file",
         "countPlural=other": "Revert {count} files"
@@ -889,8 +1104,13 @@
   ],
   "edit_changes_reverted": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Reverted {count} file",
         "countPlural=other": "Reverted {count} files"
@@ -905,12 +1125,39 @@
   "edit_changes_status_modified": "Modified",
   "edit_changes_status_renamed": "Renamed",
   "edit_changes_view_diff": "View diff",
+  "edit_click_to_retry": "Click to retry.",
+  "edit_commit": "Commit",
+  "edit_commit_push": "Commit & push",
+  "edit_commit_tooltip": "Commit and push changes to this branch",
+  "edit_continue_editing": "Continue editing",
+  "edit_create_and_edit": "Create & edit",
   "edit_describe_changes": "Describe your changes...",
+  "edit_dialog_existing_prefix": "Edit an existing branch or create a new one from",
+  "edit_dialog_existing_suffix": ".",
+  "edit_dialog_new_prefix": "We'll create a branch from",
+  "edit_dialog_new_suffix": "for your edits.",
+  "edit_existing_branch": "Existing branch",
+  "edit_exit": "Exit",
   "edit_failed_to_commit": "Failed to commit and push changes",
   "edit_failed_to_merge": "Failed to merge",
   "edit_failed_to_publish": "Failed to publish",
   "edit_failed_to_start": "Failed to start edit session.",
+  "edit_git_unavailable": "Git unavailable",
+  "edit_merge": "Merge",
+  "edit_merge_first_deploy_prefix": "Merging",
+  "edit_merge_first_deploy_suffix": "sets up your production deployment. We'll open a new tab where you can invite teammates while it reconciles.",
+  "edit_merge_hibernated_prefix": "Production is hibernated. Merging",
+  "edit_merge_hibernated_suffix": "will resume it and apply your changes. We'll open the deployment in a new tab so you can watch updates reconcile.",
+  "edit_merge_push_prefix": "Merging pushes changes from",
+  "edit_merge_push_suffix": "to production. We'll open a new tab so you can watch updates reconcile.",
+  "edit_merge_to_production": "Merge to production",
+  "edit_merge_tooltip_confirm": "Review and confirm before merging",
+  "edit_merge_tooltip_no_changes": "No changes to merge",
   "edit_merging": "Merging...",
+  "edit_new_branch": "New branch",
+  "edit_no_active_session_body": "Start an edit session to make changes to this project in Studio.",
+  "edit_no_active_session_title": "No active edit session",
+  "edit_no_uncommitted_changes": "No uncommitted changes detected",
   "edit_popup_blocked": "Pop-up was blocked.",
   "edit_provisioning_env": "Provisioning your editing environment...",
   "edit_publish": "Publish",
@@ -925,12 +1172,15 @@
   "edit_publish_tooltip_remote_updates": "Remote has updates not in your session. Click to review.",
   "edit_publishing": "Publishing...",
   "edit_pushing": "Pushing...",
+  "edit_readonly_branch_warning": "This branch is read-only. Pick another branch or create a new one.",
   "edit_return_to_org": "Return to organization",
   "edit_return_to_project": "Return to project home",
+  "edit_start_editing": "Start editing",
   "edit_starting": "Starting...",
   "edit_starting_env": "Starting your editing environment...",
   "edit_taking_longer": "This is taking longer than usual.",
   "edit_updating_env": "Updating your editing environment...",
+  "edit_view_branch_on_github": "View branch on GitHub",
   "embed_explore_error": "Explore Error",
   "embed_explore_not_found": "Explore not found",
   "embed_explore_not_found_body": "The Explore dashboard you requested could not be found. Please check that you provided the name of a working dashboard.",
@@ -951,8 +1201,13 @@
   "env_documentation_link": "documentation",
   "env_duplicate_keys_error": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "This key is duplicated",
         "countPlural=other": "Duplicate keys are not allowed"
@@ -970,8 +1225,13 @@
   "env_key_placeholder": "Key",
   "env_keys_exist_error": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "This key already exists for your target environment(s)",
         "countPlural=other": "These keys already exist for your target environment(s)"
@@ -1114,11 +1374,38 @@
   "export_pdf_rendering_charts": "Rendering charts…",
   "export_pdf_success": "Dashboard exported as PDF",
   "export_pdf_tabs_all": "Export all tabs",
+  "feature_access_admin": "Admin",
+  "feature_access_alerts": "My Subscriptions",
+  "feature_access_chat": "Chat",
+  "feature_access_dashboards": "Dashboards",
+  "feature_access_desc": "Control which features each user or user group can access.",
+  "feature_access_org_defaults": "Organization defaults",
+  "feature_access_org_defaults_desc": "Applied to all projects unless overridden per project or per subject.",
+  "feature_access_per_subject": "Per-user & group access",
+  "feature_access_per_subject_desc": "Override feature access for specific users or user groups. A deny always wins over an inherited grant.",
+  "feature_access_scope_label": "Scope",
+  "feature_access_select_project": "Select a project to configure per-project access.",
+  "feature_access_reports": "My Reports",
+  "feature_access_scope_org": "All projects (org default)",
+  "feature_access_scope_project": "Per project",
+  "feature_access_studio": "Studio (Governance)",
+  "feature_access_subject_group": "Group",
+  "feature_access_subject_user": "User",
+  "feature_access_title": "Feature Access",
   "field_list_add_fields": "Add {label} fields",
   "field_list_aria": "{label} field list",
   "field_list_dimensions": "DIMENSIONS",
   "field_list_measures": "MEASURES",
   "field_list_time": "TIME",
+  "file_actions_menu_label": "{name} actions menu trigger",
+  "file_delete_folder_description": "This folder is not empty. All contained items will be deleted.",
+  "file_delete_folder_title": "Delete this folder and all its contents?",
+  "file_duplicate": "Duplicate",
+  "file_failed_to_load": "Failed to load files",
+  "file_nav_entry_label": "{path} Nav Entry",
+  "file_new_folder": "New folder",
+  "file_rename": "Rename",
+  "file_save_file": "Save file",
   "filter_advanced_beta": "Advanced (BETA)",
   "filter_advanced_warning": "Advanced filters are a bleeding edge feature! There may be bugs.",
   "filter_dimensions": "DIMENSIONS",
@@ -1203,6 +1490,40 @@
   "github_synced": "Synced",
   "github_type_to_confirm": "Type {text} in the box below to confirm:",
   "github_unlock_bi_as_code": "Unlock the power of BI-as-code with GitHub-backed collaboration, version control, and approval workflows.",
+  "graphic_clear_zoom": "clear zoom ✖",
+  "graphic_copy": "Copy",
+  "graphic_level": "level",
+  "graphic_max": "Max",
+  "graphic_min": "Min",
+  "graphic_min_interval_at": "min. interval at",
+  "graphic_pan": "Pan",
+  "graphic_range_of_column": "The range of this column is {range}.",
+  "graphic_rollup_prefix": "This timestamp column is aggregated so each point on the time series represents a rollup count at the",
+  "graphic_rollup_suffix": ".",
+  "graphic_row_counts": "row counts",
+  "graphic_showing_all_rows": "Showing all {countStr} rows",
+  "graphic_smallest_interval_prefix": "The smallest available time interval in this column appears to be at the",
+  "graphic_smallest_interval_suffix": "level.",
+  "graphic_to_clipboard": "to clipboard",
+  "graphic_to_n_rows": [
+    {
+      "declarations": [
+        "input count",
+        "input countStr",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
+      "match": {
+        "countPlural=one": "to {countStr} row",
+        "countPlural=other": "to {countStr} rows"
+      }
+    }
+  ],
+  "graphic_zoom": "Zoom",
+  "graphic_zoomed": "Zoomed",
+  "graphic_zooming": "Zooming",
   "groups_changes_saved": "User group changes saved successfully",
   "groups_create_a_group": "Create a group",
   "groups_create_group": "Create group",
@@ -1227,8 +1548,13 @@
   "groups_table_header_group": "Group",
   "groups_total_count": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} total group",
         "countPlural=other": "{count} total groups"
@@ -1238,12 +1564,14 @@
   "groups_yes_delete": "Yes, delete",
   "home_dashboards_heading": "Dashboards",
   "home_greeting": "Hi {name}!",
+  "home_project_title_label": "Project title",
   "home_subtitle_no_chat": "Explore your dashboards below",
   "home_subtitle_with_chat": "Ask questions about your data, or explore your dashboards below",
   "home_welcome_getting_started": "It looks like you're just starting out! Check out our",
   "home_welcome_quickstart_link": "Quickstart to create your first project",
-  "home_project_title_label": "Project title",
   "home_welcome_to": "Welcome to {projectName}",
+  "image_upload_description": "Support for a single or bulk upload.",
+  "image_upload_title": "Upload an image",
   "interval_day": "Day",
   "interval_hour": "Hour",
   "interval_none": "None",
@@ -1253,7 +1581,7 @@
   "kpi_not_available": "n/a",
   "kpi_vs_comparison": "vs {comparison}",
   "language_en": "English",
-  "language_es": "Español",
+  "language_zh": "中文",
   "language_switcher_label": "Language",
   "layout_inspector_panel_aria": "Inspector Panel",
   "leaderboard_compare": "Compare",
@@ -1264,6 +1592,16 @@
   "leaderboard_remove_comparison": "Remove comparison",
   "leaderboard_shift_click": "+ Click",
   "leaderboard_toggle_breakdown": "Toggle breakdown for {name} dimension",
+  "login_error_bad_credentials": "Incorrect username or password",
+  "login_error_empty": "Enter your username and password",
+  "login_error_network": "Cannot reach the auth service, please try again later",
+  "login_error_no_token": "Login failed: no token returned",
+  "login_page_title": "Sign in",
+  "login_password": "Password",
+  "login_submit": "Sign in",
+  "login_submitting": "Signing in…",
+  "login_subtitle": "Sign in to continue",
+  "login_username": "Username",
   "mcp_add_to_config": "Add this to your MCP client's configuration file.",
   "mcp_add_url": "Add this URL to your AI client's MCP server settings:",
   "mcp_configuration": "Configuration",
@@ -1302,35 +1640,71 @@
   "nav_tab_home": "Home",
   "nav_tab_query": "Query",
   "nav_tab_reports": "Reports",
+  "portal_tab_alerts": "My Alerts",
+  "portal_tab_reports": "My Reports",
   "nav_tab_settings": "Settings",
   "nav_tab_status": "Status",
-  "org_check_out_projects": "Check out your projects below.",
-  "org_new_project": "+ New project",
-  "org_no_projects_yet": "This organization has no projects yet.",
+  "org_check_out_projects": "Check out your data domains below.",
+  "org_new_project": "+ New data domain",
+  "org_no_projects_yet": "No data domains yet.",
   "org_role_admin_description": "Full access to org settings, members, and all projects",
   "org_role_editor_description": "Can create/manage projects and non-admin members",
   "org_role_guest_description": "Access to invited projects only",
   "org_role_viewer_description": "Read-only access to all org projects",
   "org_search_add_remove_users": "Search to add/remove users",
-  "org_tab_projects": "Projects",
+  "org_tab_projects": "Data Domains",
   "org_tab_settings": "Settings",
-  "org_tab_users": "Users",
+  "org_tab_users": "Members",
   "organizations_overview_page_title": "{title} overview - StarData",
+  "parquet_preview_no_project_dir": "Could not resolve the project directory for this file.",
+  "parquet_preview_read_error_title": "Unable to read Parquet file",
+  "parquet_preview_requires_duckdb": "Previewing Parquet files requires a DuckDB connector.",
+  "parquet_preview_unknown_error": "Unknown error",
+  "personal_copy_from": "Copy from",
+  "personal_copy_from_description": "Start from an existing dashboard",
+  "personal_create_dashboard": "Create dashboard",
+  "personal_create_dashboard_description": "Personal dashboards are only visible to you. They live alongside the project but never sync to git.",
+  "personal_create_dashboard_title": "Create personal dashboard",
+  "personal_creating": "Creating...",
+  "personal_display_name": "Display name",
+  "personal_display_name_placeholder": "e.g. My revenue dashboard",
+  "personal_empty_state_action": "Create one to explore the project's data your way.",
+  "personal_empty_state_message": "You don't have any personal canvases yet.",
+  "personal_hidden_success": "Dashboard hidden successfully",
+  "personal_my_dashboards": "My dashboards",
+  "personal_only_visible_to_you": "Only visible to you",
+  "personal_only_you_can_see": "Personal — only you can see this",
+  "personal_select_dashboard_placeholder": "Select a dashboard...",
+  "personal_share_confirm": "Share this dashboard with other users in the project?",
+  "personal_share_dashboard": "Share dashboard",
+  "personal_shared_success": "Dashboard shared successfully",
+  "personal_shared_with_all": "This dashboard is shared with all users in the project.",
   "pivot_apis_failed": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "One or more APIs failed with the following error:",
         "countPlural=other": "One or more APIs failed with the following errors:"
       }
     }
   ],
+  "pivot_chip_aria": "{title} pivot chip",
   "pivot_collapse_row": "Collapse row",
   "pivot_dim_label": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "dim",
         "countPlural=other": "dims"
@@ -1345,8 +1719,13 @@
   "pivot_expand_row": "Expand row",
   "pivot_measure_label": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "measure",
         "countPlural=other": "measures"
@@ -1358,8 +1737,13 @@
   "pivot_time_prefix": "Time",
   "pivot_trace_ids_label": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Trace ID",
         "countPlural=other": "Trace IDs"
@@ -1367,27 +1751,72 @@
     }
   ],
   "pivot_unexpected_query_error": "Sorry, unexpected query error!",
+  "portal_boards_desc": "Pin charts from chat to a board to track them over time",
+  "portal_boards_empty": "No boards yet. Ask a question in chat and pin the chart here.",
+  "portal_boards_not_found": "Board not found",
+  "portal_boards_open_board": "Click to open",
+  "portal_boards_start_asking": "Start asking →",
+  "portal_chat_confirm_delete": "Delete this conversation? This cannot be undone.",
+  "portal_chat_delete_conversation": "Delete conversation",
+  "portal_chat_delete_failed": "Delete failed: {error}",
+  "portal_chat_empty": "No conversations yet — start your first one",
+  "portal_chat_load_failed": "Failed to load conversations",
+  "portal_chat_loading": "Loading conversations…",
+  "portal_chat_new_conversation": "New conversation",
+  "portal_chat_pin": "Pin",
+  "portal_chat_pinned": "Pinned",
+  "portal_chat_unpin": "Unpin",
+  "portal_home_continue_chat": "Continue chatting",
+  "portal_home_continue_chat_desc": "Review past conversations or start a new question",
+  "portal_home_go_publish": "Go publish →",
+  "portal_home_greeting": "Hi, what would you like to know?",
+  "portal_home_loading_questions": "Loading suggested questions…",
+  "portal_home_my_boards": "My Boards",
+  "portal_home_my_boards_desc": "View saved analyses and shared boards",
+  "portal_home_no_published": "No published business metrics yet. Ask an admin to publish metrics in the Tech Workbench.",
+  "portal_home_placeholder_example": "e.g. \"How are sales this month?\"",
+  "portal_home_q_dist": "How is {measure} distributed by {dimension}?",
+  "portal_home_q_month": "What is {measure} this month?",
+  "portal_home_q_trend": "What is the trend of {measure} over the last 30 days?",
+  "portal_home_subtitle": "Ask in one sentence — StarData answers based on your published business metrics",
+  "portal_nav_business_portal": "Business Portal",
+  "portal_nav_close_user_menu": "Close user menu",
+  "portal_nav_logout": "Log out",
+  "portal_nav_platform_admin": "Platform Admin",
+  "portal_nav_role_admin": "Admin",
+  "portal_nav_role_user": "Member",
+  "portal_nav_switch_dark": "Switch to dark mode",
+  "portal_nav_switch_language": "Switch language",
+  "portal_nav_switch_light": "Switch to light mode",
+  "portal_nav_tech_workbench": "Tech Workbench",
+  "portal_nav_user_fallback": "User",
+  "portal_tabs_boards": "Boards",
+  "portal_tabs_chat": "Chat",
+  "portal_tabs_home": "Home",
+  "preview_page_unavailable": "This page is not available in preview mode",
   "project_branch_hibernated": "Branch hibernated",
   "project_branch_is_hibernated": "This branch is hibernated.",
   "project_contact_admin_to_redeploy": "Contact the project's administrator to redeploy the project.",
-  "project_create_first": "Create your first project",
-  "project_create_new": "Create a new project",
+  "project_create_first": "Create your first data domain",
+  "project_create_new": "Create a new data domain",
   "project_create_project": "Create project",
   "project_dashboards_title": "Project dashboards",
   "project_delete": "Delete",
   "project_deploying": "Hang tight! We're deploying your project...",
   "project_edit": "Edit",
+  "project_empty_message": "This project doesn't have any project files yet. Use the CLI to deploy project files to it.",
+  "project_empty_title": "This project is empty",
   "project_failed_to_wake": "Failed to wake project: {error}",
   "project_hibernating": "Hibernating...",
   "project_is_hibernating": "Your project is hibernating",
-  "project_name_first": "Name your first project",
+  "project_name_first": "Name your first data domain",
   "project_name_format_error": "Name must start with a letter or number and may only contain letters, numbers, hyphens, and underscores",
   "project_name_max_length": "Name must be at most 40 characters",
   "project_name_min_length": "Name must be at least 1 character",
-  "project_name_new": "Name your project",
+  "project_name_new": "Name your data domain",
   "project_name_required": "Name is required",
   "project_rename": "Rename",
-  "project_rename_anytime": "You can rename anytime from project settings.",
+  "project_rename_anytime": "You can rename anytime from settings.",
   "project_resume_branch": "Resume branch",
   "project_role_admin": "Admin",
   "project_role_guest_description": "Access to invited projects only",
@@ -1412,6 +1841,7 @@
   "project_wake": "Wake project",
   "project_waking": "Waking...",
   "project_waking_up": "Waking up your project...",
+  "public_url_access_expires": "Access expires {date}",
   "public_url_cancel_button": "Cancel",
   "public_url_copied_button": "Copied URL",
   "public_url_copied_to_clipboard": "Public URL copied to clipboard",
@@ -1583,6 +2013,57 @@
   "route_error_no_org_permission": "You do not have permission to access this organization",
   "route_error_token_not_found": "Unable to find token",
   "route_error_token_resource_not_found": "Unable to find the token's resource",
+  "settings_ai_desc": "The LLM provider, model, and API keys are currently managed via deployment environment variables (.env); restart the service after changes. Visual configuration is coming in a later release.",
+  "audit_title": "System Log",
+  "audit_desc": "An append-only record of every administrative change on the platform. Intended for compliance audits and operational tracing; entries cannot be edited or deleted.",
+  "audit_col_time": "Time",
+  "audit_col_event": "Event",
+  "audit_col_actor": "Actor",
+  "audit_col_domain": "Data Domain",
+  "audit_col_target": "Target",
+  "audit_col_detail": "Details",
+  "audit_filter_event": "Event type",
+  "audit_filter_domain": "Data domain",
+  "audit_filter_all": "All",
+  "audit_empty": "No audit records yet.",
+  "audit_actor_system": "System",
+  "audit_event_project_publish": "Published semantic layer",
+  "audit_event_project_rollback": "Rolled back publish version",
+  "audit_event_feature_access_set": "Changed feature access",
+  "audit_event_org_feature_defaults_set": "Changed feature access defaults",
+  "audit_event_org_ai_config_set": "Changed AI configuration",
+  "audit_event_rollback_requested": "Requested rollback",
+  "audit_event_rollback_rejected": "Rejected rollback",
+  "audit_event_semantic_resource_save": "Saved semantic resource",
+  "audit_event_semantic_resource_delete": "Deleted semantic resource",
+  "audit_event_resource_visibility_set": "Changed resource visibility",
+  "audit_event_edit_lock_force_release": "Force-released edit lock",
+  "audit_event_member_add": "Added member",
+  "audit_event_member_remove": "Removed member",
+  "audit_event_member_role_change": "Changed member role",
+  "audit_event_usergroup_member_add": "Added user-group member",
+  "audit_event_usergroup_member_remove": "Removed user-group member",
+  "settings_ai_deployment_default": "deployment default",
+  "settings_ai_driver": "Provider",
+  "settings_ai_driver_openai": "OpenAI",
+  "settings_ai_driver_deepseek": "DeepSeek",
+  "settings_ai_base_url": "Endpoint URL",
+  "settings_ai_model": "Model",
+  "settings_ai_api_key": "API key",
+  "settings_ai_api_key_placeholder": "Leave empty to keep the stored key",
+  "settings_ai_api_key_stored": "A key is stored (leave empty to keep it)",
+  "settings_ai_save": "Save",
+  "settings_ai_test": "Test connectivity",
+  "settings_ai_reset": "Reset to deployment default",
+  "settings_ai_reset_confirm": "Clear this org's LLM configuration? Future requests will fall back to the deployment default.",
+  "settings_ai_test_ok": "Connectivity test passed ({provider}).",
+  "settings_ai_test_fail": "Connectivity test failed: {message}",
+  "settings_ai_save_ok": "LLM configuration saved.",
+  "settings_ai_reset_ok": "Reverted to deployment default.",
+  "settings_ai_using_default": "Currently using the deployment default ({driver}). Set an org configuration to override.",
+  "settings_ai_using_override": "Currently using org configuration ({driver}).",
+  "settings_ai_saved_on": "Last updated: {time}",
+  "settings_ai_title": "AI Configuration",
   "settings_allow_domain_description": "Allow existing and new StarData users with a {domain} email address to join this org as a {role}.",
   "settings_allow_domain_title": "Allow domain access",
   "settings_branch_callout": "These settings apply to the entire project, not just the {branch} branch.",
@@ -1625,25 +2106,21 @@
   "settings_make_public_button": "Make public",
   "settings_name_already_taken": "The name {name} is already taken",
   "settings_name_label": "Name",
+  "settings_nav_ai": "AI Configuration",
+  "settings_nav_feature_access": "Feature Access",
   "settings_nav_billing": "Billing",
   "settings_nav_console": "Console",
   "settings_nav_data_sources": "Data Sources",
   "settings_nav_data_sources_desc": "Manage data source connections",
-  "connector_status_connected": "Connected",
-  "connector_status_error": "Error",
-  "connector_status_unknown": "Unknown",
-  "connector_test_connection": "Test Connection",
-  "connector_test_success": "Connection successful",
-  "connector_test_failed": "Connection failed",
-  "connector_add": "Add Data Source",
-  "connector_empty": "No data sources configured",
   "settings_nav_env_vars": "Environment Variables",
   "settings_nav_general": "General",
+  "settings_nav_domains": "Domain Allowlist",
+  "settings_nav_system": "System Log",
   "settings_nav_public_urls": "Public URLs",
   "settings_nav_token_mgmt": "Token Management",
   "settings_nav_usage": "Usage",
   "settings_none": "none",
-  "settings_org_page_title": "Organization settings",
+  "settings_org_page_title": "Platform Settings",
   "settings_org_title": "Organization",
   "settings_org_url_description": "Your org URL will be available at your configured domain.",
   "settings_project_hibernated_notification": "Project hibernated",
@@ -1671,6 +2148,35 @@
   "share_limited_view": "Limited view. For full access and features, visit the {link}.",
   "share_original_dashboard": "original dashboard",
   "snooze_off": "Off",
+  "source_being_ingested": "Source is being ingested",
+  "source_duplicate_keep_both": "Keep Both",
+  "source_duplicate_prefix": "A source with the name",
+  "source_duplicate_replace": "Replace Existing Source",
+  "source_duplicate_suffix": "already exists.",
+  "source_has_errors": "Source has errors",
+  "source_help_additional": "Additional Information",
+  "source_help_how_to": "How to connect to {name}",
+  "source_help_local_files_warning": "External {name} files are meant for local development only. They may run fine on your machine, but aren’t reliably supported in production deployments—especially if the file is large (100MB) or outside the data directory.",
+  "source_help_text": "Need help connecting to {name}? Check out our documentation for detailed instructions.",
+  "source_help_title": "Help",
+  "source_imported_title": "Source imported successfully",
+  "source_menu_create_model": "Create new model",
+  "source_menu_generate_canvas": "Generate Canvas Dashboard",
+  "source_menu_generate_explore": "Generate Explore Dashboard",
+  "source_menu_generate_metrics": "Generate Metrics View",
+  "source_menu_refresh": "Refresh source",
+  "source_menu_replace_file": "Replace source with uploaded file",
+  "source_menu_view_dag": "View DAG graph",
+  "source_request_connector_label": "Connector",
+  "source_request_connector_placeholder": "Your data source",
+  "source_request_email_label": "Optionally, we can let you know when the connector is available.",
+  "source_request_email_placeholder": "Your email address",
+  "source_request_invalid_email": "Invalid email",
+  "source_request_prompt": "Don't see the connector you're looking for? Let us know what we're missing!",
+  "source_request_submit": "Request connector",
+  "source_request_thanks": "Thanks for your request!",
+  "source_yaml_copy": "Copy YAML",
+  "source_yaml_preview_aria": "Yaml preview",
   "status_action_describe": "Describe",
   "status_action_full_refresh": "Full Refresh",
   "status_action_incremental_refresh": "Incremental Refresh",
@@ -1683,6 +2189,7 @@
   "status_checking_errors": "Checking for errors...",
   "status_clear": "Clear",
   "status_clone_description": "Clone this project to develop locally.",
+  "status_cluster_size": "{ram} GiB RAM, {cpu} vCPU",
   "status_column_database_size": "Database Size",
   "status_column_last_refresh": "Last refresh",
   "status_column_model_name": "Model Name",
@@ -1693,8 +2200,13 @@
   "status_complete": "Complete",
   "status_compute_units": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} Compute unit",
         "countPlural=other": "{count} Compute units"
@@ -1747,7 +2259,9 @@
         "input count",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{first}, +{count} other",
         "countPlural=other": "{first}, +{count} others"
@@ -1796,13 +2310,20 @@
   "status_no_tables": "No tables found.",
   "status_note": "Note:",
   "status_one_level": "1 level",
+  "status_open_model_actions": "Open model actions",
+  "status_open_resource_actions": "Open resource actions",
   "status_owned_by_other": "Owned by another user",
   "status_owned_by_you": "Owned by you",
   "status_page_title": "Project Status",
   "status_parse_errors": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Parse error",
         "countPlural=other": "Parse errors"
@@ -1816,8 +2337,8 @@
   "status_refresh_all_confirm_tip": "To refresh a single resource, scroll to the source or model, click the '...' button, and select the refresh option.",
   "status_refresh_all_confirm_title": "Refresh all sources and models?",
   "status_refresh_all_sources_models": "Refresh all sources and models",
-  "status_refresh_errored_confirm_body": "This will re-execute all partitions that failed during their last run. The refresh will happen in the background.",
   "status_refresh_description": "Refreshing this resource will update all dependent resources.",
+  "status_refresh_errored_confirm_body": "This will re-execute all partitions that failed during their last run. The refresh will happen in the background.",
   "status_refresh_errored_confirm_title": "Refresh Errored Partitions for {modelName}?",
   "status_refreshing": "Refreshing...",
   "status_resource_reconciling": "Resource is currently being reconciled",
@@ -1825,8 +2346,13 @@
   "status_table": "Table",
   "status_table_label": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Table",
         "countPlural=other": "Tables"
@@ -1840,8 +2366,13 @@
   "status_view_all": "View all",
   "status_view_label": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "View",
         "countPlural=other": "Views"
@@ -1851,10 +2382,94 @@
   "status_view_singular": "View",
   "status_views": "Views",
   "status_yes_refresh": "Yes, refresh",
+  "studio_overview_banner": "Data source management, the semantic layer wizard, boards and chart pinning are live (M3/4). The 7-day question hit rate is still planned; the full feature set remains available in Advanced Mode (IDE).",
+  "studio_overview_connected_sources": "Connected data sources",
+  "studio_overview_desc": "One screen to see what the business can ask today, and what is still missing",
+  "studio_preview_business_view": "Preview business view",
+  "studio_preview_business_view_hint": "Open the published experience in a new tab, as a business user sees it",
+  "studio_error_env_starting": "The workbench is preparing your data environment…",
+  "studio_error_env_failed": "The data environment failed to start. Please contact your administrator.",
+  "studio_error_generic": "The workbench hit a problem:",
+  "studio_error_retry": "Retry",
+  "studio_overview_handle_in_publish": "Handle in “Publish”",
+  "studio_overview_hit_rate_7d": "7-day question hit rate",
+  "studio_overview_hit_rate_note": "Coming with M3 analytics",
+  "studio_overview_manage_in_semantics": "Manage in “Semantic Layer”",
+  "studio_overview_manage_in_sources": "Manage in “Data Sources”",
+  "studio_overview_pending_requests": "Pending requests",
+  "studio_overview_semantic_views": "Semantic layer metrics views",
+  "studio_publish_action": "Publish to production",
+  "studio_publish_confirm": "Publishing packages the current draft as a new release and updates production immediately. Continue?",
+  "studio_publish_current": "Current",
+  "studio_publish_desc": "Control which metrics views are visible to the business portal (suggested questions + Chat AI)",
+  "studio_publish_empty": "No metrics views in this data domain yet. Create one in “Semantic Layer” or Advanced Mode (IDE).",
+  "studio_publish_error": "Publish failed: {message}",
+  "studio_publish_gate_after": "are visible to the business; when the file is missing or the list is empty, nothing is gated (everything is visible).",
+  "studio_publish_gate_before": "Gating rule: only metrics views listed in the data-domain root",
+  "studio_publish_history_col_note": "Note",
+  "studio_publish_history_col_publisher": "Published by",
+  "studio_publish_history_col_time": "Time",
+  "studio_publish_history_col_version": "Version",
+  "studio_publish_history_empty": "No releases yet. The version history will show up here after the first publish.",
+  "studio_publish_history_title": "Release History",
+  "studio_publish_note_placeholder": "Release note (optional), e.g. Added transaction semantics",
+  "studio_publish_publishing": "Publishing…",
+  "studio_publish_release_desc": "Package the current draft as a new release and deploy it to production; the business side sees it immediately",
+  "studio_publish_release_title": "Publish to Production",
+  "studio_publish_rollback": "Roll back",
+  "studio_publish_rollback_confirm": "Roll back to v{version}? Production will switch to this release immediately.",
+  "studio_publish_rollback_error": "Rollback failed: {message}",
+  "studio_publish_rollback_success": "Rolled back to v{version}",
+  "studio_publish_status_published": "Published",
+  "studio_publish_status_unpublished": "Unpublished",
+  "studio_publish_success": "Published v{version}",
+  "studio_requests_desc": "Data requests raised by business users in chat (from /requests.yaml)",
+  "studio_requests_done_count": "Done ({count})",
+  "studio_requests_empty": "No pending requests",
+  "studio_requests_go_semantics": "Add semantics",
+  "studio_requests_mark_done": "✓ Mark done",
+  "studio_requests_title": "Request Inbox",
+  "studio_requests_view_all": "View all {count} requests",
+  "studio_requests_page_title": "Data requests",
+  "studio_requests_page_desc": "Questions business users asked that the semantic layer does not cover yet. Add the semantics and publish to close the loop.",
+  "studio_semantics_autosave": "Edits save automatically",
+  "studio_semantics_back_to_list": "Back to list",
+  "studio_semantics_col_label_coverage": "Chinese alias coverage",
+  "studio_semantics_col_measures_dims": "Measures / Dimensions",
+  "studio_semantics_col_metrics_view": "Metrics view",
+  "studio_semantics_col_status": "Status",
+  "studio_semantics_col_table": "Source table",
+  "studio_semantics_desc": "Metric/dimension definitions · Chinese aliases (label_cn) · No-code editing",
+  "studio_semantics_empty": "No metrics views yet. Click “New metrics view from table” in the top right to get started.",
+  "studio_semantics_generating": "Generating…",
+  "studio_semantics_new_from_table": "＋ New metrics view from table",
+  "studio_semantics_not_found": "Metrics view “{name}” not found.",
+  "studio_semantics_pick_table": "Pick a table",
+  "studio_semantics_pick_table_desc": "A draft metrics view will be generated from this table; you can keep editing it afterwards",
+  "studio_semantics_pick_table_desc_ai": "A draft metrics view will be generated from this table by AI; you can keep editing it afterwards",
+  "studio_semantics_status_error": "Parse error",
+  "studio_semantics_status_valid": "Valid",
+  "studio_sources_add": "＋ Add data source",
+  "studio_sources_analyzing": "Analyzing connectors…",
+  "studio_sources_desc": "Connected connectors · Guided setup · Table browsing",
+  "studio_sources_driver": "Driver: {name}",
+  "studio_sources_driver_unknown": "unknown",
+  "studio_sources_empty": "No data sources yet. Click “Add data source” in the top right to get started.",
+  "studio_sources_ide_hint": "Need to edit or delete connectors, or write SQL models?",
+  "studio_sources_ide_link": "Go to Advanced Mode (IDE) →",
+  "studio_sources_table_browser": "Table Browser",
+  "studio_tabs_ide": "Advanced Mode (IDE)",
+  "studio_tabs_overview": "Overview",
+  "studio_tabs_publish": "Publish",
+  "studio_tabs_semantics": "Semantic Layer",
+  "studio_tabs_sources": "Data Sources",
   "theme_beta": "Beta",
   "theme_dark": "Dark",
+  "theme_image_alt": "{value} image",
   "theme_label": "Theme",
   "theme_light": "Light",
+  "theme_pick_color_mode": "Pick your color mode",
+  "theme_select_aria": "Select {label} theme",
   "theme_system": "System",
   "time_ago": "{duration} ago",
   "time_all_time": "All time",
@@ -1890,8 +2505,13 @@
   "time_month_to_date": "Month to date",
   "time_n_days_ago": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} day ago",
         "countPlural=other": "{count} days ago"
@@ -1900,8 +2520,13 @@
   ],
   "time_n_hours_ago": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} hour ago",
         "countPlural=other": "{count} hours ago"
@@ -1910,8 +2535,13 @@
   ],
   "time_n_minutes_ago": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} minute ago",
         "countPlural=other": "{count} minutes ago"
@@ -1920,8 +2550,13 @@
   ],
   "time_n_months_ago": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} month ago",
         "countPlural=other": "{count} months ago"
@@ -1930,8 +2565,13 @@
   ],
   "time_n_weeks_ago": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} week ago",
         "countPlural=other": "{count} weeks ago"
@@ -1940,8 +2580,13 @@
   ],
   "time_n_years_ago": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} year ago",
         "countPlural=other": "{count} years ago"
@@ -1991,7 +2636,9 @@
         "input role",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Added {count} group as {role}",
         "countPlural=other": "Added {count} groups as {role}"
@@ -2005,7 +2652,9 @@
         "input count",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{emails} is already a member of this organization",
         "countPlural=other": "{emails} are already members of this organization"
@@ -2040,7 +2689,9 @@
         "input count",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Failed to add group: {groups}",
         "countPlural=other": "Failed to add groups: {groups}"
@@ -2054,7 +2705,9 @@
         "input count",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Failed to invite {emails}",
         "countPlural=other": "Failed to invite: {emails}"
@@ -2068,7 +2721,9 @@
         "input count",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Failed to invite user: {emails}",
         "countPlural=other": "Failed to invite users: {emails}"
@@ -2091,8 +2746,13 @@
   "users_general_access": "General Access",
   "users_group_count": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} Group",
         "countPlural=other": "{count} Groups"
@@ -2108,7 +2768,9 @@
         "input role",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Invited {count} guest as {role}",
         "countPlural=other": "Invited {count} guests as {role}"
@@ -2127,7 +2789,10 @@
         "local emailsPlural = emails: plural",
         "local groupsPlural = groups: plural"
       ],
-      "selectors": ["emailsPlural", "groupsPlural"],
+      "selectors": [
+        "emailsPlural",
+        "groupsPlural"
+      ],
       "match": {
         "emailsPlural=one, groupsPlural=one": "Invited {emails} person and added {groups} group as {role}",
         "emailsPlural=one, groupsPlural=other": "Invited {emails} person and added {groups} groups as {role}",
@@ -2143,7 +2808,9 @@
         "input role",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Invited {count} person as {role}",
         "countPlural=other": "Invited {count} people as {role}"
@@ -2155,8 +2822,13 @@
   "users_loading_more": "Loading more…",
   "users_member_count": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} member",
         "countPlural=other": "{count} members"
@@ -2174,7 +2846,9 @@
         "input role",
         "local countPlural = count: plural"
       ],
-      "selectors": ["countPlural"],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "Successfully invited {count} person as {role}",
         "countPlural=other": "Successfully invited {count} people as {role}"
@@ -2182,13 +2856,18 @@
     }
   ],
   "users_org_members_access": "Org members can access",
-  "users_page_title": "Manage users",
+  "users_page_title": "Manage members",
   "users_pending_invitation": "Pending invitation",
   "users_project_access": "Project access",
   "users_project_count": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} Project",
         "countPlural=other": "{count} Projects"
@@ -2221,8 +2900,13 @@
   "users_url_copied": "URL copied",
   "users_user_count": [
     {
-      "declarations": ["input count", "local countPlural = count: plural"],
-      "selectors": ["countPlural"],
+      "declarations": [
+        "input count",
+        "local countPlural = count: plural"
+      ],
+      "selectors": [
+        "countPlural"
+      ],
       "match": {
         "countPlural=one": "{count} user",
         "countPlural=other": "{count} users"
@@ -2231,9 +2915,15 @@
   ],
   "users_yes_remove": "Yes, remove",
   "users_yes_upgrade": "Yes, upgrade",
-  "workspace_generating_sample_data": "Generating your sample data...",
-  "parquet_preview_read_error_title": "Unable to read Parquet file",
-  "parquet_preview_unknown_error": "Unknown error",
-  "parquet_preview_no_project_dir": "Could not resolve the project directory for this file.",
-  "parquet_preview_requires_duckdb": "Previewing Parquet files requires a DuckDB connector."
+  "view_as_user_description": "Test your security policies by viewing this project from the perspective of another user.",
+  "view_as_user_users": "Users",
+  "visual_metrics_label_cn": "Chinese alias",
+  "visual_metrics_label_cn_hint": "Chinese field name used by business users in Chat (label_cn)",
+  "vtable_click": "Click",
+  "vtable_copy_column_name": "column name to clipboard",
+  "vtable_copy_value": "this value to clipboard",
+  "vtable_pin_column": "Pin this column to left side of the table",
+  "vtable_sort_column": "Sort column",
+  "vtable_unpin_column": "Unpin this column from left side of the table",
+  "workspace_generating_sample_data": "Generating your sample data..."
 }

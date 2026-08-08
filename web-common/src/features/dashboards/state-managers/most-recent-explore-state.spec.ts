@@ -30,7 +30,7 @@ import { queryClient } from "@rilldata/web-common/lib/svelte-query/globalQueryCl
 import {
   DashboardState_LeaderboardSortDirection,
   DashboardState_LeaderboardSortType,
-} from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+} from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import {
   RUNTIME_CONTEXT_KEY,
   RuntimeClient,

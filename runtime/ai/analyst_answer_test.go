@@ -42,6 +42,15 @@ func TestParseAnalystAnswer(t *testing.T) {
 			wantBody: "The revenue increased by 25% last quarter.",
 			wantSum:  false,
 		},
+		{
+			// LLM forgot to escape inner double quotes inside a string value
+			// (real-world case: 是绝对的"黄金客群"). The repair candidate must
+			// recover the structured answer instead of leaking raw JSON.
+			name:     "unescaped inner quotes repaired",
+			raw:      `{"summary":"s","body":"b","insights":["是绝对的"黄金客群"、价值极高"],"follow_ups":["q?"]}`,
+			wantBody: "b",
+			wantSum:  true,
+		},
 	}
 	for _, tc := range cases {
 		t.Run(tc.name, func(t *testing.T) {

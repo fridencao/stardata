@@ -8,8 +8,8 @@ import (
 	"strings"
 	"time"
 
-	aiv1 "github.com/fridencao/stardata/proto/gen/rill/ai/v1"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	aiv1 "github.com/fridencao/stardata/proto/gen/stardata/ai/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/pkg/activity"

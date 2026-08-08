@@ -4,6 +4,7 @@
   import { extractErrorMessage } from "../../../lib/errors";
   import { useGetTable } from "../selectors";
   import { useRuntimeClient } from "../../../runtime-client/v2";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let connector: string;
   export let database: string = ""; // The backend interprets an empty string as the default database
@@ -45,10 +46,12 @@
 <ul class="table-schema-list">
   {#if isError}
     <div class="{leftPadding} py-1.5 text-fg-secondary">
-      Error loading schema: {extractErrorMessage(error)}
+      {m.connector_schema_error({ message: extractErrorMessage(error) })}
     </div>
   {:else if isLoading}
-    <div class="{leftPadding} py-1.5 text-fg-secondary">Loading schema...</div>
+    <div class="{leftPadding} py-1.5 text-fg-secondary">
+      {m.connector_schema_loading()}
+    </div>
   {:else if columns && columns.length > 0}
     {#each columns as column (column.name)}
       <li class="table-schema-entry {leftPadding}">
@@ -64,7 +67,9 @@
       </li>
     {/each}
   {:else}
-    <div class="{leftPadding} py-1.5 text-fg-secondary">No columns found</div>
+    <div class="{leftPadding} py-1.5 text-fg-secondary">
+      {m.connector_no_columns()}
+    </div>
   {/if}
 </ul>
 

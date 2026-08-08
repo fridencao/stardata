@@ -5,6 +5,7 @@
   import { defaults, superForm } from "sveltekit-superforms";
   import { yup } from "sveltekit-superforms/adapters";
   import { object, string } from "yup";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let onClose: () => void = () => {};
   export let onBack: () => void = () => {};
@@ -20,8 +21,8 @@
   };
 
   const validationSchema = object({
-    request: string().required("Required"),
-    email: string().email("Invalid email"),
+    request: string().required(m.common_required()),
+    email: string().email(m.source_request_invalid_email()),
   });
 
   const { form, enhance, submit, errors, submitting } = superForm(
@@ -46,7 +47,7 @@
           });
           onClose();
           eventBus.emit("notification", {
-            message: "Thanks for your request!",
+            message: m.source_request_thanks(),
           });
         } catch (e) {
           console.error(e);
@@ -65,33 +66,33 @@
   use:enhance
 >
   <span class="text-fg-secondary text-sm mt-2">
-    Don't see the connector you're looking for? Let us know what we're missing!
+    {m.source_request_prompt()}
   </span>
   <Input
     id="request"
-    label="Connector"
-    placeholder="Your data source"
+    label={m.source_request_connector_label()}
+    placeholder={m.source_request_connector_placeholder()}
     errors={$errors.request}
     bind:value={$form.request}
     alwaysShowError
   />
   <Input
     id="email"
-    label="Optionally, we can let you know when the connector is available."
-    placeholder="Your email address"
+    label={m.source_request_email_label()}
+    placeholder={m.source_request_email_placeholder()}
     errors={$errors.email}
     bind:value={$form.email}
   />
   <div class="flex gap-x-2">
     <div class="grow"></div>
-    <Button onClick={onBack} type="secondary">Back</Button>
+    <Button onClick={onBack} type="secondary">{m.common_back()}</Button>
     <Button
       type="primary"
       submitForm
       form="request-connector-form"
       disabled={$submitting}
     >
-      Request connector
+      {m.source_request_submit()}
     </Button>
   </div>
 </form>

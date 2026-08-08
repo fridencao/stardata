@@ -1,7 +1,7 @@
 import type { PartialMessage } from "@bufbuild/protobuf";
 import { type ConnectError, createPromiseClient } from "@connectrpc/connect";
 import { createConnectTransport } from "@connectrpc/connect-web";
-import { LocalService } from "@rilldata/web-common/proto/gen/rill/local/v1/api_connect";
+import { LocalService } from "@rilldata/web-common/proto/gen/stardata/local/v1/api_connect";
 import { getStardataToken } from "./auth-token";
 import {
   DeployProjectRequest,
@@ -10,22 +10,17 @@ import {
   GetMetadataRequest,
   ListOrganizationsAndBillingMetadataRequest,
   GetVersionRequest,
-  PushToGithubRequest,
   RedeployProjectRequest,
   CreateOrganizationRequest,
   ListMatchingProjectsRequest,
   ListProjectsForOrgRequest,
   GetProjectRequest,
-  GithubRepoStatusRequest,
-} from "@rilldata/web-common/proto/gen/rill/local/v1/api_pb";
+} from "@rilldata/web-common/proto/gen/stardata/local/v1/api_pb";
 import {
   createMutation,
   createQuery,
   type CreateMutationOptions,
   type CreateQueryOptions,
-  type QueryFunction,
-  type DataTag,
-  type QueryKey,
 } from "@tanstack/svelte-query";
 
 /**
@@ -113,33 +108,6 @@ export function createLocalServiceGetVersion<
     queryKey: queryOptions?.queryKey ?? getLocalServiceGetVersionQueryKey(),
     queryFn: queryOptions?.queryFn ?? localServiceGetVersion,
   });
-}
-
-export function localServicePushToGithub(
-  args: PartialMessage<PushToGithubRequest>,
-) {
-  return getClient().pushToGithub(new PushToGithubRequest(args));
-}
-export function createLocalServicePushToGithub<
-  TError = ConnectError,
-  TContext = unknown,
->(options?: {
-  mutation?: Partial<
-    CreateMutationOptions<
-      Awaited<ReturnType<typeof localServicePushToGithub>>,
-      TError,
-      PartialMessage<PushToGithubRequest>,
-      TContext
-    >
-  >;
-}) {
-  const { mutation: mutationOptions } = options ?? {};
-  return createMutation<
-    Awaited<ReturnType<typeof localServicePushToGithub>>,
-    unknown,
-    PartialMessage<PushToGithubRequest>,
-    unknown
-  >({ mutationFn: localServicePushToGithub, ...mutationOptions });
 }
 
 export function localServiceDeploy(args: PartialMessage<DeployProjectRequest>) {
@@ -372,69 +340,6 @@ export function createLocalServiceListProjectsForOrgRequest<
       queryOptions?.queryFn ??
       (() => localServiceListProjectsForOrgRequest(org)),
   });
-}
-
-export function localServiceGithubRepoStatus(remote: string) {
-  return getClient().githubRepoStatus(
-    new GithubRepoStatusRequest({
-      remote,
-    }),
-  );
-}
-export const getLocalServiceGithubRepoStatusQueryKey = (remote: string) => [
-  `/v1/local/git-repo-status`,
-  remote,
-];
-export const getLocalServiceGithubRepoStatusQueryOptions = <
-  TData = Awaited<ReturnType<typeof localServiceGithubRepoStatus>>,
-  TError = ConnectError,
->(
-  remote: string,
-  options?: {
-    query?: Partial<
-      CreateQueryOptions<
-        Awaited<ReturnType<typeof localServiceGithubRepoStatus>>,
-        TError,
-        TData
-      >
-    >;
-  },
-) => {
-  const { query: queryOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ?? getLocalServiceGithubRepoStatusQueryKey(remote);
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof localServiceGithubRepoStatus>>
-  > = () => localServiceGithubRepoStatus(remote);
-
-  return { queryKey, queryFn, ...queryOptions } as CreateQueryOptions<
-    Awaited<ReturnType<typeof localServiceGithubRepoStatus>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-export function createLocalServiceGithubRepoStatus<
-  TData = Awaited<ReturnType<typeof localServiceGithubRepoStatus>>,
-  TError = ConnectError,
->(
-  remote: string,
-  options?: {
-    query?: Partial<
-      CreateQueryOptions<
-        Awaited<ReturnType<typeof localServiceGithubRepoStatus>>,
-        TError,
-        TData
-      >
-    >;
-  },
-) {
-  const queryOptions = getLocalServiceGithubRepoStatusQueryOptions(
-    remote,
-    options,
-  );
-  return createQuery(queryOptions);
 }
 
 export function localServiceGetProjectRequest(

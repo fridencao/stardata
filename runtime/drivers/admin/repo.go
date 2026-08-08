@@ -16,7 +16,7 @@ import (
 	"time"
 
 	"github.com/bmatcuk/doublestar/v4"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/pkg/ctxsync"
 	"github.com/fridencao/stardata/runtime/pkg/filewatcher"
@@ -237,6 +237,22 @@ func (r *repo) Stat(ctx context.Context, path string) (*drivers.FileInfo, error)
 	return nil, statErr
 }
 
+// writableRoot returns the root directory for write operations.
+// It returns an error if the repo does not support editing.
+// Editing is supported for editable git repos and editable archive repos (dev draft area).
+func (r *repo) writableRoot() (string, error) {
+	if r.git != nil {
+		if !r.git.editable() {
+			return "", fmt.Errorf("repo is not editable")
+		}
+		return r.git.root(), nil
+	}
+	if r.archive != nil && r.archive.editable {
+		return r.archive.root(), nil
+	}
+	return "", fmt.Errorf("repo is not editable")
+}
+
 // Put implements drivers.RepoStore.
 func (r *repo) Put(ctx context.Context, path string, reader io.Reader) error {
 	err := r.rlockEnsureReady(ctx, false)
@@ -245,10 +261,10 @@ func (r *repo) Put(ctx context.Context, path string, reader io.Reader) error {
 	}
 	defer r.mu.RUnlock()
 
-	if r.git != nil && !r.git.editable() {
-		return fmt.Errorf("repo is not editable")
+	root, err := r.writableRoot()
+	if err != nil {
+		return err
 	}
-	root := r.git.root()
 
 	if drivers.IsIgnored(path, r.ignorePaths) {
 		return fmt.Errorf("can't write to ignored path %q", path)
@@ -283,10 +299,10 @@ func (r *repo) MkdirAll(ctx context.Context, path string) error {
 	}
 	defer r.mu.RUnlock()
 
-	if r.git != nil && !r.git.editable() {
-		return fmt.Errorf("repo is not editable")
+	root, err := r.writableRoot()
+	if err != nil {
+		return err
 	}
-	root := r.git.root()
 
 	if drivers.IsIgnored(path, r.ignorePaths) {
 		return fmt.Errorf("can't write to ignored path %q", path)
@@ -310,10 +326,10 @@ func (r *repo) Rename(ctx context.Context, fromPath, toPath string) error {
 	}
 	defer r.mu.RUnlock()
 
-	if r.git != nil && !r.git.editable() {
-		return fmt.Errorf("repo is not editable")
+	root, err := r.writableRoot()
+	if err != nil {
+		return err
 	}
-	root := r.git.root()
 
 	if drivers.IsIgnored(fromPath, r.ignorePaths) {
 		return fmt.Errorf("can't write from ignored path %q", fromPath)
@@ -349,10 +365,10 @@ func (r *repo) Delete(ctx context.Context, path string, force bool) error {
 	}
 	defer r.mu.RUnlock()
 
-	if r.git != nil && !r.git.editable() {
-		return fmt.Errorf("repo is not editable")
+	root, err := r.writableRoot()
+	if err != nil {
+		return err
 	}
-	root := r.git.root()
 
 	if drivers.IsIgnored(path, r.ignorePaths) {
 		return fmt.Errorf("can't write to ignored path %q", path)
@@ -385,11 +401,11 @@ func (r *repo) Watch(ctx context.Context, cb drivers.WatchCallback) error {
 	// Check and copy config, then release the read lock early.
 	// We cannot access mutable fields on repo without holding a read lock, but we also can't hold the read lock forever while the watcher is running.
 	// In case the root or ignorePaths change, the watcher will respond to configCtx cancellation ensuring adequate consistency.
-	if r.git != nil && !r.git.editable() {
+	root, err := r.writableRoot()
+	if err != nil {
 		r.mu.RUnlock()
 		return fmt.Errorf("repo is not watchable")
 	}
-	root := r.git.root()
 	ignorePaths := r.ignorePaths
 	configCtx := r.configCtx
 	r.mu.RUnlock()
@@ -685,7 +701,7 @@ func (r *repo) close() error {
 	}
 	defer r.mu.RUnlock()
 
-	if r.archive != nil {
+	if r.archive != nil && !r.archive.editable {
 		_ = os.RemoveAll(r.archive.tmpDir)
 	}
 
@@ -960,14 +976,22 @@ func (r *repo) checkHandshake(ctx context.Context, force bool) error {
 	// Setup or refresh credentials for r.archive.
 	if meta.ArchiveDownloadUrl != "" {
 		if r.archive == nil {
-			tmpDir, err := r.h.storage.RandomTempDir("archive")
+			// Editable (dev) deployments use a persistent directory so that draft edits survive restarts.
+			var dir string
+			var err error
+			if meta.Editable {
+				dir, err = r.h.storage.DataDir("archive")
+			} else {
+				dir, err = r.h.storage.RandomTempDir("archive")
+			}
 			if err != nil {
 				return err
 			}
 
 			r.archive = &archiveRepo{
-				h:      r.h,
-				tmpDir: tmpDir,
+				h:        r.h,
+				tmpDir:   dir,
+				editable: meta.Editable,
 			}
 		}
 

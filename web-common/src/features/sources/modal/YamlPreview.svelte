@@ -1,6 +1,7 @@
 <script lang="ts">
   import Check from "@rilldata/web-common/components/icons/Check.svelte";
   import { Copy } from "lucide-svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let title: string;
   export let yaml: string;
@@ -20,7 +21,7 @@
     <button
       class="absolute top-2 right-2 p-1 rounded"
       type="button"
-      aria-label="Copy YAML"
+      aria-label={m.source_yaml_copy()}
       onclick={copyYaml}
     >
       {#if copied}
@@ -31,7 +32,7 @@
     </button>
     <pre
       class="bg-surface-muted p-3 rounded text-xs border border-gray-200 overflow-x-auto"
-      aria-label="Yaml preview">{yaml}</pre>
+      aria-label={m.source_yaml_preview_aria()}>{yaml}</pre>
   </div>
   <slot />
   <!-- support need help, errors etc -->

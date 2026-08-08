@@ -1,6 +1,7 @@
 <script lang="ts">
   import * as DropdownMenu from "../../../../components/dropdown-menu";
   import { getRelativeTime } from "../../../../lib/time/relative-time";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import type { V1Conversation } from "../../../../runtime-client";
 
   export let conversation: V1Conversation;
@@ -23,7 +24,7 @@
 >
   <div class="min-w-0">
     <div class="text-xs text-fg-primary truncate">
-      {conversation.title || "New Conversation"}
+      {conversation.title || m.chat_new_conversation()}
     </div>
   </div>
   <div class="flex items-center gap-2 flex-shrink-0">
@@ -31,7 +32,7 @@
       <span class="text-xs text-fg-secondary">{relativeTime}</span>
     {/if}
     {#if isCurrentChat}
-      <span class="text-xs text-fg-secondary">Current chat</span>
+      <span class="text-xs text-fg-secondary">{m.chat_current_chat()}</span>
     {/if}
   </div>
 </DropdownMenu.Item>

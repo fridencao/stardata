@@ -34,14 +34,20 @@
 
 <div class="wrapper">
   {#if hasError}
-    <span class="message pl-6">Error: {connector.errorMessage}</span>
+    <span class="message pl-6"
+      >{m.connector_error_message({ message: connector.errorMessage ?? "" })}</span
+    >
   {:else if isLoading && queryEnabled}
     <span class="message pl-6">{m.status_loading_tables_short()}</span>
   {:else if error && queryEnabled}
-    <span class="message pl-6">Error: {extractErrorMessage(error)}</span>
+    <span class="message pl-6"
+      >{m.connector_error_message({
+        message: extractErrorMessage(error),
+      })}</span
+    >
   {:else if data}
     {#if data.length === 0}
-      <span class="message pl-6">No tables found</span>
+      <span class="message pl-6">{m.connector_no_tables()}</span>
     {:else}
       <ol transition:slide={{ duration }}>
         {#each data as database (database)}

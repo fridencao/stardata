@@ -6,7 +6,7 @@ import (
 	"fmt"
 
 	"github.com/modelcontextprotocol/go-sdk/mcp"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
 	parser "github.com/fridencao/stardata/runtime/parser"
 	"google.golang.org/protobuf/encoding/protojson"
@@ -75,11 +75,6 @@ func (t *GetMetricsView) Handler(ctx context.Context, args *GetMetricsViewArgs) 
 
 	if r.GetMetricsView().State.ValidSpec == nil {
 		return nil, fmt.Errorf("metrics view %q is invalid", args.MetricsView)
-	}
-
-	// StarData publish gate: block direct access to unpublished metrics views.
-	if pub, gated := publishedMetricsViews(ctx, t.Runtime, session.InstanceID()); gated && !pub[args.MetricsView] {
-		return nil, fmt.Errorf("metrics view %q is not published", args.MetricsView)
 	}
 
 	specJSON, err := protojson.Marshal(r.GetMetricsView().State.ValidSpec)

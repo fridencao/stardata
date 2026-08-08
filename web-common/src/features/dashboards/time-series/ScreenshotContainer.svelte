@@ -174,6 +174,7 @@
         </div>
 
         <footer class="flex items-center justify-between text-xs text-fg-muted">
+          <!-- i18n-ignore: brand name -->
           <span>StarData</span>
           <span>{m.dashboard_generated({ time: generatedTime })}</span>
         </footer>

@@ -4,7 +4,6 @@
     SortDirection,
     SortType,
   } from "@rilldata/web-common/features/dashboards/proto-state/derived-types";
-  import { EmbedStore } from "@rilldata/web-common/features/embeds/embed-store";
   import { getStateManagers } from "@rilldata/web-common/features/dashboards/state-managers/state-managers";
   import { metricsExplorerStore } from "@rilldata/web-common/features/dashboards/stores/dashboard-stores";
   import { useTimeControlStore } from "@rilldata/web-common/features/dashboards/time-controls/time-control-store";
@@ -26,8 +25,6 @@
   export let exploreName: string;
   export let expandedMeasureName: string;
   export let hideStartPivotButton = false;
-
-  $: isEmbedded = EmbedStore.isEmbedded();
 
   const stateManagers = getStateManagers();
   const {
@@ -202,7 +199,9 @@
 
 <div
   class="h-full w-full flex flex-col bg-surface-base"
-  aria-label="{expandedMeasureName} Time Dimension Display"
+  aria-label={m.dashboard_time_dimension_display_aria({
+    name: expandedMeasureName,
+  })}
 >
   <TDDHeader
     {areAllTableRowsSelected}
@@ -225,16 +224,6 @@
         <div class="text-red-600 mt-1 text-lg">
           {m.dashboard_tdd_error()}
         </div>
-        {#if !isEmbedded}
-          <div class="text-fg-secondary">
-            {m.dashboard_tdd_contact_discord()}
-            <a
-              target="_blank"
-              rel="noopener noreferrer"
-              href="https://discord.gg/2ubRfjC7Rh">Discord</a
-            >.
-          </div>
-        {/if}
       </div>
     </div>
   {:else if formattedData && comparisonCopy && measure}

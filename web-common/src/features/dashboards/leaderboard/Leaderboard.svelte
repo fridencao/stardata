@@ -2,7 +2,7 @@
   import Tooltip from "@rilldata/web-common/components/tooltip/Tooltip.svelte";
   import TooltipContent from "@rilldata/web-common/components/tooltip/TooltipContent.svelte";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
-  import { DashboardState_LeaderboardSortType } from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+  import { DashboardState_LeaderboardSortType } from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
   import type {
     MetricsViewSpecDimension,
     MetricsViewSpecMeasure,

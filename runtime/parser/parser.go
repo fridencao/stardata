@@ -12,7 +12,7 @@ import (
 	"strconv"
 	"strings"
 
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime/drivers"
 	"github.com/fridencao/stardata/runtime/pkg/fileutil"
 )
@@ -32,6 +32,8 @@ var ignorePathPrefixes = []string{
 	// StarData: portal config files managed via Studio; listed in the UI but not parsed as resources.
 	"/publish.yaml",
 	"/requests.yaml",
+	// StarData: data-request backlog synced as a dev-environment virtual file (see admin/server/data_requests.go).
+	"/__virtual__/requests.yaml",
 }
 
 // Resource parsed from code files.
@@ -607,6 +609,14 @@ func (p *Parser) reparseExceptRillYAML(ctx context.Context, paths []string) (*Di
 // It also assumes that the caller has already removed any previous resources related to the paths,
 // enabling parsePaths to insert changed resources without conflicts.
 func (p *Parser) parsePaths(ctx context.Context, paths []string) error {
+	// Drop ignored paths.
+	// Reparse filters these before calling us, but the initial full parse (reload) does not,
+	// so without this a file like /publish.yaml would be parsed once at startup and reported
+	// as "resource type not specified" until the next reparse.
+	paths = slices.DeleteFunc(slices.Clone(paths), func(path string) bool {
+		return pathIsIgnored(normalizePath(path))
+	})
+
 	// Check limits
 	if len(paths) > maxFiles {
 		return fmt.Errorf("project exceeds file limit of %d", maxFiles)

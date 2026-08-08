@@ -2,7 +2,7 @@ package whitelist
 
 import (
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/spf13/cobra"
 )
 
@@ -33,7 +33,7 @@ func RemoveCmd(ch *cmdutil.Helper) *cobra.Command {
 					return err
 				}
 
-				ch.PrintfWarn("New users with email addresses ending in %q will no longer automatically be added to project %q of %q. Existing users previously added through this policy will keep their access. (To remove users, use `rill user remove`.)\n", domain, project, ch.Org)
+				ch.PrintfWarn("New users with email addresses ending in %q will no longer automatically be added to project %q of %q. Existing users previously added through this policy will keep their access. (To remove users, use `stardata user remove`.)\n", domain, project, ch.Org)
 				return nil
 			}
 
@@ -45,7 +45,7 @@ func RemoveCmd(ch *cmdutil.Helper) *cobra.Command {
 				return err
 			}
 
-			ch.PrintfWarn("New users with email addresses ending in %q will no longer automatically be added to organization %q. Existing users previously added through this policy will keep their access. (To remove users, use `rill user remove`.)\n", domain, ch.Org)
+			ch.PrintfWarn("New users with email addresses ending in %q will no longer automatically be added to organization %q. Existing users previously added through this policy will keep their access. (To remove users, use `stardata user remove`.)\n", domain, ch.Org)
 			return nil
 		},
 	}

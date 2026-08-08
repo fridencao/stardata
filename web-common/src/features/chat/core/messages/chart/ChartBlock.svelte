@@ -20,6 +20,7 @@
   import ToolCall from "../tools/ToolCall.svelte";
   import type { ChartBlock } from "./chart-block";
   import PinToBoardDialog from "./PinToBoardDialog.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let block: ChartBlock;
   export let tools: V1Tool[] | undefined = undefined;
@@ -113,7 +114,7 @@
 <div class="chart-block">
   {#if canPin}
     <div class="flex justify-end pb-1">
-      <Button type="tertiary" onClick={() => (pinOpen = true)}>📌 钉到看板</Button>
+      <Button type="tertiary" onClick={() => (pinOpen = true)}>{m.chat_pin_cta()}</Button>
     </div>
     <PinToBoardDialog
       bind:open={pinOpen}

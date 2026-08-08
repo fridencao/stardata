@@ -11,6 +11,7 @@
     createQueryServiceTableColumns,
   } from "@rilldata/web-common/runtime-client";
   import { useRuntimeClient } from "@rilldata/web-common/runtime-client/v2";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let connector: string;
   export let database: string;
@@ -70,7 +71,7 @@
           tooltipText="available columns"
           bind:active={showColumns}
         >
-          Table columns
+          {m.connector_table_columns()}
         </CollapsibleSectionTitle>
       </div>
 

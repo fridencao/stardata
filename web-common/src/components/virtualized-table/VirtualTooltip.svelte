@@ -1,6 +1,7 @@
 <script lang="ts">
   import { isClipboardApiSupported } from "@rilldata/web-common/lib/actions/copy-to-clipboard";
   import { portal } from "@rilldata/web-common/lib/actions/portal";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
   import FormattedDataType from "../data-types/FormattedDataType.svelte";
   import Shortcut from "../tooltip/Shortcut.svelte";
   import StackingWord from "../tooltip/StackingWord.svelte";
@@ -32,7 +33,7 @@
 >
   <TooltipContent maxWidth="360px">
     {#if hovering.isPin}
-      {pinned ? "Unpin" : "Pin"} this column to left side of the table
+      {pinned ? m.vtable_unpin_column() : m.vtable_pin_column()}
     {:else}
       <TooltipTitle>
         <svelte:fragment slot="name">
@@ -55,16 +56,17 @@
       {#if !hovering.isPin}
         <TooltipShortcutContainer>
           {#if hovering.isHeader && sortable}
-            <div>Sort column</div>
-            <Shortcut>Click</Shortcut>
+            <div>{m.vtable_sort_column()}</div>
+            <Shortcut>{m.vtable_click()}</Shortcut>
           {/if}
           {#if isClipboardApiSupported()}
             <div>
-              <StackingWord key="shift">Copy</StackingWord>
-              {hovering.isHeader ? "column name" : "this value"} to clipboard
+              <StackingWord key="shift">{m.chart_copy_to_clipboard()}</StackingWord>
+              {hovering.isHeader ? m.vtable_copy_column_name() : m.vtable_copy_value()}
             </div>
             <Shortcut>
-              <span style="font-family: var(--system);">⇧</span> + Click
+              <span style="font-family: var(--system);">⇧</span>
+              {m.bignumber_shift_click()}
             </Shortcut>
           {/if}
           {#if customShortcuts.length > 0}

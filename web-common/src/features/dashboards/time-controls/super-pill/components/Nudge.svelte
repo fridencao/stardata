@@ -2,6 +2,7 @@
   import CaretDownIcon from "@rilldata/web-common/components/icons/CaretDownIcon.svelte";
   import Tooltip from "@rilldata/web-common/components/tooltip/Tooltip.svelte";
   import TooltipContent from "@rilldata/web-common/components/tooltip/TooltipContent.svelte";
+  import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 
   export let canPanLeft: boolean;
   export let canPanRight: boolean;
@@ -18,7 +19,9 @@
       <CaretDownIcon size="16px" />
     </span>
     <TooltipContent slot="tooltip-content">
-      Step time {direction === "left" ? "back" : "forward"}
+      {direction === "left"
+        ? m.dashboard_step_time_back()
+        : m.dashboard_step_time_forward()}
     </TooltipContent>
   </Tooltip>
 </button>

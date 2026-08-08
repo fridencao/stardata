@@ -2,6 +2,7 @@ import { convertExpressionToFilterParam } from "@rilldata/web-common/features/da
 import { ExploreStateURLParams } from "@rilldata/web-common/features/dashboards/url-state/url-params";
 import { mapResolverExpressionToV1Expression } from "@rilldata/web-common/features/explore-mappers/map-metrics-resolver-query-to-dashboard";
 import { isSeq, parseDocument } from "yaml";
+import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
 import type { ChartType } from "../../../../components/charts/types";
 
 /** chat chart spec fields that are transcribed to component-level filters, not copied directly */
@@ -72,7 +73,7 @@ export function appendChartToCanvasYaml(
 ): string {
   const doc = parseDocument(existingYaml);
   if (doc.errors.length > 0) {
-    throw new Error("看板文件格式有误，无法写入");
+    throw new Error(m.chat_pin_board_file_invalid());
   }
 
   const row = {

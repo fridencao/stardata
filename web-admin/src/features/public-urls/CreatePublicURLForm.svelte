@@ -172,10 +172,13 @@
       {#if setExpiration}
         <div class="flex items-center gap-x-1 pl-[30px]">
           <label for="expires-at" class="text-fg-secondary font-medium">
-            Access expires {new Date($form.expiresAt).toLocaleDateString(
-              "en-US",
-              { year: "numeric", month: "short", day: "numeric" },
-            )}
+            {m.public_url_access_expires({
+              date: new Date($form.expiresAt).toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              }),
+            })}
           </label>
           <Popover bind:open={popoverOpen}>
             <PopoverTrigger>
@@ -206,12 +209,13 @@
         <Switch small id="lock-time-range" bind:checked={lockTimeRange} />
 
         <div class="flex flex-row items-center gap-x-1">
+          i18n-ignore
           <Label class="text-xs" for="lock-time-range">Lock time range</Label>
           <Tooltip location="right" alignment="middle" distance={8}>
             <div class="text-fg-secondary">
               <InfoCircle size="12px" />
             </div>
-            <TooltipContent maxWidth="400px" slot="tooltip-content">
+            <TooltipContent maxWidth="400px" slot="tooltip-content"> i18n-ignore
               Only data within this range will be visible
             </TooltipContent>
           </Tooltip>

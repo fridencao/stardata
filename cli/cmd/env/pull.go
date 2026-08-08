@@ -8,7 +8,7 @@ import (
 
 	"github.com/joho/godotenv"
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/fridencao/stardata/runtime/parser"
 	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"github.com/spf13/cobra"
@@ -57,7 +57,7 @@ func PullVars(ctx context.Context, ch *cmdutil.Helper, projectPath, projectName,
 		return fmt.Errorf("failed to parse project: %w", err)
 	}
 	if p.RillYAML == nil {
-		return fmt.Errorf("not a valid Rill project (missing a rill.yaml file)")
+		return fmt.Errorf("not a valid StarData project (missing a rill.yaml file)")
 	}
 
 	// Find the cloud project name

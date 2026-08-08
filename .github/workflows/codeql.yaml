@@ -42,7 +42,6 @@ jobs:
           javascript-typescript:
             - "web-admin/**"
             - "web-common/**"
-            - "web-local/**"
 
     - name: Initialize CodeQL
       uses: github/codeql-action/init@v3

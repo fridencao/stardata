@@ -245,7 +245,7 @@
           >
             <span slot="action">
               {@html m.dashboard_list_create_to_start({
-                link: `<a href="https://docs.rilldata.com/developers/build/dashboards" target="_blank" rel="noopener noreferrer">${escapeHtml(m.dashboard_list_create())}</a>`,
+                link: m.dashboard_list_create(),
               })}
             </span>
           </ResourceListEmptyState>

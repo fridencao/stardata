@@ -6,8 +6,8 @@ import (
 
 	"github.com/fridencao/stardata/admin/database"
 	"github.com/fridencao/stardata/admin/server/auth"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
 	runtimeauth "github.com/fridencao/stardata/runtime/server/auth"
 	"google.golang.org/grpc/codes"
@@ -193,28 +193,65 @@ func (s *Server) issueRuntimeToken(ctx context.Context, opts *issueRuntimeTokenO
 		runtime.ReadObjects,
 		runtime.UseAI,
 	}
+	// Tokens issued without project permissions (magic links, embeds, service
+	// attribute overrides) keep the pre-feature-matrix behaviour: all features open.
+	if opts.projectPermissions == nil {
+		instancePermissions = append(instancePermissions,
+			runtime.ReadDashboards,
+			runtime.ReadReports,
+			runtime.ReadAlerts,
+		)
+	}
 	if canReadStatus || canManage {
 		instancePermissions = append(
 			instancePermissions,
 			runtime.ReadInstance,
 			runtime.ReadResolvers,
 		)
+	}
+	// Read-only repo + OLAP + profiling access is granted whenever the subject
+	// can see the deployment status or manage it — including on non-editable
+	// (prod) deployments. The studio/editor must read project files and
+	// subscribe to file events (SSE) to render the editing environment; without
+	// ReadRepo those calls fail with "action not allowed" and the SSE stream
+	// drops ("Lost connection to the editing environment").
+	if canReadStatus || canManage {
+		instancePermissions = append(instancePermissions,
+			runtime.ReadOLAP,
+			runtime.ReadProfiling,
+			runtime.ReadRepo,
+		)
+	}
+	if canManage {
+		instancePermissions = append(instancePermissions, runtime.EditTrigger)
+		// Write access (edit repo, manage instance) is only possible on editable deployments.
 		if opts.deployment.Editable {
-			instancePermissions = append(instancePermissions,
-				runtime.ReadOLAP,
-				runtime.ReadProfiling,
-				runtime.ReadRepo,
+			instancePermissions = append(
+				instancePermissions,
+				runtime.EditRepo,
+				runtime.ManageInstance,
 			)
 		}
-		if canManage {
-			instancePermissions = append(instancePermissions, runtime.EditTrigger)
-			if opts.deployment.Editable {
-				instancePermissions = append(
-					instancePermissions,
-					runtime.EditRepo,
-					runtime.ManageInstance,
-				)
-			}
+	}
+
+	// StarData feature-access permissions: grant per-feature runtime bits from the
+	// admin-layer feature matrix. Absence = denied (fail-closed). UseAI already
+	// gates ChatBI; ReadDashboards/ReadReports/ReadAlerts give the runtime a signal
+	// to enforce the feature matrix at the API layer — not just hide UI tabs.
+	if opts.projectPermissions != nil {
+		if opts.projectPermissions.AccessDashboards {
+			instancePermissions = append(instancePermissions, runtime.ReadDashboards)
+		}
+		if opts.projectPermissions.AccessReports {
+			instancePermissions = append(instancePermissions, runtime.ReadReports)
+		}
+		if opts.projectPermissions.AccessAlerts {
+			instancePermissions = append(instancePermissions, runtime.ReadAlerts)
+		}
+		// AccessChat already maps to UseAI (granted unconditionally above for backward
+		// compat); override: revoke UseAI when chat is disabled.
+		if !opts.projectPermissions.AccessChat {
+			instancePermissions = removePermission(instancePermissions, runtime.UseAI)
 		}
 	}
 
@@ -322,4 +359,16 @@ func securityRulesFromMagicAuthToken(mdl *database.MagicAuthToken) ([]*runtimev1
 	}
 
 	return rules, nil
+}
+
+// removePermission returns perms with p filtered out (used to revoke a default
+// permission when a feature-matrix bit is disabled).
+func removePermission(perms []runtime.Permission, p runtime.Permission) []runtime.Permission {
+	out := perms[:0]
+	for _, x := range perms {
+		if x != p {
+			out = append(out, x)
+		}
+	}
+	return out
 }

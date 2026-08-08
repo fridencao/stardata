@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/spf13/cobra"
 )
 
@@ -80,7 +80,7 @@ func EditCmd(ch *cmdutil.Helper) *cobra.Command {
 
 	editCmd.Flags().IntVar(&prodSlots, "prod-slots", 0, "Slots to allocate for production deployments")
 	editCmd.Flags().IntVar(&devSlots, "dev-slots", 0, "Slots to allocate for dev deployments")
-	editCmd.Flags().StringVar(&prodVersion, "prod-version", "", "Rill version for production deployment")
+	editCmd.Flags().StringVar(&prodVersion, "prod-version", "", "StarData version for production deployment")
 	editCmd.Flags().Int64Var(&overrideDiskGB, "override-disk-gb", 0, "Override disk size in GB for prod and dev deployments (0 clears the override)")
 	return editCmd
 }

@@ -8,7 +8,7 @@ import (
 	"io"
 	"time"
 
-	runtimev1 "github.com/fridencao/stardata/proto/gen/rill/runtime/v1"
+	runtimev1 "github.com/fridencao/stardata/proto/gen/stardata/runtime/v1"
 	"github.com/fridencao/stardata/runtime"
 	"github.com/fridencao/stardata/runtime/metricsview"
 	"github.com/fridencao/stardata/runtime/metricsview/executor"
@@ -74,6 +74,16 @@ func newMetrics(ctx context.Context, opts *runtime.ResolverOptions) (runtime.Res
 	}
 
 	if !security.CanAccess() {
+		return nil, runtime.ErrForbidden
+	}
+
+	// StarData publish gate: keep custom APIs, embeds and MCP consistent with the
+	// dashboard query paths — draft metrics views are only reachable from Studio.
+	allowed, err := opts.Runtime.CheckPublishGate(ctx, opts.InstanceID, opts.Claims, res)
+	if err != nil {
+		return nil, err
+	}
+	if !allowed {
 		return nil, runtime.ErrForbidden
 	}
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/fridencao/stardata/cli/cmd/project"
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/fridencao/stardata/runtime/pkg/gitutil"
 	"github.com/spf13/cobra"
 )
@@ -46,15 +46,19 @@ func SeedCmd(ch *cmdutil.Helper) *cobra.Command {
 					return err
 				}
 			}
-			return project.ConnectGithubFlow(cmd.Context(), ch, &project.DeployOpts{
-				GitPath:     temp,
-				SubPath:     "rill-openrtb-prog-ads",
-				Name:        "rill-openrtb-prog-ads",
-				RemoteName:  "origin",
-				ProdVersion: "latest",
-				Slots:       2,
-				Github:      true,
-			})
+			opts := &project.DeployOpts{
+				GitPath:       temp,
+				SubPath:       "rill-openrtb-prog-ads",
+				Name:          "rill-openrtb-prog-ads",
+				ProdVersion:   "latest",
+				Slots:         2,
+				ArchiveUpload: true,
+			}
+			err = opts.ValidateAndApplyDefaults(cmd.Context(), ch)
+			if err != nil {
+				return err
+			}
+			return project.DeployWithUploadFlow(cmd.Context(), ch, opts)
 		},
 	}
 

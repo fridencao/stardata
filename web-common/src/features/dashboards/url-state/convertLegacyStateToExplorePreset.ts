@@ -29,13 +29,13 @@ import {
   getMapFromArray,
   getMissingValues,
 } from "@rilldata/web-common/lib/arrayUtils";
-import type { TimeGrain } from "@rilldata/web-common/proto/gen/rill/runtime/v1/time_grain_pb";
+import type { TimeGrain } from "@rilldata/web-common/proto/gen/stardata/runtime/v1/time_grain_pb";
 import {
   type DashboardState,
   DashboardState_ActivePage,
   DashboardState_LeaderboardSortDirection,
   PivotElement,
-} from "@rilldata/web-common/proto/gen/rill/ui/v1/dashboard_pb";
+} from "@rilldata/web-common/proto/gen/stardata/ui/v1/dashboard_pb";
 import {
   type MetricsViewSpecDimension,
   type MetricsViewSpecMeasure,

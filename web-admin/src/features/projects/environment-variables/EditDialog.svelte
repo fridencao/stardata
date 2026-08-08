@@ -284,11 +284,7 @@
       <DialogTitle>{m.env_edit_title()}</DialogTitle>
     </DialogHeader>
     <DialogDescription>
-      {m.env_for_help_see()}
-      <a
-        href="https://docs.rilldata.com/guide/administration/project-settings/variables-and-credentials"
-        target="_blank">{m.env_documentation_link()}</a
-      >
+      {m.env_for_help_see()} {m.env_documentation_link()}
     </DialogDescription>
     <form
       id={$formId}

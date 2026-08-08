@@ -2,6 +2,7 @@
   import Spinner from "../../entity-management/Spinner.svelte";
   import { EntityStatus } from "../../entity-management/types";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
+  import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
   import EmptyMeasureIcon from "./EmptyMeasureIcon.svelte";
   import EmptyTableIcon from "./EmptyTableIcon.svelte";
 
@@ -17,14 +18,6 @@
     <div class="font-semibold text-fg-primary mt-1 text-lg">
       {m.dashboard_pivot_building_table()}
     </div>
-    {#if !isEmbedded}
-      <div class="text-fg-secondary">
-        {m.dashboard_pivot_need_help_discord()}
-        <a target="_blank" rel="noopener" href="https://discord.gg/2ubRfjC7Rh"
-          >Discord</a
-        >
-      </div>
-    {/if}
   {:else if hasColumnAndNoMeasure}
     <EmptyMeasureIcon />
     <div class="flex flex-col items-center gap-y-2">
@@ -41,8 +34,8 @@
         <a
           target="_blank"
           rel="noopener"
-          href="https://docs.rilldata.com/guide/dashboards/explore/pivot"
-          >docs</a
+          href={docsUrl("/guide/dashboards/explore/pivot")}
+          >{m.dashboard_docs()}</a
         >.
       </div>
     {/if}
@@ -66,8 +59,8 @@
         {m.dashboard_pivot_learn_more()}
         <a
           target="_blank"
-          href="https://docs.rilldata.com/guide/dashboards/explore/pivot"
-          >docs</a
+          href={docsUrl("/guide/dashboards/explore/pivot")}
+          >{m.dashboard_docs()}</a
         >.
       </div>
     {/if}

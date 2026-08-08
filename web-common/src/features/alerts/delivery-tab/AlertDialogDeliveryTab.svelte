@@ -2,6 +2,7 @@
   import { Button } from "@rilldata/web-common/components/button";
   import FormSection from "@rilldata/web-common/components/forms/FormSection.svelte";
   import { m } from "@rilldata/web-common/lib/i18n/gen/messages";
+  import { docsUrl } from "@rilldata/web-common/lib/stardata-links";
   import Input from "@rilldata/web-common/components/forms/Input.svelte";
   import MultiInput from "@rilldata/web-common/components/forms/MultiInput.svelte";
   import Select from "@rilldata/web-common/components/forms/Select.svelte";
@@ -99,8 +100,7 @@
       <svelte:fragment slot="description">
         <span class="text-sm text-fg-secondary">
           {@html m.alert_form_slack_not_configured({
-            docsUrl:
-              "https://docs.rilldata.com/guide/alerts#configuring-slack-targets",
+            docsUrl: docsUrl("/guide/alerts#configuring-slack-targets"),
           })}
         </span>
       </svelte:fragment>

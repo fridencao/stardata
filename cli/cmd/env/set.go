@@ -2,7 +2,7 @@ package env
 
 import (
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	envValidator "github.com/fridencao/stardata/runtime/pkg/env"
 	"github.com/spf13/cobra"
 )

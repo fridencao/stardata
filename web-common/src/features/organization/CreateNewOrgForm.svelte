@@ -12,6 +12,7 @@
   // We need different sizes for showing in dialog vs a full page form.
   // "lg" matches all the input sizes so we have "lg"/"xl" and not something else.
   export let size: "lg" | "xl" = "lg";
+  export let showUrlField = true;
   export let createOrg: (name: string, displayName: string) => Promise<void>;
 
   const initialValues: {
@@ -90,18 +91,18 @@
     {size}
     capitalizeLabel={false}
   />
-  <Input
-    bind:value={$form.name}
-    errors={$errors?.name}
-    id="name"
-    label="URL"
-    textClass="text-sm"
-    alwaysShowError
-    width="500px"
-    {size}
-    onInput={() => (orgNameChangedDirectly = true)}
-    textInputPrefix="https://ui.rilldata.com/"
-  >
+  {#if showUrlField}
+    <Input
+      bind:value={$form.name}
+      errors={$errors?.name}
+      id="name"
+      label="Organization path"
+      textClass="text-sm"
+      alwaysShowError
+      width="500px"
+      {size}
+      onInput={() => (orgNameChangedDirectly = true)}
+    >
     <!-- TODO: once we have the path to docs we can add this back -->
     <!--    <div class="text-xs text-left" slot="description">-->
     <!--      Must comply with <a-->
@@ -109,5 +110,6 @@
     <!--        target="_blank">our naming rules.</a-->
     <!--      >-->
     <!--    </div>-->
-  </Input>
+    </Input>
+  {/if}
 </form>

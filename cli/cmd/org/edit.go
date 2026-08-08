@@ -4,7 +4,7 @@ import (
 	"fmt"
 
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -39,7 +39,7 @@ func EditCmd(ch *cmdutil.Helper) *cobra.Command {
 						return err
 					}
 				}
-				fmt.Printf("Org name %q doesn't exist, please run `rill org list` to list available orgs\n", orgName)
+				fmt.Printf("Org name %q doesn't exist, please run `stardata org list` to list available orgs\n", orgName)
 				return nil
 			}
 

@@ -11,7 +11,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"path/filepath"
 	"strings"
 
@@ -23,13 +22,11 @@ import (
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
 	"github.com/fridencao/stardata/cli/pkg/pkce"
 	"github.com/fridencao/stardata/cli/pkg/web"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
-	localv1 "github.com/fridencao/stardata/proto/gen/rill/local/v1"
-	"github.com/fridencao/stardata/proto/gen/rill/local/v1/localv1connect"
-	"github.com/fridencao/stardata/runtime/pkg/gitutil"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
+	localv1 "github.com/fridencao/stardata/proto/gen/stardata/local/v1"
+	"github.com/fridencao/stardata/proto/gen/stardata/local/v1/localv1connect"
 	"github.com/fridencao/stardata/runtime/pkg/observability"
 	authn "github.com/fridencao/stardata/runtime/server/auth"
-	"github.com/google/go-github/v71/github"
 	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -38,13 +35,13 @@ import (
 
 const retries = 3
 
-// Server implements endpoints for the local Rill app (usually served on localhost).
+// Server implements endpoints for the local StarData app (usually served on localhost).
 type Server struct {
 	logger   *zap.Logger
 	app      *App
 	metadata *localMetadata
 
-	// auth is the self-hosted auth config (nil when using the legacy Rill Cloud flow).
+	// auth is the self-hosted auth config (nil when using the legacy StarData Cloud flow).
 	auth *authn.AuthConfig
 	// externalURL is the public base URL used in issued tokens and login redirects.
 	externalURL string
@@ -124,7 +121,7 @@ func (s *Server) GetMetadata(ctx context.Context, r *connect.Request[localv1.Get
 // loginURL returns the URL the UI should send users to authenticate.
 // When self-hosted auth is enabled it points at StarData's own login
 // (the /login page for local/jwt, the OIDC redirect for oidc).
-// Otherwise it falls back to the legacy Rill Cloud OAuth flow.
+// Otherwise it falls back to the legacy StarData Cloud OAuth flow.
 func (s *Server) loginURL() string {
 	if s.auth == nil {
 		return s.app.localURL + "/auth"
@@ -148,144 +145,6 @@ func (s *Server) GetVersion(ctx context.Context, r *connect.Request[localv1.GetV
 	}), nil
 }
 
-// PushToGithub implements localv1connect.LocalServiceHandler.
-// It assumes that the current project is not a git repo, it should generally be called after DeployValidation.
-func (s *Server) PushToGithub(ctx context.Context, r *connect.Request[localv1.PushToGithubRequest]) (*connect.Response[localv1.PushToGithubResponse], error) {
-	// Get authenticated admin client
-	if !s.app.ch.IsAuthenticated() {
-		return nil, errors.New("must authenticate before performing this action")
-	}
-	c, err := s.app.ch.Client()
-	if err != nil {
-		return nil, err
-	}
-
-	// Check if the project already has a Git repo
-	initGit := false
-	remote, err := gitutil.ExtractGitRemote(s.app.ProjectPath, "", false)
-	if err != nil {
-		if errors.Is(err, gitutil.ErrNotAGitRepository) {
-			initGit = true
-		} else if !errors.Is(err, gitutil.ErrGitRemoteNotFound) {
-			return nil, err
-		}
-	}
-	if remote.Name != "" {
-		return nil, errors.New("git repository is already initialized with a remote")
-	}
-
-	gitStatus, err := c.GetGithubUserStatus(ctx, &adminv1.GetGithubUserStatusRequest{})
-	if err != nil {
-		return nil, err
-	}
-	if !gitStatus.HasAccess {
-		// generally this should not happen as IsGithubConnected should be true before pushing to git
-		return nil, fmt.Errorf("rill git app should be installed by user before pushing by visiting %s", gitStatus.GrantAccessUrl)
-	}
-
-	// if r.Msg.Account is empty, githubAccount will be "" which is equivalent to using default github account which is same as github username
-	var githubAccount string
-	if r.Msg.Account == "" || r.Msg.Account == gitStatus.Account {
-		githubAccount = ""
-	} else {
-		githubAccount = r.Msg.Account
-	}
-
-	// check if we have write permission on the github account
-	// this is a safety check as DeployValidation should take care of this
-	if githubAccount == "" {
-		if gitStatus.UserInstallationPermission != adminv1.GithubPermission_GITHUB_PERMISSION_WRITE {
-			return nil, fmt.Errorf("rill github app should be installed with write permission on user personal account by visiting %s", gitStatus.GrantAccessUrl)
-		}
-	} else {
-		valid := false
-		for o, p := range gitStatus.OrganizationInstallationPermissions {
-			if o == githubAccount && p == adminv1.GithubPermission_GITHUB_PERMISSION_WRITE {
-				valid = true
-				break
-			}
-		}
-		if !valid {
-			return nil, fmt.Errorf("rill github app should be installed with write permission on organization %q by visiting %s", githubAccount, gitStatus.GrantAccessUrl)
-		}
-	}
-
-	repoName := filepath.Base(s.app.ProjectPath)
-	if r.Msg.Repo != "" {
-		repoName = r.Msg.Repo
-	}
-	githubClient := github.NewTokenClient(ctx, gitStatus.AccessToken)
-	defaultBranch := "main"
-
-	// create remote repo
-	suffix := 0
-	var githubRepo *github.Repository
-	name := repoName
-	err = retrier.New(retrier.ConstantBackoff(retries, 1), nameConflictRetryErrClassifier{}).RunCtx(ctx, func(ctx context.Context) error {
-		if suffix > 0 {
-			name = fmt.Sprintf("%s-%d", repoName, suffix)
-		}
-		githubRepo, _, err = githubClient.Repositories.Create(ctx, githubAccount, &github.Repository{Name: &name, DefaultBranch: &defaultBranch})
-		suffix++
-		return err
-	})
-	if err != nil {
-		return nil, fmt.Errorf("failed to create repository: %w", err)
-	}
-
-	// init git repo
-	// initGit is true only if there was no .git entry at exactly s.app.ProjectPath above, so
-	// the commit below operates on this repo and never on a repo in a parent directory.
-	if initGit {
-		err = gitutil.EnsureInit(ctx, s.app.ProjectPath, "main")
-		if err != nil {
-			return nil, fmt.Errorf("failed to init git repo: %w", err)
-		}
-	}
-
-	// git add . && git commit -m
-	author, err := s.app.ch.GitSignature(ctx, s.app.ProjectPath)
-	if err != nil {
-		return nil, fmt.Errorf("failed to generate git commit signature: %w", err)
-	}
-	_, err = gitutil.CommitAll(ctx, s.app.ProjectPath, "", "Auto committed by Rill", author)
-	if err != nil && !errors.Is(err, gitutil.ErrEmptyCommit) {
-		// on ErrEmptyCommit we still trigger the push
-		return nil, fmt.Errorf("failed to commit files to git: %w", err)
-	}
-
-	// Create the remote; this errors if origin already exists, so an existing remote is never overwritten
-	_, err = gitutil.Run(ctx, s.app.ProjectPath, "remote", "add", "origin", *githubRepo.CloneURL)
-	if err != nil {
-		return nil, fmt.Errorf("failed to create remote: %w", err)
-	}
-
-	// push all local branches, passing the access token on the command line only so it is never persisted in .git/config
-	config := &gitutil.Config{
-		Remote:   *githubRepo.CloneURL,
-		Username: "x-access-token",
-		Password: gitStatus.AccessToken,
-	}
-	authRemote, err := config.FullyQualifiedRemote()
-	if err != nil {
-		return nil, err
-	}
-	if err := gitutil.Push(ctx, s.app.ProjectPath, authRemote, "refs/heads/*:refs/heads/*"); err != nil {
-		return nil, fmt.Errorf("failed to push to remote %q : %w", *githubRepo.CloneURL, err)
-	}
-
-	account := githubAccount
-	if account == "" {
-		account = gitStatus.Account
-	}
-
-	return connect.NewResponse(&localv1.PushToGithubResponse{
-		Remote:  *githubRepo.CloneURL,
-		Account: account,
-		Repo:    name,
-	}), nil
-}
-
 // DeployProject implements localv1connect.LocalServiceHandler.
 func (s *Server) DeployProject(ctx context.Context, r *connect.Request[localv1.DeployProjectRequest]) (*connect.Response[localv1.DeployProjectResponse], error) {
 	// Get authenticated admin client
@@ -297,7 +156,7 @@ func (s *Server) DeployProject(ctx context.Context, r *connect.Request[localv1.D
 		return nil, err
 	}
 
-	// check if rill org exists
+	// check if stardata org exists
 	_, err = c.GetOrganization(ctx, &adminv1.GetOrganizationRequest{
 		Org: r.Msg.Org,
 	})
@@ -308,7 +167,7 @@ func (s *Server) DeployProject(ctx context.Context, r *connect.Request[localv1.D
 			_, err = c.CreateOrganization(ctx, &adminv1.CreateOrganizationRequest{
 				Name:        r.Msg.Org,
 				DisplayName: r.Msg.NewOrgDisplayName,
-				Description: "Auto created by Rill",
+				Description: "Auto created by StarData",
 			})
 			if err != nil {
 				return nil, err
@@ -344,112 +203,24 @@ func (s *Server) DeployProject(ctx context.Context, r *connect.Request[localv1.D
 		directoryName = filepath.Base(s.app.ProjectPath)
 	}
 
-	var projRequest *adminv1.CreateProjectRequest
-	if r.Msg.Archive { // old zip-and-ship, currently used only for testing until we figure out a good way to test using manged github repos
-		assetID, err := cmdutil.UploadRepo(ctx, repo, s.app.ch, r.Msg.Org, r.Msg.ProjectName)
-		if err != nil {
-			return nil, err
-		}
+	// Upload the project files as an archive asset (the only supported deploy mode)
+	assetID, err := cmdutil.UploadRepo(ctx, repo, s.app.ch, r.Msg.Org, r.Msg.ProjectName)
+	if err != nil {
+		return nil, err
+	}
 
-		// create project request
-		projRequest = &adminv1.CreateProjectRequest{
-			Org:            r.Msg.Org,
-			Project:        r.Msg.ProjectName,
-			Description:    "Auto created by Rill",
-			Provisioner:    "",
-			ProdVersion:    "",
-			ProdSlots:      int64(DefaultProdSlots(s.app.ch)),
-			DevSlots:       int64(DefaultDevSlots(s.app.ch)),
-			Public:         false,
-			DirectoryName:  directoryName,
-			ArchiveAssetId: assetID,
-		}
-	} else if r.Msg.Upload { // upload repo to rill managed storage instead of github
-		gitBranch, err := currentGitBranch(ctx, s.app.ProjectPath)
-		if err != nil {
-			return nil, err
-		}
-		ghRepo, err := s.app.ch.GitHelper(r.Msg.Org, r.Msg.ProjectName, s.app.ProjectPath).PushToNewManagedRepo(ctx, gitBranch)
-		if err != nil {
-			return nil, err
-		}
-
-		// create project request
-		projRequest = &adminv1.CreateProjectRequest{
-			Org:           r.Msg.Org,
-			Project:       r.Msg.ProjectName,
-			Description:   "Auto created by Rill",
-			Provisioner:   "",
-			ProdVersion:   "",
-			ProdSlots:     int64(DefaultProdSlots(s.app.ch)),
-			DevSlots:      int64(DefaultDevSlots(s.app.ch)),
-			Public:        false,
-			DirectoryName: directoryName,
-			GitRemote:     ghRepo.Remote,
-			PrimaryBranch: ghRepo.DefaultBranch,
-		}
-	} else {
-		userStatus, err := c.GetGithubUserStatus(ctx, &adminv1.GetGithubUserStatusRequest{})
-		if err != nil {
-			return nil, err
-		}
-		if !userStatus.HasAccess {
-			// generally this should not happen as IsGithubConnected should be true before deploying
-			return nil, fmt.Errorf("rill git app should be installed/authorized by user before deploying, please visit %s", userStatus.GrantAccessUrl)
-		}
-
-		gitPath, subPath, err := gitutil.InferRepoRootAndSubpath(s.app.ProjectPath)
-		if err != nil {
-			return nil, err
-		}
-
-		// check if project is a git repo
-		remote, err := gitutil.ExtractGitRemote(gitPath, "", false)
-		if err != nil {
-			if errors.Is(err, gitutil.ErrGitRemoteNotFound) || errors.Is(err, gitutil.ErrNotAGitRepository) {
-				return nil, errors.New("project is not a valid git repository or not connected to a remote")
-			}
-			return nil, err
-		}
-		githubRemote, err := remote.Github()
-		if err != nil {
-			return nil, fmt.Errorf("failed to get github remote: %w", err)
-		}
-
-		// check if there are uncommitted changes
-		st, err := gitutil.Status(ctx, gitPath, subPath, remote.Name, "")
-		if err != nil {
-			return nil, fmt.Errorf("failed to get git status: %w", err)
-		}
-		if st.LocalChanges || st.LocalCommits > 0 {
-			return nil, errors.New("local changes in repo, please commit and push before deploying")
-		}
-
-		// Get github repo status
-		repoStatus, err := c.GetGithubRepoStatus(ctx, &adminv1.GetGithubRepoStatusRequest{
-			Remote: githubRemote,
-		})
-		if err != nil {
-			return nil, err
-		}
-		if !repoStatus.HasAccess {
-			// generally this should not happen as IsRepoAccessGranted should be true before deploying
-			return nil, fmt.Errorf("need access to the repository before deploying, please visit %s to grant access", repoStatus.GrantAccessUrl)
-		}
-		projRequest = &adminv1.CreateProjectRequest{
-			Org:           r.Msg.Org,
-			Project:       r.Msg.ProjectName,
-			Description:   "Auto created by Rill",
-			Provisioner:   "",
-			ProdVersion:   "",
-			ProdSlots:     int64(DefaultProdSlots(s.app.ch)),
-			DevSlots:      int64(DefaultDevSlots(s.app.ch)),
-			Public:        false,
-			DirectoryName: directoryName,
-			GitRemote:     githubRemote,
-			Subpath:       subPath,
-			PrimaryBranch: repoStatus.DefaultBranch,
-		}
+	// create project request
+	projRequest := &adminv1.CreateProjectRequest{
+		Org:            r.Msg.Org,
+		Project:        r.Msg.ProjectName,
+		Description:    "Auto created by StarData",
+		Provisioner:    "",
+		ProdVersion:    "",
+		ProdSlots:      int64(DefaultProdSlots(s.app.ch)),
+		DevSlots:       int64(DefaultDevSlots(s.app.ch)),
+		Public:         false,
+		DirectoryName:  directoryName,
+		ArchiveAssetId: assetID,
 	}
 
 	// create project
@@ -519,7 +290,7 @@ func (s *Server) RedeployProject(ctx context.Context, r *connect.Request[localv1
 		}
 	}
 
-	if r.Msg.Rearchive { // old zip-and-ship, currently used only for testing until we figure out a good way to test using manged github repos
+	if r.Msg.Rearchive || r.Msg.Reupload {
 		repo, release, err := s.app.Runtime.Repo(ctx, s.app.Instance.ID)
 		if err != nil {
 			return nil, err
@@ -537,55 +308,6 @@ func (s *Server) RedeployProject(ctx context.Context, r *connect.Request[localv1
 		})
 		if err != nil {
 			return nil, err
-		}
-	} else if r.Msg.Reupload {
-		if projResp.Project.ManagedGitId != "" {
-			// If rill-managed project then push to the repo based on org/project passed in.
-			err = s.app.ch.GitHelper(projResp.Project.OrgName, projResp.Project.Name, s.app.ProjectPath).PushToManagedRepo(ctx, false)
-			if err != nil {
-				return nil, err
-			}
-		} else if projResp.Project.ArchiveAssetId != "" || r.Msg.CreateManagedRepo {
-			// project was previously deployed using zip and ship, or we are overwriting another project already connected to github
-			gitBranch, err := currentGitBranch(ctx, s.app.ProjectPath)
-			if err != nil {
-				return nil, err
-			}
-			ghRepo, err := s.app.ch.GitHelper(projResp.Project.OrgName, projResp.Project.Name, s.app.ProjectPath).PushToNewManagedRepo(ctx, gitBranch)
-			if err != nil {
-				return nil, err
-			}
-			_, err = c.UpdateProject(ctx, &adminv1.UpdateProjectRequest{
-				Org:           projResp.Project.OrgName,
-				Project:       projResp.Project.Name,
-				GitRemote:     &ghRepo.Remote,
-				PrimaryBranch: &ghRepo.DefaultBranch,
-			})
-			if err != nil {
-				return nil, err
-			}
-		} else {
-			reporoot, subpath, err := gitutil.InferRepoRootAndSubpath(s.app.ProjectPath)
-			if err != nil {
-				return nil, err
-			}
-			// just for verification confirm that subpath matches the one stored in project
-			if subpath != projResp.Project.Subpath {
-				return nil, fmt.Errorf("current project subpath %q does not match the one stored in rill %q. Try doing deploy using rill cli from github repo root by passing explicit subpath using `rill deploy --subpath %s`", subpath, projResp.Project.Subpath, projResp.Project.Subpath)
-			}
-			author, err := s.app.ch.GitSignature(ctx, reporoot)
-			if err != nil {
-				return nil, err
-			}
-			config := &gitutil.Config{
-				Remote:        projResp.Project.GitRemote,
-				DefaultBranch: projResp.Project.PrimaryBranch,
-				Subpath:       projResp.Project.Subpath,
-			}
-			err = s.app.ch.CommitAndSafePush(ctx, reporoot, config, "", author, "1")
-			if err != nil {
-				return nil, err
-			}
 		}
 	}
 
@@ -637,7 +359,7 @@ func (s *Server) GetCurrentUser(ctx context.Context, r *connect.Request[localv1.
 		return nil, errors.New("failed to get current user")
 	}
 
-	// get rill user orgs
+	// get stardata user orgs
 	resp, err := c.ListOrganizations(ctx, &adminv1.ListOrganizationsRequest{PageSize: 1000})
 	if err != nil {
 		return nil, err
@@ -973,7 +695,8 @@ func (s *Server) logoutHandler() http.Handler {
 	})
 }
 
-// trackingHandler proxies events to intake.rilldata.io.
+// trackingHandler receives telemetry events from the UI.
+// StarData: the underlying telemetry client is a no-op, so events are accepted and discarded.
 func (s *Server) trackingHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Read entire body up front (since it may be closed before the request is sent in the goroutine below)
@@ -1002,7 +725,7 @@ func (s *Server) trackingHandler() http.Handler {
 	})
 }
 
-// localMetadata contains metadata about the current project and Rill configuration.
+// localMetadata contains metadata about the current project and StarData configuration.
 type localMetadata struct {
 	InstanceID       string `json:"instance_id"`
 	ProjectPath      string `json:"project_path"`
@@ -1018,7 +741,7 @@ type localMetadata struct {
 	GRPCPort         int    `json:"grpc_port"`
 }
 
-// metadataHandler serves the metadata of the local Rill instance.
+// metadataHandler serves the metadata of the local StarData instance.
 func (s *Server) metadataHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		data, err := json.Marshal(s.metadata)
@@ -1041,7 +764,7 @@ type versionResponse struct {
 	LatestVersion  string `json:"latest_version"`
 }
 
-// versionHandler servers the current and latest version of the Rill CLI.
+// versionHandler servers the current and latest version of the StarData CLI.
 func (s *Server) versionHandler() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		// Get the latest version available
@@ -1071,7 +794,7 @@ func (s *Server) versionHandler() http.Handler {
 	})
 }
 
-// nameConflictRetryErrClassifier classifies name already exists errors as retryable, works for both github repo and project name
+// nameConflictRetryErrClassifier classifies name already exists errors as retryable, used when creating projects
 type nameConflictRetryErrClassifier struct{}
 
 func (nameConflictRetryErrClassifier) Classify(err error) retrier.Action {
@@ -1123,22 +846,4 @@ func (s *Server) traceHandler() http.Handler {
 			return
 		}
 	})
-}
-
-// currentGitBranch returns the current git branch of the repository at the given path.
-// It does not return error if the repo does not exist. The exact-path .git check matters:
-// without it, a non-repo project directory nested inside an unrelated repo would report the
-// parent repo's branch.
-func currentGitBranch(ctx context.Context, path string) (string, error) {
-	if _, err := os.Stat(filepath.Join(path, ".git")); err != nil {
-		return "", nil
-	}
-	branch, err := gitutil.CurrentBranch(ctx, path)
-	if err != nil {
-		if errors.Is(err, gitutil.ErrDetachedHead) {
-			return "", fmt.Errorf("HEAD is not a branch. Checkout a branch to deploy")
-		}
-		return "", err
-	}
-	return branch, nil
 }

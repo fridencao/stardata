@@ -11,6 +11,7 @@
     extractBranchFromPath,
   } from "@rilldata/web-admin/features/branches/branch-utils";
   import BranchDeploymentStopped from "@rilldata/web-admin/features/branches/BranchDeploymentStopped.svelte";
+  import EditSessionGate from "@rilldata/web-admin/features/edit-session/EditSessionGate.svelte";
   import EditSessionLoading from "@rilldata/web-admin/features/edit-session/EditSessionLoading.svelte";
   import EditSessionTimeoutBanner from "@rilldata/web-admin/features/edit-session/EditSessionTimeoutBanner.svelte";
   import ProjectHeader from "../../../../../features/projects/header/ProjectHeader.svelte";
@@ -25,7 +26,10 @@
   import { useQueryClient } from "@tanstack/svelte-query";
   import { onDestroy } from "svelte";
   import { setCloudReadonlyNotice } from "@rilldata/web-common/features/entity-management/actions/protected-files.ts";
-  import { isProjectWelcomePage } from "@rilldata/web-admin/features/navigation/nav-utils.ts";
+  import {
+    isProjectWelcomePage,
+    isStudioPage,
+  } from "@rilldata/web-admin/features/navigation/nav-utils.ts";
   import WelcomeRedirector from "@rilldata/web-admin/features/welcome/project/WelcomeRedirector.svelte";
   import { InfoIcon } from "lucide-svelte";
   import { overlay } from "@rilldata/web-common/layout/overlay-store";
@@ -108,7 +112,15 @@
     instanceId !== null &&
     jwt !== null;
 
+  // A non-editable deployment (e.g. the primary prod deployment resolved from
+  // a branchless edit URL) mints a JWT without ReadRepo, so mounting the
+  // editor would only surface SSE PermissionDenied errors as a 500. Gate it.
+  $: isNotEditable = !!deployment && !deployment.editable;
+
   $: inProjectWelcomePage = isProjectWelcomePage($page);
+  // Studio pages render their own chrome (PortalNav + StudioTabs) via the
+  // studio layout, so the technical ProjectHeader is hidden there.
+  $: inStudioPage = isStudioPage($page);
 
   // Invalidating this query refetches a fresh JWT; `runtimeClient.getJwt()`
   // reads the updated value on the next call. Branch must be part of the
@@ -159,6 +171,20 @@
       body={deployment?.statusMessage ||
         "The editing environment encountered an error. Please try again."}
     />
+  {:else if isNotEditable}
+    <SlimProjectHeader
+      {organization}
+      {project}
+      readProjects={organizationPermissions?.readProjects}
+      {planDisplayName}
+      {organizationLogoUrl}
+    />
+    <EditSessionGate
+      {organization}
+      {project}
+      activeBranch={branch}
+      {primaryBranch}
+    />
   {:else if isStopped && deployment?.id}
     <SlimProjectHeader
       {organization}
@@ -179,7 +205,7 @@
   {:else if isReady && deployment?.id && instanceId && runtimeHost && jwt}
     {#key `${runtimeHost}::${instanceId}::${hasPrimaryDeployment}`}
       <RuntimeProvider host={runtimeHost} {instanceId} {jwt}>
-        {#if !inProjectWelcomePage}
+        {#if !inProjectWelcomePage && !inStudioPage}
           <ProjectHeader
             {organization}
             {project}
@@ -192,6 +218,8 @@
             {organizationLogoUrl}
             editContext={true}
           />
+        {/if}
+        {#if !inProjectWelcomePage}
           <EditSessionTimeoutBanner
             usedOn={deployment.usedOn}
             {devTtlSeconds}

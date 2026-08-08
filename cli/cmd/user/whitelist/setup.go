@@ -2,7 +2,7 @@ package whitelist
 
 import (
 	"github.com/fridencao/stardata/cli/pkg/cmdutil"
-	adminv1 "github.com/fridencao/stardata/proto/gen/rill/admin/v1"
+	adminv1 "github.com/fridencao/stardata/proto/gen/stardata/admin/v1"
 	"github.com/spf13/cobra"
 )
 
@@ -44,7 +44,7 @@ func SetupCmd(ch *cmdutil.Helper) *cobra.Command {
 				if err != nil {
 					return err
 				}
-				ch.PrintfSuccess("Whitelisted %q for project %q of organization %q (to remove it, use `rill user whitelist remove`).\n", domain, project, ch.Org)
+				ch.PrintfSuccess("Whitelisted %q for project %q of organization %q (to remove it, use `stardata user whitelist remove`).\n", domain, project, ch.Org)
 			} else {
 				_, err = client.CreateWhitelistedDomain(cmd.Context(), &adminv1.CreateWhitelistedDomainRequest{
 					Org:    ch.Org,
@@ -54,7 +54,7 @@ func SetupCmd(ch *cmdutil.Helper) *cobra.Command {
 				if err != nil {
 					return err
 				}
-				ch.PrintfSuccess("Whitelisted %q for organization %q (to remove it, use `rill user whitelist remove`).\n", domain, ch.Org)
+				ch.PrintfSuccess("Whitelisted %q for organization %q (to remove it, use `stardata user whitelist remove`).\n", domain, ch.Org)
 			}
 
 			return nil

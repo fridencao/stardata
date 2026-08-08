@@ -1,0 +1,89 @@
+/* ==========================================================================
+   StarData auth / login card — UNIFIED STYLE (single source of truth).
+
+   This file is the canonical definition of the StarData authentication UI.
+   It is consumed in two places:
+     1. web-admin  /-/welcome/login  — via the .auth-card* classes below.
+     2. Keycloak 'stardata' login theme
+        (deploy/keycloak/themes/stardata/login/resources/css/stardata.css)
+        which MIRRORS these exact values (Keycloak cannot import Svelte/Tailwind,
+        so the numbers are duplicated there on purpose — keep them in sync).
+
+   The sizes match the compact scale already applied to web-common's Tailwind
+   utilities (verified in the built bundle):
+     text-2xl = 14px / 1.35   (outer "Sign in to StarData" title, weight 800)
+     text-base = 11px / 1.45  (card "Welcome back" title, weight 600)
+     text-sm   = 10.5px / 1.5 (subtitle / muted text)
+     body      = 11px / 1.5   (base / input text)
+     button    = 12px
+   Brand tokens resolve to light-mode values (the auth surface is always on the
+   light welcome background).
+   ========================================================================== */
+
+.auth-card {
+  /* ---- brand tokens ---- */
+  --auth-brand: #155dfc; /* primary-600 / accent-primary  (logo + button) */
+  --auth-brand-hover: #1d4ed8;
+  --auth-fg-accent: #1c398e; /* heading text */
+  --auth-fg-muted: #737373; /* subtitle / hint text */
+  --auth-border: #e5e5e5;
+  --auth-surface: #ffffff;
+
+  /* ---- type scale (compact) ---- */
+  --auth-title-size: 14px;
+  --auth-title-weight: 800;
+  --auth-title-lh: 1.35;
+
+  --auth-card-title-size: 11px;
+  --auth-card-title-weight: 600;
+  --auth-card-title-lh: 1.45;
+
+  --auth-subtitle-size: 10.5px;
+  --auth-subtitle-lh: 1.5;
+
+  --auth-base-size: 11px;
+  --auth-base-lh: 1.5;
+  --auth-btn-size: 12px;
+
+  /* ---- card geometry (mirrors p-6 / rounded-md) ---- */
+  --auth-card-radius: 6px;
+  --auth-card-padding: 24px;
+
+  /* ---- visual ---- */
+  background: var(--auth-surface);
+  border: 1px solid var(--auth-border);
+  border-radius: var(--auth-card-radius);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.1);
+  padding: var(--auth-card-padding);
+}
+
+/* Outer page title: "Sign in to StarData" (text-2xl font-extrabold) */
+.auth-title {
+  font-size: var(--auth-title-size);
+  font-weight: var(--auth-title-weight);
+  line-height: var(--auth-title-lh);
+  color: var(--auth-fg-accent);
+  margin: 0;
+}
+
+/* Card heading: "Welcome back" (text-base font-semibold) */
+.auth-card__title {
+  font-size: var(--auth-card-title-size);
+  font-weight: var(--auth-card-title-weight);
+  line-height: var(--auth-card-title-lh);
+  color: var(--auth-fg-accent);
+  margin: 0;
+}
+
+/* Card subtitle / muted line (text-sm text-fg-muted) */
+.auth-card__subtitle {
+  font-size: var(--auth-subtitle-size);
+  line-height: var(--auth-subtitle-lh);
+  color: var(--auth-fg-muted);
+  margin: 0;
+}
+
+/* Primary button text size (shared by web-common Button + Keycloak mirror) */
+.auth-btn {
+  font-size: var(--auth-btn-size);
+}

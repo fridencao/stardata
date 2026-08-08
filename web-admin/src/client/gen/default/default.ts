@@ -29,12 +29,9 @@ import type {
   AdminServiceAddOrganizationMemberUserBody,
   AdminServiceAddProjectMemberUserBody,
   AdminServiceCancelBillingSubscriptionParams,
-  AdminServiceConnectProjectToGithubBody,
   AdminServiceCreateAlertBodyBody,
   AdminServiceCreateAssetBody,
   AdminServiceCreateDeploymentBody,
-  AdminServiceCreateGithubPullRequestBody,
-  AdminServiceCreateManagedGitRepoBody,
   AdminServiceCreatePersonalFileBody,
   AdminServiceCreateProjectBody,
   AdminServiceCreateProjectWhitelistedDomainBodyBody,
@@ -50,7 +47,6 @@ import type {
   AdminServiceGetCloneCredentialsParams,
   AdminServiceGetDeploymentBody,
   AdminServiceGetDeploymentCredentialsBody,
-  AdminServiceGetGithubRepoStatusParams,
   AdminServiceGetIFrameBody,
   AdminServiceGetOrganizationParams,
   AdminServiceGetPaymentsPortalURLParams,
@@ -63,8 +59,10 @@ import type {
   AdminServiceHibernateProjectParams,
   AdminServiceIssueMagicAuthTokenBody,
   AdminServiceIssueUserAuthTokenBody,
+  AdminServiceListAuditEventsParams,
   AdminServiceListBookmarksParams,
   AdminServiceListDeploymentsParams,
+  AdminServiceListFeatureAccessParams,
   AdminServiceListMagicAuthTokensParams,
   AdminServiceListOrganizationBillingIssuesParams,
   AdminServiceListOrganizationInvitesParams,
@@ -78,22 +76,30 @@ import type {
   AdminServiceListProjectsForOrganizationAndUserParams,
   AdminServiceListProjectsForOrganizationParams,
   AdminServiceListProjectsForUserByNameParams,
+  AdminServiceListSemanticVersionsParams,
   AdminServiceListUserAuthTokensParams,
   AdminServiceListUsergroupMemberUsersParams,
   AdminServiceListUsergroupsForOrganizationAndUserParams,
   AdminServiceProvisionBody,
+  AdminServicePublishSemanticProjectBody,
   AdminServicePullVirtualRepoParams,
   AdminServiceRedeployProjectParams,
   AdminServiceRequestProjectAccessBodyBody,
   AdminServiceRevokeAllUserAuthTokensParams,
   AdminServiceRevokeUserAuthTokenParams,
+  AdminServiceSaveSemanticResourceBody,
   AdminServiceSearchProjectNamesParams,
   AdminServiceSearchProjectUsersParams,
   AdminServiceSearchUsersParams,
+  AdminServiceSetFeatureAccessBody,
+  AdminServiceSetOrgAIConfigBody,
+  AdminServiceSetOrgFeatureDefaultsBody,
   AdminServiceSetOrganizationMemberUserRoleBody,
   AdminServiceSetProjectMemberUserRoleBodyBody,
+  AdminServiceSetResourceVisibilityBody,
   AdminServiceSudoGetResourceParams,
   AdminServiceSudoUpdateOrganizationBillingMessageBody,
+  AdminServiceTestOrgAIConfigBody,
   AdminServiceTriggerReconcileBodyBody,
   AdminServiceTriggerRefreshSourcesBody,
   AdminServiceUnsubscribeAlertBodyBody,
@@ -105,6 +111,7 @@ import type {
   AdminServiceUpdateServiceBody,
   AdminServiceUpdateUsergroupBody,
   RpcStatus,
+  V1AcquireEditLockResponse,
   V1AddOrganizationMemberUserResponse,
   V1AddOrganizationMemberUsergroupResponse,
   V1AddProjectMemberUserResponse,
@@ -114,14 +121,11 @@ import type {
   V1CancelBillingSubscriptionResponse,
   V1CompleteRequest,
   V1CompleteResponse,
-  V1ConnectProjectToGithubResponse,
   V1CreateAlertResponse,
   V1CreateAssetResponse,
   V1CreateBookmarkRequest,
   V1CreateBookmarkResponse,
   V1CreateDeploymentResponse,
-  V1CreateGithubPullRequestResponse,
-  V1CreateManagedGitRepoResponse,
   V1CreateOrganizationRequest,
   V1CreateOrganizationResponse,
   V1CreatePersonalFileResponse,
@@ -133,10 +137,12 @@ import type {
   V1CreateWhitelistedDomainResponse,
   V1DeleteAlertResponse,
   V1DeleteDeploymentResponse,
+  V1DeleteOrgAIConfigResponse,
   V1DeleteOrganizationResponse,
   V1DeletePersonalFileResponse,
   V1DeleteProjectResponse,
   V1DeleteReportResponse,
+  V1DeleteSemanticResourceResponse,
   V1DeleteServiceResponse,
   V1DeleteUserResponse,
   V1DeleteUsergroupResponse,
@@ -145,6 +151,7 @@ import type {
   V1EditAlertResponse,
   V1EditPersonalFileResponse,
   V1EditReportResponse,
+  V1ForceReleaseEditLockResponse,
   V1GenerateAlertYAMLResponse,
   V1GenerateReportYAMLResponse,
   V1GetAlertMetaResponse,
@@ -160,10 +167,9 @@ import type {
   V1GetDeploymentConfigResponse,
   V1GetDeploymentCredentialsResponse,
   V1GetDeploymentResponse,
-  V1GetGithubPullRequestResponse,
-  V1GetGithubRepoStatusResponse,
-  V1GetGithubUserStatusResponse,
+  V1GetEditLockResponse,
   V1GetIFrameResponse,
+  V1GetOrgAIConfigResponse,
   V1GetOrganizationMemberUserResponse,
   V1GetOrganizationNameForDomainResponse,
   V1GetOrganizationResponse,
@@ -176,10 +182,12 @@ import type {
   V1GetProjectVariablesResponse,
   V1GetRepoMetaResponse,
   V1GetReportMetaResponse,
+  V1GetSemanticResourceResponse,
   V1GetServiceResponse,
   V1GetUserResponse,
   V1GetUsergroupResponse,
   V1GetVirtualFileResponse,
+  V1HeartbeatEditLockResponse,
   V1HibernateProjectResponse,
   V1IssueMagicAuthTokenResponse,
   V1IssueRepresentativeAuthTokenRequest,
@@ -187,9 +195,10 @@ import type {
   V1IssueServiceAuthTokenResponse,
   V1IssueUserAuthTokenResponse,
   V1LeaveOrganizationResponse,
+  V1ListAuditEventsResponse,
   V1ListBookmarksResponse,
   V1ListDeploymentsResponse,
-  V1ListGithubUserReposResponse,
+  V1ListFeatureAccessResponse,
   V1ListMagicAuthTokensResponse,
   V1ListOrganizationBillingIssuesResponse,
   V1ListOrganizationInvitesResponse,
@@ -207,7 +216,10 @@ import type {
   V1ListProjectsForOrganizationResponse,
   V1ListProjectsForUserByNameResponse,
   V1ListPublicBillingPlansResponse,
+  V1ListResourceVisibilityResponse,
   V1ListRolesResponse,
+  V1ListSemanticResourcesResponse,
+  V1ListSemanticVersionsResponse,
   V1ListServiceAuthTokensResponse,
   V1ListServicesResponse,
   V1ListSuperusersResponse,
@@ -217,11 +229,14 @@ import type {
   V1ListUsergroupsForProjectAndUserResponse,
   V1ListWhitelistedDomainsResponse,
   V1PingResponse,
+  V1PreviewSemanticProjectResponse,
   V1ProvisionResponse,
+  V1PublishSemanticProjectResponse,
   V1PullVirtualRepoResponse,
   V1RecordEventsRequest,
   V1RecordEventsResponse,
   V1RedeployProjectResponse,
+  V1ReleaseEditLockResponse,
   V1RemoveBookmarkResponse,
   V1RemoveOrganizationMemberServiceResponse,
   V1RemoveOrganizationMemberUserResponse,
@@ -240,15 +255,20 @@ import type {
   V1RevokeRepresentativeAuthTokensResponse,
   V1RevokeServiceAuthTokenResponse,
   V1RevokeUserAuthTokenResponse,
+  V1SaveSemanticResourceResponse,
   V1SearchProjectNamesResponse,
   V1SearchProjectUsersResponse,
   V1SearchUsersResponse,
+  V1SetFeatureAccessResponse,
+  V1SetOrgAIConfigResponse,
+  V1SetOrgFeatureDefaultsResponse,
   V1SetOrganizationMemberServiceRoleResponse,
   V1SetOrganizationMemberUserRoleResponse,
   V1SetOrganizationMemberUsergroupRoleResponse,
   V1SetProjectMemberServiceRoleResponse,
   V1SetProjectMemberUserRoleResponse,
   V1SetProjectMemberUsergroupRoleResponse,
+  V1SetResourceVisibilityResponse,
   V1SetSuperuserRequest,
   V1SetSuperuserResponse,
   V1StartDeploymentResponse,
@@ -277,6 +297,7 @@ import type {
   V1SudoUpdateOrganizationQuotasResponse,
   V1SudoUpdateUserQuotasRequest,
   V1SudoUpdateUserQuotasResponse,
+  V1TestOrgAIConfigResponse,
   V1TriggerReconcileResponse,
   V1TriggerRedeployRequest,
   V1TriggerRedeployResponse,
@@ -1284,260 +1305,6 @@ export const createAdminServiceStopDeployment = <
   return createMutation(mutationOptions, queryClient);
 };
 /**
- * @summary GetGithubRepoRequest returns info about a Github repo based on the caller's installations.
-If the caller has not granted access to the repository, instructions for granting access are returned.
- */
-export const adminServiceGetGithubRepoStatus = (
-  params?: AdminServiceGetGithubRepoStatusParams,
-  signal?: AbortSignal,
-) => {
-  return httpClient<V1GetGithubRepoStatusResponse>({
-    url: `/v1/github/repositories`,
-    method: "GET",
-    params,
-    signal,
-  });
-};
-
-export const getAdminServiceGetGithubRepoStatusQueryKey = (
-  params?: AdminServiceGetGithubRepoStatusParams,
-) => {
-  return [`/v1/github/repositories`, ...(params ? [params] : [])] as const;
-};
-
-export const getAdminServiceGetGithubRepoStatusQueryOptions = <
-  TData = Awaited<ReturnType<typeof adminServiceGetGithubRepoStatus>>,
-  TError = RpcStatus,
->(
-  params?: AdminServiceGetGithubRepoStatusParams,
-  options?: {
-    query?: Partial<
-      CreateQueryOptions<
-        Awaited<ReturnType<typeof adminServiceGetGithubRepoStatus>>,
-        TError,
-        TData
-      >
-    >;
-  },
-) => {
-  const { query: queryOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ??
-    getAdminServiceGetGithubRepoStatusQueryKey(params);
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof adminServiceGetGithubRepoStatus>>
-  > = ({ signal }) => adminServiceGetGithubRepoStatus(params, signal);
-
-  return { queryKey, queryFn, ...queryOptions } as CreateQueryOptions<
-    Awaited<ReturnType<typeof adminServiceGetGithubRepoStatus>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type AdminServiceGetGithubRepoStatusQueryResult = NonNullable<
-  Awaited<ReturnType<typeof adminServiceGetGithubRepoStatus>>
->;
-export type AdminServiceGetGithubRepoStatusQueryError = RpcStatus;
-
-/**
- * @summary GetGithubRepoRequest returns info about a Github repo based on the caller's installations.
-If the caller has not granted access to the repository, instructions for granting access are returned.
- */
-
-export function createAdminServiceGetGithubRepoStatus<
-  TData = Awaited<ReturnType<typeof adminServiceGetGithubRepoStatus>>,
-  TError = RpcStatus,
->(
-  params?: AdminServiceGetGithubRepoStatusParams,
-  options?: {
-    query?: Partial<
-      CreateQueryOptions<
-        Awaited<ReturnType<typeof adminServiceGetGithubRepoStatus>>,
-        TError,
-        TData
-      >
-    >;
-  },
-  queryClient?: QueryClient,
-): CreateQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-} {
-  const queryOptions = getAdminServiceGetGithubRepoStatusQueryOptions(
-    params,
-    options,
-  );
-
-  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-}
-
-/**
- * @summary GetGithubUserStatus returns info about a Github user account based on the caller's installations.
-If we don't have access to user's personal account tokens or it is expired, instructions for granting access are returned.
- */
-export const adminServiceGetGithubUserStatus = (signal?: AbortSignal) => {
-  return httpClient<V1GetGithubUserStatusResponse>({
-    url: `/v1/github/user`,
-    method: "GET",
-    signal,
-  });
-};
-
-export const getAdminServiceGetGithubUserStatusQueryKey = () => {
-  return [`/v1/github/user`] as const;
-};
-
-export const getAdminServiceGetGithubUserStatusQueryOptions = <
-  TData = Awaited<ReturnType<typeof adminServiceGetGithubUserStatus>>,
-  TError = RpcStatus,
->(options?: {
-  query?: Partial<
-    CreateQueryOptions<
-      Awaited<ReturnType<typeof adminServiceGetGithubUserStatus>>,
-      TError,
-      TData
-    >
-  >;
-}) => {
-  const { query: queryOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ?? getAdminServiceGetGithubUserStatusQueryKey();
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof adminServiceGetGithubUserStatus>>
-  > = ({ signal }) => adminServiceGetGithubUserStatus(signal);
-
-  return { queryKey, queryFn, ...queryOptions } as CreateQueryOptions<
-    Awaited<ReturnType<typeof adminServiceGetGithubUserStatus>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type AdminServiceGetGithubUserStatusQueryResult = NonNullable<
-  Awaited<ReturnType<typeof adminServiceGetGithubUserStatus>>
->;
-export type AdminServiceGetGithubUserStatusQueryError = RpcStatus;
-
-/**
- * @summary GetGithubUserStatus returns info about a Github user account based on the caller's installations.
-If we don't have access to user's personal account tokens or it is expired, instructions for granting access are returned.
- */
-
-export function createAdminServiceGetGithubUserStatus<
-  TData = Awaited<ReturnType<typeof adminServiceGetGithubUserStatus>>,
-  TError = RpcStatus,
->(
-  options?: {
-    query?: Partial<
-      CreateQueryOptions<
-        Awaited<ReturnType<typeof adminServiceGetGithubUserStatus>>,
-        TError,
-        TData
-      >
-    >;
-  },
-  queryClient?: QueryClient,
-): CreateQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-} {
-  const queryOptions = getAdminServiceGetGithubUserStatusQueryOptions(options);
-
-  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-}
-
-export const adminServiceListGithubUserRepos = (signal?: AbortSignal) => {
-  return httpClient<V1ListGithubUserReposResponse>({
-    url: `/v1/github/user/repositories`,
-    method: "GET",
-    signal,
-  });
-};
-
-export const getAdminServiceListGithubUserReposQueryKey = () => {
-  return [`/v1/github/user/repositories`] as const;
-};
-
-export const getAdminServiceListGithubUserReposQueryOptions = <
-  TData = Awaited<ReturnType<typeof adminServiceListGithubUserRepos>>,
-  TError = RpcStatus,
->(options?: {
-  query?: Partial<
-    CreateQueryOptions<
-      Awaited<ReturnType<typeof adminServiceListGithubUserRepos>>,
-      TError,
-      TData
-    >
-  >;
-}) => {
-  const { query: queryOptions } = options ?? {};
-
-  const queryKey =
-    queryOptions?.queryKey ?? getAdminServiceListGithubUserReposQueryKey();
-
-  const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof adminServiceListGithubUserRepos>>
-  > = ({ signal }) => adminServiceListGithubUserRepos(signal);
-
-  return { queryKey, queryFn, ...queryOptions } as CreateQueryOptions<
-    Awaited<ReturnType<typeof adminServiceListGithubUserRepos>>,
-    TError,
-    TData
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-};
-
-export type AdminServiceListGithubUserReposQueryResult = NonNullable<
-  Awaited<ReturnType<typeof adminServiceListGithubUserRepos>>
->;
-export type AdminServiceListGithubUserReposQueryError = RpcStatus;
-
-export function createAdminServiceListGithubUserRepos<
-  TData = Awaited<ReturnType<typeof adminServiceListGithubUserRepos>>,
-  TError = RpcStatus,
->(
-  options?: {
-    query?: Partial<
-      CreateQueryOptions<
-        Awaited<ReturnType<typeof adminServiceListGithubUserRepos>>,
-        TError,
-        TData
-      >
-    >;
-  },
-  queryClient?: QueryClient,
-): CreateQueryResult<TData, TError> & {
-  queryKey: DataTag<QueryKey, TData, TError>;
-} {
-  const queryOptions = getAdminServiceListGithubUserReposQueryOptions(options);
-
-  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
-    TData,
-    TError
-  > & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  query.queryKey = queryOptions.queryKey;
-
-  return query;
-}
-
-/**
  * @summary RevokeMagicAuthToken revokes a magic auth token.
  */
 export const adminServiceRevokeMagicAuthToken = (tokenId: string) => {
@@ -2255,6 +2022,463 @@ export const createAdminServiceUpdateOrganization = <
   return createMutation(mutationOptions, queryClient);
 };
 /**
+ * @summary GetOrgAIConfig returns the org's LLM configuration. The API key is never
+returned; only whether one is set.
+ */
+export const adminServiceGetOrgAIConfig = (
+  org: string,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1GetOrgAIConfigResponse>({
+    url: `/v1/orgs/${org}/ai-config`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getAdminServiceGetOrgAIConfigQueryKey = (org?: string) => {
+  return [`/v1/orgs/${org}/ai-config`] as const;
+};
+
+export const getAdminServiceGetOrgAIConfigQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceGetOrgAIConfig>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceGetOrgAIConfig>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getAdminServiceGetOrgAIConfigQueryKey(org);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminServiceGetOrgAIConfig>>
+  > = ({ signal }) => adminServiceGetOrgAIConfig(org, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!org,
+    ...queryOptions,
+  } as CreateQueryOptions<
+    Awaited<ReturnType<typeof adminServiceGetOrgAIConfig>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type AdminServiceGetOrgAIConfigQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceGetOrgAIConfig>>
+>;
+export type AdminServiceGetOrgAIConfigQueryError = RpcStatus;
+
+/**
+ * @summary GetOrgAIConfig returns the org's LLM configuration. The API key is never
+returned; only whether one is set.
+ */
+
+export function createAdminServiceGetOrgAIConfig<
+  TData = Awaited<ReturnType<typeof adminServiceGetOrgAIConfig>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceGetOrgAIConfig>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getAdminServiceGetOrgAIConfigQueryOptions(org, options);
+
+  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary DeleteOrgAIConfig removes the org override, reverting to the deployment default.
+ */
+export const adminServiceDeleteOrgAIConfig = (org: string) => {
+  return httpClient<V1DeleteOrgAIConfigResponse>({
+    url: `/v1/orgs/${org}/ai-config`,
+    method: "DELETE",
+  });
+};
+
+export const getAdminServiceDeleteOrgAIConfigMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceDeleteOrgAIConfig>>,
+    TError,
+    { org: string },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceDeleteOrgAIConfig>>,
+  TError,
+  { org: string },
+  TContext
+> => {
+  const mutationKey = ["adminServiceDeleteOrgAIConfig"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceDeleteOrgAIConfig>>,
+    { org: string }
+  > = (props) => {
+    const { org } = props ?? {};
+
+    return adminServiceDeleteOrgAIConfig(org);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceDeleteOrgAIConfigMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceDeleteOrgAIConfig>>
+>;
+
+export type AdminServiceDeleteOrgAIConfigMutationError = RpcStatus;
+
+/**
+ * @summary DeleteOrgAIConfig removes the org override, reverting to the deployment default.
+ */
+export const createAdminServiceDeleteOrgAIConfig = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceDeleteOrgAIConfig>>,
+      TError,
+      { org: string },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceDeleteOrgAIConfig>>,
+  TError,
+  { org: string },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceDeleteOrgAIConfigMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary SetOrgAIConfig writes the org's LLM configuration.
+ */
+export const adminServiceSetOrgAIConfig = (
+  org: string,
+  adminServiceSetOrgAIConfigBody: AdminServiceSetOrgAIConfigBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1SetOrgAIConfigResponse>({
+    url: `/v1/orgs/${org}/ai-config`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceSetOrgAIConfigBody,
+    signal,
+  });
+};
+
+export const getAdminServiceSetOrgAIConfigMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceSetOrgAIConfig>>,
+    TError,
+    { org: string; data: AdminServiceSetOrgAIConfigBody },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceSetOrgAIConfig>>,
+  TError,
+  { org: string; data: AdminServiceSetOrgAIConfigBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceSetOrgAIConfig"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceSetOrgAIConfig>>,
+    { org: string; data: AdminServiceSetOrgAIConfigBody }
+  > = (props) => {
+    const { org, data } = props ?? {};
+
+    return adminServiceSetOrgAIConfig(org, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceSetOrgAIConfigMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceSetOrgAIConfig>>
+>;
+export type AdminServiceSetOrgAIConfigMutationBody =
+  AdminServiceSetOrgAIConfigBody;
+export type AdminServiceSetOrgAIConfigMutationError = RpcStatus;
+
+/**
+ * @summary SetOrgAIConfig writes the org's LLM configuration.
+ */
+export const createAdminServiceSetOrgAIConfig = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceSetOrgAIConfig>>,
+      TError,
+      { org: string; data: AdminServiceSetOrgAIConfigBody },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceSetOrgAIConfig>>,
+  TError,
+  { org: string; data: AdminServiceSetOrgAIConfigBody },
+  TContext
+> => {
+  const mutationOptions = getAdminServiceSetOrgAIConfigMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary TestOrgAIConfig runs a minimal completion against the given (or stored)
+config and reports whether it works, without persisting anything.
+ */
+export const adminServiceTestOrgAIConfig = (
+  org: string,
+  adminServiceTestOrgAIConfigBody: AdminServiceTestOrgAIConfigBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1TestOrgAIConfigResponse>({
+    url: `/v1/orgs/${org}/ai-config/test`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceTestOrgAIConfigBody,
+    signal,
+  });
+};
+
+export const getAdminServiceTestOrgAIConfigMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceTestOrgAIConfig>>,
+    TError,
+    { org: string; data: AdminServiceTestOrgAIConfigBody },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceTestOrgAIConfig>>,
+  TError,
+  { org: string; data: AdminServiceTestOrgAIConfigBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceTestOrgAIConfig"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceTestOrgAIConfig>>,
+    { org: string; data: AdminServiceTestOrgAIConfigBody }
+  > = (props) => {
+    const { org, data } = props ?? {};
+
+    return adminServiceTestOrgAIConfig(org, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceTestOrgAIConfigMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceTestOrgAIConfig>>
+>;
+export type AdminServiceTestOrgAIConfigMutationBody =
+  AdminServiceTestOrgAIConfigBody;
+export type AdminServiceTestOrgAIConfigMutationError = RpcStatus;
+
+/**
+ * @summary TestOrgAIConfig runs a minimal completion against the given (or stored)
+config and reports whether it works, without persisting anything.
+ */
+export const createAdminServiceTestOrgAIConfig = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceTestOrgAIConfig>>,
+      TError,
+      { org: string; data: AdminServiceTestOrgAIConfigBody },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceTestOrgAIConfig>>,
+  TError,
+  { org: string; data: AdminServiceTestOrgAIConfigBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceTestOrgAIConfigMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary ListAuditEvents lists recent administrative audit events for an org.
+ */
+export const adminServiceListAuditEvents = (
+  org: string,
+  params?: AdminServiceListAuditEventsParams,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1ListAuditEventsResponse>({
+    url: `/v1/orgs/${org}/audit-events`,
+    method: "GET",
+    params,
+    signal,
+  });
+};
+
+export const getAdminServiceListAuditEventsQueryKey = (
+  org?: string,
+  params?: AdminServiceListAuditEventsParams,
+) => {
+  return [`/v1/orgs/${org}/audit-events`, ...(params ? [params] : [])] as const;
+};
+
+export const getAdminServiceListAuditEventsQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceListAuditEvents>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  params?: AdminServiceListAuditEventsParams,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListAuditEvents>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getAdminServiceListAuditEventsQueryKey(org, params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminServiceListAuditEvents>>
+  > = ({ signal }) => adminServiceListAuditEvents(org, params, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!org,
+    ...queryOptions,
+  } as CreateQueryOptions<
+    Awaited<ReturnType<typeof adminServiceListAuditEvents>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type AdminServiceListAuditEventsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceListAuditEvents>>
+>;
+export type AdminServiceListAuditEventsQueryError = RpcStatus;
+
+/**
+ * @summary ListAuditEvents lists recent administrative audit events for an org.
+ */
+
+export function createAdminServiceListAuditEvents<
+  TData = Awaited<ReturnType<typeof adminServiceListAuditEvents>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  params?: AdminServiceListAuditEventsParams,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListAuditEvents>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getAdminServiceListAuditEventsQueryOptions(
+    org,
+    params,
+    options,
+  );
+
+  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
  * @summary GetBillingCreditBalance returns the organization's remaining trial credit balance
  */
 export const adminServiceGetBillingCreditBalance = (
@@ -2946,92 +3170,6 @@ export const createAdminServiceRenewBillingSubscription = <
   return createMutation(mutationOptions, queryClient);
 };
 /**
- * @summary CreateManagedGitRepo creates a new rill managed git repo for the organization.
- */
-export const adminServiceCreateManagedGitRepo = (
-  org: string,
-  adminServiceCreateManagedGitRepoBody: AdminServiceCreateManagedGitRepoBody,
-) => {
-  return httpClient<V1CreateManagedGitRepoResponse>({
-    url: `/v1/orgs/${org}/create-managed-git-repo`,
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    data: adminServiceCreateManagedGitRepoBody,
-  });
-};
-
-export const getAdminServiceCreateManagedGitRepoMutationOptions = <
-  TError = RpcStatus,
-  TContext = unknown,
->(options?: {
-  mutation?: CreateMutationOptions<
-    Awaited<ReturnType<typeof adminServiceCreateManagedGitRepo>>,
-    TError,
-    { org: string; data: AdminServiceCreateManagedGitRepoBody },
-    TContext
-  >;
-}): CreateMutationOptions<
-  Awaited<ReturnType<typeof adminServiceCreateManagedGitRepo>>,
-  TError,
-  { org: string; data: AdminServiceCreateManagedGitRepoBody },
-  TContext
-> => {
-  const mutationKey = ["adminServiceCreateManagedGitRepo"];
-  const { mutation: mutationOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey } };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof adminServiceCreateManagedGitRepo>>,
-    { org: string; data: AdminServiceCreateManagedGitRepoBody }
-  > = (props) => {
-    const { org, data } = props ?? {};
-
-    return adminServiceCreateManagedGitRepo(org, data);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type AdminServiceCreateManagedGitRepoMutationResult = NonNullable<
-  Awaited<ReturnType<typeof adminServiceCreateManagedGitRepo>>
->;
-export type AdminServiceCreateManagedGitRepoMutationBody =
-  AdminServiceCreateManagedGitRepoBody;
-export type AdminServiceCreateManagedGitRepoMutationError = RpcStatus;
-
-/**
- * @summary CreateManagedGitRepo creates a new rill managed git repo for the organization.
- */
-export const createAdminServiceCreateManagedGitRepo = <
-  TError = RpcStatus,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: CreateMutationOptions<
-      Awaited<ReturnType<typeof adminServiceCreateManagedGitRepo>>,
-      TError,
-      { org: string; data: AdminServiceCreateManagedGitRepoBody },
-      TContext
-    >;
-  },
-  queryClient?: QueryClient,
-): CreateMutationResult<
-  Awaited<ReturnType<typeof adminServiceCreateManagedGitRepo>>,
-  TError,
-  { org: string; data: AdminServiceCreateManagedGitRepoBody },
-  TContext
-> => {
-  const mutationOptions =
-    getAdminServiceCreateManagedGitRepoMutationOptions(options);
-
-  return createMutation(mutationOptions, queryClient);
-};
-/**
  * @summary CreateAsset returns a one time signed URL using which any asset can be uploaded.
  */
 export const adminServiceCreateAsset = (
@@ -3114,6 +3252,292 @@ export const createAdminServiceCreateAsset = <
   TContext
 > => {
   const mutationOptions = getAdminServiceCreateAssetMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary ListFeatureAccess lists feature access for an org (optionally scoped to a project),
+including org defaults and each subject's effective access.
+ */
+export const adminServiceListFeatureAccess = (
+  org: string,
+  params?: AdminServiceListFeatureAccessParams,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1ListFeatureAccessResponse>({
+    url: `/v1/orgs/${org}/feature-access`,
+    method: "GET",
+    params,
+    signal,
+  });
+};
+
+export const getAdminServiceListFeatureAccessQueryKey = (
+  org?: string,
+  params?: AdminServiceListFeatureAccessParams,
+) => {
+  return [
+    `/v1/orgs/${org}/feature-access`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getAdminServiceListFeatureAccessQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceListFeatureAccess>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  params?: AdminServiceListFeatureAccessParams,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListFeatureAccess>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getAdminServiceListFeatureAccessQueryKey(org, params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminServiceListFeatureAccess>>
+  > = ({ signal }) => adminServiceListFeatureAccess(org, params, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!org,
+    ...queryOptions,
+  } as CreateQueryOptions<
+    Awaited<ReturnType<typeof adminServiceListFeatureAccess>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type AdminServiceListFeatureAccessQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceListFeatureAccess>>
+>;
+export type AdminServiceListFeatureAccessQueryError = RpcStatus;
+
+/**
+ * @summary ListFeatureAccess lists feature access for an org (optionally scoped to a project),
+including org defaults and each subject's effective access.
+ */
+
+export function createAdminServiceListFeatureAccess<
+  TData = Awaited<ReturnType<typeof adminServiceListFeatureAccess>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  params?: AdminServiceListFeatureAccessParams,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListFeatureAccess>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getAdminServiceListFeatureAccessQueryOptions(
+    org,
+    params,
+    options,
+  );
+
+  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary SetFeatureAccess sets feature access overrides for a user or user group.
+ */
+export const adminServiceSetFeatureAccess = (
+  org: string,
+  adminServiceSetFeatureAccessBody: AdminServiceSetFeatureAccessBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1SetFeatureAccessResponse>({
+    url: `/v1/orgs/${org}/feature-access`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceSetFeatureAccessBody,
+    signal,
+  });
+};
+
+export const getAdminServiceSetFeatureAccessMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceSetFeatureAccess>>,
+    TError,
+    { org: string; data: AdminServiceSetFeatureAccessBody },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceSetFeatureAccess>>,
+  TError,
+  { org: string; data: AdminServiceSetFeatureAccessBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceSetFeatureAccess"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceSetFeatureAccess>>,
+    { org: string; data: AdminServiceSetFeatureAccessBody }
+  > = (props) => {
+    const { org, data } = props ?? {};
+
+    return adminServiceSetFeatureAccess(org, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceSetFeatureAccessMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceSetFeatureAccess>>
+>;
+export type AdminServiceSetFeatureAccessMutationBody =
+  AdminServiceSetFeatureAccessBody;
+export type AdminServiceSetFeatureAccessMutationError = RpcStatus;
+
+/**
+ * @summary SetFeatureAccess sets feature access overrides for a user or user group.
+ */
+export const createAdminServiceSetFeatureAccess = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceSetFeatureAccess>>,
+      TError,
+      { org: string; data: AdminServiceSetFeatureAccessBody },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceSetFeatureAccess>>,
+  TError,
+  { org: string; data: AdminServiceSetFeatureAccessBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceSetFeatureAccessMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary SetOrgFeatureDefaults sets the org-level default feature grants.
+ */
+export const adminServiceSetOrgFeatureDefaults = (
+  org: string,
+  adminServiceSetOrgFeatureDefaultsBody: AdminServiceSetOrgFeatureDefaultsBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1SetOrgFeatureDefaultsResponse>({
+    url: `/v1/orgs/${org}/feature-access/defaults`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceSetOrgFeatureDefaultsBody,
+    signal,
+  });
+};
+
+export const getAdminServiceSetOrgFeatureDefaultsMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceSetOrgFeatureDefaults>>,
+    TError,
+    { org: string; data: AdminServiceSetOrgFeatureDefaultsBody },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceSetOrgFeatureDefaults>>,
+  TError,
+  { org: string; data: AdminServiceSetOrgFeatureDefaultsBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceSetOrgFeatureDefaults"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceSetOrgFeatureDefaults>>,
+    { org: string; data: AdminServiceSetOrgFeatureDefaultsBody }
+  > = (props) => {
+    const { org, data } = props ?? {};
+
+    return adminServiceSetOrgFeatureDefaults(org, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceSetOrgFeatureDefaultsMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceSetOrgFeatureDefaults>>
+>;
+export type AdminServiceSetOrgFeatureDefaultsMutationBody =
+  AdminServiceSetOrgFeatureDefaultsBody;
+export type AdminServiceSetOrgFeatureDefaultsMutationError = RpcStatus;
+
+/**
+ * @summary SetOrgFeatureDefaults sets the org-level default feature grants.
+ */
+export const createAdminServiceSetOrgFeatureDefaults = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceSetOrgFeatureDefaults>>,
+      TError,
+      { org: string; data: AdminServiceSetOrgFeatureDefaultsBody },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceSetOrgFeatureDefaults>>,
+  TError,
+  { org: string; data: AdminServiceSetOrgFeatureDefaultsBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceSetOrgFeatureDefaultsMutationOptions(options);
 
   return createMutation(mutationOptions, queryClient);
 };
@@ -5457,117 +5881,6 @@ export function createAdminServiceGetCloneCredentials<
 }
 
 /**
- * @summary Connects a rill managed project to github.
-Replaces the contents of the remote repo with the contents of the project.
- */
-export const adminServiceConnectProjectToGithub = (
-  org: string,
-  project: string,
-  adminServiceConnectProjectToGithubBody: AdminServiceConnectProjectToGithubBody,
-  signal?: AbortSignal,
-) => {
-  return httpClient<V1ConnectProjectToGithubResponse>({
-    url: `/v1/orgs/${org}/projects/${project}/connect-to-github`,
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    data: adminServiceConnectProjectToGithubBody,
-    signal,
-  });
-};
-
-export const getAdminServiceConnectProjectToGithubMutationOptions = <
-  TError = RpcStatus,
-  TContext = unknown,
->(options?: {
-  mutation?: CreateMutationOptions<
-    Awaited<ReturnType<typeof adminServiceConnectProjectToGithub>>,
-    TError,
-    {
-      org: string;
-      project: string;
-      data: AdminServiceConnectProjectToGithubBody;
-    },
-    TContext
-  >;
-}): CreateMutationOptions<
-  Awaited<ReturnType<typeof adminServiceConnectProjectToGithub>>,
-  TError,
-  {
-    org: string;
-    project: string;
-    data: AdminServiceConnectProjectToGithubBody;
-  },
-  TContext
-> => {
-  const mutationKey = ["adminServiceConnectProjectToGithub"];
-  const { mutation: mutationOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey } };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof adminServiceConnectProjectToGithub>>,
-    {
-      org: string;
-      project: string;
-      data: AdminServiceConnectProjectToGithubBody;
-    }
-  > = (props) => {
-    const { org, project, data } = props ?? {};
-
-    return adminServiceConnectProjectToGithub(org, project, data);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type AdminServiceConnectProjectToGithubMutationResult = NonNullable<
-  Awaited<ReturnType<typeof adminServiceConnectProjectToGithub>>
->;
-export type AdminServiceConnectProjectToGithubMutationBody =
-  AdminServiceConnectProjectToGithubBody;
-export type AdminServiceConnectProjectToGithubMutationError = RpcStatus;
-
-/**
- * @summary Connects a rill managed project to github.
-Replaces the contents of the remote repo with the contents of the project.
- */
-export const createAdminServiceConnectProjectToGithub = <
-  TError = RpcStatus,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: CreateMutationOptions<
-      Awaited<ReturnType<typeof adminServiceConnectProjectToGithub>>,
-      TError,
-      {
-        org: string;
-        project: string;
-        data: AdminServiceConnectProjectToGithubBody;
-      },
-      TContext
-    >;
-  },
-  queryClient?: QueryClient,
-): CreateMutationResult<
-  Awaited<ReturnType<typeof adminServiceConnectProjectToGithub>>,
-  TError,
-  {
-    org: string;
-    project: string;
-    data: AdminServiceConnectProjectToGithubBody;
-  },
-  TContext
-> => {
-  const mutationOptions =
-    getAdminServiceConnectProjectToGithubMutationOptions(options);
-
-  return createMutation(mutationOptions, queryClient);
-};
-/**
  * @summary GetDeploymentCredentials returns runtime info and access token on behalf of a specific user, or alternatively for a raw set of JWT attributes
 DEPRECATED: Clients should call GetDeployment instead.
  */
@@ -5896,149 +6209,37 @@ export const createAdminServiceCreateDeployment = <
   return createMutation(mutationOptions, queryClient);
 };
 /**
- * @summary CreateGithubPullRequest creates a Github PR from the specified branch in the project's connected Github repository to the primary branch.
+ * @summary GetEditLock returns the current lock holder, if any.
  */
-export const adminServiceCreateGithubPullRequest = (
+export const adminServiceGetEditLock = (
   org: string,
   project: string,
-  adminServiceCreateGithubPullRequestBody: AdminServiceCreateGithubPullRequestBody,
   signal?: AbortSignal,
 ) => {
-  return httpClient<V1CreateGithubPullRequestResponse>({
-    url: `/v1/orgs/${org}/projects/${project}/github/pr`,
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    data: adminServiceCreateGithubPullRequestBody,
-    signal,
-  });
-};
-
-export const getAdminServiceCreateGithubPullRequestMutationOptions = <
-  TError = RpcStatus,
-  TContext = unknown,
->(options?: {
-  mutation?: CreateMutationOptions<
-    Awaited<ReturnType<typeof adminServiceCreateGithubPullRequest>>,
-    TError,
-    {
-      org: string;
-      project: string;
-      data: AdminServiceCreateGithubPullRequestBody;
-    },
-    TContext
-  >;
-}): CreateMutationOptions<
-  Awaited<ReturnType<typeof adminServiceCreateGithubPullRequest>>,
-  TError,
-  {
-    org: string;
-    project: string;
-    data: AdminServiceCreateGithubPullRequestBody;
-  },
-  TContext
-> => {
-  const mutationKey = ["adminServiceCreateGithubPullRequest"];
-  const { mutation: mutationOptions } = options
-    ? options.mutation &&
-      "mutationKey" in options.mutation &&
-      options.mutation.mutationKey
-      ? options
-      : { ...options, mutation: { ...options.mutation, mutationKey } }
-    : { mutation: { mutationKey } };
-
-  const mutationFn: MutationFunction<
-    Awaited<ReturnType<typeof adminServiceCreateGithubPullRequest>>,
-    {
-      org: string;
-      project: string;
-      data: AdminServiceCreateGithubPullRequestBody;
-    }
-  > = (props) => {
-    const { org, project, data } = props ?? {};
-
-    return adminServiceCreateGithubPullRequest(org, project, data);
-  };
-
-  return { mutationFn, ...mutationOptions };
-};
-
-export type AdminServiceCreateGithubPullRequestMutationResult = NonNullable<
-  Awaited<ReturnType<typeof adminServiceCreateGithubPullRequest>>
->;
-export type AdminServiceCreateGithubPullRequestMutationBody =
-  AdminServiceCreateGithubPullRequestBody;
-export type AdminServiceCreateGithubPullRequestMutationError = RpcStatus;
-
-/**
- * @summary CreateGithubPullRequest creates a Github PR from the specified branch in the project's connected Github repository to the primary branch.
- */
-export const createAdminServiceCreateGithubPullRequest = <
-  TError = RpcStatus,
-  TContext = unknown,
->(
-  options?: {
-    mutation?: CreateMutationOptions<
-      Awaited<ReturnType<typeof adminServiceCreateGithubPullRequest>>,
-      TError,
-      {
-        org: string;
-        project: string;
-        data: AdminServiceCreateGithubPullRequestBody;
-      },
-      TContext
-    >;
-  },
-  queryClient?: QueryClient,
-): CreateMutationResult<
-  Awaited<ReturnType<typeof adminServiceCreateGithubPullRequest>>,
-  TError,
-  {
-    org: string;
-    project: string;
-    data: AdminServiceCreateGithubPullRequestBody;
-  },
-  TContext
-> => {
-  const mutationOptions =
-    getAdminServiceCreateGithubPullRequestMutationOptions(options);
-
-  return createMutation(mutationOptions, queryClient);
-};
-/**
- * @summary GetGithubPullRequest returns the status of the PR for the specified branch, if it exists.
- */
-export const adminServiceGetGithubPullRequest = (
-  org: string,
-  project: string,
-  branch: string,
-  signal?: AbortSignal,
-) => {
-  return httpClient<V1GetGithubPullRequestResponse>({
-    url: `/v1/orgs/${org}/projects/${project}/github/pr/${branch}`,
+  return httpClient<V1GetEditLockResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/edit-lock`,
     method: "GET",
     signal,
   });
 };
 
-export const getAdminServiceGetGithubPullRequestQueryKey = (
+export const getAdminServiceGetEditLockQueryKey = (
   org?: string,
   project?: string,
-  branch?: string,
 ) => {
-  return [`/v1/orgs/${org}/projects/${project}/github/pr/${branch}`] as const;
+  return [`/v1/orgs/${org}/projects/${project}/edit-lock`] as const;
 };
 
-export const getAdminServiceGetGithubPullRequestQueryOptions = <
-  TData = Awaited<ReturnType<typeof adminServiceGetGithubPullRequest>>,
+export const getAdminServiceGetEditLockQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceGetEditLock>>,
   TError = RpcStatus,
 >(
   org: string,
   project: string,
-  branch: string,
   options?: {
     query?: Partial<
       CreateQueryOptions<
-        Awaited<ReturnType<typeof adminServiceGetGithubPullRequest>>,
+        Awaited<ReturnType<typeof adminServiceGetEditLock>>,
         TError,
         TData
       >
@@ -6048,46 +6249,43 @@ export const getAdminServiceGetGithubPullRequestQueryOptions = <
   const { query: queryOptions } = options ?? {};
 
   const queryKey =
-    queryOptions?.queryKey ??
-    getAdminServiceGetGithubPullRequestQueryKey(org, project, branch);
+    queryOptions?.queryKey ?? getAdminServiceGetEditLockQueryKey(org, project);
 
   const queryFn: QueryFunction<
-    Awaited<ReturnType<typeof adminServiceGetGithubPullRequest>>
-  > = ({ signal }) =>
-    adminServiceGetGithubPullRequest(org, project, branch, signal);
+    Awaited<ReturnType<typeof adminServiceGetEditLock>>
+  > = ({ signal }) => adminServiceGetEditLock(org, project, signal);
 
   return {
     queryKey,
     queryFn,
-    enabled: !!(org && project && branch),
+    enabled: !!(org && project),
     ...queryOptions,
   } as CreateQueryOptions<
-    Awaited<ReturnType<typeof adminServiceGetGithubPullRequest>>,
+    Awaited<ReturnType<typeof adminServiceGetEditLock>>,
     TError,
     TData
   > & { queryKey: DataTag<QueryKey, TData, TError> };
 };
 
-export type AdminServiceGetGithubPullRequestQueryResult = NonNullable<
-  Awaited<ReturnType<typeof adminServiceGetGithubPullRequest>>
+export type AdminServiceGetEditLockQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceGetEditLock>>
 >;
-export type AdminServiceGetGithubPullRequestQueryError = RpcStatus;
+export type AdminServiceGetEditLockQueryError = RpcStatus;
 
 /**
- * @summary GetGithubPullRequest returns the status of the PR for the specified branch, if it exists.
+ * @summary GetEditLock returns the current lock holder, if any.
  */
 
-export function createAdminServiceGetGithubPullRequest<
-  TData = Awaited<ReturnType<typeof adminServiceGetGithubPullRequest>>,
+export function createAdminServiceGetEditLock<
+  TData = Awaited<ReturnType<typeof adminServiceGetEditLock>>,
   TError = RpcStatus,
 >(
   org: string,
   project: string,
-  branch: string,
   options?: {
     query?: Partial<
       CreateQueryOptions<
-        Awaited<ReturnType<typeof adminServiceGetGithubPullRequest>>,
+        Awaited<ReturnType<typeof adminServiceGetEditLock>>,
         TError,
         TData
       >
@@ -6097,10 +6295,9 @@ export function createAdminServiceGetGithubPullRequest<
 ): CreateQueryResult<TData, TError> & {
   queryKey: DataTag<QueryKey, TData, TError>;
 } {
-  const queryOptions = getAdminServiceGetGithubPullRequestQueryOptions(
+  const queryOptions = getAdminServiceGetEditLockQueryOptions(
     org,
     project,
-    branch,
     options,
   );
 
@@ -6114,6 +6311,394 @@ export function createAdminServiceGetGithubPullRequest<
   return query;
 }
 
+/**
+ * @summary AcquireEditLock takes (or refreshes) the project-level draft editing lock.
+ */
+export const adminServiceAcquireEditLock = (
+  org: string,
+  project: string,
+  adminServiceTriggerReconcileBodyBody: AdminServiceTriggerReconcileBodyBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1AcquireEditLockResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/edit-lock/acquire`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceTriggerReconcileBodyBody,
+    signal,
+  });
+};
+
+export const getAdminServiceAcquireEditLockMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceAcquireEditLock>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceTriggerReconcileBodyBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceAcquireEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceAcquireEditLock"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceAcquireEditLock>>,
+    { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServiceAcquireEditLock(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceAcquireEditLockMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceAcquireEditLock>>
+>;
+export type AdminServiceAcquireEditLockMutationBody =
+  AdminServiceTriggerReconcileBodyBody;
+export type AdminServiceAcquireEditLockMutationError = RpcStatus;
+
+/**
+ * @summary AcquireEditLock takes (or refreshes) the project-level draft editing lock.
+ */
+export const createAdminServiceAcquireEditLock = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceAcquireEditLock>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServiceTriggerReconcileBodyBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceAcquireEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceAcquireEditLockMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary ForceReleaseEditLock drops the lock regardless of holder (org admin recovery).
+ */
+export const adminServiceForceReleaseEditLock = (
+  org: string,
+  project: string,
+  adminServiceTriggerReconcileBodyBody: AdminServiceTriggerReconcileBodyBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1ForceReleaseEditLockResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/edit-lock/force-release`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceTriggerReconcileBodyBody,
+    signal,
+  });
+};
+
+export const getAdminServiceForceReleaseEditLockMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceForceReleaseEditLock>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceTriggerReconcileBodyBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceForceReleaseEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceForceReleaseEditLock"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceForceReleaseEditLock>>,
+    { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServiceForceReleaseEditLock(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceForceReleaseEditLockMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceForceReleaseEditLock>>
+>;
+export type AdminServiceForceReleaseEditLockMutationBody =
+  AdminServiceTriggerReconcileBodyBody;
+export type AdminServiceForceReleaseEditLockMutationError = RpcStatus;
+
+/**
+ * @summary ForceReleaseEditLock drops the lock regardless of holder (org admin recovery).
+ */
+export const createAdminServiceForceReleaseEditLock = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceForceReleaseEditLock>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServiceTriggerReconcileBodyBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceForceReleaseEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceForceReleaseEditLockMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary HeartbeatEditLock extends the caller's lock and flushes any pending autosave.
+ */
+export const adminServiceHeartbeatEditLock = (
+  org: string,
+  project: string,
+  adminServiceTriggerReconcileBodyBody: AdminServiceTriggerReconcileBodyBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1HeartbeatEditLockResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/edit-lock/heartbeat`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceTriggerReconcileBodyBody,
+    signal,
+  });
+};
+
+export const getAdminServiceHeartbeatEditLockMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceHeartbeatEditLock>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceTriggerReconcileBodyBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceHeartbeatEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceHeartbeatEditLock"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceHeartbeatEditLock>>,
+    { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServiceHeartbeatEditLock(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceHeartbeatEditLockMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceHeartbeatEditLock>>
+>;
+export type AdminServiceHeartbeatEditLockMutationBody =
+  AdminServiceTriggerReconcileBodyBody;
+export type AdminServiceHeartbeatEditLockMutationError = RpcStatus;
+
+/**
+ * @summary HeartbeatEditLock extends the caller's lock and flushes any pending autosave.
+ */
+export const createAdminServiceHeartbeatEditLock = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceHeartbeatEditLock>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServiceTriggerReconcileBodyBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceHeartbeatEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceHeartbeatEditLockMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary ReleaseEditLock releases the caller's lock.
+ */
+export const adminServiceReleaseEditLock = (
+  org: string,
+  project: string,
+  adminServiceTriggerReconcileBodyBody: AdminServiceTriggerReconcileBodyBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1ReleaseEditLockResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/edit-lock/release`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceTriggerReconcileBodyBody,
+    signal,
+  });
+};
+
+export const getAdminServiceReleaseEditLockMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceReleaseEditLock>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceTriggerReconcileBodyBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceReleaseEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceReleaseEditLock"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceReleaseEditLock>>,
+    { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServiceReleaseEditLock(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceReleaseEditLockMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceReleaseEditLock>>
+>;
+export type AdminServiceReleaseEditLockMutationBody =
+  AdminServiceTriggerReconcileBodyBody;
+export type AdminServiceReleaseEditLockMutationError = RpcStatus;
+
+/**
+ * @summary ReleaseEditLock releases the caller's lock.
+ */
+export const createAdminServiceReleaseEditLock = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceReleaseEditLock>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServiceTriggerReconcileBodyBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceReleaseEditLock>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceReleaseEditLockMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
 /**
  * @summary HibernateProject hibernates a project by tearing down its deployments.
  */
@@ -8395,6 +8980,964 @@ export const createAdminServiceRequestProjectAccess = <
 
   return createMutation(mutationOptions, queryClient);
 };
+/**
+ * @summary ListResourceVisibility lists the per-resource business visibility flags.
+ */
+export const adminServiceListResourceVisibility = (
+  org: string,
+  project: string,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1ListResourceVisibilityResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/resource-visibility`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getAdminServiceListResourceVisibilityQueryKey = (
+  org?: string,
+  project?: string,
+) => {
+  return [`/v1/orgs/${org}/projects/${project}/resource-visibility`] as const;
+};
+
+export const getAdminServiceListResourceVisibilityQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceListResourceVisibility>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListResourceVisibility>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getAdminServiceListResourceVisibilityQueryKey(org, project);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminServiceListResourceVisibility>>
+  > = ({ signal }) => adminServiceListResourceVisibility(org, project, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(org && project),
+    ...queryOptions,
+  } as CreateQueryOptions<
+    Awaited<ReturnType<typeof adminServiceListResourceVisibility>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type AdminServiceListResourceVisibilityQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceListResourceVisibility>>
+>;
+export type AdminServiceListResourceVisibilityQueryError = RpcStatus;
+
+/**
+ * @summary ListResourceVisibility lists the per-resource business visibility flags.
+ */
+
+export function createAdminServiceListResourceVisibility<
+  TData = Awaited<ReturnType<typeof adminServiceListResourceVisibility>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListResourceVisibility>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getAdminServiceListResourceVisibilityQueryOptions(
+    org,
+    project,
+    options,
+  );
+
+  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary SetResourceVisibility toggles whether business users can see a resource.
+ */
+export const adminServiceSetResourceVisibility = (
+  org: string,
+  project: string,
+  adminServiceSetResourceVisibilityBody: AdminServiceSetResourceVisibilityBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1SetResourceVisibilityResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/resource-visibility`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceSetResourceVisibilityBody,
+    signal,
+  });
+};
+
+export const getAdminServiceSetResourceVisibilityMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceSetResourceVisibility>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceSetResourceVisibilityBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceSetResourceVisibility>>,
+  TError,
+  { org: string; project: string; data: AdminServiceSetResourceVisibilityBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceSetResourceVisibility"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceSetResourceVisibility>>,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceSetResourceVisibilityBody;
+    }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServiceSetResourceVisibility(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceSetResourceVisibilityMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceSetResourceVisibility>>
+>;
+export type AdminServiceSetResourceVisibilityMutationBody =
+  AdminServiceSetResourceVisibilityBody;
+export type AdminServiceSetResourceVisibilityMutationError = RpcStatus;
+
+/**
+ * @summary SetResourceVisibility toggles whether business users can see a resource.
+ */
+export const createAdminServiceSetResourceVisibility = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceSetResourceVisibility>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServiceSetResourceVisibilityBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceSetResourceVisibility>>,
+  TError,
+  { org: string; project: string; data: AdminServiceSetResourceVisibilityBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceSetResourceVisibilityMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary PreviewSemanticProject validates the current draft without creating a version.
+ */
+export const adminServicePreviewSemanticProject = (
+  org: string,
+  project: string,
+  adminServiceTriggerReconcileBodyBody: AdminServiceTriggerReconcileBodyBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1PreviewSemanticProjectResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/semantic-preview`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceTriggerReconcileBodyBody,
+    signal,
+  });
+};
+
+export const getAdminServicePreviewSemanticProjectMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServicePreviewSemanticProject>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceTriggerReconcileBodyBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServicePreviewSemanticProject>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationKey = ["adminServicePreviewSemanticProject"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServicePreviewSemanticProject>>,
+    { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServicePreviewSemanticProject(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServicePreviewSemanticProjectMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServicePreviewSemanticProject>>
+>;
+export type AdminServicePreviewSemanticProjectMutationBody =
+  AdminServiceTriggerReconcileBodyBody;
+export type AdminServicePreviewSemanticProjectMutationError = RpcStatus;
+
+/**
+ * @summary PreviewSemanticProject validates the current draft without creating a version.
+ */
+export const createAdminServicePreviewSemanticProject = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServicePreviewSemanticProject>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServiceTriggerReconcileBodyBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServicePreviewSemanticProject>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServicePreviewSemanticProjectMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary PublishSemanticProject snapshots the current draft resources into a new version
+and makes it the project's live version (DB semantic layer mode).
+ */
+export const adminServicePublishSemanticProject = (
+  org: string,
+  project: string,
+  adminServicePublishSemanticProjectBody: AdminServicePublishSemanticProjectBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1PublishSemanticProjectResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/semantic-publish`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServicePublishSemanticProjectBody,
+    signal,
+  });
+};
+
+export const getAdminServicePublishSemanticProjectMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServicePublishSemanticProject>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServicePublishSemanticProjectBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServicePublishSemanticProject>>,
+  TError,
+  {
+    org: string;
+    project: string;
+    data: AdminServicePublishSemanticProjectBody;
+  },
+  TContext
+> => {
+  const mutationKey = ["adminServicePublishSemanticProject"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServicePublishSemanticProject>>,
+    {
+      org: string;
+      project: string;
+      data: AdminServicePublishSemanticProjectBody;
+    }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServicePublishSemanticProject(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServicePublishSemanticProjectMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServicePublishSemanticProject>>
+>;
+export type AdminServicePublishSemanticProjectMutationBody =
+  AdminServicePublishSemanticProjectBody;
+export type AdminServicePublishSemanticProjectMutationError = RpcStatus;
+
+/**
+ * @summary PublishSemanticProject snapshots the current draft resources into a new version
+and makes it the project's live version (DB semantic layer mode).
+ */
+export const createAdminServicePublishSemanticProject = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServicePublishSemanticProject>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServicePublishSemanticProjectBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServicePublishSemanticProject>>,
+  TError,
+  {
+    org: string;
+    project: string;
+    data: AdminServicePublishSemanticProjectBody;
+  },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServicePublishSemanticProjectMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary ListSemanticResources lists the draft semantic resources of a project.
+ */
+export const adminServiceListSemanticResources = (
+  org: string,
+  project: string,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1ListSemanticResourcesResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/semantic-resources`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getAdminServiceListSemanticResourcesQueryKey = (
+  org?: string,
+  project?: string,
+) => {
+  return [`/v1/orgs/${org}/projects/${project}/semantic-resources`] as const;
+};
+
+export const getAdminServiceListSemanticResourcesQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceListSemanticResources>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListSemanticResources>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getAdminServiceListSemanticResourcesQueryKey(org, project);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminServiceListSemanticResources>>
+  > = ({ signal }) => adminServiceListSemanticResources(org, project, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(org && project),
+    ...queryOptions,
+  } as CreateQueryOptions<
+    Awaited<ReturnType<typeof adminServiceListSemanticResources>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type AdminServiceListSemanticResourcesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceListSemanticResources>>
+>;
+export type AdminServiceListSemanticResourcesQueryError = RpcStatus;
+
+/**
+ * @summary ListSemanticResources lists the draft semantic resources of a project.
+ */
+
+export function createAdminServiceListSemanticResources<
+  TData = Awaited<ReturnType<typeof adminServiceListSemanticResources>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListSemanticResources>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getAdminServiceListSemanticResourcesQueryOptions(
+    org,
+    project,
+    options,
+  );
+
+  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary SaveSemanticResource validates and stores a new draft version of a resource.
+Requires the caller to hold the project's editing lock.
+ */
+export const adminServiceSaveSemanticResource = (
+  org: string,
+  project: string,
+  adminServiceSaveSemanticResourceBody: AdminServiceSaveSemanticResourceBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1SaveSemanticResourceResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/semantic-resources`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceSaveSemanticResourceBody,
+    signal,
+  });
+};
+
+export const getAdminServiceSaveSemanticResourceMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceSaveSemanticResource>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceSaveSemanticResourceBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceSaveSemanticResource>>,
+  TError,
+  { org: string; project: string; data: AdminServiceSaveSemanticResourceBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceSaveSemanticResource"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceSaveSemanticResource>>,
+    { org: string; project: string; data: AdminServiceSaveSemanticResourceBody }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServiceSaveSemanticResource(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceSaveSemanticResourceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceSaveSemanticResource>>
+>;
+export type AdminServiceSaveSemanticResourceMutationBody =
+  AdminServiceSaveSemanticResourceBody;
+export type AdminServiceSaveSemanticResourceMutationError = RpcStatus;
+
+/**
+ * @summary SaveSemanticResource validates and stores a new draft version of a resource.
+Requires the caller to hold the project's editing lock.
+ */
+export const createAdminServiceSaveSemanticResource = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceSaveSemanticResource>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServiceSaveSemanticResourceBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceSaveSemanticResource>>,
+  TError,
+  { org: string; project: string; data: AdminServiceSaveSemanticResourceBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceSaveSemanticResourceMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary GetSemanticResource returns one draft semantic resource.
+ */
+export const adminServiceGetSemanticResource = (
+  org: string,
+  project: string,
+  resourceKind: string,
+  resourceName: string,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1GetSemanticResourceResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/semantic-resources/${resourceKind}/${resourceName}`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getAdminServiceGetSemanticResourceQueryKey = (
+  org?: string,
+  project?: string,
+  resourceKind?: string,
+  resourceName?: string,
+) => {
+  return [
+    `/v1/orgs/${org}/projects/${project}/semantic-resources/${resourceKind}/${resourceName}`,
+  ] as const;
+};
+
+export const getAdminServiceGetSemanticResourceQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceGetSemanticResource>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  resourceKind: string,
+  resourceName: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceGetSemanticResource>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getAdminServiceGetSemanticResourceQueryKey(
+      org,
+      project,
+      resourceKind,
+      resourceName,
+    );
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminServiceGetSemanticResource>>
+  > = ({ signal }) =>
+    adminServiceGetSemanticResource(
+      org,
+      project,
+      resourceKind,
+      resourceName,
+      signal,
+    );
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(org && project && resourceKind && resourceName),
+    ...queryOptions,
+  } as CreateQueryOptions<
+    Awaited<ReturnType<typeof adminServiceGetSemanticResource>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type AdminServiceGetSemanticResourceQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceGetSemanticResource>>
+>;
+export type AdminServiceGetSemanticResourceQueryError = RpcStatus;
+
+/**
+ * @summary GetSemanticResource returns one draft semantic resource.
+ */
+
+export function createAdminServiceGetSemanticResource<
+  TData = Awaited<ReturnType<typeof adminServiceGetSemanticResource>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  resourceKind: string,
+  resourceName: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceGetSemanticResource>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getAdminServiceGetSemanticResourceQueryOptions(
+    org,
+    project,
+    resourceKind,
+    resourceName,
+    options,
+  );
+
+  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary DeleteSemanticResource removes a resource's entire draft version chain.
+ */
+export const adminServiceDeleteSemanticResource = (
+  org: string,
+  project: string,
+  resourceKind: string,
+  resourceName: string,
+) => {
+  return httpClient<V1DeleteSemanticResourceResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/semantic-resources/${resourceKind}/${resourceName}`,
+    method: "DELETE",
+  });
+};
+
+export const getAdminServiceDeleteSemanticResourceMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceDeleteSemanticResource>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      resourceKind: string;
+      resourceName: string;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceDeleteSemanticResource>>,
+  TError,
+  { org: string; project: string; resourceKind: string; resourceName: string },
+  TContext
+> => {
+  const mutationKey = ["adminServiceDeleteSemanticResource"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceDeleteSemanticResource>>,
+    { org: string; project: string; resourceKind: string; resourceName: string }
+  > = (props) => {
+    const { org, project, resourceKind, resourceName } = props ?? {};
+
+    return adminServiceDeleteSemanticResource(
+      org,
+      project,
+      resourceKind,
+      resourceName,
+    );
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceDeleteSemanticResourceMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceDeleteSemanticResource>>
+>;
+
+export type AdminServiceDeleteSemanticResourceMutationError = RpcStatus;
+
+/**
+ * @summary DeleteSemanticResource removes a resource's entire draft version chain.
+ */
+export const createAdminServiceDeleteSemanticResource = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceDeleteSemanticResource>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        resourceKind: string;
+        resourceName: string;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceDeleteSemanticResource>>,
+  TError,
+  { org: string; project: string; resourceKind: string; resourceName: string },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceDeleteSemanticResourceMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary ListSemanticVersions returns the publish history for a DB-mode project.
+ */
+export const adminServiceListSemanticVersions = (
+  org: string,
+  project: string,
+  params?: AdminServiceListSemanticVersionsParams,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1ListSemanticVersionsResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/semantic-versions`,
+    method: "GET",
+    params,
+    signal,
+  });
+};
+
+export const getAdminServiceListSemanticVersionsQueryKey = (
+  org?: string,
+  project?: string,
+  params?: AdminServiceListSemanticVersionsParams,
+) => {
+  return [
+    `/v1/orgs/${org}/projects/${project}/semantic-versions`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getAdminServiceListSemanticVersionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceListSemanticVersions>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  params?: AdminServiceListSemanticVersionsParams,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListSemanticVersions>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getAdminServiceListSemanticVersionsQueryKey(org, project, params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminServiceListSemanticVersions>>
+  > = ({ signal }) =>
+    adminServiceListSemanticVersions(org, project, params, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(org && project),
+    ...queryOptions,
+  } as CreateQueryOptions<
+    Awaited<ReturnType<typeof adminServiceListSemanticVersions>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type AdminServiceListSemanticVersionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceListSemanticVersions>>
+>;
+export type AdminServiceListSemanticVersionsQueryError = RpcStatus;
+
+/**
+ * @summary ListSemanticVersions returns the publish history for a DB-mode project.
+ */
+
+export function createAdminServiceListSemanticVersions<
+  TData = Awaited<ReturnType<typeof adminServiceListSemanticVersions>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  params?: AdminServiceListSemanticVersionsParams,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListSemanticVersions>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getAdminServiceListSemanticVersionsQueryOptions(
+    org,
+    project,
+    params,
+    options,
+  );
+
+  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
 /**
  * @summary ListProjectMemberServices returns all the services for the project for an organization
  */

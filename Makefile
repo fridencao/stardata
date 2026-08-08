@@ -12,11 +12,9 @@ cli: cli.prepare
 
 .PHONY: cli.prepare
 cli.prepare: runtime.examples.embed
-	npm install
-	npm run build
+	# web-local has been removed: the CLI no longer embeds a frontend build.
+	# cli/pkg/web falls back to its default index.html when embed/dist is absent.
 	rm -rf cli/pkg/web/embed/dist || true
-	mkdir -p cli/pkg/web/embed/dist
-	cp -r web-local/build/* cli/pkg/web/embed/dist
 	go run scripts/embed_duckdb_ext/main.go
 
 .PHONY: coverage.go
@@ -43,16 +41,16 @@ docs.generate: runtime.examples.embed
 
 .PHONY: proto.generate
 proto.generate:
-	cd proto && buf generate --exclude-path rill/ui
-	cd proto && buf generate --template buf.gen.openapi-admin.yaml --path rill/admin
-	cd proto && buf generate --template buf.gen.openapi-runtime.yaml --path rill/runtime
-	cd proto && buf generate --template buf.gen.runtime.yaml --path rill/runtime
-	cd proto && buf generate --template buf.gen.local.yaml --path rill/local
+	cd proto && buf generate --exclude-path stardata/ui
+	cd proto && buf generate --template buf.gen.openapi-admin.yaml --path stardata/admin
+	cd proto && buf generate --template buf.gen.openapi-runtime.yaml --path stardata/runtime
+	cd proto && buf generate --template buf.gen.runtime.yaml --path stardata/runtime
+	cd proto && buf generate --template buf.gen.local.yaml --path stardata/local
 	cd proto && buf generate --template buf.gen.ui.yaml
 	go run scripts/convert-openapi-v2-to-v3/convert.go --force \
-		proto/gen/rill/admin/v1/admin.swagger.yaml proto/gen/rill/admin/v1/openapi.yaml
+		proto/gen/stardata/admin/v1/admin.swagger.yaml proto/gen/stardata/admin/v1/openapi.yaml
 	go run scripts/convert-openapi-v2-to-v3/convert.go --force --public-only \
-		proto/gen/rill/admin/v1/admin.swagger.yaml proto/gen/rill/admin/v1/public.openapi.yaml
+		proto/gen/stardata/admin/v1/admin.swagger.yaml proto/gen/stardata/admin/v1/public.openapi.yaml
 	npm install
 	npm run generate:runtime-client -w web-common
 	npm run generate:client -w web-admin

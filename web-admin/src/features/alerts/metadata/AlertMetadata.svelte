@@ -143,21 +143,25 @@
           {alertSpec.displayName}
         </h1>
         <div class="grow"></div>
-        {#if !$isAlertCreatedByCode.data}
-          <EditAlert {alertSpec} disabled={!$exploreIsValid} />
-          <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-              <IconButton ariaLabel={m.alert_context_menu_aria()}>
-                <ThreeDot size="16px" />
-              </IconButton>
-            </DropdownMenu.Trigger>
-            <DropdownMenu.Content align="start">
-              <DropdownMenu.Item onclick={handleDeleteAlert}>
-                {m.alert_delete()}
-              </DropdownMenu.Item>
-            </DropdownMenu.Content>
-          </DropdownMenu.Root>
-        {/if}
+        <ProjectAccessControls {organization} {project}>
+          <svelte:fragment slot="manage-project">
+            {#if !$isAlertCreatedByCode.data}
+              <EditAlert {alertSpec} disabled={!$exploreIsValid} />
+              <DropdownMenu.Root>
+                <DropdownMenu.Trigger>
+                  <IconButton ariaLabel={m.alert_context_menu_aria()}>
+                    <ThreeDot size="16px" />
+                  </IconButton>
+                </DropdownMenu.Trigger>
+                <DropdownMenu.Content align="start">
+                  <DropdownMenu.Item onclick={handleDeleteAlert}>
+                    {m.alert_delete()}
+                  </DropdownMenu.Item>
+                </DropdownMenu.Content>
+              </DropdownMenu.Root>
+            {/if}
+          </svelte:fragment>
+        </ProjectAccessControls>
       </div>
     </div>
 

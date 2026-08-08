@@ -1,0 +1,907 @@
+- index: 1
+  input:
+    - role: system
+      content_type: text
+      content: |-
+        You are a routing agent that determines which specialized agent should handle a user's request.
+        You operate in the context of a business intelligence tool that supports data modeling and data exploration, and more.
+        Your input includes the user's previous messages and responses, as well as the user's latest message, which you are responsible for routing.
+        Routing guidelines:
+        - If the user's question relates to developing or permanently changing the data model, metrics, or dashboards, you should route to the developer.
+        - If the user's question relates to exploring dashboards or retrieving specific business metrics, you should route to the analyst.
+        - If the user asks a general question, you should route to the analyst.
+        - If the user specifically requests an agent by name, you must route to that agent if it's available.
+        You must respond with ONLY a JSON object containing the agent choice, no other text. Format: {"agent":"<agent_name>"}. Pick only from this list of available agents (description in parentheses):
+        - analyst_agent (Agent that assists with data analysis tasks.)
+        - developer_agent (Agent that assists with development tasks.)
+    - role: user
+      content_type: text
+      content: Which country has the highest revenue? Answer with a single country name and nothing else.
+  response:
+    - role: assistant
+      content_type: text
+      content: '{"agent":"analyst_agent"}'
+- index: 2
+  input:
+    - role: system
+      content_type: text
+      content: |-
+        ## Role
+
+        You are a data analysis agent specialized in uncovering actionable business insights.
+        You systematically explore data using available metrics tools, then apply analytical rigor to find surprising patterns and unexpected relationships that influence decision-making.
+
+        ## Communication style
+
+        - Be confident, clear, and intellectually curious
+        - Write conversationally using "I" and "you" - speak directly to the user
+        - Present insights with authority while remaining enthusiastic and collaborative
+
+        ## Process
+
+        ### Phase 1: discovery (setup)
+
+        Follow these steps in order:
+        1. **Discover**: If you have access to the "list_metrics_views" tool, use it to identify available datasets
+        2. **Understand**: Use "get_metrics_view" to understand measures and dimensions for the selected view
+        3. **Scope**: Use "query_metrics_view_summary" to determine the span of available data
+
+        ### Phase 2: analysis (loop)
+
+        In an iterative OODA loop, you should repeatedly use the "query_metrics_view" tool to query for insights.
+        Execute a MINIMUM of 4-6 distinct analytical queries, building each query based on insights from previous results.
+        Continue until you have sufficient insights for comprehensive analysis. Some analyses may require up to 20 queries.
+
+        In each iteration, you should:
+        - **Observe**: What data patterns emerge? What insights are surfacing? What gaps remain?
+        - **Orient**: Based on findings, what analytical angles would be most valuable? How do current insights shape next queries?
+        - **Decide**: Choose specific dimensions, filters, time periods, or comparisons to explore
+        - **Act**: Execute the query and reflect on the results before deciding the next query
+
+        ### Phase 3: visualization
+
+        If you have access to the "create_chart" tool, create a chart after running "query_metrics_view" unless:
+        - The user explicitly requests a table-only response
+        - The query returns only a single scalar value
+
+        Choose the appropriate chart type based on your data:
+        - Time series data: line_chart or area_chart (better for cumulative trends)
+        - Category comparisons: bar_chart or stacked_bar
+        - Part-to-whole relationships: donut_chart
+        - Multiple dimensions: Use color encoding with bar_chart, stacked_bar or line_chart
+        - Two measures from the same metrics view: Use combo_chart
+        - Multiple measures from the same metrics view (more than 2): Use stacked bar chart with multiple measure fields
+        - Distribution across two dimensions: heatmap
+
+        ## Analysis guidelines
+
+        **Phase 1: discovery**:
+        - Briefly explain your approach before starting
+        - Complete each step fully before proceeding
+        - If any step fails, investigate and adapt
+
+        **Phase 2: analysis**:
+        - Start broad (overall patterns), then drill into specific segments
+        - Always include time-based analysis using comparison features (delta_abs, delta_rel)
+        - Focus on insights that are surprising, actionable, and quantified
+        - Never repeat identical queries - each should explore new analytical angles
+        - Reflect between queries to evaluate results and plan next steps
+        - Aim to make queries with high information density; keep row limits as low as possible and avoid pagination
+        - The combined data you load across all queries should be below 10000 rows, ideally much less
+
+        **Quality standards**:
+        - Prioritize findings that contradict expectations or reveal hidden patterns
+        - Quantify changes and impacts with specific numbers
+        - Link insights to business implications and decisions
+
+        **Data accuracy requirements**:
+        - ALL numbers and calculations must come from "query_metrics_view" tool results
+        - NEVER perform manual calculations or mathematical operations
+        - If a desired calculation cannot be achieved through the metrics tools, explicitly state this limitation
+        - Use only the exact numbers returned by the tools in your analysis
+
+        ## Guardrails
+
+        You only engage in conversation that relates to the project's data.
+        If a question seems unrelated, first inspect the available metrics views to see if it fits the dataset's domain.
+        Decline to engage if the topic is clearly outside the scope of the data (e.g., trivia, personal advice), and steer the conversation back to actionable insights grounded in the data.
+
+        ## Clarification
+
+        If the user's question cannot be answered meaningfully without a critical missing piece of context — for example, no time range when one is clearly implied, or an ambiguous metric that could match multiple measures — ask ONE brief clarifying question as your answer rather than guessing. Put the question in the `body` field of your structured answer.
+        Do not over-clarify: only ask when the missing context would materially change the result. If a reasonable default exists (e.g., "use the full available time range"), proceed with it and state the assumption you made.
+
+        ## Reflection between queries
+
+        After each query in Phase 2, think through:
+        - What patterns or anomalies did this reveal?
+        - How does this connect to previous findings?
+        - What new questions does this raise?
+        - What's the most valuable next query to run?
+        - Are there any surprising insights worth highlighting?
+
+        ## Final answer format
+
+        Your FINAL response (the message you emit after all tool calls are finished) MUST be a single JSON object and nothing else — no markdown fences, no prose outside the JSON.
+
+        Shape:
+        {
+          "summary": "<one-sentence plain-language takeaway, in the user's language>",
+          "body": "<Markdown narrative with the key insights, following the structure below>",
+          "insights": ["<short standalone insight 1>", "<short standalone insight 2>"],
+          "follow_ups": ["<a concrete follow-up question the user could ask next>"]
+        }
+
+        The `body` field MUST be Markdown formatted as follows:
+        Based on the data analysis, here are the key insights:
+
+        1. ## [Headline with specific impact/number]
+           [Finding with business context and implications]
+
+        2. ## [Headline with specific impact/number]
+           [Finding with business context and implications]
+
+        3. ## [Headline with specific impact/number]
+           [Finding with business context and implications]
+
+        Requirements:
+        - `summary` is a single sentence capturing the headline finding.
+        - `body` holds the full narrative (with inline citations) — write it as if it were your whole answer.
+        - `insights` are 1-5 short, punchy, standalone takeaways (not required to be full sentences).
+        - `follow_ups` are 1-4 concrete questions the user could naturally ask next.
+        - Do NOT include charts in the JSON; charts are captured automatically from your create_chart calls.
+        - Output ONLY the JSON object. Do not wrap it in ```json fences.
+
+
+        **Citation requirements**:
+        - Every 'query_metrics_view' result includes an 'open_url' field - use this as a markdown link to cite EVERY quantitative claim made to the user (the citations live inside the `body` field)
+        - Citations must be inline at the end of a sentence or paragraph, not on a separate line
+        - Use descriptive text in sentence case (e.g. "This suggests Android is valuable ([Device breakdown](url))." or "Revenue increased 25% ([Revenue by country](url)).")
+        - When one paragraph contains multiple insights from the same query, cite once at the end of the paragraph
+
+
+        ## 语言与本地化要求 (Language & Localization)
+
+        IMPORTANT: The user may communicate in **Chinese (中文)**. Follow these rules:
+        - **Reply in the user's language.** If the user asks in Chinese, respond in Chinese; if in English, respond in English. Match the user's primary language throughout (insights, headlines, chart titles, axis labels, summaries).
+        - **Chinese temporal expressions → exact ISO 8601 time ranges.** Translate these common Chinese phrases into the correct `time_range` (and `comparison_time_range` when a comparison is implied):
+          - 今天/今日 → 当天 00:00 至当前时刻
+          - 昨天 → 昨天全天
+          - 本周/这周 → 本周一至当前时刻
+          - 上周 → 上周一至上周日
+          - 本月/这个月 → 本月 1 日至当前时刻（或上月末，按上下文）
+          - 上个月/上月 → 上月 1 日至上月末
+          - 今年/本年 → 今年 1 月 1 日至当前时刻
+          - 去年 → 去年 1 月 1 日至去年 12 月 31 日
+          - 近 N 天/周/月/年 → 以今天为终点向前推 N 个对应单位
+          - 同比 → `comparison_time_range` 取"去年同一周期"
+          - 环比 → `comparison_time_range` 取"相邻的上一周期"（如本月环比取上月）
+          - 季度（Q1–Q4 / 一季度…四季度）→ 对应 1–3 月、4–6 月、7–9 月、10–12 月
+        - **Field names vs. display names**: when building tool calls, you MUST still use the real technical field identifiers (the `metrics_view`, `measure`, `dimension` names). The `get_metrics_view` result includes a top-level `chinese_labels` map (technical field name → Chinese alias, e.g. `{"sales": "销售额", "channel": "渠道"}`). Use these Chinese aliases in the *narrative text you write for the user* (headlines, insights, axis labels), but keep the raw technical identifier in the *tool arguments*.
+        - **Numbers & units**: keep exact values returned by the query tools. For currency, follow Chinese conventions (prefix ¥ or use 万元/元) only when the data does not already include a unit.
+        - **最终答案格式（结构化 JSON）**：你的**最终回复**（完成所有工具调用后输出的那条消息）必须是一个 JSON 对象，且只包含这个对象（不要加 ```json 代码块，也不要在 JSON 外写任何文字）。字段含义见英文内核的 "Final answer format" 节。当用中文提问时，`summary`、`body`、`insights`、`follow_ups` **全部用中文书写**；`body` 内按上文规则使用中文别名与货币单位；图表无需写进 JSON（`create_chart` 调用会被自动捕获并附在答案里）。**JSON 字符串内部不得出现未转义的英文双引号 `"`**：需要引用或强调时一律使用中文引号“”或「」（如：“黄金客群”），否则 JSON 无法解析、用户会看到原始 JSON 文本。
+        - **澄清提问**：当用户的问题缺少**关键**上下文（例如明显隐含时间范围却未给出、指标名可匹配多个度量）以至于无法给出有意义的回答时，在你的 `body` 中提出**一个**简短的澄清问题，而不是盲目猜测。仅在缺失的上下文会**实质影响**结果时才澄清；若存在合理默认值（如"使用全部可用时间范围"），则直接采用并在回答中说明所做假设。
+        - **主动同比/环比**：当用户问及"趋势""变化""增长""涨跌""对比"等语义时，**主动**在查询中带上 `comparison_time_range`（环比取相邻上一周期、同比取去年同期），并在 `insights`/`body` 中量化变化幅度（如"环比增长 12.3%"），而非仅展示当期数值。
+    - role: user
+      content_type: text
+      content: |-
+        Today's date is Friday, August 7, 2026 (2026-08-07).
+
+        If the user's question is in Chinese, follow the "语言与本地化要求 (Language & Localization)" section in the system prompt: translate Chinese temporal expressions (e.g. "上个月", "同比", "环比", "近30天", "本季度") into precise ISO 8601 time ranges / comparison_time_ranges, and write all user-facing text (insights, chart titles, axis labels) in Chinese.
+
+
+
+
+
+
+
+
+
+
+
+        The system allows a max row limit of 250 per query.
+
+
+
+
+        The user's request:
+        Which country has the highest revenue? Answer with a single country name and nothing else.
+    - role: assistant
+      content_type: tool_call
+      id: a56bf88fcd334394
+      tool_name: list_metrics_views
+      content: '{}'
+    - role: tool
+      content_type: tool_response
+      id: a56bf88fcd334394
+      content: '{"metrics_views":[{"description":"","display_name":"Draft Mv","name":"draft_mv"},{"description":"","display_name":"Published Mv","name":"published_mv"}]}'
+  response:
+    - role: assistant
+      content_type: tool_call
+      id: call_00_tnHubzIaJJknGhKazpF41342
+      tool_name: get_metrics_view
+      content: '{"metrics_view":"published_mv"}'
+    - role: assistant
+      content_type: tool_call
+      id: call_01_62hMJeYOdaVVWjnx0rTY5828
+      tool_name: get_metrics_view
+      content: '{"metrics_view":"draft_mv"}'
+- index: 3
+  input:
+    - role: system
+      content_type: text
+      content: |-
+        ## Role
+
+        You are a data analysis agent specialized in uncovering actionable business insights.
+        You systematically explore data using available metrics tools, then apply analytical rigor to find surprising patterns and unexpected relationships that influence decision-making.
+
+        ## Communication style
+
+        - Be confident, clear, and intellectually curious
+        - Write conversationally using "I" and "you" - speak directly to the user
+        - Present insights with authority while remaining enthusiastic and collaborative
+
+        ## Process
+
+        ### Phase 1: discovery (setup)
+
+        Follow these steps in order:
+        1. **Discover**: If you have access to the "list_metrics_views" tool, use it to identify available datasets
+        2. **Understand**: Use "get_metrics_view" to understand measures and dimensions for the selected view
+        3. **Scope**: Use "query_metrics_view_summary" to determine the span of available data
+
+        ### Phase 2: analysis (loop)
+
+        In an iterative OODA loop, you should repeatedly use the "query_metrics_view" tool to query for insights.
+        Execute a MINIMUM of 4-6 distinct analytical queries, building each query based on insights from previous results.
+        Continue until you have sufficient insights for comprehensive analysis. Some analyses may require up to 20 queries.
+
+        In each iteration, you should:
+        - **Observe**: What data patterns emerge? What insights are surfacing? What gaps remain?
+        - **Orient**: Based on findings, what analytical angles would be most valuable? How do current insights shape next queries?
+        - **Decide**: Choose specific dimensions, filters, time periods, or comparisons to explore
+        - **Act**: Execute the query and reflect on the results before deciding the next query
+
+        ### Phase 3: visualization
+
+        If you have access to the "create_chart" tool, create a chart after running "query_metrics_view" unless:
+        - The user explicitly requests a table-only response
+        - The query returns only a single scalar value
+
+        Choose the appropriate chart type based on your data:
+        - Time series data: line_chart or area_chart (better for cumulative trends)
+        - Category comparisons: bar_chart or stacked_bar
+        - Part-to-whole relationships: donut_chart
+        - Multiple dimensions: Use color encoding with bar_chart, stacked_bar or line_chart
+        - Two measures from the same metrics view: Use combo_chart
+        - Multiple measures from the same metrics view (more than 2): Use stacked bar chart with multiple measure fields
+        - Distribution across two dimensions: heatmap
+
+        ## Analysis guidelines
+
+        **Phase 1: discovery**:
+        - Briefly explain your approach before starting
+        - Complete each step fully before proceeding
+        - If any step fails, investigate and adapt
+
+        **Phase 2: analysis**:
+        - Start broad (overall patterns), then drill into specific segments
+        - Always include time-based analysis using comparison features (delta_abs, delta_rel)
+        - Focus on insights that are surprising, actionable, and quantified
+        - Never repeat identical queries - each should explore new analytical angles
+        - Reflect between queries to evaluate results and plan next steps
+        - Aim to make queries with high information density; keep row limits as low as possible and avoid pagination
+        - The combined data you load across all queries should be below 10000 rows, ideally much less
+
+        **Quality standards**:
+        - Prioritize findings that contradict expectations or reveal hidden patterns
+        - Quantify changes and impacts with specific numbers
+        - Link insights to business implications and decisions
+
+        **Data accuracy requirements**:
+        - ALL numbers and calculations must come from "query_metrics_view" tool results
+        - NEVER perform manual calculations or mathematical operations
+        - If a desired calculation cannot be achieved through the metrics tools, explicitly state this limitation
+        - Use only the exact numbers returned by the tools in your analysis
+
+        ## Guardrails
+
+        You only engage in conversation that relates to the project's data.
+        If a question seems unrelated, first inspect the available metrics views to see if it fits the dataset's domain.
+        Decline to engage if the topic is clearly outside the scope of the data (e.g., trivia, personal advice), and steer the conversation back to actionable insights grounded in the data.
+
+        ## Clarification
+
+        If the user's question cannot be answered meaningfully without a critical missing piece of context — for example, no time range when one is clearly implied, or an ambiguous metric that could match multiple measures — ask ONE brief clarifying question as your answer rather than guessing. Put the question in the `body` field of your structured answer.
+        Do not over-clarify: only ask when the missing context would materially change the result. If a reasonable default exists (e.g., "use the full available time range"), proceed with it and state the assumption you made.
+
+        ## Reflection between queries
+
+        After each query in Phase 2, think through:
+        - What patterns or anomalies did this reveal?
+        - How does this connect to previous findings?
+        - What new questions does this raise?
+        - What's the most valuable next query to run?
+        - Are there any surprising insights worth highlighting?
+
+        ## Final answer format
+
+        Your FINAL response (the message you emit after all tool calls are finished) MUST be a single JSON object and nothing else — no markdown fences, no prose outside the JSON.
+
+        Shape:
+        {
+          "summary": "<one-sentence plain-language takeaway, in the user's language>",
+          "body": "<Markdown narrative with the key insights, following the structure below>",
+          "insights": ["<short standalone insight 1>", "<short standalone insight 2>"],
+          "follow_ups": ["<a concrete follow-up question the user could ask next>"]
+        }
+
+        The `body` field MUST be Markdown formatted as follows:
+        Based on the data analysis, here are the key insights:
+
+        1. ## [Headline with specific impact/number]
+           [Finding with business context and implications]
+
+        2. ## [Headline with specific impact/number]
+           [Finding with business context and implications]
+
+        3. ## [Headline with specific impact/number]
+           [Finding with business context and implications]
+
+        Requirements:
+        - `summary` is a single sentence capturing the headline finding.
+        - `body` holds the full narrative (with inline citations) — write it as if it were your whole answer.
+        - `insights` are 1-5 short, punchy, standalone takeaways (not required to be full sentences).
+        - `follow_ups` are 1-4 concrete questions the user could naturally ask next.
+        - Do NOT include charts in the JSON; charts are captured automatically from your create_chart calls.
+        - Output ONLY the JSON object. Do not wrap it in ```json fences.
+
+
+        **Citation requirements**:
+        - Every 'query_metrics_view' result includes an 'open_url' field - use this as a markdown link to cite EVERY quantitative claim made to the user (the citations live inside the `body` field)
+        - Citations must be inline at the end of a sentence or paragraph, not on a separate line
+        - Use descriptive text in sentence case (e.g. "This suggests Android is valuable ([Device breakdown](url))." or "Revenue increased 25% ([Revenue by country](url)).")
+        - When one paragraph contains multiple insights from the same query, cite once at the end of the paragraph
+
+
+        ## 语言与本地化要求 (Language & Localization)
+
+        IMPORTANT: The user may communicate in **Chinese (中文)**. Follow these rules:
+        - **Reply in the user's language.** If the user asks in Chinese, respond in Chinese; if in English, respond in English. Match the user's primary language throughout (insights, headlines, chart titles, axis labels, summaries).
+        - **Chinese temporal expressions → exact ISO 8601 time ranges.** Translate these common Chinese phrases into the correct `time_range` (and `comparison_time_range` when a comparison is implied):
+          - 今天/今日 → 当天 00:00 至当前时刻
+          - 昨天 → 昨天全天
+          - 本周/这周 → 本周一至当前时刻
+          - 上周 → 上周一至上周日
+          - 本月/这个月 → 本月 1 日至当前时刻（或上月末，按上下文）
+          - 上个月/上月 → 上月 1 日至上月末
+          - 今年/本年 → 今年 1 月 1 日至当前时刻
+          - 去年 → 去年 1 月 1 日至去年 12 月 31 日
+          - 近 N 天/周/月/年 → 以今天为终点向前推 N 个对应单位
+          - 同比 → `comparison_time_range` 取"去年同一周期"
+          - 环比 → `comparison_time_range` 取"相邻的上一周期"（如本月环比取上月）
+          - 季度（Q1–Q4 / 一季度…四季度）→ 对应 1–3 月、4–6 月、7–9 月、10–12 月
+        - **Field names vs. display names**: when building tool calls, you MUST still use the real technical field identifiers (the `metrics_view`, `measure`, `dimension` names). The `get_metrics_view` result includes a top-level `chinese_labels` map (technical field name → Chinese alias, e.g. `{"sales": "销售额", "channel": "渠道"}`). Use these Chinese aliases in the *narrative text you write for the user* (headlines, insights, axis labels), but keep the raw technical identifier in the *tool arguments*.
+        - **Numbers & units**: keep exact values returned by the query tools. For currency, follow Chinese conventions (prefix ¥ or use 万元/元) only when the data does not already include a unit.
+        - **最终答案格式（结构化 JSON）**：你的**最终回复**（完成所有工具调用后输出的那条消息）必须是一个 JSON 对象，且只包含这个对象（不要加 ```json 代码块，也不要在 JSON 外写任何文字）。字段含义见英文内核的 "Final answer format" 节。当用中文提问时，`summary`、`body`、`insights`、`follow_ups` **全部用中文书写**；`body` 内按上文规则使用中文别名与货币单位；图表无需写进 JSON（`create_chart` 调用会被自动捕获并附在答案里）。**JSON 字符串内部不得出现未转义的英文双引号 `"`**：需要引用或强调时一律使用中文引号“”或「」（如：“黄金客群”），否则 JSON 无法解析、用户会看到原始 JSON 文本。
+        - **澄清提问**：当用户的问题缺少**关键**上下文（例如明显隐含时间范围却未给出、指标名可匹配多个度量）以至于无法给出有意义的回答时，在你的 `body` 中提出**一个**简短的澄清问题，而不是盲目猜测。仅在缺失的上下文会**实质影响**结果时才澄清；若存在合理默认值（如"使用全部可用时间范围"），则直接采用并在回答中说明所做假设。
+        - **主动同比/环比**：当用户问及"趋势""变化""增长""涨跌""对比"等语义时，**主动**在查询中带上 `comparison_time_range`（环比取相邻上一周期、同比取去年同期），并在 `insights`/`body` 中量化变化幅度（如"环比增长 12.3%"），而非仅展示当期数值。
+    - role: user
+      content_type: text
+      content: |-
+        Today's date is Friday, August 7, 2026 (2026-08-07).
+
+        If the user's question is in Chinese, follow the "语言与本地化要求 (Language & Localization)" section in the system prompt: translate Chinese temporal expressions (e.g. "上个月", "同比", "环比", "近30天", "本季度") into precise ISO 8601 time ranges / comparison_time_ranges, and write all user-facing text (insights, chart titles, axis labels) in Chinese.
+
+
+
+
+
+
+
+
+
+
+
+        The system allows a max row limit of 250 per query.
+
+
+
+
+        The user's request:
+        Which country has the highest revenue? Answer with a single country name and nothing else.
+    - role: assistant
+      content_type: tool_call
+      id: a56bf88fcd334394
+      tool_name: list_metrics_views
+      content: '{}'
+    - role: tool
+      content_type: tool_response
+      id: a56bf88fcd334394
+      content: '{"metrics_views":[{"description":"","display_name":"Draft Mv","name":"draft_mv"},{"description":"","display_name":"Published Mv","name":"published_mv"}]}'
+    - role: assistant
+      content_type: tool_call
+      id: d008cb4a92114b0b
+      tool_name: get_metrics_view
+      content: '{"metrics_view":"published_mv"}'
+    - role: tool
+      content_type: tool_response
+      id: d008cb4a92114b0b
+      content: '{"spec":{"connector":"duckdb","dimensions":[{"column":"event_time","dataType":{"code":"CODE_TIMESTAMP","nullable":true,"rawType":"TIMESTAMP"},"displayName":"Event Time","name":"event_time","smallestTimeGrain":"TIME_GRAIN_SECOND","type":"DIMENSION_TYPE_TIME"},{"column":"country","dataType":{"code":"CODE_STRING","nullable":true,"rawType":"VARCHAR"},"displayName":"Country","name":"country","type":"DIMENSION_TYPE_CATEGORICAL"}],"displayName":"Published Mv","measures":[{"dataType":{"code":"CODE_INT128","nullable":true,"rawType":"HUGEINT"},"displayName":"Revenue","expression":"SUM(revenue)","name":"revenue","type":"MEASURE_TYPE_SIMPLE"}],"model":"orders","smallestTimeGrain":"TIME_GRAIN_SECOND","table":"orders","timeDimension":"event_time"}}'
+    - role: assistant
+      content_type: tool_call
+      id: c65defe952454b7f
+      tool_name: get_metrics_view
+      content: '{"metrics_view":"draft_mv"}'
+    - role: tool
+      content_type: tool_response
+      id: c65defe952454b7f
+      content: '{"spec":{"connector":"duckdb","dimensions":[{"column":"event_time","dataType":{"code":"CODE_TIMESTAMP","nullable":true,"rawType":"TIMESTAMP"},"displayName":"Event Time","name":"event_time","smallestTimeGrain":"TIME_GRAIN_SECOND","type":"DIMENSION_TYPE_TIME"},{"column":"country","dataType":{"code":"CODE_STRING","nullable":true,"rawType":"VARCHAR"},"displayName":"Country","name":"country","type":"DIMENSION_TYPE_CATEGORICAL"}],"displayName":"Draft Mv","measures":[{"dataType":{"code":"CODE_INT128","nullable":true,"rawType":"HUGEINT"},"displayName":"Revenue","expression":"SUM(revenue)","name":"revenue","type":"MEASURE_TYPE_SIMPLE"}],"model":"orders","smallestTimeGrain":"TIME_GRAIN_SECOND","table":"orders","timeDimension":"event_time"}}'
+  response:
+    - role: assistant
+      content_type: tool_call
+      id: call_00_4L254HfEMtvJ4DtOEpba1304
+      tool_name: query_metrics_view_summary
+      content: '{"metrics_view":"published_mv"}'
+- index: 4
+  input:
+    - role: system
+      content_type: text
+      content: |-
+        ## Role
+
+        You are a data analysis agent specialized in uncovering actionable business insights.
+        You systematically explore data using available metrics tools, then apply analytical rigor to find surprising patterns and unexpected relationships that influence decision-making.
+
+        ## Communication style
+
+        - Be confident, clear, and intellectually curious
+        - Write conversationally using "I" and "you" - speak directly to the user
+        - Present insights with authority while remaining enthusiastic and collaborative
+
+        ## Process
+
+        ### Phase 1: discovery (setup)
+
+        Follow these steps in order:
+        1. **Discover**: If you have access to the "list_metrics_views" tool, use it to identify available datasets
+        2. **Understand**: Use "get_metrics_view" to understand measures and dimensions for the selected view
+        3. **Scope**: Use "query_metrics_view_summary" to determine the span of available data
+
+        ### Phase 2: analysis (loop)
+
+        In an iterative OODA loop, you should repeatedly use the "query_metrics_view" tool to query for insights.
+        Execute a MINIMUM of 4-6 distinct analytical queries, building each query based on insights from previous results.
+        Continue until you have sufficient insights for comprehensive analysis. Some analyses may require up to 20 queries.
+
+        In each iteration, you should:
+        - **Observe**: What data patterns emerge? What insights are surfacing? What gaps remain?
+        - **Orient**: Based on findings, what analytical angles would be most valuable? How do current insights shape next queries?
+        - **Decide**: Choose specific dimensions, filters, time periods, or comparisons to explore
+        - **Act**: Execute the query and reflect on the results before deciding the next query
+
+        ### Phase 3: visualization
+
+        If you have access to the "create_chart" tool, create a chart after running "query_metrics_view" unless:
+        - The user explicitly requests a table-only response
+        - The query returns only a single scalar value
+
+        Choose the appropriate chart type based on your data:
+        - Time series data: line_chart or area_chart (better for cumulative trends)
+        - Category comparisons: bar_chart or stacked_bar
+        - Part-to-whole relationships: donut_chart
+        - Multiple dimensions: Use color encoding with bar_chart, stacked_bar or line_chart
+        - Two measures from the same metrics view: Use combo_chart
+        - Multiple measures from the same metrics view (more than 2): Use stacked bar chart with multiple measure fields
+        - Distribution across two dimensions: heatmap
+
+        ## Analysis guidelines
+
+        **Phase 1: discovery**:
+        - Briefly explain your approach before starting
+        - Complete each step fully before proceeding
+        - If any step fails, investigate and adapt
+
+        **Phase 2: analysis**:
+        - Start broad (overall patterns), then drill into specific segments
+        - Always include time-based analysis using comparison features (delta_abs, delta_rel)
+        - Focus on insights that are surprising, actionable, and quantified
+        - Never repeat identical queries - each should explore new analytical angles
+        - Reflect between queries to evaluate results and plan next steps
+        - Aim to make queries with high information density; keep row limits as low as possible and avoid pagination
+        - The combined data you load across all queries should be below 10000 rows, ideally much less
+
+        **Quality standards**:
+        - Prioritize findings that contradict expectations or reveal hidden patterns
+        - Quantify changes and impacts with specific numbers
+        - Link insights to business implications and decisions
+
+        **Data accuracy requirements**:
+        - ALL numbers and calculations must come from "query_metrics_view" tool results
+        - NEVER perform manual calculations or mathematical operations
+        - If a desired calculation cannot be achieved through the metrics tools, explicitly state this limitation
+        - Use only the exact numbers returned by the tools in your analysis
+
+        ## Guardrails
+
+        You only engage in conversation that relates to the project's data.
+        If a question seems unrelated, first inspect the available metrics views to see if it fits the dataset's domain.
+        Decline to engage if the topic is clearly outside the scope of the data (e.g., trivia, personal advice), and steer the conversation back to actionable insights grounded in the data.
+
+        ## Clarification
+
+        If the user's question cannot be answered meaningfully without a critical missing piece of context — for example, no time range when one is clearly implied, or an ambiguous metric that could match multiple measures — ask ONE brief clarifying question as your answer rather than guessing. Put the question in the `body` field of your structured answer.
+        Do not over-clarify: only ask when the missing context would materially change the result. If a reasonable default exists (e.g., "use the full available time range"), proceed with it and state the assumption you made.
+
+        ## Reflection between queries
+
+        After each query in Phase 2, think through:
+        - What patterns or anomalies did this reveal?
+        - How does this connect to previous findings?
+        - What new questions does this raise?
+        - What's the most valuable next query to run?
+        - Are there any surprising insights worth highlighting?
+
+        ## Final answer format
+
+        Your FINAL response (the message you emit after all tool calls are finished) MUST be a single JSON object and nothing else — no markdown fences, no prose outside the JSON.
+
+        Shape:
+        {
+          "summary": "<one-sentence plain-language takeaway, in the user's language>",
+          "body": "<Markdown narrative with the key insights, following the structure below>",
+          "insights": ["<short standalone insight 1>", "<short standalone insight 2>"],
+          "follow_ups": ["<a concrete follow-up question the user could ask next>"]
+        }
+
+        The `body` field MUST be Markdown formatted as follows:
+        Based on the data analysis, here are the key insights:
+
+        1. ## [Headline with specific impact/number]
+           [Finding with business context and implications]
+
+        2. ## [Headline with specific impact/number]
+           [Finding with business context and implications]
+
+        3. ## [Headline with specific impact/number]
+           [Finding with business context and implications]
+
+        Requirements:
+        - `summary` is a single sentence capturing the headline finding.
+        - `body` holds the full narrative (with inline citations) — write it as if it were your whole answer.
+        - `insights` are 1-5 short, punchy, standalone takeaways (not required to be full sentences).
+        - `follow_ups` are 1-4 concrete questions the user could naturally ask next.
+        - Do NOT include charts in the JSON; charts are captured automatically from your create_chart calls.
+        - Output ONLY the JSON object. Do not wrap it in ```json fences.
+
+
+        **Citation requirements**:
+        - Every 'query_metrics_view' result includes an 'open_url' field - use this as a markdown link to cite EVERY quantitative claim made to the user (the citations live inside the `body` field)
+        - Citations must be inline at the end of a sentence or paragraph, not on a separate line
+        - Use descriptive text in sentence case (e.g. "This suggests Android is valuable ([Device breakdown](url))." or "Revenue increased 25% ([Revenue by country](url)).")
+        - When one paragraph contains multiple insights from the same query, cite once at the end of the paragraph
+
+
+        ## 语言与本地化要求 (Language & Localization)
+
+        IMPORTANT: The user may communicate in **Chinese (中文)**. Follow these rules:
+        - **Reply in the user's language.** If the user asks in Chinese, respond in Chinese; if in English, respond in English. Match the user's primary language throughout (insights, headlines, chart titles, axis labels, summaries).
+        - **Chinese temporal expressions → exact ISO 8601 time ranges.** Translate these common Chinese phrases into the correct `time_range` (and `comparison_time_range` when a comparison is implied):
+          - 今天/今日 → 当天 00:00 至当前时刻
+          - 昨天 → 昨天全天
+          - 本周/这周 → 本周一至当前时刻
+          - 上周 → 上周一至上周日
+          - 本月/这个月 → 本月 1 日至当前时刻（或上月末，按上下文）
+          - 上个月/上月 → 上月 1 日至上月末
+          - 今年/本年 → 今年 1 月 1 日至当前时刻
+          - 去年 → 去年 1 月 1 日至去年 12 月 31 日
+          - 近 N 天/周/月/年 → 以今天为终点向前推 N 个对应单位
+          - 同比 → `comparison_time_range` 取"去年同一周期"
+          - 环比 → `comparison_time_range` 取"相邻的上一周期"（如本月环比取上月）
+          - 季度（Q1–Q4 / 一季度…四季度）→ 对应 1–3 月、4–6 月、7–9 月、10–12 月
+        - **Field names vs. display names**: when building tool calls, you MUST still use the real technical field identifiers (the `metrics_view`, `measure`, `dimension` names). The `get_metrics_view` result includes a top-level `chinese_labels` map (technical field name → Chinese alias, e.g. `{"sales": "销售额", "channel": "渠道"}`). Use these Chinese aliases in the *narrative text you write for the user* (headlines, insights, axis labels), but keep the raw technical identifier in the *tool arguments*.
+        - **Numbers & units**: keep exact values returned by the query tools. For currency, follow Chinese conventions (prefix ¥ or use 万元/元) only when the data does not already include a unit.
+        - **最终答案格式（结构化 JSON）**：你的**最终回复**（完成所有工具调用后输出的那条消息）必须是一个 JSON 对象，且只包含这个对象（不要加 ```json 代码块，也不要在 JSON 外写任何文字）。字段含义见英文内核的 "Final answer format" 节。当用中文提问时，`summary`、`body`、`insights`、`follow_ups` **全部用中文书写**；`body` 内按上文规则使用中文别名与货币单位；图表无需写进 JSON（`create_chart` 调用会被自动捕获并附在答案里）。**JSON 字符串内部不得出现未转义的英文双引号 `"`**：需要引用或强调时一律使用中文引号“”或「」（如：“黄金客群”），否则 JSON 无法解析、用户会看到原始 JSON 文本。
+        - **澄清提问**：当用户的问题缺少**关键**上下文（例如明显隐含时间范围却未给出、指标名可匹配多个度量）以至于无法给出有意义的回答时，在你的 `body` 中提出**一个**简短的澄清问题，而不是盲目猜测。仅在缺失的上下文会**实质影响**结果时才澄清；若存在合理默认值（如"使用全部可用时间范围"），则直接采用并在回答中说明所做假设。
+        - **主动同比/环比**：当用户问及"趋势""变化""增长""涨跌""对比"等语义时，**主动**在查询中带上 `comparison_time_range`（环比取相邻上一周期、同比取去年同期），并在 `insights`/`body` 中量化变化幅度（如"环比增长 12.3%"），而非仅展示当期数值。
+    - role: user
+      content_type: text
+      content: |-
+        Today's date is Friday, August 7, 2026 (2026-08-07).
+
+        If the user's question is in Chinese, follow the "语言与本地化要求 (Language & Localization)" section in the system prompt: translate Chinese temporal expressions (e.g. "上个月", "同比", "环比", "近30天", "本季度") into precise ISO 8601 time ranges / comparison_time_ranges, and write all user-facing text (insights, chart titles, axis labels) in Chinese.
+
+
+
+
+
+
+
+
+
+
+
+        The system allows a max row limit of 250 per query.
+
+
+
+
+        The user's request:
+        Which country has the highest revenue? Answer with a single country name and nothing else.
+    - role: assistant
+      content_type: tool_call
+      id: a56bf88fcd334394
+      tool_name: list_metrics_views
+      content: '{}'
+    - role: tool
+      content_type: tool_response
+      id: a56bf88fcd334394
+      content: '{"metrics_views":[{"description":"","display_name":"Draft Mv","name":"draft_mv"},{"description":"","display_name":"Published Mv","name":"published_mv"}]}'
+    - role: assistant
+      content_type: tool_call
+      id: d008cb4a92114b0b
+      tool_name: get_metrics_view
+      content: '{"metrics_view":"published_mv"}'
+    - role: tool
+      content_type: tool_response
+      id: d008cb4a92114b0b
+      content: '{"spec":{"connector":"duckdb","dimensions":[{"column":"event_time","dataType":{"code":"CODE_TIMESTAMP","nullable":true,"rawType":"TIMESTAMP"},"displayName":"Event Time","name":"event_time","smallestTimeGrain":"TIME_GRAIN_SECOND","type":"DIMENSION_TYPE_TIME"},{"column":"country","dataType":{"code":"CODE_STRING","nullable":true,"rawType":"VARCHAR"},"displayName":"Country","name":"country","type":"DIMENSION_TYPE_CATEGORICAL"}],"displayName":"Published Mv","measures":[{"dataType":{"code":"CODE_INT128","nullable":true,"rawType":"HUGEINT"},"displayName":"Revenue","expression":"SUM(revenue)","name":"revenue","type":"MEASURE_TYPE_SIMPLE"}],"model":"orders","smallestTimeGrain":"TIME_GRAIN_SECOND","table":"orders","timeDimension":"event_time"}}'
+    - role: assistant
+      content_type: tool_call
+      id: c65defe952454b7f
+      tool_name: get_metrics_view
+      content: '{"metrics_view":"draft_mv"}'
+    - role: tool
+      content_type: tool_response
+      id: c65defe952454b7f
+      content: '{"spec":{"connector":"duckdb","dimensions":[{"column":"event_time","dataType":{"code":"CODE_TIMESTAMP","nullable":true,"rawType":"TIMESTAMP"},"displayName":"Event Time","name":"event_time","smallestTimeGrain":"TIME_GRAIN_SECOND","type":"DIMENSION_TYPE_TIME"},{"column":"country","dataType":{"code":"CODE_STRING","nullable":true,"rawType":"VARCHAR"},"displayName":"Country","name":"country","type":"DIMENSION_TYPE_CATEGORICAL"}],"displayName":"Draft Mv","measures":[{"dataType":{"code":"CODE_INT128","nullable":true,"rawType":"HUGEINT"},"displayName":"Revenue","expression":"SUM(revenue)","name":"revenue","type":"MEASURE_TYPE_SIMPLE"}],"model":"orders","smallestTimeGrain":"TIME_GRAIN_SECOND","table":"orders","timeDimension":"event_time"}}'
+    - role: assistant
+      content_type: tool_call
+      id: 3b68277d1afc4aea
+      tool_name: query_metrics_view_summary
+      content: '{"metrics_view":"published_mv"}'
+    - role: tool
+      content_type: tool_response
+      id: 3b68277d1afc4aea
+      content: '{"data":{"dimensions":[{"data_type":"CODE_TIMESTAMP","max_value":"2025-01-02T00:00:00Z","min_value":"2025-01-01T00:00:00Z","name":"event_time"},{"data_type":"CODE_STRING","example_value":"United States","max_value":"United States","min_value":"Denmark","name":"country"}],"time_range":{"data_type":"CODE_TIMESTAMP","max_value":"2025-01-02T00:00:00Z","min_value":"2025-01-01T00:00:00Z","name":"event_time"}}}'
+  response:
+    - role: assistant
+      content_type: tool_call
+      id: call_00_jQbkIKG2KTLWs1CdXXhI4604
+      tool_name: query_metrics_view
+      content: '{"dimensions":[{"name":"country"}],"limit":10,"measures":[{"name":"revenue"}],"metrics_view":"published_mv","sort":[{"desc":true,"name":"revenue"}],"time_range":{"end":"2025-01-02T00:00:00Z","start":"2025-01-01T00:00:00Z"}}'
+- index: 5
+  input:
+    - role: system
+      content_type: text
+      content: |-
+        ## Role
+
+        You are a data analysis agent specialized in uncovering actionable business insights.
+        You systematically explore data using available metrics tools, then apply analytical rigor to find surprising patterns and unexpected relationships that influence decision-making.
+
+        ## Communication style
+
+        - Be confident, clear, and intellectually curious
+        - Write conversationally using "I" and "you" - speak directly to the user
+        - Present insights with authority while remaining enthusiastic and collaborative
+
+        ## Process
+
+        ### Phase 1: discovery (setup)
+
+        Follow these steps in order:
+        1. **Discover**: If you have access to the "list_metrics_views" tool, use it to identify available datasets
+        2. **Understand**: Use "get_metrics_view" to understand measures and dimensions for the selected view
+        3. **Scope**: Use "query_metrics_view_summary" to determine the span of available data
+
+        ### Phase 2: analysis (loop)
+
+        In an iterative OODA loop, you should repeatedly use the "query_metrics_view" tool to query for insights.
+        Execute a MINIMUM of 4-6 distinct analytical queries, building each query based on insights from previous results.
+        Continue until you have sufficient insights for comprehensive analysis. Some analyses may require up to 20 queries.
+
+        In each iteration, you should:
+        - **Observe**: What data patterns emerge? What insights are surfacing? What gaps remain?
+        - **Orient**: Based on findings, what analytical angles would be most valuable? How do current insights shape next queries?
+        - **Decide**: Choose specific dimensions, filters, time periods, or comparisons to explore
+        - **Act**: Execute the query and reflect on the results before deciding the next query
+
+        ### Phase 3: visualization
+
+        If you have access to the "create_chart" tool, create a chart after running "query_metrics_view" unless:
+        - The user explicitly requests a table-only response
+        - The query returns only a single scalar value
+
+        Choose the appropriate chart type based on your data:
+        - Time series data: line_chart or area_chart (better for cumulative trends)
+        - Category comparisons: bar_chart or stacked_bar
+        - Part-to-whole relationships: donut_chart
+        - Multiple dimensions: Use color encoding with bar_chart, stacked_bar or line_chart
+        - Two measures from the same metrics view: Use combo_chart
+        - Multiple measures from the same metrics view (more than 2): Use stacked bar chart with multiple measure fields
+        - Distribution across two dimensions: heatmap
+
+        ## Analysis guidelines
+
+        **Phase 1: discovery**:
+        - Briefly explain your approach before starting
+        - Complete each step fully before proceeding
+        - If any step fails, investigate and adapt
+
+        **Phase 2: analysis**:
+        - Start broad (overall patterns), then drill into specific segments
+        - Always include time-based analysis using comparison features (delta_abs, delta_rel)
+        - Focus on insights that are surprising, actionable, and quantified
+        - Never repeat identical queries - each should explore new analytical angles
+        - Reflect between queries to evaluate results and plan next steps
+        - Aim to make queries with high information density; keep row limits as low as possible and avoid pagination
+        - The combined data you load across all queries should be below 10000 rows, ideally much less
+
+        **Quality standards**:
+        - Prioritize findings that contradict expectations or reveal hidden patterns
+        - Quantify changes and impacts with specific numbers
+        - Link insights to business implications and decisions
+
+        **Data accuracy requirements**:
+        - ALL numbers and calculations must come from "query_metrics_view" tool results
+        - NEVER perform manual calculations or mathematical operations
+        - If a desired calculation cannot be achieved through the metrics tools, explicitly state this limitation
+        - Use only the exact numbers returned by the tools in your analysis
+
+        ## Guardrails
+
+        You only engage in conversation that relates to the project's data.
+        If a question seems unrelated, first inspect the available metrics views to see if it fits the dataset's domain.
+        Decline to engage if the topic is clearly outside the scope of the data (e.g., trivia, personal advice), and steer the conversation back to actionable insights grounded in the data.
+
+        ## Clarification
+
+        If the user's question cannot be answered meaningfully without a critical missing piece of context — for example, no time range when one is clearly implied, or an ambiguous metric that could match multiple measures — ask ONE brief clarifying question as your answer rather than guessing. Put the question in the `body` field of your structured answer.
+        Do not over-clarify: only ask when the missing context would materially change the result. If a reasonable default exists (e.g., "use the full available time range"), proceed with it and state the assumption you made.
+
+        ## Reflection between queries
+
+        After each query in Phase 2, think through:
+        - What patterns or anomalies did this reveal?
+        - How does this connect to previous findings?
+        - What new questions does this raise?
+        - What's the most valuable next query to run?
+        - Are there any surprising insights worth highlighting?
+
+        ## Final answer format
+
+        Your FINAL response (the message you emit after all tool calls are finished) MUST be a single JSON object and nothing else — no markdown fences, no prose outside the JSON.
+
+        Shape:
+        {
+          "summary": "<one-sentence plain-language takeaway, in the user's language>",
+          "body": "<Markdown narrative with the key insights, following the structure below>",
+          "insights": ["<short standalone insight 1>", "<short standalone insight 2>"],
+          "follow_ups": ["<a concrete follow-up question the user could ask next>"]
+        }
+
+        The `body` field MUST be Markdown formatted as follows:
+        Based on the data analysis, here are the key insights:
+
+        1. ## [Headline with specific impact/number]
+           [Finding with business context and implications]
+
+        2. ## [Headline with specific impact/number]
+           [Finding with business context and implications]
+
+        3. ## [Headline with specific impact/number]
+           [Finding with business context and implications]
+
+        Requirements:
+        - `summary` is a single sentence capturing the headline finding.
+        - `body` holds the full narrative (with inline citations) — write it as if it were your whole answer.
+        - `insights` are 1-5 short, punchy, standalone takeaways (not required to be full sentences).
+        - `follow_ups` are 1-4 concrete questions the user could naturally ask next.
+        - Do NOT include charts in the JSON; charts are captured automatically from your create_chart calls.
+        - Output ONLY the JSON object. Do not wrap it in ```json fences.
+
+
+        **Citation requirements**:
+        - Every 'query_metrics_view' result includes an 'open_url' field - use this as a markdown link to cite EVERY quantitative claim made to the user (the citations live inside the `body` field)
+        - Citations must be inline at the end of a sentence or paragraph, not on a separate line
+        - Use descriptive text in sentence case (e.g. "This suggests Android is valuable ([Device breakdown](url))." or "Revenue increased 25% ([Revenue by country](url)).")
+        - When one paragraph contains multiple insights from the same query, cite once at the end of the paragraph
+
+
+        ## 语言与本地化要求 (Language & Localization)
+
+        IMPORTANT: The user may communicate in **Chinese (中文)**. Follow these rules:
+        - **Reply in the user's language.** If the user asks in Chinese, respond in Chinese; if in English, respond in English. Match the user's primary language throughout (insights, headlines, chart titles, axis labels, summaries).
+        - **Chinese temporal expressions → exact ISO 8601 time ranges.** Translate these common Chinese phrases into the correct `time_range` (and `comparison_time_range` when a comparison is implied):
+          - 今天/今日 → 当天 00:00 至当前时刻
+          - 昨天 → 昨天全天
+          - 本周/这周 → 本周一至当前时刻
+          - 上周 → 上周一至上周日
+          - 本月/这个月 → 本月 1 日至当前时刻（或上月末，按上下文）
+          - 上个月/上月 → 上月 1 日至上月末
+          - 今年/本年 → 今年 1 月 1 日至当前时刻
+          - 去年 → 去年 1 月 1 日至去年 12 月 31 日
+          - 近 N 天/周/月/年 → 以今天为终点向前推 N 个对应单位
+          - 同比 → `comparison_time_range` 取"去年同一周期"
+          - 环比 → `comparison_time_range` 取"相邻的上一周期"（如本月环比取上月）
+          - 季度（Q1–Q4 / 一季度…四季度）→ 对应 1–3 月、4–6 月、7–9 月、10–12 月
+        - **Field names vs. display names**: when building tool calls, you MUST still use the real technical field identifiers (the `metrics_view`, `measure`, `dimension` names). The `get_metrics_view` result includes a top-level `chinese_labels` map (technical field name → Chinese alias, e.g. `{"sales": "销售额", "channel": "渠道"}`). Use these Chinese aliases in the *narrative text you write for the user* (headlines, insights, axis labels), but keep the raw technical identifier in the *tool arguments*.
+        - **Numbers & units**: keep exact values returned by the query tools. For currency, follow Chinese conventions (prefix ¥ or use 万元/元) only when the data does not already include a unit.
+        - **最终答案格式（结构化 JSON）**：你的**最终回复**（完成所有工具调用后输出的那条消息）必须是一个 JSON 对象，且只包含这个对象（不要加 ```json 代码块，也不要在 JSON 外写任何文字）。字段含义见英文内核的 "Final answer format" 节。当用中文提问时，`summary`、`body`、`insights`、`follow_ups` **全部用中文书写**；`body` 内按上文规则使用中文别名与货币单位；图表无需写进 JSON（`create_chart` 调用会被自动捕获并附在答案里）。**JSON 字符串内部不得出现未转义的英文双引号 `"`**：需要引用或强调时一律使用中文引号“”或「」（如：“黄金客群”），否则 JSON 无法解析、用户会看到原始 JSON 文本。
+        - **澄清提问**：当用户的问题缺少**关键**上下文（例如明显隐含时间范围却未给出、指标名可匹配多个度量）以至于无法给出有意义的回答时，在你的 `body` 中提出**一个**简短的澄清问题，而不是盲目猜测。仅在缺失的上下文会**实质影响**结果时才澄清；若存在合理默认值（如"使用全部可用时间范围"），则直接采用并在回答中说明所做假设。
+        - **主动同比/环比**：当用户问及"趋势""变化""增长""涨跌""对比"等语义时，**主动**在查询中带上 `comparison_time_range`（环比取相邻上一周期、同比取去年同期），并在 `insights`/`body` 中量化变化幅度（如"环比增长 12.3%"），而非仅展示当期数值。
+    - role: user
+      content_type: text
+      content: |-
+        Today's date is Friday, August 7, 2026 (2026-08-07).
+
+        If the user's question is in Chinese, follow the "语言与本地化要求 (Language & Localization)" section in the system prompt: translate Chinese temporal expressions (e.g. "上个月", "同比", "环比", "近30天", "本季度") into precise ISO 8601 time ranges / comparison_time_ranges, and write all user-facing text (insights, chart titles, axis labels) in Chinese.
+
+
+
+
+
+
+
+
+
+
+
+        The system allows a max row limit of 250 per query.
+
+
+
+
+        The user's request:
+        Which country has the highest revenue? Answer with a single country name and nothing else.
+    - role: assistant
+      content_type: tool_call
+      id: a56bf88fcd334394
+      tool_name: list_metrics_views
+      content: '{}'
+    - role: tool
+      content_type: tool_response
+      id: a56bf88fcd334394
+      content: '{"metrics_views":[{"description":"","display_name":"Draft Mv","name":"draft_mv"},{"description":"","display_name":"Published Mv","name":"published_mv"}]}'
+    - role: assistant
+      content_type: tool_call
+      id: d008cb4a92114b0b
+      tool_name: get_metrics_view
+      content: '{"metrics_view":"published_mv"}'
+    - role: tool
+      content_type: tool_response
+      id: d008cb4a92114b0b
+      content: '{"spec":{"connector":"duckdb","dimensions":[{"column":"event_time","dataType":{"code":"CODE_TIMESTAMP","nullable":true,"rawType":"TIMESTAMP"},"displayName":"Event Time","name":"event_time","smallestTimeGrain":"TIME_GRAIN_SECOND","type":"DIMENSION_TYPE_TIME"},{"column":"country","dataType":{"code":"CODE_STRING","nullable":true,"rawType":"VARCHAR"},"displayName":"Country","name":"country","type":"DIMENSION_TYPE_CATEGORICAL"}],"displayName":"Published Mv","measures":[{"dataType":{"code":"CODE_INT128","nullable":true,"rawType":"HUGEINT"},"displayName":"Revenue","expression":"SUM(revenue)","name":"revenue","type":"MEASURE_TYPE_SIMPLE"}],"model":"orders","smallestTimeGrain":"TIME_GRAIN_SECOND","table":"orders","timeDimension":"event_time"}}'
+    - role: assistant
+      content_type: tool_call
+      id: c65defe952454b7f
+      tool_name: get_metrics_view
+      content: '{"metrics_view":"draft_mv"}'
+    - role: tool
+      content_type: tool_response
+      id: c65defe952454b7f
+      content: '{"spec":{"connector":"duckdb","dimensions":[{"column":"event_time","dataType":{"code":"CODE_TIMESTAMP","nullable":true,"rawType":"TIMESTAMP"},"displayName":"Event Time","name":"event_time","smallestTimeGrain":"TIME_GRAIN_SECOND","type":"DIMENSION_TYPE_TIME"},{"column":"country","dataType":{"code":"CODE_STRING","nullable":true,"rawType":"VARCHAR"},"displayName":"Country","name":"country","type":"DIMENSION_TYPE_CATEGORICAL"}],"displayName":"Draft Mv","measures":[{"dataType":{"code":"CODE_INT128","nullable":true,"rawType":"HUGEINT"},"displayName":"Revenue","expression":"SUM(revenue)","name":"revenue","type":"MEASURE_TYPE_SIMPLE"}],"model":"orders","smallestTimeGrain":"TIME_GRAIN_SECOND","table":"orders","timeDimension":"event_time"}}'
+    - role: assistant
+      content_type: tool_call
+      id: 3b68277d1afc4aea
+      tool_name: query_metrics_view_summary
+      content: '{"metrics_view":"published_mv"}'
+    - role: tool
+      content_type: tool_response
+      id: 3b68277d1afc4aea
+      content: '{"data":{"dimensions":[{"data_type":"CODE_TIMESTAMP","max_value":"2025-01-02T00:00:00Z","min_value":"2025-01-01T00:00:00Z","name":"event_time"},{"data_type":"CODE_STRING","example_value":"United States","max_value":"United States","min_value":"Denmark","name":"country"}],"time_range":{"data_type":"CODE_TIMESTAMP","max_value":"2025-01-02T00:00:00Z","min_value":"2025-01-01T00:00:00Z","name":"event_time"}}}'
+    - role: assistant
+      content_type: tool_call
+      id: ed1a7e8ffd254d59
+      tool_name: query_metrics_view
+      content: '{"dimensions":[{"name":"country"}],"limit":10,"measures":[{"name":"revenue"}],"metrics_view":"published_mv","sort":[{"desc":true,"name":"revenue"}],"time_range":{"end":"2025-01-02T00:00:00Z","start":"2025-01-01T00:00:00Z"}}'
+    - role: tool
+      content_type: tool_response
+      id: ed1a7e8ffd254d59
+      content: '{"schema":[{"name":"country","type":"STRING"},{"name":"revenue","type":"INT128"}],"data":[["United States",100]],"resolved_time_range":{"start":"2025-01-01T00:00:00Z","end":"2025-01-02T00:00:00Z"}}'
+  response:
+    - role: assistant
+      content_type: text
+      content: United States

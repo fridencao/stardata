@@ -11,8 +11,8 @@ import type {
  * @returns String ID in format "kind:name", or undefined if metadata is incomplete
  *
  * @example
- * createResourceId({ name: { kind: 'rill.runtime.v1.Model', name: 'orders' } })
- * // Returns: "rill.runtime.v1.Model:orders"
+ * createResourceId({ name: { kind: 'stardata.runtime.v1.Model', name: 'orders' } })
+ * // Returns: "stardata.runtime.v1.Model:orders"
  */
 export function createResourceId(meta?: V1ResourceMeta): string | undefined {
   return resourceNameToId(meta?.name);
@@ -25,8 +25,8 @@ export function createResourceId(meta?: V1ResourceMeta): string | undefined {
  * @returns Object with kind and name, or null if parsing fails
  *
  * @example
- * parseResourceId("rill.runtime.v1.Model:orders")
- * // Returns: { kind: "rill.runtime.v1.Model", name: "orders" }
+ * parseResourceId("stardata.runtime.v1.Model:orders")
+ * // Returns: { kind: "stardata.runtime.v1.Model", name: "orders" }
  */
 export function parseResourceId(id: string): V1ResourceName | null {
   const idx = id.indexOf(":");
@@ -52,8 +52,8 @@ export function parseResourceId(id: string): V1ResourceName | null {
  * @returns String ID in format "kind:name", or undefined if input is invalid
  *
  * @example
- * resourceNameToId({ kind: 'rill.runtime.v1.Model', name: 'orders' })
- * // Returns: "rill.runtime.v1.Model:orders"
+ * resourceNameToId({ kind: 'stardata.runtime.v1.Model', name: 'orders' })
+ * // Returns: "stardata.runtime.v1.Model:orders"
  *
  * resourceNameToId(null)
  * // Returns: undefined
