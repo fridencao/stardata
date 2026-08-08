@@ -25,7 +25,7 @@ Phase 4「双层角色化智能 BI」改造，整体完成度约 **80%**。核�
 | D2 | R1 全链路验证 | **先做端到端验证脚本**，暴露并发/覆盖/回滚风险 | 用户确认 |
 | D3 | 发布门控语义 | 需要作为**安全边界**看待 | 用户确认 |
 | D4 | 发布门控修复方案 | 采纳**runtime 层统一拦截 + fail-closed**（3-5 天）方案 | 用户确认 |
-| D5 | Feature Access 后端双保险 | **主动延后至 Phase 4 之后**（作为已接受的技术债存档） | 用户确认 |
+| D5 | Feature Access 后端双保险 | ~~延后至 Phase 4 之后~~ → **已在 Phase 4 内实现并完成真实栈验证**（见 §4c） | 用户「现在就做」 |
 | D6 | 审计基建 | Phase 4 收尾（4c）内做**最小落库**，UI 展示后置 | 用户确认 |
 | D7 | E2E 测试 | Phase 4 收尾内补 **3 个 spec**（portal-home / studio-publish / feature-access） | 用户确认 |
 | D8 | 治理者落地页 | **保留现状**（进 Studio），Studio 内加「预览业务视图」入口作为自验证手段 | 用户确认 |
@@ -86,7 +86,6 @@ Phase 4「双层角色化智能 BI」改造，整体完成度约 **80%**。核�
 - `/settings/system` 审计日志 UI（读取 P1-3 埋的表）
 - `/settings/ai`：LLM 供应商 / 密钥 / 连通性测试可写
 - `/settings/domains` 独立化（业务概念完全脱离 project 术语）
-- **Feature Access 后端双保险**（延后项，见 D5）：runtime API 层校验 `AccessChat / AccessDashboards / AccessReports / AccessAlerts` 拒绝越权
 - Studio 路由从 `-/edit/studio` 迁到 `/studio/[domain]`，解耦 dev deployment 生命周期
 
 ### 实施过程中新增并已完成的项
@@ -101,7 +100,6 @@ Phase 4「双层角色化智能 BI」改造，整体完成度约 **80%**。核�
 
 | 债务 | 现状 | 风险 | 缓解 |
 |---|---|---|---|
-| Feature Access 后端双保险缺失 | 前端隐藏 tab，后端 runtime API 未校验 access_* | 垂直越权：用户直接调 API 或猜路由访问被隐藏功能 | 结合发布门控 fail-closed（P0-2），关键数据查询已经受语义层 security policy 与发布门控双重拦截；剩余风险主要是 reports/alerts 列表接口的 metadata 泄漏 |
 | Studio 挂 `-/edit/studio` | 生命周期绑 dev deployment，URL 暴露 `-/edit` | 治理者遇到 dev deployment 问题时体验割裂 | P2-5 的 error boundary 消化 90% 场景 |
 | `-/ai`、`-/dashboards` 等 legacy 路由保留 | 未删，仍可访问 | 内部路径不一致，可能被 bookmark 分发 | 门户 tab 已经指向新路由，legacy 路径视为内部实现 |
 | `svelte-check --tsconfig` 模式约 585 个类型错误 | 深层类型债；**注意 CI 并不跑这个模式** | 无法启用更严格的类型门禁 | CI 实际跑 `--no-tsconfig`，已在 V-5 中清零；严格模式清理属独立课题 |
@@ -130,6 +128,28 @@ Phase 4「双层角色化智能 BI」改造，整体完成度约 **80%**。核�
 | （构建） | `Dockerfile.admin` 多余 apt 依赖在受限网络 404 → 镜像构建 exit 100 | `755fa4bdf` |
 
 > 原则：这些项在 Phase 4 收尾判定（§6）之前必须闭合 V-1 ~ V-4 —— **已全部闭合**。
+
+## 4c. D5 Feature Access 后端双保险（已实现并验证）
+
+原计划延后（见 §3 P3+），后按用户要求在 Phase 4 内完成。
+
+**实现**（commit `4d2b27a4b`）
+
+- `runtime/security.go`：新增 `ReadDashboards(0x1C) / ReadReports(0x1D) / ReadAlerts(0x1E)` 三个 permission，并入 `AllPermissions`。
+- `runtime/featureaccess.go`：`CheckFeatureAccess` 按 resource kind → permission 映射（`Explore`/`Canvas` → ReadDashboards，`Report` → ReadReports，`Alert` → ReadAlerts）。`MetricsView` / `Model` / `Source` / `API` **故意不门控**——它们是共享底座，一旦门控会连带打断 Chat 与语义层。
+- `runtime/resources.go`：`ApplySecurityPolicy` 里紧跟发布门控之后调用，复用同一个 metadata 收口点，`ListResources` / `GetResource` / resolver 全覆盖。
+- `admin/server/runtime_jwt.go`：按 `projectPermissions.Access*` 授予对应 permission；`AccessChat=false` 时移除 `UseAI`。**没有 project permissions 的 token（magic link / embed / service attribute override）保持旧行为**——全功能开放，避免静默破坏既有集成。
+
+**真实栈验证**（docker-compose，org `OCBC` / project `retail` / instance `45c5…deee`）
+
+管理员身份无法验证：`admin/permissions.go` 对 `ManageProject` 用户提前返回并把所有 `Access*` 置 true（设计如此，防止管理员把自己锁在外面）。故新建非管理员身份 `viewer@stardata.local`（org viewer + project viewer）。
+
+以 `org_feature_defaults` 设 `dashboards=false`，同一 viewer 身份两次取 JWT 对照：
+
+- `dashboards=false` → JWT `ins` = `[25,23,21,27,29,30]`（**28=ReadDashboards 缺失**，29/30 在）；`GetResource(Explore/published_explore)` → **403 action not allowed**；`ListResources` 只返回 `MetricsView/published_mv`、`Model/orders`、`ProjectParser/parser`，**Explore 被过滤**；`MetricsView/published_mv` → **200**（未被门控，符合设计）。
+- `dashboards=true` → JWT `ins` = `[25,23,21,27,28,29,30]`；同一个 Explore → **200**，`ListResources` 出现 `Explore/published_explore`。
+
+单向翻转再翻回，确认因果关系是 feature flag 本身而非其他变量。单元测试 `runtime/featureaccess_test.go` 8 个 subtest 全绿。
 
 ## 5. 执行顺序与依赖
 
