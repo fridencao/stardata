@@ -64,8 +64,35 @@ func (s *Service) PublishProject(ctx context.Context, projectID string, note str
 		zap.Int("count", n),
 	)
 
-	// Step 3: dry-run gate (placeholder — will be implemented in 5.2-T2).
-	// For now: skip validation and promote directly.
+	// Step 3: Dry-run gate. Renders the snapshot into a temp dir and runs the
+	// runtime's parser to catch YAML syntax, kind mismatches, and reference errors.
+	// This is a parser-only check — model SQL correctness against real data requires
+	// full reconcile (Phase 5.3 scope). Documented trade-off from Q14.
+	dryRun, err := s.DryRunPublishVersion(ctx, ver.ID)
+	if err != nil {
+		report, _ := json.Marshal(map[string]any{"error": err.Error()})
+		_ = s.DB.UpdateProjectVersionStatus(ctx, ver.ID, database.ProjectVersionStatusRejected, report)
+		return nil, fmt.Errorf("publish: dry-run: %w", err)
+	}
+	if !dryRun.OK {
+		_ = s.DB.UpdateProjectVersionStatus(ctx, ver.ID, database.ProjectVersionStatusRejected, dryRunReport(dryRun))
+		// Return the rejected version so the UI can display the errors, but signal
+		// via error that the publish did not go live.
+		rejected, _ := s.DB.FindProjectVersion(ctx, ver.ID)
+		if rejected != nil {
+			ver = rejected
+		}
+		s.Logger.Warn("publish: dry-run failed",
+			zap.String("project_id", projectID),
+			zap.Int("version", ver.Version),
+			zap.Int("errors", len(dryRun.Errors)),
+		)
+		return ver, fmt.Errorf("publish: dry-run rejected the snapshot (%d parse errors)", len(dryRun.Errors))
+	}
+	s.Logger.Info("publish: dry-run passed",
+		zap.String("project_id", projectID),
+		zap.Int("version", ver.Version),
+	)
 
 	// Step 4: Promote.
 	if err := s.DB.UpdateProjectVersionStatus(ctx, ver.ID, database.ProjectVersionStatusPublished, nil); err != nil {

@@ -147,3 +147,23 @@ func (c *connection) SetProjectCurrentPublishedVersion(ctx context.Context, proj
 	`, projectID, versionID)
 	return checkUpdateRow("project", res, err)
 }
+
+// FindProjectVersionResources returns the exact resource rows frozen into a version.
+// Unlike the draft read path this does no DISTINCT ON collapsing: the snapshot
+// already picked one row per resource, and re-collapsing could silently substitute a
+// different version if the same name were somehow present twice.
+func (c *connection) FindProjectVersionResources(ctx context.Context, projectVersionID string) ([]*database.SemanticResource, error) {
+	var res []*database.SemanticResource
+	err := c.getDB(ctx).SelectContext(ctx, &res, `
+		SELECT sr.id, sr.project_id, sr.resource_kind, sr.resource_name, sr.definition,
+		       sr.version, sr.status, sr.created_by_user_id, sr.created_on, sr.updated_on
+		FROM project_version_resources pvr
+		JOIN semantic_resources sr ON sr.id = pvr.semantic_resource_id
+		WHERE pvr.project_version_id = $1
+		ORDER BY sr.resource_kind, lower(sr.resource_name)
+	`, projectVersionID)
+	if err != nil {
+		return nil, parseErr("project version resources", err)
+	}
+	return res, nil
+}

@@ -71,6 +71,15 @@ func (s *Server) PublishSemanticProject(ctx context.Context, req *adminv1.Publis
 
 	ver, err := s.admin.PublishProject(ctx, proj.ID, req.Note, claims)
 	if err != nil {
+		// A dry-run rejection returns the rejected version alongside the error. That
+		// is not a server failure — it's the gate doing its job — so surface the
+		// version (with its validation_report) to the UI rather than a 500. Only a
+		// nil version means the publish genuinely failed.
+		if ver != nil && ver.Status == database.ProjectVersionStatusRejected {
+			return &adminv1.PublishSemanticProjectResponse{
+				Version: s.semanticVersionToPB(ctx, ver, ""),
+			}, nil
+		}
 		return nil, status.Error(codes.Internal, err.Error())
 	}
 

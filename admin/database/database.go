@@ -356,6 +356,8 @@ type DB interface {
 	// version. It returns the number of resources snapshotted. If the project has no
 	// draft resources, it returns 0 (no error).
 	SnapshotDraftResources(ctx context.Context, projectVersionID, projectID string) (int, error)
+	// FindProjectVersionResources returns the resource rows frozen into a version.
+	FindProjectVersionResources(ctx context.Context, projectVersionID string) ([]*SemanticResource, error)
 	// SetProjectCurrentPublishedVersion updates projects.current_published_version_id.
 	SetProjectCurrentPublishedVersion(ctx context.Context, projectID, versionID string) error
 
