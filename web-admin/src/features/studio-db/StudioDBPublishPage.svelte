@@ -4,6 +4,7 @@
   import DelayedCircleOutlineSpinner from "@rilldata/web-common/components/spinner/DelayedCircleOutlineSpinner.svelte";
   import {
     createAdminServicePublishSemanticProject,
+    createAdminServicePreviewSemanticProject,
     createAdminServiceListSemanticVersions,
     createAdminServiceListResourceVisibility,
     createAdminServiceSetResourceVisibility,
@@ -22,8 +23,13 @@
 
   let note = "";
   let banner: { tone: "ok" | "err"; text: string } | null = null;
+  // Validation errors from the last preview or a rejected publish. Kept separate
+  // from `banner` so the governor can read the list while the banner explains
+  // what happened.
+  let validationErrors: string[] = [];
 
   const publishMutation = createAdminServicePublishSemanticProject();
+  const previewMutation = createAdminServicePreviewSemanticProject();
   const visibilityMutation = createAdminServiceSetResourceVisibility();
 
   $: versionsQuery = createAdminServiceListSemanticVersions(organization, project);
@@ -51,19 +57,55 @@
     return !!visibleByKey.get(`${kind}/${name.toLowerCase()}`);
   }
 
+  async function preview() {
+    banner = null;
+    validationErrors = [];
+    try {
+      const res = await $previewMutation.mutateAsync({
+        org: organization,
+        project,
+        data: {},
+      });
+      if (res.ok) {
+        banner = { tone: "ok", text: "校验通过，可以发布。" };
+      } else {
+        validationErrors = res.errors ?? [];
+        banner = { tone: "err", text: "校验未通过，请先修正下列问题。" };
+      }
+    } catch (e: any) {
+      banner = { tone: "err", text: errText(e) };
+    }
+  }
+
   async function publish() {
     banner = null;
+    validationErrors = [];
     try {
       const res = await $publishMutation.mutateAsync({
         org: organization,
         project,
         data: { note },
       });
-      note = "";
-      banner = {
-        tone: "ok",
-        text: `已发布为版本 ${res.version?.version ?? "?"}。运行时已收到通知。`,
-      };
+
+      // A rejected version comes back as a normal response (the gate refusing a bad
+      // snapshot is the system working, not a server error), so inspect the status.
+      if (res.version?.status === "rejected") {
+        const report = res.version.validationReport as
+          | { errors?: string[] }
+          | undefined;
+        validationErrors = report?.errors ?? [];
+        banner = {
+          tone: "err",
+          text: `发布被校验门控拒绝（版本 ${res.version.version} 已标记为拒绝）。`,
+        };
+      } else {
+        note = "";
+        banner = {
+          tone: "ok",
+          text: `已发布为版本 ${res.version?.version ?? "?"}。运行时已收到通知。`,
+        };
+      }
+
       await queryClient.invalidateQueries({
         queryKey: getAdminServiceListSemanticVersionsQueryKey(organization, project),
       });
@@ -144,11 +186,21 @@
       bind:value={note}
       placeholder="本次发布的目的、影响范围等"
     />
-    <div>
+    <div class="flex gap-2">
+      <Button type="secondary" onClick={preview} loading={$previewMutation.isPending}>
+        预览校验
+      </Button>
       <Button type="primary" onClick={publish} loading={$publishMutation.isPending}>
         发布当前草稿
       </Button>
     </div>
+    {#if validationErrors.length}
+      <ul class="rounded-sm border border-red-300 bg-red-50 p-3 text-sm text-red-800 dark:border-red-700 dark:bg-red-900/30 dark:text-red-200">
+        {#each validationErrors as err (err)}
+          <li>{err}</li>
+        {/each}
+      </ul>
+    {/if}
     {#if banner}
       <div
         class="rounded-sm border px-3 py-2 text-sm {banner.tone === 'ok'

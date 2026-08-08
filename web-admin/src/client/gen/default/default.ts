@@ -229,6 +229,7 @@ import type {
   V1ListUsergroupsForProjectAndUserResponse,
   V1ListWhitelistedDomainsResponse,
   V1PingResponse,
+  V1PreviewSemanticProjectResponse,
   V1ProvisionResponse,
   V1PublishSemanticProjectResponse,
   V1PullVirtualRepoResponse,
@@ -9181,6 +9182,103 @@ export const createAdminServiceSetResourceVisibility = <
 > => {
   const mutationOptions =
     getAdminServiceSetResourceVisibilityMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary PreviewSemanticProject validates the current draft without creating a version.
+ */
+export const adminServicePreviewSemanticProject = (
+  org: string,
+  project: string,
+  adminServiceTriggerReconcileBodyBody: AdminServiceTriggerReconcileBodyBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1PreviewSemanticProjectResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/semantic-preview`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceTriggerReconcileBodyBody,
+    signal,
+  });
+};
+
+export const getAdminServicePreviewSemanticProjectMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServicePreviewSemanticProject>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceTriggerReconcileBodyBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServicePreviewSemanticProject>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationKey = ["adminServicePreviewSemanticProject"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServicePreviewSemanticProject>>,
+    { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServicePreviewSemanticProject(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServicePreviewSemanticProjectMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServicePreviewSemanticProject>>
+>;
+export type AdminServicePreviewSemanticProjectMutationBody =
+  AdminServiceTriggerReconcileBodyBody;
+export type AdminServicePreviewSemanticProjectMutationError = RpcStatus;
+
+/**
+ * @summary PreviewSemanticProject validates the current draft without creating a version.
+ */
+export const createAdminServicePreviewSemanticProject = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServicePreviewSemanticProject>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServiceTriggerReconcileBodyBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServicePreviewSemanticProject>>,
+  TError,
+  { org: string; project: string; data: AdminServiceTriggerReconcileBodyBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServicePreviewSemanticProjectMutationOptions(options);
 
   return createMutation(mutationOptions, queryClient);
 };

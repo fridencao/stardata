@@ -128,3 +128,70 @@ func dryRunReport(r *DryRunResult) []byte {
 	b, _ := json.Marshal(r)
 	return b
 }
+
+// PreviewDraft validates the project's current draft resources without creating a
+// version or touching any persistent state. This is the governor's "check before
+// publish" action: same parsing pipeline as the publish dry-run, but ephemeral.
+func (s *Service) PreviewDraft(ctx context.Context, projectID string) (*DryRunResult, error) {
+	resources, err := s.DB.FindSemanticResources(ctx, projectID, database.SemanticResourceStatusDraft)
+	if err != nil {
+		return nil, fmt.Errorf("preview: load drafts: %w", err)
+	}
+	if len(resources) == 0 {
+		return &DryRunResult{OK: false, Errors: []string{"当前草稿中没有资源"}}, nil
+	}
+
+	// Reuse the same render + parse path as DryRunPublishVersion. The only difference
+	// is that here we read the live draft set rather than a frozen version snapshot.
+	tmpDir, err := os.MkdirTemp("", "stardata-preview-*")
+	if err != nil {
+		return nil, fmt.Errorf("preview: create temp dir: %w", err)
+	}
+	defer os.RemoveAll(tmpDir)
+
+	for _, r := range resources {
+		p, data, err := RenderSemanticResource(r)
+		if err != nil {
+			return &DryRunResult{OK: false, Errors: []string{fmt.Sprintf("无法渲染资源 %s/%s: %v", r.ResourceKind, r.ResourceName, err)}}, nil
+		}
+		full := filepath.Join(tmpDir, p)
+		if err := os.MkdirAll(filepath.Dir(full), 0o755); err != nil {
+			return nil, fmt.Errorf("preview: mkdir %s: %w", filepath.Dir(full), err)
+		}
+		if err := os.WriteFile(full, data, 0o644); err != nil {
+			return nil, fmt.Errorf("preview: write %s: %w", p, err)
+		}
+	}
+
+	renderRillYAML(resources, tmpDir)
+
+	st := rillstorage.MustNew(os.TempDir(), nil)
+	handle, err := drivers.Open("file", "", "preview", map[string]any{"dsn": tmpDir}, st, activity.NewNoopClient(), s.Logger)
+	if err != nil {
+		return nil, fmt.Errorf("preview: open file driver: %w", err)
+	}
+	defer handle.Close()
+
+	repo, ok := handle.AsRepoStore("preview")
+	if !ok {
+		return nil, fmt.Errorf("preview: file driver does not implement RepoStore")
+	}
+
+	parseCtx, cancel := context.WithTimeout(ctx, 60*time.Second)
+	defer cancel()
+
+	p, err := parser.Parse(parseCtx, repo, "preview", "prod", "duckdb", false)
+	if err != nil {
+		return &DryRunResult{OK: false, Errors: []string{fmt.Sprintf("解析失败: %v", err)}}, nil
+	}
+
+	if p.HasParseErrors() {
+		msgs := make([]string, 0, len(p.Errors))
+		for _, pe := range p.Errors {
+			msgs = append(msgs, fmt.Sprintf("%s: %s", pe.FilePath, pe.Message))
+		}
+		return &DryRunResult{OK: false, Errors: msgs}, nil
+	}
+
+	return &DryRunResult{OK: true}, nil
+}

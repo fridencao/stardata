@@ -1158,6 +1158,11 @@ export interface V1PingResponse {
   time?: string;
 }
 
+export interface V1PreviewSemanticProjectResponse {
+  ok?: boolean;
+  errors?: string[];
+}
+
 export type V1ProjectAnnotations = { [key: string]: string };
 
 export interface V1Project {

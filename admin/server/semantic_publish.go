@@ -125,3 +125,32 @@ func (s *Server) ListSemanticVersions(ctx context.Context, req *adminv1.ListSema
 	}
 	return &adminv1.ListSemanticVersionsResponse{Versions: out}, nil
 }
+
+// PreviewSemanticProject validates the current draft without side effects: no
+// version is created, no visibility changes, no runtime notify. It reuses the same
+// parser pipeline as the publish dry-run so what a preview passes will also pass
+// publish (barring races with a concurrent editor).
+func (s *Server) PreviewSemanticProject(ctx context.Context, req *adminv1.PreviewSemanticProjectRequest) (*adminv1.PreviewSemanticProjectResponse, error) {
+	observability.AddRequestAttributes(ctx,
+		attribute.String("args.org", req.Org),
+		attribute.String("args.project", req.Project),
+	)
+
+	proj, err := s.requireProjectEditor(ctx, req.Org, req.Project)
+	if err != nil {
+		return nil, err
+	}
+	if proj.SemanticLayerMode != "db" {
+		return nil, status.Error(codes.FailedPrecondition, "preview is only available for DB-mode projects")
+	}
+
+	res, err := s.admin.PreviewDraft(ctx, proj.ID)
+	if err != nil {
+		return nil, status.Error(codes.Internal, err.Error())
+	}
+
+	return &adminv1.PreviewSemanticProjectResponse{
+		Ok:     res.OK,
+		Errors: res.Errors,
+	}, nil
+}
