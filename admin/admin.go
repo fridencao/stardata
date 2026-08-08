@@ -36,6 +36,9 @@ type Options struct {
 	ScaleDownConstraint        int
 	AllowMockBilling           bool
 	StoppedDeploymentRetention time.Duration
+	// AIDriver is the deployment-wide LLM driver name resolved from env vars. Kept
+	// for display only: it tells an org admin what applies when no org override exists.
+	AIDriver string
 }
 
 type Service struct {
@@ -59,6 +62,7 @@ type Service struct {
 	StoppedDeploymentRetention time.Duration
 	Biller                     billing.Biller
 	PaymentProvider            payment.Provider
+	aiResolver                 *aiResolver
 }
 
 func New(ctx context.Context, opts *Options, logger *zap.Logger, issuer *auth.Issuer, emailClient *email.Client, aiService drivers.AIService, assets assetstore.Store, biller billing.Biller, p payment.Provider) (*Service, error) {
@@ -148,10 +152,13 @@ func New(ctx context.Context, opts *Options, logger *zap.Logger, issuer *auth.Is
 		StoppedDeploymentRetention: opts.StoppedDeploymentRetention,
 		Biller:                     biller,
 		PaymentProvider:            p,
+		aiResolver:                 newAIResolver(),
 	}, nil
 }
 
 func (s *Service) Close() error {
+	s.closeAIResolver()
+
 	var allErrs error
 	for _, p := range s.ProvisionerSet {
 		err := p.Close()

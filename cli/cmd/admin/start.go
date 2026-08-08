@@ -366,6 +366,7 @@ func StartCmd(ch *cmdutil.Helper) *cobra.Command {
 				ScaleDownConstraint:        conf.ScaleDownConstraint,
 				AllowMockBilling:           conf.AllowMockBilling,
 				StoppedDeploymentRetention: conf.StoppedDeploymentRetention,
+				AIDriver:                   aiDriver,
 			}
 			adm, err := admin.New(cmd.Context(), admOpts, logger, issuer, emailClient, aiService, assets, biller, p)
 			if err != nil {

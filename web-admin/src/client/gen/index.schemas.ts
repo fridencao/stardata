@@ -414,6 +414,10 @@ export interface V1DeleteDeploymentResponse {
   deploymentId?: string;
 }
 
+export interface V1DeleteOrgAIConfigResponse {
+  [key: string]: unknown;
+}
+
 export interface V1DeleteOrganizationResponse {
   [key: string]: unknown;
 }
@@ -663,6 +667,13 @@ export interface V1GetIFrameResponse {
   instanceId?: string;
   accessToken?: string;
   ttlSeconds?: number;
+}
+
+export interface V1GetOrgAIConfigResponse {
+  config?: V1OrgAIConfig;
+  /** Effective driver/model when no override is set — reflects the deployment env. */
+  defaultDriver?: string;
+  defaultModel?: string;
 }
 
 export interface V1GetOrganizationMemberUserResponse {
@@ -990,6 +1001,19 @@ export interface V1MemberUsergroup {
   updatedOn?: string;
   restrictResources?: boolean;
   resources?: V1ResourceName[];
+}
+
+/**
+ * OrgAIConfig describes an org-scoped LLM configuration. api_key is intentionally
+never returned by the server; the boolean flag lets the UI tell whether one is set.
+ */
+export interface V1OrgAIConfig {
+  orgId?: string;
+  driver?: string;
+  baseUrl?: string;
+  model?: string;
+  hasApiKey?: boolean;
+  updatedOn?: string;
 }
 
 export interface V1Organization {
@@ -1402,6 +1426,10 @@ export interface V1SetFeatureAccessResponse {
   [key: string]: unknown;
 }
 
+export interface V1SetOrgAIConfigResponse {
+  config?: V1OrgAIConfig;
+}
+
 export interface V1SetOrgFeatureDefaultsResponse {
   [key: string]: unknown;
 }
@@ -1597,6 +1625,12 @@ export interface V1SudoUpdateUserQuotasRequest {
 
 export interface V1SudoUpdateUserQuotasResponse {
   user?: V1User;
+}
+
+export interface V1TestOrgAIConfigResponse {
+  ok?: boolean;
+  message?: string;
+  provider?: string;
 }
 
 export type V1ToolMeta = { [key: string]: unknown };
@@ -1867,6 +1901,23 @@ export type AdminServiceUpdateOrganizationBody = {
   thumbnailAssetId?: string;
   defaultProjectRole?: string;
   billingEmail?: string;
+};
+
+export type AdminServiceSetOrgAIConfigBody = {
+  driver?: string;
+  baseUrl?: string;
+  model?: string;
+  /** Plaintext API key. Leave empty to preserve the currently-stored key. */
+  apiKey?: string;
+};
+
+export type AdminServiceTestOrgAIConfigBody = {
+  /** If any of these are set, the test uses the given values instead of the
+stored config. Handy for "test before save". */
+  driver?: string;
+  baseUrl?: string;
+  model?: string;
+  apiKey?: string;
 };
 
 export type AdminServiceListAuditEventsParams = {

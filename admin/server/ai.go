@@ -45,8 +45,10 @@ func (s *Server) Complete(ctx context.Context, req *adminv1.CompleteRequest) (*a
 		}
 	}
 
-	// Pass messages and tools to the AI service
-	res, err := s.admin.AI.Complete(ctx, &drivers.CompleteOptions{
+	// Pass messages and tools to the AI service. Org-level config (if any) wins
+	// over the deployment-wide env-var config; see admin/ai_config.go.
+	aiService := s.admin.AIForOrg(ctx, s.orgIDForAIRequest(ctx))
+	res, err := aiService.Complete(ctx, &drivers.CompleteOptions{
 		Messages:     messages,
 		Tools:        req.Tools,
 		OutputSchema: outputSchema,

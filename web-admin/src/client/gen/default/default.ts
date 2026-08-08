@@ -89,11 +89,13 @@ import type {
   AdminServiceSearchProjectUsersParams,
   AdminServiceSearchUsersParams,
   AdminServiceSetFeatureAccessBody,
+  AdminServiceSetOrgAIConfigBody,
   AdminServiceSetOrgFeatureDefaultsBody,
   AdminServiceSetOrganizationMemberUserRoleBody,
   AdminServiceSetProjectMemberUserRoleBodyBody,
   AdminServiceSudoGetResourceParams,
   AdminServiceSudoUpdateOrganizationBillingMessageBody,
+  AdminServiceTestOrgAIConfigBody,
   AdminServiceTriggerReconcileBodyBody,
   AdminServiceTriggerRefreshSourcesBody,
   AdminServiceUnsubscribeAlertBodyBody,
@@ -130,6 +132,7 @@ import type {
   V1CreateWhitelistedDomainResponse,
   V1DeleteAlertResponse,
   V1DeleteDeploymentResponse,
+  V1DeleteOrgAIConfigResponse,
   V1DeleteOrganizationResponse,
   V1DeletePersonalFileResponse,
   V1DeleteProjectResponse,
@@ -158,6 +161,7 @@ import type {
   V1GetDeploymentCredentialsResponse,
   V1GetDeploymentResponse,
   V1GetIFrameResponse,
+  V1GetOrgAIConfigResponse,
   V1GetOrganizationMemberUserResponse,
   V1GetOrganizationNameForDomainResponse,
   V1GetOrganizationResponse,
@@ -239,6 +243,7 @@ import type {
   V1SearchProjectUsersResponse,
   V1SearchUsersResponse,
   V1SetFeatureAccessResponse,
+  V1SetOrgAIConfigResponse,
   V1SetOrgFeatureDefaultsResponse,
   V1SetOrganizationMemberServiceRoleResponse,
   V1SetOrganizationMemberUserRoleResponse,
@@ -274,6 +279,7 @@ import type {
   V1SudoUpdateOrganizationQuotasResponse,
   V1SudoUpdateUserQuotasRequest,
   V1SudoUpdateUserQuotasResponse,
+  V1TestOrgAIConfigResponse,
   V1TriggerReconcileResponse,
   V1TriggerRedeployRequest,
   V1TriggerRedeployResponse,
@@ -1994,6 +2000,358 @@ export const createAdminServiceUpdateOrganization = <
 > => {
   const mutationOptions =
     getAdminServiceUpdateOrganizationMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary GetOrgAIConfig returns the org's LLM configuration. The API key is never
+returned; only whether one is set.
+ */
+export const adminServiceGetOrgAIConfig = (
+  org: string,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1GetOrgAIConfigResponse>({
+    url: `/v1/orgs/${org}/ai-config`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getAdminServiceGetOrgAIConfigQueryKey = (org?: string) => {
+  return [`/v1/orgs/${org}/ai-config`] as const;
+};
+
+export const getAdminServiceGetOrgAIConfigQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceGetOrgAIConfig>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceGetOrgAIConfig>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getAdminServiceGetOrgAIConfigQueryKey(org);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminServiceGetOrgAIConfig>>
+  > = ({ signal }) => adminServiceGetOrgAIConfig(org, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!org,
+    ...queryOptions,
+  } as CreateQueryOptions<
+    Awaited<ReturnType<typeof adminServiceGetOrgAIConfig>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type AdminServiceGetOrgAIConfigQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceGetOrgAIConfig>>
+>;
+export type AdminServiceGetOrgAIConfigQueryError = RpcStatus;
+
+/**
+ * @summary GetOrgAIConfig returns the org's LLM configuration. The API key is never
+returned; only whether one is set.
+ */
+
+export function createAdminServiceGetOrgAIConfig<
+  TData = Awaited<ReturnType<typeof adminServiceGetOrgAIConfig>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceGetOrgAIConfig>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getAdminServiceGetOrgAIConfigQueryOptions(org, options);
+
+  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary DeleteOrgAIConfig removes the org override, reverting to the deployment default.
+ */
+export const adminServiceDeleteOrgAIConfig = (org: string) => {
+  return httpClient<V1DeleteOrgAIConfigResponse>({
+    url: `/v1/orgs/${org}/ai-config`,
+    method: "DELETE",
+  });
+};
+
+export const getAdminServiceDeleteOrgAIConfigMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceDeleteOrgAIConfig>>,
+    TError,
+    { org: string },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceDeleteOrgAIConfig>>,
+  TError,
+  { org: string },
+  TContext
+> => {
+  const mutationKey = ["adminServiceDeleteOrgAIConfig"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceDeleteOrgAIConfig>>,
+    { org: string }
+  > = (props) => {
+    const { org } = props ?? {};
+
+    return adminServiceDeleteOrgAIConfig(org);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceDeleteOrgAIConfigMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceDeleteOrgAIConfig>>
+>;
+
+export type AdminServiceDeleteOrgAIConfigMutationError = RpcStatus;
+
+/**
+ * @summary DeleteOrgAIConfig removes the org override, reverting to the deployment default.
+ */
+export const createAdminServiceDeleteOrgAIConfig = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceDeleteOrgAIConfig>>,
+      TError,
+      { org: string },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceDeleteOrgAIConfig>>,
+  TError,
+  { org: string },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceDeleteOrgAIConfigMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary SetOrgAIConfig writes the org's LLM configuration.
+ */
+export const adminServiceSetOrgAIConfig = (
+  org: string,
+  adminServiceSetOrgAIConfigBody: AdminServiceSetOrgAIConfigBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1SetOrgAIConfigResponse>({
+    url: `/v1/orgs/${org}/ai-config`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceSetOrgAIConfigBody,
+    signal,
+  });
+};
+
+export const getAdminServiceSetOrgAIConfigMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceSetOrgAIConfig>>,
+    TError,
+    { org: string; data: AdminServiceSetOrgAIConfigBody },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceSetOrgAIConfig>>,
+  TError,
+  { org: string; data: AdminServiceSetOrgAIConfigBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceSetOrgAIConfig"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceSetOrgAIConfig>>,
+    { org: string; data: AdminServiceSetOrgAIConfigBody }
+  > = (props) => {
+    const { org, data } = props ?? {};
+
+    return adminServiceSetOrgAIConfig(org, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceSetOrgAIConfigMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceSetOrgAIConfig>>
+>;
+export type AdminServiceSetOrgAIConfigMutationBody =
+  AdminServiceSetOrgAIConfigBody;
+export type AdminServiceSetOrgAIConfigMutationError = RpcStatus;
+
+/**
+ * @summary SetOrgAIConfig writes the org's LLM configuration.
+ */
+export const createAdminServiceSetOrgAIConfig = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceSetOrgAIConfig>>,
+      TError,
+      { org: string; data: AdminServiceSetOrgAIConfigBody },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceSetOrgAIConfig>>,
+  TError,
+  { org: string; data: AdminServiceSetOrgAIConfigBody },
+  TContext
+> => {
+  const mutationOptions = getAdminServiceSetOrgAIConfigMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary TestOrgAIConfig runs a minimal completion against the given (or stored)
+config and reports whether it works, without persisting anything.
+ */
+export const adminServiceTestOrgAIConfig = (
+  org: string,
+  adminServiceTestOrgAIConfigBody: AdminServiceTestOrgAIConfigBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1TestOrgAIConfigResponse>({
+    url: `/v1/orgs/${org}/ai-config/test`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceTestOrgAIConfigBody,
+    signal,
+  });
+};
+
+export const getAdminServiceTestOrgAIConfigMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceTestOrgAIConfig>>,
+    TError,
+    { org: string; data: AdminServiceTestOrgAIConfigBody },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceTestOrgAIConfig>>,
+  TError,
+  { org: string; data: AdminServiceTestOrgAIConfigBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceTestOrgAIConfig"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceTestOrgAIConfig>>,
+    { org: string; data: AdminServiceTestOrgAIConfigBody }
+  > = (props) => {
+    const { org, data } = props ?? {};
+
+    return adminServiceTestOrgAIConfig(org, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceTestOrgAIConfigMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceTestOrgAIConfig>>
+>;
+export type AdminServiceTestOrgAIConfigMutationBody =
+  AdminServiceTestOrgAIConfigBody;
+export type AdminServiceTestOrgAIConfigMutationError = RpcStatus;
+
+/**
+ * @summary TestOrgAIConfig runs a minimal completion against the given (or stored)
+config and reports whether it works, without persisting anything.
+ */
+export const createAdminServiceTestOrgAIConfig = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceTestOrgAIConfig>>,
+      TError,
+      { org: string; data: AdminServiceTestOrgAIConfigBody },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceTestOrgAIConfig>>,
+  TError,
+  { org: string; data: AdminServiceTestOrgAIConfigBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceTestOrgAIConfigMutationOptions(options);
 
   return createMutation(mutationOptions, queryClient);
 };

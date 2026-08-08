@@ -14,6 +14,7 @@ const (
 	AuditEventProjectRollback     = "project_rollback"
 	AuditEventFeatureAccessSet    = "feature_access_set"
 	AuditEventOrgFeatureDefaults  = "org_feature_defaults_set"
+	AuditEventOrgAIConfigSet      = "org_ai_config_set"
 	AuditEventMemberAdd           = "member_add"
 	AuditEventMemberRemove        = "member_remove"
 	AuditEventMemberRoleChange    = "member_role_change"

@@ -327,6 +327,10 @@ type DB interface {
 	InsertAuditEvent(ctx context.Context, opts *InsertAuditEventOptions) error
 	ListAuditEventsForOrg(ctx context.Context, orgID string, filter *AuditEventFilter, limit int) ([]*AuditEvent, error)
 
+	FindOrgAIConfig(ctx context.Context, orgID string) (*OrgAIConfig, error)
+	UpsertOrgAIConfig(ctx context.Context, opts *UpsertOrgAIConfigOptions) (*OrgAIConfig, error)
+	DeleteOrgAIConfig(ctx context.Context, orgID string) error
+
 	FindOrganizationIDsWithBilling(ctx context.Context) ([]string, error)
 	FindOrganizationIDsWithoutBilling(ctx context.Context) ([]string, error)
 
@@ -1323,6 +1327,35 @@ type InsertAuditEventOptions struct {
 type AuditEventFilter struct {
 	ProjectID *string
 	EventType string
+}
+
+// OrgAIConfig is an org-scoped LLM provider configuration (StarData). When present
+// it overrides the deployment-wide env-var AI config for that org's completions.
+// APIKey is already decrypted when read back via FindOrgAIConfig.
+type OrgAIConfig struct {
+	OrgID           string    `db:"org_id"`
+	Driver          string    `db:"driver"`
+	BaseURL         string    `db:"base_url"`
+	Model           string    `db:"model"`
+	APIKey          []byte    `db:"api_key"`
+	APIKeyEncKeyID  string    `db:"api_key_encryption_key_id"`
+	UpdatedByUserID *string   `db:"updated_by_user_id"`
+	CreatedOn       time.Time `db:"created_on"`
+	UpdatedOn       time.Time `db:"updated_on"`
+}
+
+// UpsertOrgAIConfigOptions defines the fields written when saving an org AI config.
+// APIKey is the plaintext key; the postgres layer encrypts it with the keyring.
+// If APIKey is nil the existing stored key is preserved (so the UI need not
+// re-send the secret on every edit).
+type UpsertOrgAIConfigOptions struct {
+	OrgID           string
+	Driver          string
+	BaseURL         string
+	Model           string
+	APIKey          []byte
+	KeepExistingKey bool
+	UpdatedByUserID *string
 }
 
 // ProjectVariable represents a key-value variable for a project, possible for a specific environment (e.g. production or development).

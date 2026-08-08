@@ -57,3 +57,75 @@ func (c *connection) ListAuditEventsForOrg(ctx context.Context, orgID string, fi
 	}
 	return res, nil
 }
+
+// FindOrgAIConfig returns the org's LLM configuration, with the API key decrypted.
+// Returns database.ErrNotFound when the org has no override configured.
+func (c *connection) FindOrgAIConfig(ctx context.Context, orgID string) (*database.OrgAIConfig, error) {
+	res := &database.OrgAIConfig{}
+	err := c.getDB(ctx).QueryRowxContext(ctx, `
+		SELECT org_id, driver, base_url, model, api_key, api_key_encryption_key_id,
+		       updated_by_user_id, created_on, updated_on
+		FROM org_ai_config WHERE org_id = $1
+	`, orgID).StructScan(res)
+	if err != nil {
+		return nil, parseErr("org ai config", err)
+	}
+
+	plain, err := c.decrypt(res.APIKey, res.APIKeyEncKeyID)
+	if err != nil {
+		return nil, fmt.Errorf("org ai config: decrypt api key: %w", err)
+	}
+	res.APIKey = plain
+	return res, nil
+}
+
+// UpsertOrgAIConfig writes the org's LLM configuration, encrypting the API key.
+func (c *connection) UpsertOrgAIConfig(ctx context.Context, opts *database.UpsertOrgAIConfigOptions) (*database.OrgAIConfig, error) {
+	// KeepExistingKey lets the UI save provider/model changes without re-sending
+	// the secret. COALESCE-style preservation is done in SQL to stay atomic.
+	if opts.KeepExistingKey {
+		_, err := c.getDB(ctx).ExecContext(ctx, `
+			INSERT INTO org_ai_config (org_id, driver, base_url, model, updated_by_user_id, updated_on)
+			VALUES ($1, $2, $3, $4, $5, now())
+			ON CONFLICT (org_id) DO UPDATE SET
+				driver = excluded.driver,
+				base_url = excluded.base_url,
+				model = excluded.model,
+				updated_by_user_id = excluded.updated_by_user_id,
+				updated_on = now()
+		`, opts.OrgID, opts.Driver, opts.BaseURL, opts.Model, opts.UpdatedByUserID)
+		if err != nil {
+			return nil, parseErr("org ai config", err)
+		}
+		return c.FindOrgAIConfig(ctx, opts.OrgID)
+	}
+
+	encrypted, keyID, err := c.encrypt(opts.APIKey)
+	if err != nil {
+		return nil, fmt.Errorf("org ai config: encrypt api key: %w", err)
+	}
+
+	_, err = c.getDB(ctx).ExecContext(ctx, `
+		INSERT INTO org_ai_config (org_id, driver, base_url, model, api_key, api_key_encryption_key_id, updated_by_user_id, updated_on)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, now())
+		ON CONFLICT (org_id) DO UPDATE SET
+			driver = excluded.driver,
+			base_url = excluded.base_url,
+			model = excluded.model,
+			api_key = excluded.api_key,
+			api_key_encryption_key_id = excluded.api_key_encryption_key_id,
+			updated_by_user_id = excluded.updated_by_user_id,
+			updated_on = now()
+	`, opts.OrgID, opts.Driver, opts.BaseURL, opts.Model, encrypted, keyID, opts.UpdatedByUserID)
+	if err != nil {
+		return nil, parseErr("org ai config", err)
+	}
+	return c.FindOrgAIConfig(ctx, opts.OrgID)
+}
+
+// DeleteOrgAIConfig removes the org override, reverting the org to the
+// deployment-wide env-var AI config.
+func (c *connection) DeleteOrgAIConfig(ctx context.Context, orgID string) error {
+	_, err := c.getDB(ctx).ExecContext(ctx, "DELETE FROM org_ai_config WHERE org_id = $1", orgID)
+	return parseErr("org ai config", err)
+}
