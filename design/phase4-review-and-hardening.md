@@ -110,16 +110,26 @@ Phase 4「双层角色化智能 BI」改造，整体完成度约 **80%**。核�
 
 已实现但**尚未在真实环境确认**的部分。每一项都对应一个具体的复现步骤，不是"再看一眼"级别的检查。
 
-| # | 待验证项 | 状态 | 为什么重要 | 关联改动 |
-|---|---|---|---|---|
-| V-1 | Studio error boundary 的错误文案匹配 | 待验证 | 正则（`runtime not reachable` / `not ready` / `failed\|error\|unavailable`）是读代码推断的；兜不住就会漏出原始技术错误，等于 P2-5 白做 | `studio/+error.svelte` |
-| V-2 | `?preview=1` 不被上游 layout 截胡 | 待验证 | `?preview` 语义只在 `[project]/+page.ts` 实现；`+layout.ts` 的 `maybeRedirectToEditableDeployment` / branch / welcome 重定向都可能抢先跳走 | `[project]/+page.ts` |
-| V-3 | R1 全链路 docker-compose 人工走查 | 待验证 | R1-X 修复只在 unit test 层验证过；容器内 `USER stardata`(uid 1001) + `runtime_data` volume 的实际行为未确认。另需确认 publish/rollback 可靠触发 prod 重部署 | `repo_archive.go` |
-| V-4 | 发布门控 HTTP 层端到端 | 待验证 | P0-2 只有单元级验证；未用非治理账号实际访问未发布 explore/canvas/embed URL 确认 403/404 | `runtime/publishgate.go` 及三处接入点 |
-| V-5 | svelte-check 处理策略 | ✅ 已闭合 | **更正先前记录**：CI 跑的是 `--no-tsconfig`，只有 3 个既有错误（不是 585；585 来自本地 `npm run check` 的 `--tsconfig` 模式）。3 个已修复，web-admin / web-common 均 0 error | `CreateProjectForm.svelte`、`OrgUsersTable.svelte` |
-| V-6 | `build:i18n` 锁定 node ≥20 | ✅ 已闭合 | node 18 下 paraglide 报 `crypto is not defined` 静默失败 | `scripts/check-node-version.js`、`package.json` |
+**全部已在真实 docker-compose 栈上闭合**（环境：postgres:15 + Keycloak OIDC + admin + runtime + web-admin + nginx，Playwright 驱动真实 Chromium）。
 
-> 原则：这些项在 Phase 4 收尾判定（§6）之前必须闭合 V-1 ~ V-4。
+| # | 待验证项 | 状态 | 结论 |
+|---|---|---|---|
+| V-1 | Studio error boundary 的错误文案匹配 | ✅ 已验证 | 停 runtime 制造故障 → 实际走的是上层「分支已休眠 + 恢复分支」专属 UX，boundary 不触发。**结论：不需改**，真实体验比兜底文案更好 |
+| V-2 | `?preview=1` 不被上游 layout 截胡 | ✅ 已验证 | 浏览器实测：无 preview → 重定向 Studio；`?preview=1` → 停在门户首页，未被 `+layout.ts` 截胡 |
+| V-3 | R1 全链路 docker-compose 人工走查 | ✅ 已验证 | edit session 创建 / publish v1 / publish（修复后）/ rollback / 多次 archive 切换后 Studio 存活 / **内容 diff（改 displayName → publish → prod 生效 → rollback → 回退）**；容器内 draft 目录 0755。过程发现并修复 2 个 P0（见下） |
+| V-4 | 发布门控 HTTP 层端到端 | ✅ 已验证 | prod JWT 直连 runtime：published→200 / draft→403 / ListResources 隐藏 draft / 数据查询 draft→403；**外加 fail-closed**：破坏 publish.yaml → 三条路径全 4xx/5xx 拒绝，恢复后正常 |
+| V-5 | svelte-check 处理策略 | ✅ 已闭合 | CI 跑 `--no-tsconfig`，3 个既有错误已修，web-admin / web-common 均 0 error |
+| V-6 | `build:i18n` 锁定 node ≥20 | ✅ 已闭合 | 加 prebuild 守卫 + engines.node，node 18/22 双向实测 |
+
+### V-3 / V-4 真实栈走查额外发现并修复的 3 个 P0（单元测试均无法发现）
+
+| # | 问题 | commit |
+|---|---|---|
+| R1-Y | `UpdateProject` 无条件跑 primary-branch 守卫 → 只要有 dev session，publish 恒 500 死锁。**发布模型对 archive 项目 100% 不可用** | `ca45ae390` |
+| R1-X 第二层 | `untar` 用 file mode(0644) 建嵌套目录 → 第二次 publish 触发 re-sync 时 `dashboards/*.yaml` EACCES | `e92ddaf2c` |
+| （构建） | `Dockerfile.admin` 多余 apt 依赖在受限网络 404 → 镜像构建 exit 100 | `755fa4bdf` |
+
+> 原则：这些项在 Phase 4 收尾判定（§6）之前必须闭合 V-1 ~ V-4 —— **已全部闭合**。
 
 ## 5. 执行顺序与依赖
 
