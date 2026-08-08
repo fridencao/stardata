@@ -76,10 +76,12 @@ import type {
   AdminServiceListProjectsForOrganizationAndUserParams,
   AdminServiceListProjectsForOrganizationParams,
   AdminServiceListProjectsForUserByNameParams,
+  AdminServiceListSemanticVersionsParams,
   AdminServiceListUserAuthTokensParams,
   AdminServiceListUsergroupMemberUsersParams,
   AdminServiceListUsergroupsForOrganizationAndUserParams,
   AdminServiceProvisionBody,
+  AdminServicePublishSemanticProjectBody,
   AdminServicePullVirtualRepoParams,
   AdminServiceRedeployProjectParams,
   AdminServiceRequestProjectAccessBodyBody,
@@ -94,6 +96,7 @@ import type {
   AdminServiceSetOrgFeatureDefaultsBody,
   AdminServiceSetOrganizationMemberUserRoleBody,
   AdminServiceSetProjectMemberUserRoleBodyBody,
+  AdminServiceSetResourceVisibilityBody,
   AdminServiceSudoGetResourceParams,
   AdminServiceSudoUpdateOrganizationBillingMessageBody,
   AdminServiceTestOrgAIConfigBody,
@@ -213,8 +216,10 @@ import type {
   V1ListProjectsForOrganizationResponse,
   V1ListProjectsForUserByNameResponse,
   V1ListPublicBillingPlansResponse,
+  V1ListResourceVisibilityResponse,
   V1ListRolesResponse,
   V1ListSemanticResourcesResponse,
+  V1ListSemanticVersionsResponse,
   V1ListServiceAuthTokensResponse,
   V1ListServicesResponse,
   V1ListSuperusersResponse,
@@ -225,6 +230,7 @@ import type {
   V1ListWhitelistedDomainsResponse,
   V1PingResponse,
   V1ProvisionResponse,
+  V1PublishSemanticProjectResponse,
   V1PullVirtualRepoResponse,
   V1RecordEventsRequest,
   V1RecordEventsResponse,
@@ -261,6 +267,7 @@ import type {
   V1SetProjectMemberServiceRoleResponse,
   V1SetProjectMemberUserRoleResponse,
   V1SetProjectMemberUsergroupRoleResponse,
+  V1SetResourceVisibilityResponse,
   V1SetSuperuserRequest,
   V1SetSuperuserResponse,
   V1StartDeploymentResponse,
@@ -8973,6 +8980,322 @@ export const createAdminServiceRequestProjectAccess = <
   return createMutation(mutationOptions, queryClient);
 };
 /**
+ * @summary ListResourceVisibility lists the per-resource business visibility flags.
+ */
+export const adminServiceListResourceVisibility = (
+  org: string,
+  project: string,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1ListResourceVisibilityResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/resource-visibility`,
+    method: "GET",
+    signal,
+  });
+};
+
+export const getAdminServiceListResourceVisibilityQueryKey = (
+  org?: string,
+  project?: string,
+) => {
+  return [`/v1/orgs/${org}/projects/${project}/resource-visibility`] as const;
+};
+
+export const getAdminServiceListResourceVisibilityQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceListResourceVisibility>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListResourceVisibility>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getAdminServiceListResourceVisibilityQueryKey(org, project);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminServiceListResourceVisibility>>
+  > = ({ signal }) => adminServiceListResourceVisibility(org, project, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(org && project),
+    ...queryOptions,
+  } as CreateQueryOptions<
+    Awaited<ReturnType<typeof adminServiceListResourceVisibility>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type AdminServiceListResourceVisibilityQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceListResourceVisibility>>
+>;
+export type AdminServiceListResourceVisibilityQueryError = RpcStatus;
+
+/**
+ * @summary ListResourceVisibility lists the per-resource business visibility flags.
+ */
+
+export function createAdminServiceListResourceVisibility<
+  TData = Awaited<ReturnType<typeof adminServiceListResourceVisibility>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListResourceVisibility>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getAdminServiceListResourceVisibilityQueryOptions(
+    org,
+    project,
+    options,
+  );
+
+  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
+/**
+ * @summary SetResourceVisibility toggles whether business users can see a resource.
+ */
+export const adminServiceSetResourceVisibility = (
+  org: string,
+  project: string,
+  adminServiceSetResourceVisibilityBody: AdminServiceSetResourceVisibilityBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1SetResourceVisibilityResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/resource-visibility`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServiceSetResourceVisibilityBody,
+    signal,
+  });
+};
+
+export const getAdminServiceSetResourceVisibilityMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServiceSetResourceVisibility>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceSetResourceVisibilityBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServiceSetResourceVisibility>>,
+  TError,
+  { org: string; project: string; data: AdminServiceSetResourceVisibilityBody },
+  TContext
+> => {
+  const mutationKey = ["adminServiceSetResourceVisibility"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServiceSetResourceVisibility>>,
+    {
+      org: string;
+      project: string;
+      data: AdminServiceSetResourceVisibilityBody;
+    }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServiceSetResourceVisibility(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServiceSetResourceVisibilityMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceSetResourceVisibility>>
+>;
+export type AdminServiceSetResourceVisibilityMutationBody =
+  AdminServiceSetResourceVisibilityBody;
+export type AdminServiceSetResourceVisibilityMutationError = RpcStatus;
+
+/**
+ * @summary SetResourceVisibility toggles whether business users can see a resource.
+ */
+export const createAdminServiceSetResourceVisibility = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServiceSetResourceVisibility>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServiceSetResourceVisibilityBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServiceSetResourceVisibility>>,
+  TError,
+  { org: string; project: string; data: AdminServiceSetResourceVisibilityBody },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServiceSetResourceVisibilityMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
+ * @summary PublishSemanticProject snapshots the current draft resources into a new version
+and makes it the project's live version (DB semantic layer mode).
+ */
+export const adminServicePublishSemanticProject = (
+  org: string,
+  project: string,
+  adminServicePublishSemanticProjectBody: AdminServicePublishSemanticProjectBody,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1PublishSemanticProjectResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/semantic-publish`,
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    data: adminServicePublishSemanticProjectBody,
+    signal,
+  });
+};
+
+export const getAdminServicePublishSemanticProjectMutationOptions = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(options?: {
+  mutation?: CreateMutationOptions<
+    Awaited<ReturnType<typeof adminServicePublishSemanticProject>>,
+    TError,
+    {
+      org: string;
+      project: string;
+      data: AdminServicePublishSemanticProjectBody;
+    },
+    TContext
+  >;
+}): CreateMutationOptions<
+  Awaited<ReturnType<typeof adminServicePublishSemanticProject>>,
+  TError,
+  {
+    org: string;
+    project: string;
+    data: AdminServicePublishSemanticProjectBody;
+  },
+  TContext
+> => {
+  const mutationKey = ["adminServicePublishSemanticProject"];
+  const { mutation: mutationOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey } };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof adminServicePublishSemanticProject>>,
+    {
+      org: string;
+      project: string;
+      data: AdminServicePublishSemanticProjectBody;
+    }
+  > = (props) => {
+    const { org, project, data } = props ?? {};
+
+    return adminServicePublishSemanticProject(org, project, data);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AdminServicePublishSemanticProjectMutationResult = NonNullable<
+  Awaited<ReturnType<typeof adminServicePublishSemanticProject>>
+>;
+export type AdminServicePublishSemanticProjectMutationBody =
+  AdminServicePublishSemanticProjectBody;
+export type AdminServicePublishSemanticProjectMutationError = RpcStatus;
+
+/**
+ * @summary PublishSemanticProject snapshots the current draft resources into a new version
+and makes it the project's live version (DB semantic layer mode).
+ */
+export const createAdminServicePublishSemanticProject = <
+  TError = RpcStatus,
+  TContext = unknown,
+>(
+  options?: {
+    mutation?: CreateMutationOptions<
+      Awaited<ReturnType<typeof adminServicePublishSemanticProject>>,
+      TError,
+      {
+        org: string;
+        project: string;
+        data: AdminServicePublishSemanticProjectBody;
+      },
+      TContext
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateMutationResult<
+  Awaited<ReturnType<typeof adminServicePublishSemanticProject>>,
+  TError,
+  {
+    org: string;
+    project: string;
+    data: AdminServicePublishSemanticProjectBody;
+  },
+  TContext
+> => {
+  const mutationOptions =
+    getAdminServicePublishSemanticProjectMutationOptions(options);
+
+  return createMutation(mutationOptions, queryClient);
+};
+/**
  * @summary ListSemanticResources lists the draft semantic resources of a project.
  */
 export const adminServiceListSemanticResources = (
@@ -9403,6 +9726,120 @@ export const createAdminServiceDeleteSemanticResource = <
 
   return createMutation(mutationOptions, queryClient);
 };
+/**
+ * @summary ListSemanticVersions returns the publish history for a DB-mode project.
+ */
+export const adminServiceListSemanticVersions = (
+  org: string,
+  project: string,
+  params?: AdminServiceListSemanticVersionsParams,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1ListSemanticVersionsResponse>({
+    url: `/v1/orgs/${org}/projects/${project}/semantic-versions`,
+    method: "GET",
+    params,
+    signal,
+  });
+};
+
+export const getAdminServiceListSemanticVersionsQueryKey = (
+  org?: string,
+  project?: string,
+  params?: AdminServiceListSemanticVersionsParams,
+) => {
+  return [
+    `/v1/orgs/${org}/projects/${project}/semantic-versions`,
+    ...(params ? [params] : []),
+  ] as const;
+};
+
+export const getAdminServiceListSemanticVersionsQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceListSemanticVersions>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  params?: AdminServiceListSemanticVersionsParams,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListSemanticVersions>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getAdminServiceListSemanticVersionsQueryKey(org, project, params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminServiceListSemanticVersions>>
+  > = ({ signal }) =>
+    adminServiceListSemanticVersions(org, project, params, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(org && project),
+    ...queryOptions,
+  } as CreateQueryOptions<
+    Awaited<ReturnType<typeof adminServiceListSemanticVersions>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type AdminServiceListSemanticVersionsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceListSemanticVersions>>
+>;
+export type AdminServiceListSemanticVersionsQueryError = RpcStatus;
+
+/**
+ * @summary ListSemanticVersions returns the publish history for a DB-mode project.
+ */
+
+export function createAdminServiceListSemanticVersions<
+  TData = Awaited<ReturnType<typeof adminServiceListSemanticVersions>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  project: string,
+  params?: AdminServiceListSemanticVersionsParams,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListSemanticVersions>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getAdminServiceListSemanticVersionsQueryOptions(
+    org,
+    project,
+    params,
+    options,
+  );
+
+  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
 /**
  * @summary ListProjectMemberServices returns all the services for the project for an organization
  */

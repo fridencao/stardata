@@ -959,6 +959,12 @@ export interface V1ListPublicBillingPlansResponse {
   plans?: V1BillingPlan[];
 }
 
+export interface V1ListResourceVisibilityResponse {
+  /** Only resources with an explicit row appear. Anything absent is not visible
+(fail-closed). */
+  visibility?: V1ResourceVisibilityInfo[];
+}
+
 export interface V1ListRolesResponse {
   organizationRoles?: V1OrganizationRole[];
   projectRoles?: V1ProjectRole[];
@@ -966,6 +972,10 @@ export interface V1ListRolesResponse {
 
 export interface V1ListSemanticResourcesResponse {
   resources?: V1SemanticResourceInfo[];
+}
+
+export interface V1ListSemanticVersionsResponse {
+  versions?: V1SemanticVersionInfo[];
 }
 
 export interface V1ListServiceAuthTokensResponse {
@@ -1292,6 +1302,10 @@ export interface V1ProvisionerResource {
   config?: V1ProvisionerResourceConfig;
 }
 
+export interface V1PublishSemanticProjectResponse {
+  version?: V1SemanticVersionInfo;
+}
+
 export interface V1PullVirtualRepoResponse {
   /** List of virtual files ordered by update time, most recent last. */
   files?: V1VirtualFile[];
@@ -1410,6 +1424,14 @@ export interface V1ResourceName {
   name?: string;
 }
 
+export interface V1ResourceVisibilityInfo {
+  resourceKind?: string;
+  resourceName?: string;
+  visible?: boolean;
+  updatedByUserId?: string;
+  updatedOn?: string;
+}
+
 export interface V1RevokeAllUserAuthTokensResponse {
   /** Number of tokens revoked. */
   tokensRevoked?: number;
@@ -1469,6 +1491,26 @@ export interface V1SemanticResourceInfo {
   updatedOn?: string;
 }
 
+/**
+ * Structured dry-run failure detail; only set for rejected versions.
+ */
+export type V1SemanticVersionInfoValidationReport = { [key: string]: unknown };
+
+export interface V1SemanticVersionInfo {
+  id?: string;
+  version?: number;
+  status?: string;
+  publishedByUserId?: string;
+  publishedByUserEmail?: string;
+  publishedOn?: string;
+  note?: string;
+  /** Structured dry-run failure detail; only set for rejected versions. */
+  validationReport?: V1SemanticVersionInfoValidationReport;
+  createdOn?: string;
+  /** is_current is true for the version the runtime is serving right now. */
+  isCurrent?: boolean;
+}
+
 export type V1ServiceAttributes = { [key: string]: unknown };
 
 export interface V1Service {
@@ -1522,6 +1564,10 @@ export interface V1SetProjectMemberUserRoleResponse {
 
 export interface V1SetProjectMemberUsergroupRoleResponse {
   [key: string]: unknown;
+}
+
+export interface V1SetResourceVisibilityResponse {
+  visibility?: V1ResourceVisibilityInfo;
 }
 
 export interface V1SetSuperuserRequest {
@@ -2291,6 +2337,16 @@ export type AdminServiceRedeployProjectParams = {
   superuserForceAccess?: boolean;
 };
 
+export type AdminServiceSetResourceVisibilityBody = {
+  resourceKind?: string;
+  resourceName?: string;
+  visible?: boolean;
+};
+
+export type AdminServicePublishSemanticProjectBody = {
+  note?: string;
+};
+
 export type AdminServiceSaveSemanticResourceBody = {
   resourceKind?: string;
   resourceName?: string;
@@ -2298,6 +2354,10 @@ export type AdminServiceSaveSemanticResourceBody = {
   definitionRaw?: string;
   /** Optional "format" hint for models: "sql" means the raw body is bare SQL. */
   format?: string;
+};
+
+export type AdminServiceListSemanticVersionsParams = {
+  limit?: number;
 };
 
 export type AdminServiceListMagicAuthTokensParams = {
