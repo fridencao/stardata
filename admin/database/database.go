@@ -346,6 +346,19 @@ type DB interface {
 	ForceReleaseEditingLock(ctx context.Context, projectID string) error
 	DeleteExpiredEditingLocks(ctx context.Context) (int, error)
 
+	// Project versions (StarData Phase 5.2): atomic publish snapshots.
+	InsertProjectVersion(ctx context.Context, opts *InsertProjectVersionOptions) (*ProjectVersion, error)
+	FindProjectVersion(ctx context.Context, id string) (*ProjectVersion, error)
+	FindLatestProjectVersion(ctx context.Context, projectID string, status ProjectVersionStatus) (*ProjectVersion, error)
+	ListProjectVersions(ctx context.Context, projectID string, limit int) ([]*ProjectVersion, error)
+	UpdateProjectVersionStatus(ctx context.Context, id string, status ProjectVersionStatus, report []byte) error
+	// SnapshotDraftResources atomically associates the latest draft resources with a
+	// version. It returns the number of resources snapshotted. If the project has no
+	// draft resources, it returns 0 (no error).
+	SnapshotDraftResources(ctx context.Context, projectVersionID, projectID string) (int, error)
+	// SetProjectCurrentPublishedVersion updates projects.current_published_version_id.
+	SetProjectCurrentPublishedVersion(ctx context.Context, projectID, versionID string) error
+
 	FindOrganizationIDsWithBilling(ctx context.Context) ([]string, error)
 	FindOrganizationIDsWithoutBilling(ctx context.Context) ([]string, error)
 
@@ -547,6 +560,9 @@ type Project struct {
 	// the semantic_resources table). New projects default to "archive" for
 	// backwards compatibility; DB mode is opt-in per project.
 	SemanticLayerMode string `db:"semantic_layer_mode"`
+	// CurrentPublishedVersionID points to the project_versions row that the
+	// runtime is currently serving to business users. NULL until first publish.
+	CurrentPublishedVersionID *string `db:"current_published_version_id"`
 	// CreatedOn is the time the project was created.
 	CreatedOn time.Time `db:"created_on"`
 	// UpdatedOn is the time the project was last updated.
@@ -1418,6 +1434,39 @@ type EditingLock struct {
 	LockedAt       time.Time `db:"locked_at"`
 	LastHeartbeat  time.Time `db:"last_heartbeat"`
 	ExpiresAt      time.Time `db:"expires_at"`
+}
+
+// ProjectVersionStatus constrains the status column in project_versions.
+type ProjectVersionStatus string
+
+const (
+	ProjectVersionStatusDraft      ProjectVersionStatus = "draft"
+	ProjectVersionStatusValidating ProjectVersionStatus = "validating"
+	ProjectVersionStatusPublished  ProjectVersionStatus = "published"
+	ProjectVersionStatusRejected   ProjectVersionStatus = "rejected"
+)
+
+// ProjectVersion is an atomic snapshot of a project's semantic resources.
+type ProjectVersion struct {
+	ID                string               `db:"id"`
+	ProjectID         string               `db:"project_id"`
+	Version           int                  `db:"version"`
+	Status            ProjectVersionStatus `db:"status"`
+	PublishedByUserID *string              `db:"published_by_user_id"`
+	PublishedOn       *time.Time           `db:"published_on"`
+	Note              string               `db:"note"`
+	ValidationReport  []byte               `db:"validation_report"` // JSONB, may be nil
+	CreatedOn         time.Time            `db:"created_on"`
+	UpdatedOn         time.Time            `db:"updated_on"`
+}
+
+// InsertProjectVersionOptions defines the inputs for opening a new version.
+// A version starts in 'validating' because the dry-run gate runs before it can be
+// published; it never appears as published without passing that gate.
+type InsertProjectVersionOptions struct {
+	ProjectID         string
+	Note              string
+	PublishedByUserID *string
 }
 
 // ProjectVariable represents a key-value variable for a project, possible for a specific environment (e.g. production or development).
