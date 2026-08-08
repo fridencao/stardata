@@ -359,6 +359,10 @@ type DB interface {
 	// SetProjectCurrentPublishedVersion updates projects.current_published_version_id.
 	SetProjectCurrentPublishedVersion(ctx context.Context, projectID, versionID string) error
 
+	// Resource visibility (StarData Phase 5.2): per-resource business visibility.
+	ListResourceVisibility(ctx context.Context, projectID string) ([]*ResourceVisibility, error)
+	UpsertResourceVisibility(ctx context.Context, opts *UpsertResourceVisibilityOptions) (*ResourceVisibility, error)
+
 	FindOrganizationIDsWithBilling(ctx context.Context) ([]string, error)
 	FindOrganizationIDsWithoutBilling(ctx context.Context) ([]string, error)
 
@@ -1467,6 +1471,27 @@ type InsertProjectVersionOptions struct {
 	ProjectID         string
 	Note              string
 	PublishedByUserID *string
+}
+
+// ResourceVisibility is the per-resource business-visibility flag. Absent rows and
+// visible=false mean the same thing (fail-closed).
+type ResourceVisibility struct {
+	ID              string    `db:"id"`
+	ProjectID       string    `db:"project_id"`
+	ResourceKind    string    `db:"resource_kind"`
+	ResourceName    string    `db:"resource_name"`
+	Visible         bool      `db:"visible"`
+	UpdatedByUserID *string   `db:"updated_by_user_id"`
+	UpdatedOn       time.Time `db:"updated_on"`
+}
+
+// UpsertResourceVisibilityOptions defines the write for toggling a resource on or off.
+type UpsertResourceVisibilityOptions struct {
+	ProjectID       string
+	ResourceKind    string
+	ResourceName    string
+	Visible         bool
+	UpdatedByUserID *string
 }
 
 // ProjectVariable represents a key-value variable for a project, possible for a specific environment (e.g. production or development).

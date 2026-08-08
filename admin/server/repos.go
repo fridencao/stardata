@@ -2,6 +2,9 @@ package server
 
 import (
 	"context"
+	"crypto/sha256"
+	"encoding/hex"
+	"strings"
 	"time"
 
 	admin "github.com/fridencao/stardata/admin"
@@ -243,10 +246,19 @@ func virtualFileToDTO(vf *database.VirtualFile) *adminv1.VirtualFile {
 // resource also does not yet retract the already-materialized file on the runtime;
 // both are tracked as 5.2 work.
 func (s *Server) pullSemanticResourcesAsVirtualFiles(ctx context.Context, projectID, lastFingerprint string) (*adminv1.PullVirtualRepoResponse, error) {
-	fingerprint, err := s.admin.DB.FindSemanticResourceFingerprint(ctx, projectID, database.SemanticResourceStatusDraft)
+	resourceFP, err := s.admin.DB.FindSemanticResourceFingerprint(ctx, projectID, database.SemanticResourceStatusDraft)
 	if err != nil {
 		return nil, err
 	}
+
+	// The publish gate is derived from resource_visibility, so a visibility toggle
+	// without any resource edit must also invalidate the runtime's cached files.
+	// Fold both into a single fingerprint the transport can compare.
+	visibilities, err := s.admin.DB.ListResourceVisibility(ctx, projectID)
+	if err != nil {
+		return nil, err
+	}
+	fingerprint := combineFingerprints(resourceFP, visibilityFingerprint(visibilities))
 
 	// Unchanged since the caller's last pull: return an empty page, same token.
 	if lastFingerprint != "" && lastFingerprint == fingerprint {
@@ -282,8 +294,59 @@ func (s *Server) pullSemanticResourcesAsVirtualFiles(ctx context.Context, projec
 		})
 	}
 
+	// Append the synthesized publish.yaml so the runtime's existing gate logic works
+	// without modification. The gate's content = the list of resource names opted
+	// into visibility by the governor.
+	files = appendPublishGateFile(visibilities, files)
+
 	return &adminv1.PullVirtualRepoResponse{
 		Files:         files,
 		NextPageToken: marshalStringTimestampPageToken(fingerprint, time.Time{}),
 	}, nil
+}
+
+// appendPublishGateFile renders the project's resource_visibility rows into the
+// publish.yaml the runtime's gate already reads.
+//
+// Emitting the file unconditionally for DB-mode projects is what makes visibility
+// fail-closed: the runtime treats a present publish.yaml as an allowlist, so any
+// resource the governor has not opted in stays hidden from business users. If the
+// file were omitted when nothing is visible yet, the gate would fall back to
+// "no gating" and expose everything.
+func appendPublishGateFile(visibilities []*database.ResourceVisibility, files []*adminv1.VirtualFile) []*adminv1.VirtualFile {
+	visible := make([]string, 0, len(visibilities))
+	for _, r := range visibilities {
+		if r.Visible {
+			visible = append(visible, r.ResourceName)
+		}
+	}
+
+	return append(files, &adminv1.VirtualFile{
+		Path:      admin.PublishGatePath,
+		Data:      admin.RenderPublishGate(visible),
+		UpdatedOn: timestamppb.New(time.Now()),
+	})
+}
+
+// visibilityFingerprint summarizes the visibility table so a toggle changes the
+// combined fingerprint even when no resource was edited.
+func visibilityFingerprint(rows []*database.ResourceVisibility) string {
+	var b strings.Builder
+	for _, r := range rows {
+		b.WriteString(r.ResourceKind)
+		b.WriteByte('/')
+		b.WriteString(strings.ToLower(r.ResourceName))
+		if r.Visible {
+			b.WriteString("=1;")
+		} else {
+			b.WriteString("=0;")
+		}
+	}
+	sum := sha256.Sum256([]byte(b.String()))
+	return hex.EncodeToString(sum[:])
+}
+
+func combineFingerprints(parts ...string) string {
+	sum := sha256.Sum256([]byte(strings.Join(parts, "|")))
+	return hex.EncodeToString(sum[:])
 }

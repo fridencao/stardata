@@ -129,3 +129,63 @@ func testProjectVersions(t *testing.T, db database.DB) {
 	err = db.DeleteSemanticResource(ctx, proj.ID, "metrics_view", "revenue_mv")
 	require.Error(t, err, "deleting a version-referenced resource must be refused")
 }
+
+// testResourceVisibility covers the fail-closed contract that replaces publish.yaml:
+// a resource is invisible unless a row says otherwise, and toggling is idempotent
+// and case-insensitive on the name.
+func testResourceVisibility(t *testing.T, db database.DB) {
+	ctx := context.Background()
+	_, proj := semanticTestProject(t, db, "vis")
+
+	// Nothing configured yet: the list is empty, which means "nothing is visible"
+	// rather than "everything is visible".
+	list, err := db.ListResourceVisibility(ctx, proj.ID)
+	require.NoError(t, err)
+	require.Empty(t, list)
+
+	// Opting a resource in.
+	row, err := db.UpsertResourceVisibility(ctx, &database.UpsertResourceVisibilityOptions{
+		ProjectID:    proj.ID,
+		ResourceKind: "metrics_view",
+		ResourceName: "Revenue_MV",
+		Visible:      true,
+	})
+	require.NoError(t, err)
+	require.True(t, row.Visible)
+
+	// A second write for the same resource updates rather than duplicating, and
+	// matches the name case-insensitively.
+	row2, err := db.UpsertResourceVisibility(ctx, &database.UpsertResourceVisibilityOptions{
+		ProjectID:    proj.ID,
+		ResourceKind: "metrics_view",
+		ResourceName: "revenue_mv",
+		Visible:      false,
+	})
+	require.NoError(t, err)
+	require.Equal(t, row.ID, row2.ID)
+	require.False(t, row2.Visible)
+
+	list, err = db.ListResourceVisibility(ctx, proj.ID)
+	require.NoError(t, err)
+	require.Len(t, list, 1)
+	require.False(t, list[0].Visible)
+
+	// Toggling a different resource does not disturb the first.
+	_, err = db.UpsertResourceVisibility(ctx, &database.UpsertResourceVisibilityOptions{
+		ProjectID:    proj.ID,
+		ResourceKind: "explore",
+		ResourceName: "revenue_dash",
+		Visible:      true,
+	})
+	require.NoError(t, err)
+
+	list, err = db.ListResourceVisibility(ctx, proj.ID)
+	require.NoError(t, err)
+	require.Len(t, list, 2)
+	byName := map[string]bool{}
+	for _, r := range list {
+		byName[r.ResourceName] = r.Visible
+	}
+	require.False(t, byName["Revenue_MV"])
+	require.True(t, byName["revenue_dash"])
+}

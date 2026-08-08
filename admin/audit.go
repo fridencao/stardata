@@ -18,6 +18,7 @@ const (
 	AuditEventEditLockForceRelease   = "edit_lock_force_release"
 	AuditEventSemanticResourceSave   = "semantic_resource_save"
 	AuditEventSemanticResourceDelete = "semantic_resource_delete"
+	AuditEventResourceVisibilitySet  = "resource_visibility_set"
 	AuditEventMemberAdd              = "member_add"
 	AuditEventMemberRemove           = "member_remove"
 	AuditEventMemberRoleChange       = "member_role_change"

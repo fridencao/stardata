@@ -5,6 +5,7 @@ import (
 
 	"github.com/fridencao/stardata/admin/database"
 	"github.com/stretchr/testify/require"
+	"gopkg.in/yaml.v3"
 )
 
 func TestRenderSemanticResource(t *testing.T) {
@@ -118,4 +119,36 @@ func mustDefinition(t *testing.T, m map[string]any) []byte {
 	b, err := toJSON(m)
 	require.NoError(t, err)
 	return b
+}
+
+func TestRenderPublishGate(t *testing.T) {
+	// The gate must be emitted even with nothing visible: an absent publish.yaml
+	// means "no gating" to the runtime, which would expose everything. An empty
+	// allowlist is what makes visibility fail-closed.
+	empty := string(RenderPublishGate(nil))
+	require.Contains(t, empty, "published:")
+	require.NotContains(t, empty, "- \"")
+
+	out := string(RenderPublishGate([]string{"revenue_mv", "customer_mv"}))
+	require.Contains(t, out, `- "revenue_mv"`)
+	require.Contains(t, out, `- "customer_mv"`)
+
+	// Names are quoted so ones that look like YAML scalars survive the round trip.
+	tricky := string(RenderPublishGate([]string{"123", "true", `we"ird`}))
+	require.Contains(t, tricky, `- "123"`)
+	require.Contains(t, tricky, `- "true"`)
+	require.Contains(t, tricky, `- "we\"ird"`)
+}
+
+func TestRenderPublishGate_ParsesAsTheRuntimeExpects(t *testing.T) {
+	// Round-trip through the same shape runtime/publishgate.go unmarshals into, so a
+	// rendering change cannot silently break the gate.
+	var doc struct {
+		Published []string `yaml:"published"`
+	}
+	require.NoError(t, yaml.Unmarshal(RenderPublishGate([]string{"a", "b"}), &doc))
+	require.Equal(t, []string{"a", "b"}, doc.Published)
+
+	require.NoError(t, yaml.Unmarshal(RenderPublishGate(nil), &doc))
+	require.Empty(t, doc.Published)
 }
