@@ -59,6 +59,7 @@ import type {
   AdminServiceHibernateProjectParams,
   AdminServiceIssueMagicAuthTokenBody,
   AdminServiceIssueUserAuthTokenBody,
+  AdminServiceListAuditEventsParams,
   AdminServiceListBookmarksParams,
   AdminServiceListDeploymentsParams,
   AdminServiceListFeatureAccessParams,
@@ -180,6 +181,7 @@ import type {
   V1IssueServiceAuthTokenResponse,
   V1IssueUserAuthTokenResponse,
   V1LeaveOrganizationResponse,
+  V1ListAuditEventsResponse,
   V1ListBookmarksResponse,
   V1ListDeploymentsResponse,
   V1ListFeatureAccessResponse,
@@ -1995,6 +1997,111 @@ export const createAdminServiceUpdateOrganization = <
 
   return createMutation(mutationOptions, queryClient);
 };
+/**
+ * @summary ListAuditEvents lists recent administrative audit events for an org.
+ */
+export const adminServiceListAuditEvents = (
+  org: string,
+  params?: AdminServiceListAuditEventsParams,
+  signal?: AbortSignal,
+) => {
+  return httpClient<V1ListAuditEventsResponse>({
+    url: `/v1/orgs/${org}/audit-events`,
+    method: "GET",
+    params,
+    signal,
+  });
+};
+
+export const getAdminServiceListAuditEventsQueryKey = (
+  org?: string,
+  params?: AdminServiceListAuditEventsParams,
+) => {
+  return [`/v1/orgs/${org}/audit-events`, ...(params ? [params] : [])] as const;
+};
+
+export const getAdminServiceListAuditEventsQueryOptions = <
+  TData = Awaited<ReturnType<typeof adminServiceListAuditEvents>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  params?: AdminServiceListAuditEventsParams,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListAuditEvents>>,
+        TError,
+        TData
+      >
+    >;
+  },
+) => {
+  const { query: queryOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ??
+    getAdminServiceListAuditEventsQueryKey(org, params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof adminServiceListAuditEvents>>
+  > = ({ signal }) => adminServiceListAuditEvents(org, params, signal);
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!org,
+    ...queryOptions,
+  } as CreateQueryOptions<
+    Awaited<ReturnType<typeof adminServiceListAuditEvents>>,
+    TError,
+    TData
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+};
+
+export type AdminServiceListAuditEventsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof adminServiceListAuditEvents>>
+>;
+export type AdminServiceListAuditEventsQueryError = RpcStatus;
+
+/**
+ * @summary ListAuditEvents lists recent administrative audit events for an org.
+ */
+
+export function createAdminServiceListAuditEvents<
+  TData = Awaited<ReturnType<typeof adminServiceListAuditEvents>>,
+  TError = RpcStatus,
+>(
+  org: string,
+  params?: AdminServiceListAuditEventsParams,
+  options?: {
+    query?: Partial<
+      CreateQueryOptions<
+        Awaited<ReturnType<typeof adminServiceListAuditEvents>>,
+        TError,
+        TData
+      >
+    >;
+  },
+  queryClient?: QueryClient,
+): CreateQueryResult<TData, TError> & {
+  queryKey: DataTag<QueryKey, TData, TError>;
+} {
+  const queryOptions = getAdminServiceListAuditEventsQueryOptions(
+    org,
+    params,
+    options,
+  );
+
+  const query = createQuery(queryOptions, queryClient) as CreateQueryResult<
+    TData,
+    TError
+  > & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  query.queryKey = queryOptions.queryKey;
+
+  return query;
+}
+
 /**
  * @summary GetBillingCreditBalance returns the organization's remaining trial credit balance
  */

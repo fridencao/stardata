@@ -15,11 +15,17 @@
 
   let navItems = $derived([
     { label: m.settings_nav_general(), route: "", hasPermission: true },
+    { label: m.settings_nav_domains(), route: "/domains", hasPermission: true },
     { label: m.settings_nav_ai(), route: "/ai", hasPermission: true },
     {
       label: m.settings_nav_feature_access(),
       route: "/feature-access",
       hasPermission: organizationPermissions?.manageOrgMembers,
+    },
+    {
+      label: m.settings_nav_system(),
+      route: "/system",
+      hasPermission: organizationPermissions?.manageOrg,
     },
   ]);
 </script>

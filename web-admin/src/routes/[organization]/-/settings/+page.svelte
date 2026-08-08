@@ -5,7 +5,6 @@
   import FaviconSettings from "@rilldata/web-admin/features/organizations/settings/FaviconSettings.svelte";
   import LogoSettings from "@rilldata/web-admin/features/organizations/settings/LogoSettings.svelte";
   import OrgNameSettings from "@rilldata/web-admin/features/organizations/settings/OrgNameSettings.svelte";
-  import OrgDomainAllowListSettings from "@rilldata/web-admin/features/organizations/settings/OrgDomainAllowListSettings.svelte";
   import type { PageData } from "./$types";
 
   export let data: PageData;
@@ -24,7 +23,6 @@
 <OrgNameSettings {organization} />
 <LogoSettings {organization} {organizationLogoUrl} {organizationLogoDarkUrl} />
 <FaviconSettings {organization} {organizationFaviconUrl} />
-<OrgDomainAllowListSettings {organization} />
 
 <DangerZone>
   <DeleteOrg {organization} />

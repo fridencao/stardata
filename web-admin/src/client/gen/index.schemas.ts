@@ -122,6 +122,26 @@ export interface V1ApproveProjectAccessResponse {
   [key: string]: unknown;
 }
 
+export type V1AuditEventPayload = { [key: string]: unknown };
+
+/**
+ * AuditEvent is a single audit-log entry (StarData).
+ */
+export interface V1AuditEvent {
+  id?: string;
+  orgId?: string;
+  projectId?: string;
+  actorUserId?: string;
+  eventType?: string;
+  targetId?: string;
+  payload?: V1AuditEventPayload;
+  createdOn?: string;
+  /** Denormalized for display; empty if unresolvable. */
+  projectName?: string;
+  actorUserEmail?: string;
+  actorUserName?: string;
+}
+
 export interface V1BillingIssue {
   org?: string;
   type?: V1BillingIssueType;
@@ -782,6 +802,10 @@ export interface V1IssueUserAuthTokenResponse {
 
 export interface V1LeaveOrganizationResponse {
   [key: string]: unknown;
+}
+
+export interface V1ListAuditEventsResponse {
+  events?: V1AuditEvent[];
 }
 
 export interface V1ListBookmarksResponse {
@@ -1843,6 +1867,12 @@ export type AdminServiceUpdateOrganizationBody = {
   thumbnailAssetId?: string;
   defaultProjectRole?: string;
   billingEmail?: string;
+};
+
+export type AdminServiceListAuditEventsParams = {
+  project?: string;
+  eventType?: string;
+  limit?: number;
 };
 
 export type AdminServiceGetBillingCreditBalanceParams = {
